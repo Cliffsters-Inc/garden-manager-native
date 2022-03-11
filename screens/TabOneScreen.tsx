@@ -9,7 +9,10 @@ export default function TabOneScreen({
 }: RootTabScreenProps<"TabOne">) {
   return (
     <View style={styles.container}>
+
       <Text style={styles.title}>Tab One Uken</Text>
+
+
       <View
         style={styles.separator}
         lightColor="#eee"
