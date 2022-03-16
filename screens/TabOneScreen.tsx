@@ -1,8 +1,9 @@
 import { FlatList, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
-import { useAppSelector, useAppDispatch } from "../store";
-import { gardenSelectors, gardenActions } from "../services/garden/gardenSlice";
+import { useAppSelector } from "../store";
+import { gardenSelectors } from "../services/garden/gardenSlice";
+import { AddBedField } from "../components/AddBedField";
 export default function TabOneScreen({
   navigation,
 }: RootTabScreenProps<"TabOne">) {
@@ -36,6 +37,7 @@ export default function TabOneScreen({
           </View>
         )}
       />
+      <AddBedField />
     </View>
   );
 }
