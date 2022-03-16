@@ -1,12 +1,12 @@
 import { FlatList, StyleSheet } from "react-native";
-import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { useAppSelector, useAppDispatch } from "../store";
+import { gardenSelectors, gardenActions } from "../services/garden/gardenSlice";
 export default function TabOneScreen({
   navigation,
 }: RootTabScreenProps<"TabOne">) {
-  const garden = useAppSelector((state) => state.garden);
+  const garden = useAppSelector(gardenSelectors.selectGarden);
 
   return (
     <View style={styles.container}>
