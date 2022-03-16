@@ -1,5 +1,6 @@
 import { Plant } from "../services/types";
 import { FlatList, Text, View, StyleSheet } from "react-native";
+import { format } from "date-fns";
 
 type Props = {
   plants?: Plant[];
@@ -8,13 +9,20 @@ type Props = {
 export const PlantsList = ({ plants }: Props) => {
   return plants ? (
     <FlatList
+      style={styles.container}
       data={plants}
       renderItem={({ item }) => (
-        <View style={styles.container} key={item.id}>
+        <View key={item.id} style={styles.plantContainer}>
           <Text style={{ color: "green" }}>{item.name}</Text>
           {item.notes && <Text>Notes: {item.notes}</Text>}
-
-          <View style={styles.separator} />
+          <Text style={{ color: "gray" }}>
+            Plantation: {format(new Date(item.plantationDate), "dd/MMM/yy")}
+          </Text>
+          {item.harvestDate && (
+            <Text style={{ color: "gray" }}>
+              Harvest: {format(new Date(item.harvestDate), "dd/MMM/yy")}
+            </Text>
+          )}
         </View>
       )}
     />
@@ -23,15 +31,14 @@ export const PlantsList = ({ plants }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingLeft: 15,
+    marginLeft: 15,
+    marginBottom: 10,
+  },
+  plantContainer: {
+    marginVertical: 5,
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 5,
-    height: 1,
-    width: "80%",
   },
 });

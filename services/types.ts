@@ -1,8 +1,8 @@
 export type Plant = {
   name: string;
   id: string;
-  plantationDate: number; // use epochDate eg. 1647339947
-  harvestDate?: number; // use epochDate eg. 1647339947
+  plantationDate: string; // use ISO date eg.	"2022-03-16T07:59:10.647Z"
+  harvestDate?: string;
   notes?: string;
 };
 
