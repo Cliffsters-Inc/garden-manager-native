@@ -7,13 +7,14 @@ import { useAppSelector } from "../store";
 interface GardenCardsProps {}
 
 export const GardenCards: FunctionComponent<GardenCardsProps> = () => {
-  const garden = useAppSelector(gardenSelectors.selectBeds);
+  const gardens = useAppSelector(gardenSelectors.selectGardens);
+
   return (
     <View style={styles.container}>
       <FlatList
         numColumns={2}
         keyExtractor={(item) => item.id}
-        data={garden.gardens}
+        data={gardens}
         renderItem={({ item }) => (
           <Pressable>
             <Card containerStyle={styles.card}>
@@ -28,14 +29,16 @@ export const GardenCards: FunctionComponent<GardenCardsProps> = () => {
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: "center",
+    justifyContent: "center",
     width: "100%",
     padding: 15,
   },
   card: {
     minHeight: 80,
-    minWidth: 80,
-    margin: 5,
-    padding: 20,
+    minWidth: 100,
+    // margin: 5,
+    // padding: 20,
     borderWidth: 1,
   },
 });

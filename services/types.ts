@@ -6,15 +6,10 @@
 //   notes?: string;
 // };
 
-// export type Garden = {
-//   beds: { name: string; id: string; plants?: Plant[] }[];
-// };
-
-export type Plant = {
+export type Garden = {
   name: string;
-  sowDate: string;
-  harvestDate: string;
-  notes: string;
+  id: string;
+  beds: { name: string; id: string; plants?: Plant[] }[];
 };
 
 export type Bed = {
@@ -23,6 +18,12 @@ export type Bed = {
   plants: Plant[];
 };
 
-export type Garden = {
-  gardens: { name: string; id: string; beds: Bed[] }[];
+export type Plant = {
+  name: string;
+  sowDate: string;
+  harvestDate: string;
+  notes: string;
 };
+// export type Gardens = {
+//   gardens: { name: string; id: string; beds: Bed[] }[];
+// };

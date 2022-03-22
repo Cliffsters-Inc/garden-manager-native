@@ -1,22 +1,22 @@
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
 import { Garden } from "../types";
-import { initialState } from "../initialState";
+import { initialGardenState } from "./initialGardenState";
 import { RootState } from "../../store";
 
 export const gardenSlice = createSlice({
-  name: "garden",
-  initialState: initialState as Garden,
+  name: "gardens",
+  initialState: initialGardenState as Garden[],
   reducers: {
-    addGarden: (state, action: PayloadAction<{ name: string }>) => {
+    addGarden: (gardens, action: PayloadAction<{ name: string }>) => {
       const { payload } = action;
 
-      state.gardens.push({ name: payload.name, id: nanoid(), beds: [] });
+      gardens.push({ name: payload.name, id: nanoid(), beds: [] });
     },
-    removeGarden: (state, action: PayloadAction<{ id: string }>) => {
+    removeGarden: (gardens, action: PayloadAction<{ id: string }>) => {
       const { payload } = action;
 
-      const updatedBeds = state.gardens.filter((bed) => bed.id !== payload.id);
-      state.gardens = updatedBeds;
+      const updatedBeds = gardens.filter((bed) => bed.id !== payload.id);
+      gardens = updatedBeds;
     },
   },
 });
@@ -28,8 +28,9 @@ export type GardenSlice = {
 };
 
 export const gardenSelectors = {
-  selectGarden: (state: RootState) => state,
-  selectBeds: (state: RootState) => state.garden,
+  // selectGardens: (state: RootState) => state.gardens,
+  selectGardens: (state: RootState) => state.gardens,
+  // selectBeds: (state: RootState) => state.garden,
   // selectBed: (state: RootState, bedId: string) =>
   //   state.garden.beds.find((bed) => bed.id === bedId),
 };

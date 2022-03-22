@@ -3,7 +3,7 @@ import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { AddBedField } from "../components/AddBedField";
 import { GardenBedsList } from "../components/GardenBedsList";
-import { GardenCards } from "../components/gardenCards";
+import { GardenCards } from "../components/GardenCards";
 export default function TabOneScreen({
   navigation,
 }: RootTabScreenProps<"TabOne">) {
