@@ -5,18 +5,18 @@ import { RootState } from "../../store";
 
 export const gardenSlice = createSlice({
   name: "garden",
-  initialState: initialState.garden as Garden,
+  initialState: initialState as Garden,
   reducers: {
-    addBed: (state, action: PayloadAction<{ name: string }>) => {
+    addGarden: (state, action: PayloadAction<{ name: string }>) => {
       const { payload } = action;
 
-      state.beds.push({ name: payload.name, id: nanoid() });
+      state.gardens.push({ name: payload.name, id: nanoid(), beds: [] });
     },
-    removeBed: (state, action: PayloadAction<{ id: string }>) => {
+    removeGarden: (state, action: PayloadAction<{ id: string }>) => {
       const { payload } = action;
 
-      const updatedBeds = state.beds.filter((bed) => bed.id !== payload.id);
-      state.beds = updatedBeds;
+      const updatedBeds = state.gardens.filter((bed) => bed.id !== payload.id);
+      state.gardens = updatedBeds;
     },
   },
 });
@@ -28,8 +28,8 @@ export type GardenSlice = {
 };
 
 export const gardenSelectors = {
-  selectGarden: (state: RootState) => state.garden,
-  selectBeds: (state: RootState) => state.garden.beds,
-  selectBed: (state: RootState, bedId: string) =>
-    state.garden.beds.find((bed) => bed.id === bedId),
+  selectGarden: (state: RootState) => state,
+  selectBeds: (state: RootState) => state.garden,
+  // selectBed: (state: RootState, bedId: string) =>
+  //   state.garden.beds.find((bed) => bed.id === bedId),
 };
