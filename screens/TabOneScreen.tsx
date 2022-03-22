@@ -3,13 +3,15 @@ import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { AddBedField } from "../components/AddBedField";
 import { GardenBedsList } from "../components/GardenBedsList";
+import { GardenCards } from "../components/gardenCards";
 export default function TabOneScreen({
   navigation,
 }: RootTabScreenProps<"TabOne">) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Garden Beds</Text>
-      <GardenBedsList />
+      {/* <GardenBedsList /> */}
+      <GardenCards />
       <AddBedField />
     </View>
   );

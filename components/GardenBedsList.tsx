@@ -8,15 +8,16 @@ export const GardenBedsList = () => {
   const garden = useAppSelector(gardenSelectors.selectGarden);
 
   return (
-    <FlatList
-      data={garden.beds}
-      renderItem={({ item }) => (
-        <View key={item.id}>
-          <Text style={styles.subTitle}>{item.name}</Text>
-          <PlantsList plants={item.plants} />
-        </View>
-      )}
-    />
+    // <FlatList
+    //   data={garden}
+    //   renderItem={({ item }) => (
+    //     <View key={item.id}>
+    //       <Text style={styles.subTitle}>{item.name}</Text>
+    //       <PlantsList plants={item.plants} />
+    //     </View>
+    //   )}
+    // />
+    <View></View>
   );
 };
 
