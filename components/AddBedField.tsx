@@ -9,7 +9,7 @@ export const AddBedField = () => {
   const appDispatch = useAppDispatch();
 
   const handleAddBed = () => {
-    appDispatch(gardenActions.addBed({ name: text }));
+    appDispatch(gardenActions.addGarden({ name: text }));
     setText("");
   };
 
