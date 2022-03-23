@@ -1,8 +1,10 @@
 import { FunctionComponent } from "react";
 import { FlatList, Pressable, View, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { gardenSelectors } from "../services/garden/gardenSlice";
 import { useAppSelector } from "../store";
+import { AddGardenCard } from "./AddGardenCard";
 
 interface GardenCardsProps {}
 
@@ -10,7 +12,7 @@ export const GardenCards: FunctionComponent<GardenCardsProps> = () => {
   const gardens = useAppSelector(gardenSelectors.selectGardens);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <FlatList
         numColumns={2}
         keyExtractor={(item) => item.id}
@@ -23,12 +25,13 @@ export const GardenCards: FunctionComponent<GardenCardsProps> = () => {
           </Pressable>
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
@@ -37,8 +40,6 @@ const styles = StyleSheet.create({
   card: {
     minHeight: 80,
     minWidth: 100,
-    // margin: 5,
-    // padding: 20,
     borderWidth: 1,
   },
 });
