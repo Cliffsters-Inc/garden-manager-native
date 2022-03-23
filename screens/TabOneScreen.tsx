@@ -4,10 +4,9 @@ import { RootTabScreenProps } from "../types";
 import { AddBedField } from "../components/AddBedField";
 import { GardenCards } from "../components/GardenCards";
 import { AddGardenCard } from "../components/AddGardenCard";
-
-export const GardenTabScreen = ({
+export default function TabOneScreen({
   navigation,
-}: RootTabScreenProps<"GardenTab">) => {
+}: RootTabScreenProps<"TabOne">) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Garden Beds</Text>
@@ -17,7 +16,7 @@ export const GardenTabScreen = ({
       <AddBedField />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
