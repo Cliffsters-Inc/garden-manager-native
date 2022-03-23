@@ -1,10 +1,15 @@
 import React from "react";
 import { Text, View } from "./Themed";
-import { FlatList, StyleSheet, Image } from "react-native";
+import { FlatList, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { mockData } from "../services/mockData";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { NavigationProp } from "@react-navigation/native";
 
-export const PlantList = () => {
+type Props = {
+  navigation: NavigationProp<any>; // ! get typed properly
+};
+
+export const PlantList = ({ navigation }: Props) => {
   const { plants } = mockData;
 
   return plants ? (
@@ -12,7 +17,15 @@ export const PlantList = () => {
       style={styles.container}
       data={plants}
       renderItem={({ item }) => (
-        <View style={[styles.plantContainer]}>
+        <TouchableOpacity
+          style={[styles.plantContainer]}
+          onPress={() =>
+            navigation.navigate("PlantInfoScreen", {
+              title: item.name,
+              plantInfo: item,
+            })
+          }
+        >
           <View key={item.id} style={styles.plantL}>
             <Image style={styles.img} source={{ uri: item.image }} />
             <Text style={{ color: "green", fontWeight: "bold" }}>
@@ -25,7 +38,7 @@ export const PlantList = () => {
               <FontAwesome5 name="angle-right" size={12} />
             </Text>
           </View>
-        </View>
+        </TouchableOpacity>
       )}
     />
   ) : null;

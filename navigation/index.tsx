@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   NavigationContainer,
@@ -12,7 +12,7 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName, Pressable } from "react-native";
+import { ColorSchemeName } from "react-native";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -20,13 +20,10 @@ import { CalendarTabScreen } from "../screens/CalendarTabScreen";
 import { GardenTabScreen } from "../screens/GardenTabScreen";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
+import { PlantInfoScreen } from "../screens/PlantInfoScreen";
 import { PlantsTabScreen } from "../screens/PlantsTabScreen";
 import { SettingsTabScreen } from "../screens/SettingsTabScreen";
-import {
-  RootStackParamList,
-  RootTabParamList,
-  RootTabScreenProps,
-} from "../types";
+import { RootStackParamList, RootTabParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 
 export default function Navigation({
@@ -66,6 +63,16 @@ function RootNavigator() {
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
+      <Stack.Group>
+        <Stack.Screen
+          name="PlantInfoScreen"
+          component={PlantInfoScreen}
+          options={({ route }) => ({
+            title: route.params.plantInfo.name,
+            headerBackTitle: "Plants",
+          })}
+        />
+      </Stack.Group>
     </Stack.Navigator>
   );
 }
@@ -89,69 +96,38 @@ function BottomTabNavigator() {
       <BottomTab.Screen
         name="GardenTab"
         component={GardenTabScreen}
-        options={({ navigation }: RootTabScreenProps<"GardenTab">) => ({
+        options={() => ({
           title: "Garden",
           tabBarIcon: ({ color }) => <TabBarIcon name="tree" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate("Modal")}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            ></Pressable>
-          ),
         })}
       />
       <BottomTab.Screen
         name="PlantsTab"
         component={PlantsTabScreen}
-        options={({ navigation }: RootTabScreenProps<"PlantsTab">) => ({
+        options={() => ({
           title: "Plants",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="seedling" color={color} />
           ),
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate("Modal")}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            ></Pressable>
-          ),
         })}
       />
+
       <BottomTab.Screen
         name="CalendarTab"
         component={CalendarTabScreen}
-        options={({ navigation }: RootTabScreenProps<"CalendarTab">) => ({
+        options={() => ({
           title: "Calendar",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="calendar" color={color} />
-          ),
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate("Modal")}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            ></Pressable>
           ),
         })}
       />
       <BottomTab.Screen
         name="SettingsTab"
         component={SettingsTabScreen}
-        options={({ navigation }: RootTabScreenProps<"SettingsTab">) => ({
+        options={() => ({
           title: "Settings",
           tabBarIcon: ({ color }) => <TabBarIcon name="cog" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate("Modal")}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            ></Pressable>
-          ),
         })}
       />
     </BottomTab.Navigator>
