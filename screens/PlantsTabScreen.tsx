@@ -1,11 +1,17 @@
+import React from "react";
 import { StyleSheet } from "react-native";
 import { RootTabScreenProps } from "../types";
 import { Text, View } from "../components/Themed";
+import { PlantList } from "../components/PlantList";
 
 export const PlantsTabScreen = ({
   navigation,
 }: RootTabScreenProps<"PlantsTab">) => {
-  return <View style={styles.container}></View>;
+  return (
+    <View style={styles.container}>
+      <PlantList />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({

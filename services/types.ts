@@ -6,6 +6,20 @@
 //   notes?: string;
 // };
 
+type Months =
+  | "JAN"
+  | "FEB"
+  | "MAR"
+  | "APR"
+  | "MAY"
+  | "JUN"
+  | "JUL"
+  | "AUG"
+  | "SEP"
+  | "OCT"
+  | "NOV"
+  | "DEC";
+
 export type Garden = {
   name: string;
   id: string;
@@ -19,11 +33,35 @@ export type Bed = {
 };
 
 export type Plant = {
+  id: string;
+  plantInfoId: string;
   name: string;
   sowDate: string;
   harvestDate: string;
-  notes: string;
+  logs: PlantLog[];
 };
-// export type Gardens = {
-//   gardens: { name: string; id: string; beds: Bed[] }[];
-// };
+
+export type PlantLog = {
+  id: string;
+  creationDate: string;
+  editedDate: string;
+  soilDescription: string;
+  phLevel: number;
+  notes: string;
+  photos: string[];
+};
+
+export type PlantInfo = {
+  id: string;
+  name: string;
+  description: string;
+  growSeason: { from: Months; to: Months };
+  companionPlantIds?: string[];
+  combativePlantIds?: string[];
+  image?: string;
+  starred: boolean;
+};
+
+export type MockData = {
+  plants: PlantInfo[];
+};
