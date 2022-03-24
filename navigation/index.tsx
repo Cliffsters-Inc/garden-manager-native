@@ -20,7 +20,7 @@ import { CalendarTabScreen } from "../screens/CalendarTabScreen";
 import { GardenTabScreen } from "../screens/GardenTabScreen";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import { PlantInfoScreen } from "../screens/PlantInfoScreen";
+import { VeggieInfoScreen } from "../screens/VeggieInfoScreen";
 import { VeggiesTabScreen } from "../screens/VeggiesTabScreen";
 import { SettingsTabScreen } from "../screens/SettingsTabScreen";
 import { RootStackParamList, RootTabParamList } from "../types";
@@ -65,10 +65,10 @@ function RootNavigator() {
       </Stack.Group>
       <Stack.Group>
         <Stack.Screen
-          name="PlantInfoScreen"
-          component={PlantInfoScreen}
+          name="VeggieInfoScreen"
+          component={VeggieInfoScreen}
           options={({ route }) => ({
-            title: route.params.plantInfo.name,
+            title: route.params.veggieInfo.name,
             headerBackTitle: "Veggies",
           })}
         />

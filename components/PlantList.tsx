@@ -21,9 +21,9 @@ export const PlantList = ({ navigation }: Props) => {
         <TouchableOpacity
           style={[styles.plantContainer]}
           onPress={() =>
-            navigation.navigate("PlantInfoScreen", {
+            navigation.navigate("VeggieInfoScreen", {
               title: item.name,
-              plantInfo: item,
+              veggieInfo: item,
             })
           }
         >
