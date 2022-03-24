@@ -9,6 +9,7 @@ import {
   NavigatorScreenParams,
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { PlantInfo } from "./services/types";
 
 declare global {
   namespace ReactNavigation {
@@ -18,6 +19,7 @@ declare global {
 
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
+  PlantInfoScreen: { plantInfo: PlantInfo };
   Modal: undefined;
   NotFound: undefined;
 };
@@ -27,7 +29,7 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 
 export type RootTabParamList = {
   GardenTab: undefined;
-  PlantsTab: undefined;
+  VeggiesTab: undefined;
   CalendarTab: undefined;
   SettingsTab: undefined;
   TabOne: undefined;
