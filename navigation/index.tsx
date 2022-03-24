@@ -24,8 +24,11 @@ import { VeggieInfoScreen } from "../screens/VeggieInfoScreen";
 import { VeggiesTabScreen } from "../screens/VeggiesTabScreen";
 import { SettingsTabScreen } from "../screens/SettingsTabScreen";
 import {
+  CalendarTabParamList,
+  GardenTabParamList,
   RootStackParamList,
   RootTabParamList,
+  SettingsTabParamList,
   VeggiesTabParamList,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
@@ -90,7 +93,7 @@ function BottomTabNavigator() {
     >
       <BottomTab.Screen
         name="GardenTab"
-        component={GardenTabScreen}
+        component={GardenTabNavigator}
         options={() => ({
           title: "Garden",
           tabBarIcon: ({ color }) => <TabBarIcon name="tree" color={color} />,
@@ -108,7 +111,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="CalendarTab"
-        component={CalendarTabScreen}
+        component={CalendarTabNavigator}
         options={() => ({
           title: "Calendar",
           tabBarIcon: ({ color }) => (
@@ -118,7 +121,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="SettingsTab"
-        component={SettingsTabScreen}
+        component={SettingsTabNavigator}
         options={() => ({
           title: "Settings",
           tabBarIcon: ({ color }) => <TabBarIcon name="cog" color={color} />,
@@ -128,11 +131,25 @@ function BottomTabNavigator() {
   );
 }
 
+const GardenStack = createNativeStackNavigator<GardenTabParamList>();
+
+function GardenTabNavigator() {
+  return (
+    <GardenStack.Navigator>
+      <GardenStack.Screen
+        name="GardenTabScreen"
+        component={GardenTabScreen}
+        options={{ title: "Garden" }}
+      />
+    </GardenStack.Navigator>
+  );
+}
+
 const VeggiesStack = createNativeStackNavigator<VeggiesTabParamList>();
 
 function VeggiesTabNavigator() {
   return (
-    <VeggiesStack.Navigator initialRouteName="VeggiesTabScreen">
+    <VeggiesStack.Navigator>
       <VeggiesStack.Screen
         name="VeggiesTabScreen"
         component={VeggiesTabScreen}
@@ -147,6 +164,34 @@ function VeggiesTabNavigator() {
         })}
       />
     </VeggiesStack.Navigator>
+  );
+}
+
+const CalendarStack = createNativeStackNavigator<CalendarTabParamList>();
+
+function CalendarTabNavigator() {
+  return (
+    <CalendarStack.Navigator>
+      <CalendarStack.Screen
+        name="CalendarTabScreen"
+        component={CalendarTabScreen}
+        options={{ title: "Calendar" }}
+      />
+    </CalendarStack.Navigator>
+  );
+}
+
+const SettingsStack = createNativeStackNavigator<SettingsTabParamList>();
+
+function SettingsTabNavigator() {
+  return (
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen
+        name="SettingsTabScreen"
+        component={SettingsTabScreen}
+        options={{ title: "Settings" }}
+      />
+    </SettingsStack.Navigator>
   );
 }
 
