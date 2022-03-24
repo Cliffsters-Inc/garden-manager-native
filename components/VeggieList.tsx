@@ -9,7 +9,7 @@ type Props = {
   navigation: NavigationProp<any>; // ! get typed properly
 };
 
-export const PlantList = ({ navigation }: Props) => {
+export const VeggieList = ({ navigation }: Props) => {
   const { veggies } = mockData;
 
   return veggies ? (

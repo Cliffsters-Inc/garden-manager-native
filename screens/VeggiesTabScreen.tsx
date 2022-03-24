@@ -2,14 +2,14 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { RootTabScreenProps } from "../types";
 import { View } from "../components/Themed";
-import { PlantList } from "../components/PlantList";
+import { VeggieList } from "../components/VeggieList";
 
 export const VeggiesTabScreen = ({
   navigation,
 }: RootTabScreenProps<"VeggiesTab">) => {
   return (
     <View style={styles.container}>
-      <PlantList navigation={navigation} />
+      <VeggieList navigation={navigation} />
     </View>
   );
 };
