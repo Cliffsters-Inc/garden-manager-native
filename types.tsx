@@ -32,11 +32,21 @@ export type RootTabParamList = {
   VeggiesTab: undefined;
   CalendarTab: undefined;
   SettingsTab: undefined;
-  TabOne: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
   CompositeScreenProps<
     BottomTabScreenProps<RootTabParamList, Screen>,
     NativeStackScreenProps<RootStackParamList>
+  >;
+
+export type VeggiesTabParamList = {
+  VeggiesTabScreen: undefined;
+  VeggieInfoScreen: { title: string; veggieInfo: VeggieInfo };
+};
+
+export type VeggiesTabScreenProps<Screen extends keyof VeggiesTabParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<VeggiesTabParamList, Screen>,
+    RootStackScreenProps<keyof RootStackParamList>
   >;

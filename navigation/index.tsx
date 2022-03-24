@@ -23,7 +23,11 @@ import NotFoundScreen from "../screens/NotFoundScreen";
 import { VeggieInfoScreen } from "../screens/VeggieInfoScreen";
 import { VeggiesTabScreen } from "../screens/VeggiesTabScreen";
 import { SettingsTabScreen } from "../screens/SettingsTabScreen";
-import { RootStackParamList, RootTabParamList } from "../types";
+import {
+  RootStackParamList,
+  RootTabParamList,
+  VeggiesTabParamList,
+} from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 
 export default function Navigation({
@@ -63,16 +67,6 @@ function RootNavigator() {
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
-      <Stack.Group>
-        <Stack.Screen
-          name="VeggieInfoScreen"
-          component={VeggieInfoScreen}
-          options={({ route }) => ({
-            title: route.params.veggieInfo.name,
-            headerBackTitle: "Veggies",
-          })}
-        />
-      </Stack.Group>
     </Stack.Navigator>
   );
 }
@@ -91,6 +85,7 @@ function BottomTabNavigator() {
       initialRouteName="GardenTab"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
+        headerShown: false,
       }}
     >
       <BottomTab.Screen
@@ -103,7 +98,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="VeggiesTab"
-        component={VeggiesTabScreen}
+        component={VeggiesTabNavigator}
         options={() => ({
           title: "Veggies",
           tabBarIcon: ({ color }) => (
@@ -111,7 +106,6 @@ function BottomTabNavigator() {
           ),
         })}
       />
-
       <BottomTab.Screen
         name="CalendarTab"
         component={CalendarTabScreen}
@@ -131,6 +125,28 @@ function BottomTabNavigator() {
         })}
       />
     </BottomTab.Navigator>
+  );
+}
+
+const VeggiesStack = createNativeStackNavigator<VeggiesTabParamList>();
+
+function VeggiesTabNavigator() {
+  return (
+    <VeggiesStack.Navigator initialRouteName="VeggiesTabScreen">
+      <VeggiesStack.Screen
+        name="VeggiesTabScreen"
+        component={VeggiesTabScreen}
+        options={{ title: "Veggies" }}
+      />
+      <VeggiesStack.Screen
+        name="VeggieInfoScreen"
+        component={VeggieInfoScreen}
+        options={({ route }) => ({
+          title: route.params.veggieInfo.name,
+          headerBackTitle: "Veggies",
+        })}
+      />
+    </VeggiesStack.Navigator>
   );
 }
 

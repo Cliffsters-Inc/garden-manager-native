@@ -3,10 +3,10 @@ import { Text, View } from "./Themed";
 import { FlatList, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { mockData } from "../services/mockData";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { NavigationProp } from "@react-navigation/native";
+import { VeggiesTabScreenProps } from "../types";
 
 type Props = {
-  navigation: NavigationProp<any>; // ! get typed properly
+  navigation: VeggiesTabScreenProps<"VeggiesTabScreen">["navigation"];
 };
 
 export const VeggieList = ({ navigation }: Props) => {
