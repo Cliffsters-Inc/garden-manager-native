@@ -8,11 +8,11 @@ import {
 import { Text, View } from "../components/Themed";
 import { RootStackParamList } from "../types";
 
-export const PlantInfoScreen = ({
+export const VeggieInfoScreen = ({
   navigation,
   route,
-}: NativeStackScreenProps<RootStackParamList, "PlantInfoScreen">) => {
-  const { plantInfo } = route.params;
+}: NativeStackScreenProps<RootStackParamList, "VeggieInfoScreen">) => {
+  const { veggieInfo } = route.params;
 
   return (
     <View style={styles.container}>
@@ -23,22 +23,22 @@ export const PlantInfoScreen = ({
           alignItems: "flex-end",
         }}
       >
-        <Image style={styles.img} source={{ uri: plantInfo.image }} />
+        <Image style={styles.img} source={{ uri: veggieInfo.image }} />
         <View style={{ alignItems: "flex-end" }}>
           <AntDesign
-            name={plantInfo.starred ? "star" : "staro"}
+            name={veggieInfo.starred ? "star" : "staro"}
             size={25}
             style={{ padding: 5 }}
             color="#f3f704"
           />
 
           <Text>
-            {plantInfo?.growSeason.from} - {plantInfo?.growSeason.from}
+            {veggieInfo?.growSeason.from} - {veggieInfo?.growSeason.from}
           </Text>
         </View>
       </View>
-      <Text style={styles.title}>{plantInfo.name}</Text>
-      <Text>Description: {plantInfo?.description}</Text>
+      <Text style={styles.title}>{veggieInfo.name}</Text>
+      <Text>Description: {veggieInfo?.description}</Text>
     </View>
   );
 };
