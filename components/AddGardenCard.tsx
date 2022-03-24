@@ -90,13 +90,13 @@ export const AddGardenCard: React.FunctionComponent = () => {
             )}
             name="hoursOfSun"
           />
-          <Controller
+          {/* <Controller
         control={control}
-        render={({ field }) => (
+        // render={({ field }) => (
     
-        )}
+        // )}
         name="hoursOfSun"
-    />
+    /> */}
 
           <Button title="Submit" onPress={handleSubmit(onSubmit)} />
         </View>
