@@ -30,6 +30,7 @@ export type RootTabParamList = {
   PlantsTab: undefined;
   CalendarTab: undefined;
   SettingsTab: undefined;
+  TabOne: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =

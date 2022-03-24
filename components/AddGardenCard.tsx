@@ -1,14 +1,28 @@
-import { Feather } from "@expo/vector-icons";
-import { FunctionComponent, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { Pressable, StyleSheet, TextInput } from "react-native";
-import { BottomSheet, Button, Card, Input } from "react-native-elements";
-import { View } from "./Themed";
+import React from "react";
 
-export const AddGardenCard: FunctionComponent = () => {
+import { Feather } from "@expo/vector-icons";
+import { useState } from "react";
+import { Pressable, StyleSheet, TextInput } from "react-native";
+import { BottomSheet, Button, Card, Input, Text } from "react-native-elements";
+import { View } from "./Themed";
+import { Controller, useForm } from "react-hook-form";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+export const AddGardenCard: React.FunctionComponent = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [text, onChangeText] = useState("");
-  const [number, onChangeNumber] = useState("");
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      newGardenName: "",
+      hoursOfSun: 0,
+      sunDirection: undefined,
+    },
+  });
+  const onSubmit = (data: object) => console.log(data);
 
   enum SunEnum {
     north = "north",
@@ -23,18 +37,12 @@ export const AddGardenCard: FunctionComponent = () => {
     sunDirection: SunEnum;
   }
 
-  const { register, handleSubmit } = useForm<IFormInput>();
-  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
-
-  const con = () => {
-    console.log("visible: ", isVisible);
-    console.log("text: ", text);
-    console.log("number: ", number);
+  const toggleHide = () => {
+    setIsVisible(false);
   };
 
   return (
-    <View>
-      <Button onPress={con}>con</Button>
+    <SafeAreaView>
       <Pressable style={styles.container} onPress={() => setIsVisible(true)}>
         <Card containerStyle={styles.card}>
           <Card.Title>Add Garden</Card.Title>
@@ -46,29 +54,55 @@ export const AddGardenCard: FunctionComponent = () => {
         isVisible={isVisible}
         containerStyle={styles.bottomSheet}
       >
-        <View style={styles.inputContainer}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <input
-              {...register("newGardenName", {
-                required: "Please enter new garden name",
-              })}
-              placeholder={"New garden name"}
-            />
-            <input
-              {...register("hoursOfSun")}
-              placeholder={"Hours of sun this garden recieves"}
-            />
-            <select {...register("sunDirection")}>
-              <option value="north">north</option>
-              <option value="east">east</option>
-              <option value="south">south</option>
-              <option value="west">west</option>
-            </select>
-            <input type="submit" />
-          </form>
+        <View>
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                placeholder="New garden Name"
+                style={styles.input}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="newGardenName"
+          />
+          {errors.newGardenName && <Text>You must name your new garden.</Text>}
+
+          <Controller
+            control={control}
+            rules={{
+              maxLength: 2,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholder="Hours of sun recieved here"
+                onBlur={onBlur}
+                keyboardType="numeric"
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="hoursOfSun"
+          />
+          <Controller
+        control={control}
+        render={({ field }) => (
+    
+        )}
+        name="hoursOfSun"
+    />
+
+          <Button title="Submit" onPress={handleSubmit(onSubmit)} />
         </View>
+        <Button onPress={toggleHide}>Hide</Button>
       </BottomSheet>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -86,11 +120,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   bottomSheet: {
+    flex: 0.5,
     backgroundColor: "black",
   },
   inputContainer: {
     flex: 1,
     justifyContent: "space-between",
-    marginBottom: "80%",
+    // marginBottom: "80%",
+  },
+  input: {
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "black",
+    height: 80,
+    padding: 10,
+    borderRadius: 4,
+    marginVertical: 10,
+    marginHorizontal: 30,
   },
 });

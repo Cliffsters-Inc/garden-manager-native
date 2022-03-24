@@ -1,3 +1,4 @@
+import React from "react";
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
 import { Garden } from "../types";
 import { initialGardenState } from "./initialGardenState";

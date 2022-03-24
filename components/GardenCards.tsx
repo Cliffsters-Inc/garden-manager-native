@@ -1,3 +1,4 @@
+import React from "react";
 import { FunctionComponent } from "react";
 import { FlatList, Pressable, View, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
