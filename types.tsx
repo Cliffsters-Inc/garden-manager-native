@@ -17,9 +17,11 @@ declare global {
   }
 }
 
+/**
+ * Root Stack
+ */
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
-  VeggieInfoScreen: { veggieInfo: VeggieInfo };
   Modal: undefined;
   NotFound: undefined;
 };
@@ -27,16 +29,71 @@ export type RootStackParamList = {
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen>;
 
+/**
+ * Root Tab
+ */
 export type RootTabParamList = {
-  GardenTab: undefined;
-  VeggiesTab: undefined;
-  CalendarTab: undefined;
-  SettingsTab: undefined;
-  TabOne: undefined;
+  GardenTab: NavigatorScreenParams<GardenTabParamList>;
+  VeggiesTab: NavigatorScreenParams<VeggiesTabParamList>;
+  CalendarTab: NavigatorScreenParams<CalendarTabParamList>;
+  SettingsTab: NavigatorScreenParams<SettingsTabParamList>;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
   CompositeScreenProps<
     BottomTabScreenProps<RootTabParamList, Screen>,
     NativeStackScreenProps<RootStackParamList>
+  >;
+
+/**
+ * Garden Tab
+ */
+export type GardenTabParamList = {
+  GardenTabScreen: undefined;
+};
+
+export type GardenTabScreenProps<Screen extends keyof GardenTabParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<GardenTabParamList, Screen>,
+    RootStackScreenProps<keyof RootStackParamList>
+  >;
+
+/**
+ * Veggies Tab
+ */
+export type VeggiesTabParamList = {
+  VeggiesTabScreen: undefined;
+  VeggieInfoScreen: { title: string; veggieInfo: VeggieInfo };
+};
+
+export type VeggiesTabScreenProps<Screen extends keyof VeggiesTabParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<VeggiesTabParamList, Screen>,
+    RootStackScreenProps<keyof RootStackParamList>
+  >;
+
+/**
+ * Calendar Tab
+ */
+export type CalendarTabParamList = {
+  CalendarTabScreen: undefined;
+};
+
+export type CalendarTabScreenProps<Screen extends keyof CalendarTabParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<CalendarTabParamList, Screen>,
+    RootStackScreenProps<keyof RootStackParamList>
+  >;
+
+/**
+ * Settings Tab
+ */
+export type SettingsTabParamList = {
+  SettingsTabScreen: undefined;
+};
+
+export type SettingsTabScreenProps<Screen extends keyof SettingsTabParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<SettingsTabParamList, Screen>,
+    RootStackScreenProps<keyof RootStackParamList>
   >;

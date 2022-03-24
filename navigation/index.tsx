@@ -23,7 +23,14 @@ import NotFoundScreen from "../screens/NotFoundScreen";
 import { VeggieInfoScreen } from "../screens/VeggieInfoScreen";
 import { VeggiesTabScreen } from "../screens/VeggiesTabScreen";
 import { SettingsTabScreen } from "../screens/SettingsTabScreen";
-import { RootStackParamList, RootTabParamList } from "../types";
+import {
+  CalendarTabParamList,
+  GardenTabParamList,
+  RootStackParamList,
+  RootTabParamList,
+  SettingsTabParamList,
+  VeggiesTabParamList,
+} from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 
 export default function Navigation({
@@ -63,16 +70,6 @@ function RootNavigator() {
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
-      <Stack.Group>
-        <Stack.Screen
-          name="VeggieInfoScreen"
-          component={VeggieInfoScreen}
-          options={({ route }) => ({
-            title: route.params.veggieInfo.name,
-            headerBackTitle: "Veggies",
-          })}
-        />
-      </Stack.Group>
     </Stack.Navigator>
   );
 }
@@ -91,11 +88,12 @@ function BottomTabNavigator() {
       initialRouteName="GardenTab"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
+        headerShown: false,
       }}
     >
       <BottomTab.Screen
         name="GardenTab"
-        component={GardenTabScreen}
+        component={GardenTabNavigator}
         options={() => ({
           title: "Garden",
           tabBarIcon: ({ color }) => <TabBarIcon name="tree" color={color} />,
@@ -103,7 +101,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="VeggiesTab"
-        component={VeggiesTabScreen}
+        component={VeggiesTabNavigator}
         options={() => ({
           title: "Veggies",
           tabBarIcon: ({ color }) => (
@@ -111,10 +109,9 @@ function BottomTabNavigator() {
           ),
         })}
       />
-
       <BottomTab.Screen
         name="CalendarTab"
-        component={CalendarTabScreen}
+        component={CalendarTabNavigator}
         options={() => ({
           title: "Calendar",
           tabBarIcon: ({ color }) => (
@@ -124,13 +121,77 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="SettingsTab"
-        component={SettingsTabScreen}
+        component={SettingsTabNavigator}
         options={() => ({
           title: "Settings",
           tabBarIcon: ({ color }) => <TabBarIcon name="cog" color={color} />,
         })}
       />
     </BottomTab.Navigator>
+  );
+}
+
+const GardenStack = createNativeStackNavigator<GardenTabParamList>();
+
+function GardenTabNavigator() {
+  return (
+    <GardenStack.Navigator>
+      <GardenStack.Screen
+        name="GardenTabScreen"
+        component={GardenTabScreen}
+        options={{ title: "Garden" }}
+      />
+    </GardenStack.Navigator>
+  );
+}
+
+const VeggiesStack = createNativeStackNavigator<VeggiesTabParamList>();
+
+function VeggiesTabNavigator() {
+  return (
+    <VeggiesStack.Navigator>
+      <VeggiesStack.Screen
+        name="VeggiesTabScreen"
+        component={VeggiesTabScreen}
+        options={{ title: "Veggies" }}
+      />
+      <VeggiesStack.Screen
+        name="VeggieInfoScreen"
+        component={VeggieInfoScreen}
+        options={({ route }) => ({
+          title: route.params.veggieInfo.name,
+          headerBackTitle: "Veggies",
+        })}
+      />
+    </VeggiesStack.Navigator>
+  );
+}
+
+const CalendarStack = createNativeStackNavigator<CalendarTabParamList>();
+
+function CalendarTabNavigator() {
+  return (
+    <CalendarStack.Navigator>
+      <CalendarStack.Screen
+        name="CalendarTabScreen"
+        component={CalendarTabScreen}
+        options={{ title: "Calendar" }}
+      />
+    </CalendarStack.Navigator>
+  );
+}
+
+const SettingsStack = createNativeStackNavigator<SettingsTabParamList>();
+
+function SettingsTabNavigator() {
+  return (
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen
+        name="SettingsTabScreen"
+        component={SettingsTabScreen}
+        options={{ title: "Settings" }}
+      />
+    </SettingsStack.Navigator>
   );
 }
 

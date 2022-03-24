@@ -6,12 +6,12 @@ import {
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
 import { Text, View } from "../components/Themed";
-import { RootStackParamList } from "../types";
+import { VeggiesTabParamList } from "../types";
 
 export const VeggieInfoScreen = ({
   navigation,
   route,
-}: NativeStackScreenProps<RootStackParamList, "VeggieInfoScreen">) => {
+}: NativeStackScreenProps<VeggiesTabParamList, "VeggieInfoScreen">) => {
   const { veggieInfo } = route.params;
 
   return (
