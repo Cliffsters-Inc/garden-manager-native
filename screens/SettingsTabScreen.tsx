@@ -1,10 +1,10 @@
 import { StyleSheet } from "react-native";
-import { RootTabScreenProps } from "../types";
+import { SettingsTabScreenProps } from "../types";
 import { Text, View } from "../components/Themed";
 
 export const SettingsTabScreen = ({
   navigation,
-}: RootTabScreenProps<"SettingsTab">) => {
+}: SettingsTabScreenProps<"SettingsTabScreen">) => {
   return <View style={styles.container}></View>;
 };
 
