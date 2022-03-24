@@ -10,12 +10,13 @@ type Props = {
 };
 
 export const PlantList = ({ navigation }: Props) => {
-  const { plants } = mockData;
+  const { veggies } = mockData;
 
-  return plants ? (
+  return veggies ? (
     <FlatList
       style={styles.container}
-      data={plants}
+      data={veggies}
+      keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <TouchableOpacity
           style={[styles.plantContainer]}
@@ -26,7 +27,7 @@ export const PlantList = ({ navigation }: Props) => {
             })
           }
         >
-          <View key={item.id} style={styles.plantL}>
+          <View style={styles.plantL}>
             <Image style={styles.img} source={{ uri: item.image }} />
             <Text style={{ color: "green", fontWeight: "bold" }}>
               {item.name}

@@ -4,9 +4,9 @@ import { RootTabScreenProps } from "../types";
 import { View } from "../components/Themed";
 import { PlantList } from "../components/PlantList";
 
-export const PlantsTabScreen = ({
+export const VeggiesTabScreen = ({
   navigation,
-}: RootTabScreenProps<"PlantsTab">) => {
+}: RootTabScreenProps<"VeggiesTab">) => {
   return (
     <View style={styles.container}>
       <PlantList navigation={navigation} />

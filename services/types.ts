@@ -1,11 +1,3 @@
-// export type Plant = {
-//   name: string;
-//   id: string;
-//   plantationDate: string; // use ISO date eg.	"2022-03-16T07:59:10.647Z"
-//   harvestDate?: string;
-//   notes?: string;
-// };
-
 type Months =
   | "JAN"
   | "FEB"
@@ -34,7 +26,7 @@ export type Bed = {
 
 export type Plant = {
   id: string;
-  plantInfoId: string;
+  veggieInfoId: string;
   name: string;
   sowDate: string;
   harvestDate: string;
@@ -51,7 +43,7 @@ export type PlantLog = {
   photos: string[];
 };
 
-export type PlantInfo = {
+export type VeggieInfo = {
   id: string;
   name: string;
   description: string;
@@ -63,5 +55,5 @@ export type PlantInfo = {
 };
 
 export type MockData = {
-  plants: PlantInfo[];
+  veggies: VeggieInfo[];
 };

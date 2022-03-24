@@ -1,7 +1,7 @@
 import { MockData } from "./types";
 
 export const mockData: MockData = {
-  plants: [
+  veggies: [
     {
       id: "32089ghv290123asg3b21309",
       name: "Beetroot",

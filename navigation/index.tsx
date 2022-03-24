@@ -21,7 +21,7 @@ import { GardenTabScreen } from "../screens/GardenTabScreen";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import { PlantInfoScreen } from "../screens/PlantInfoScreen";
-import { PlantsTabScreen } from "../screens/PlantsTabScreen";
+import { VeggiesTabScreen } from "../screens/VeggiesTabScreen";
 import { SettingsTabScreen } from "../screens/SettingsTabScreen";
 import { RootStackParamList, RootTabParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
@@ -69,7 +69,7 @@ function RootNavigator() {
           component={PlantInfoScreen}
           options={({ route }) => ({
             title: route.params.plantInfo.name,
-            headerBackTitle: "Plants",
+            headerBackTitle: "Veggies",
           })}
         />
       </Stack.Group>
@@ -102,10 +102,10 @@ function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="PlantsTab"
-        component={PlantsTabScreen}
+        name="VeggiesTab"
+        component={VeggiesTabScreen}
         options={() => ({
-          title: "Plants",
+          title: "Veggies",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="seedling" color={color} />
           ),

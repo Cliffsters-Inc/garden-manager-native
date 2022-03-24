@@ -29,7 +29,7 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 
 export type RootTabParamList = {
   GardenTab: undefined;
-  PlantsTab: undefined;
+  VeggiesTab: undefined;
   CalendarTab: undefined;
   SettingsTab: undefined;
 };
