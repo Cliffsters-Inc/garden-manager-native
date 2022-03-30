@@ -6,7 +6,7 @@ export const initialGardenState = [
       {
         name: "1",
         id: "23kl4hj23645hj",
-        plants: [
+        veggies: [
           {
             name: "carrot",
             sowDate: "2022-03-16T07:59:10.647Z",
@@ -19,7 +19,7 @@ export const initialGardenState = [
       {
         name: "2",
         id: "2hjk3afv89",
-        plants: [
+        veggies: [
           {
             name: "capsicum",
             sowDate: "2022-03-16T07:59:10.647Z",
@@ -33,7 +33,7 @@ export const initialGardenState = [
   {
     name: "backyard",
     id: "213nkjun4safgkkhg1",
-    plants: [
+    veggies: [
       {
         name: "onions",
         sowDate: "2022-03-16T07:59:10.647Z",
