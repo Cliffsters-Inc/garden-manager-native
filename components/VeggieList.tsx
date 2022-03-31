@@ -19,7 +19,7 @@ export const VeggieList = ({ navigation }: Props) => {
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <TouchableOpacity
-          style={[styles.plantContainer]}
+          style={[styles.veggieContainer]}
           onPress={() =>
             navigation.navigate("VeggieInfoScreen", {
               title: item.name,
@@ -27,13 +27,13 @@ export const VeggieList = ({ navigation }: Props) => {
             })
           }
         >
-          <View style={styles.plantL}>
+          <View style={styles.veggieL}>
             <Image style={styles.img} source={{ uri: item.image }} />
             <Text style={{ color: "green", fontWeight: "bold" }}>
               {item.name}
             </Text>
           </View>
-          <View style={styles.plantR}>
+          <View style={styles.veggieR}>
             <Text style={{ color: "gray" }}>
               {`${item.growSeason.from} - ${item.growSeason.to}   `}
               <FontAwesome5 name="angle-right" size={12} />
@@ -51,18 +51,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     width: "100%",
   },
-  plantContainer: {
+  veggieContainer: {
     paddingVertical: 5,
     flexDirection: "row",
     justifyContent: "space-between",
     borderBottomWidth: 1,
     borderBottomColor: "#EEEEEE",
   },
-  plantL: {
+  veggieL: {
     flexDirection: "row",
     alignItems: "center",
   },
-  plantR: {
+  veggieR: {
     flexDirection: "row",
     alignItems: "center",
   },

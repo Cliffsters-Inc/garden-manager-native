@@ -15,25 +15,25 @@ type Months =
 export type Garden = {
   name: string;
   id: string;
-  beds: { name: string; id: string; plants?: Plant[] }[];
+  beds: { name: string; id: string; veggies?: Veggie[] }[];
 };
 
 export type Bed = {
   name: string;
   id: string;
-  plants: Plant[];
+  veggies: Veggie[];
 };
 
-export type Plant = {
+export type Veggie = {
   id: string;
   veggieInfoId: string;
   name: string;
   sowDate: string;
   harvestDate: string;
-  logs: PlantLog[];
+  logs: VeggieLog[];
 };
 
-export type PlantLog = {
+export type VeggieLog = {
   id: string;
   creationDate: string;
   editedDate: string;
@@ -48,8 +48,8 @@ export type VeggieInfo = {
   name: string;
   description: string;
   growSeason: { from: Months; to: Months };
-  companionPlantIds?: string[];
-  combativePlantIds?: string[];
+  companionVeggieIds?: string[];
+  combativeVeggieIds?: string[];
   image?: string;
   starred: boolean;
 };

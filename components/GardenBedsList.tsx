@@ -2,7 +2,7 @@ import React from "react";
 import { FlatList, Text, View, StyleSheet } from "react-native";
 import { useAppSelector } from "../store";
 import { gardenSelectors } from "../services/garden/gardenSlice";
-import { PlantsList } from "./PlantsList";
+import { VeggiesList } from "./VeggiesList";
 
 export const GardenBedsList = () => {
   const garden = useAppSelector(gardenSelectors.selectGardens);
@@ -13,7 +13,7 @@ export const GardenBedsList = () => {
     //   renderItem={({ item }) => (
     //     <View key={item.id}>
     //       <Text style={styles.subTitle}>{item.name}</Text>
-    //       <PlantsList plants={item.plants} />
+    //       <VeggiesList veggies={item.veggies} />
     //     </View>
     //   )}
     // />
