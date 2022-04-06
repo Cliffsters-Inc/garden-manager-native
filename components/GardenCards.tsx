@@ -1,11 +1,10 @@
 import React from "react";
 import { FunctionComponent } from "react";
-import { FlatList, Pressable, View, StyleSheet } from "react-native";
+import { FlatList, Pressable, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { gardenSelectors } from "../services/garden/gardenSlice";
 import { useAppSelector } from "../store";
-import { AddGardenCard } from "./AddGardenCard";
 
 interface GardenCardsProps {}
 
@@ -39,8 +38,8 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   card: {
-    minHeight: 80,
-    minWidth: 100,
+    minHeight: 100,
+    minWidth: 150,
     borderWidth: 1,
   },
 });

@@ -29,9 +29,7 @@ export type GardenSlice = {
 };
 
 export const gardenSelectors = {
-  // selectGardens: (state: RootState) => state.gardens,
   selectGardens: (state: RootState) => state.gardens,
-  // selectBeds: (state: RootState) => state.garden,
   // selectBed: (state: RootState, bedId: string) =>
   //   state.garden.beds.find((bed) => bed.id === bedId),
 };
