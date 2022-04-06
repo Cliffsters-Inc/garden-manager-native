@@ -1,5 +1,6 @@
 export const initialGardenState = [
   {
+    test: 1,
     name: "frontyard",
     id: "klj39sadg7sd98",
     beds: [

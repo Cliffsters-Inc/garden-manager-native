@@ -1,3 +1,4 @@
+import { combineReducers } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import {
   configureStore,
@@ -8,19 +9,47 @@ import {
   addListener,
 } from "@reduxjs/toolkit";
 import { gardenSlice } from "./services/garden/gardenSlice";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const persistConfig = {
+  key: "root",
+  version: 1,
+  storage: AsyncStorage,
+};
+
+const rootReducer = combineReducers({
+  [gardenSlice.name]: gardenSlice.reducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const listenerMiddlewareInstance = createListenerMiddleware({
   onError: () => console.error,
 });
 
 const store = configureStore({
-  reducer: {
-    [gardenSlice.name]: gardenSlice.reducer,
-  },
-  middleware: (gDM) => gDM().prepend(listenerMiddlewareInstance.middleware),
+  reducer: persistedReducer,
+  middleware: (gDM) =>
+    gDM({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).prepend(listenerMiddlewareInstance.middleware),
 });
 
-export { store };
+let persistor = persistStore(store);
+
+export { store, persistor };
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;

@@ -13,6 +13,7 @@ type Months =
   | "DEC";
 
 export type Garden = {
+  test?: number;
   name: string;
   id: string;
   beds: { name: string; id: string; veggies?: Veggie[] }[];
