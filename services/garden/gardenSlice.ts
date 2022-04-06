@@ -19,11 +19,6 @@ export const gardenSlice = createSlice({
       const updatedBeds = gardens.filter((bed) => bed.id !== payload.id);
       gardens = updatedBeds;
     },
-    test: (gardens) => {
-      console.log(gardens[0]);
-
-      gardens[0].test = gardens[0].test && gardens[0].test + 1;
-    },
   },
 });
 
