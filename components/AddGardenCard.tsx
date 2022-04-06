@@ -16,6 +16,7 @@ export const AddGardenCard: React.FunctionComponent = () => {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -25,6 +26,8 @@ export const AddGardenCard: React.FunctionComponent = () => {
 
   const onSubmit = (data: NewGardenForm) => {
     appDispatch(gardenActions.addGarden({ name: data.newGardenName }));
+    setIsVisible(false);
+    reset({ ...data, newGardenName: "" });
   };
 
   const toggleHide = () => {
