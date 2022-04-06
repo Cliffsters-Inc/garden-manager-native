@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
 import { Pressable, StyleSheet, TextInput } from "react-native";
@@ -7,9 +5,13 @@ import { BottomSheet, Button, Card, Input, Text } from "react-native-elements";
 import { View } from "./Themed";
 import { Controller, useForm } from "react-hook-form";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAppDispatch } from "../store";
+import { gardenActions } from "../services/garden/gardenSlice";
+import { NewGardenForm } from "../services/types";
 
 export const AddGardenCard: React.FunctionComponent = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const appDispatch = useAppDispatch();
 
   const {
     control,
@@ -18,24 +20,12 @@ export const AddGardenCard: React.FunctionComponent = () => {
   } = useForm({
     defaultValues: {
       newGardenName: "",
-      hoursOfSun: 0,
-      sunDirection: undefined,
     },
   });
-  const onSubmit = (data: object) => console.log(data);
 
-  enum SunEnum {
-    north = "north",
-    east = "east",
-    south = "south",
-    west = "west",
-  }
-
-  interface IFormInput {
-    newGardenName: string;
-    hoursOfSun: number;
-    sunDirection: SunEnum;
-  }
+  const onSubmit = (data: NewGardenForm) => {
+    appDispatch(gardenActions.addGarden({ name: data.newGardenName }));
+  };
 
   const toggleHide = () => {
     setIsVisible(false);
@@ -58,46 +48,25 @@ export const AddGardenCard: React.FunctionComponent = () => {
           <Controller
             control={control}
             rules={{
-              required: true,
+              required: "Name is required",
+              maxLength: {
+                value: 20,
+                message: "Too many characters",
+              },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 placeholder="New garden Name"
                 style={styles.input}
                 onBlur={onBlur}
-                onChangeText={onChange}
+                onChangeText={(value) => onChange(value)}
                 value={value}
+                autoCapitalize={"sentences"}
               />
             )}
             name="newGardenName"
           />
-          {errors.newGardenName && <Text>You must name your new garden.</Text>}
-
-          <Controller
-            control={control}
-            rules={{
-              maxLength: 2,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Hours of sun recieved here"
-                onBlur={onBlur}
-                keyboardType="numeric"
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="hoursOfSun"
-          />
-          {/* <Controller
-        control={control}
-        // render={({ field }) => (
-    
-        // )}
-        name="hoursOfSun"
-    /> */}
-
+          {errors.newGardenName && <Text>{errors.newGardenName.message}</Text>}
           <Button title="Submit" onPress={handleSubmit(onSubmit)} />
         </View>
         <Button onPress={toggleHide}>Hide</Button>
@@ -120,13 +89,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   bottomSheet: {
-    flex: 0.5,
+    flex: 1,
+    justifyContent: "center",
     backgroundColor: "black",
   },
   inputContainer: {
     flex: 1,
-    justifyContent: "space-between",
-    // marginBottom: "80%",
   },
   input: {
     backgroundColor: "white",
