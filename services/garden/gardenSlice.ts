@@ -23,8 +23,6 @@ export const gardenSlice = createSlice({
       const { payload } = action;
 
       let gardenIndex = gardens.findIndex((garden) => garden.id === payload.id);
-      console.log("bedyy: ", gardenIndex);
-      console.log("payload: ", payload.id);
       gardens[gardenIndex].beds?.push({
         name: payload.name,
         id: nanoid(),
