@@ -33,12 +33,18 @@ export const initialGardenState = [
   {
     name: "backyard",
     id: "213nkjun4safgkkhg1",
-    veggies: [
+    beds: [
       {
-        name: "onions",
-        sowDate: "2022-03-16T07:59:10.647Z",
-        harvestDate: "2023-01-14T13:00:00.000Z",
-        notes: "Set up shadecloth for extra protection.",
+        name: "1",
+        id: "bkghefuhefku865766",
+        veggies: [
+          {
+            name: "onions",
+            sowDate: "2022-03-16T07:59:10.647Z",
+            harvestDate: "2023-01-14T13:00:00.000Z",
+            notes: "Set up shadecloth for extra protection.",
+          },
+        ],
       },
     ],
   },

@@ -3,18 +3,21 @@ import { Text, View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 import { GardenCards } from "../components/GardenCards";
 import { AddGardenCard } from "../components/AddGardenCard";
+import { useState } from "react";
+import { BedCards } from "../components/BedCards";
 
 export const GardenTabScreen = ({
   navigation,
 }: GardenTabScreenProps<"GardenTabScreen">) => {
+  const [selectedGardenId, setSelectedGardenId] = useState<string>("");
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.title}>Garden Beds</Text>
         <AddGardenCard />
       </View>
       <View>
-        <GardenCards />
+        <GardenCards setSelectedGardenId={setSelectedGardenId} />
+        <BedCards selectedGardenId={selectedGardenId} />
       </View>
     </View>
   );
@@ -30,5 +33,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginTop: "50%",
+    backgroundColor: "red",
   },
 });

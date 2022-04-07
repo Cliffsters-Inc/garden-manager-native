@@ -15,7 +15,7 @@ type Months =
 export type Garden = {
   name: string;
   id: string;
-  beds?: { name: string; id: string; veggies?: Veggie[] }[];
+  beds?: Bed[];
 };
 
 export type NewGardenForm = {
