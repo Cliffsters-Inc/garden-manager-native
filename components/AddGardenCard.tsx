@@ -1,10 +1,9 @@
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
 import { Pressable, StyleSheet, TextInput } from "react-native";
-import { BottomSheet, Button, Card, Input, Text } from "react-native-elements";
+import { BottomSheet, Button, Card, Text } from "react-native-elements";
 import { View } from "./Themed";
 import { Controller, useForm } from "react-hook-form";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useAppDispatch } from "../store";
 import { gardenActions } from "../services/garden/gardenSlice";
 import { NewGardenForm } from "../services/types";
@@ -35,7 +34,7 @@ export const AddGardenCard: React.FunctionComponent = () => {
   };
 
   return (
-    <SafeAreaView>
+    <View>
       <Pressable style={styles.container} onPress={() => setIsVisible(true)}>
         <Card containerStyle={styles.card}>
           <Card.Title>Add Garden</Card.Title>
@@ -74,13 +73,13 @@ export const AddGardenCard: React.FunctionComponent = () => {
         </View>
         <Button onPress={toggleHide}>Hide</Button>
       </BottomSheet>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 0.5,
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
@@ -95,9 +94,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     backgroundColor: "black",
-  },
-  inputContainer: {
-    flex: 1,
   },
   input: {
     backgroundColor: "white",
