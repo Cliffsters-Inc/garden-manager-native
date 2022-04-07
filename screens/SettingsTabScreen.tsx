@@ -1,11 +1,16 @@
 import { StyleSheet } from "react-native";
 import { SettingsTabScreenProps } from "../types";
-import { Text, View } from "../components/Themed";
+import { View } from "../components/Themed";
+import { DevSection } from "../components/DevSection";
 
 export const SettingsTabScreen = ({
   navigation,
 }: SettingsTabScreenProps<"SettingsTabScreen">) => {
-  return <View style={styles.container}></View>;
+  return (
+    <View style={styles.container}>
+      <DevSection />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
