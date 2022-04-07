@@ -7,6 +7,7 @@ import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
 import { PersistGate } from "redux-persist/integration/react";
+import { Loading } from "./components/Loading";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -18,7 +19,7 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
+          <PersistGate loading={<Loading />} persistor={persistor}>
             <Navigation colorScheme={colorScheme} />
             <StatusBar />
           </PersistGate>
