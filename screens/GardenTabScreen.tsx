@@ -9,9 +9,13 @@ export const GardenTabScreen = ({
 }: GardenTabScreenProps<"GardenTabScreen">) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Garden Beds</Text>
-      <AddGardenCard />
-      <GardenCards />
+      <View>
+        <Text style={styles.title}>Garden Beds</Text>
+        <AddGardenCard />
+      </View>
+      <View>
+        <GardenCards />
+      </View>
     </View>
   );
 };
@@ -25,6 +29,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    marginTop: "20%",
+    marginTop: "50%",
   },
 });
