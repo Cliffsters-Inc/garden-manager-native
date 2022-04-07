@@ -19,6 +19,12 @@ export const gardenSlice = createSlice({
       const updatedBeds = gardens.filter((bed) => bed.id !== payload.id);
       gardens = updatedBeds;
     },
+    addBed: (gardens, action: PayloadAction<{ id: string }>) => {
+      const { payload } = action;
+
+      let gardenIndex = gardens.findIndex((garden) => garden.id === payload.id);
+      gardens[gardenIndex].beds?.push({ name: "", id: nanoid() });
+    },
   },
 });
 

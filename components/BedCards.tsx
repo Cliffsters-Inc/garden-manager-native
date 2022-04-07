@@ -1,17 +1,18 @@
 import { FunctionComponent } from "react";
 import { FlatList, Pressable } from "react-native";
-import { Card } from "react-native-elements";
-import { gardenSelectors } from "../services/garden/gardenSlice";
-import { useAppSelector } from "../store";
+import { Button, Card } from "react-native-elements";
+import { gardenActions, gardenSelectors } from "../services/garden/gardenSlice";
+import { useAppDispatch, useAppSelector } from "../store";
 import { Text, View } from "./Themed";
 
 type BedCardsProps = {
-  selectedGardenId: Object;
+  selectedGardenId: string;
 };
 
 export const BedCards: FunctionComponent<BedCardsProps> = ({
   selectedGardenId,
 }) => {
+  const appDispatch = useAppDispatch();
   const gardens = useAppSelector(gardenSelectors.selectGardens);
 
   const selectedGardenObject = gardens.find(
@@ -19,6 +20,10 @@ export const BedCards: FunctionComponent<BedCardsProps> = ({
   );
 
   const beds = selectedGardenObject?.beds;
+
+  const handlePress = () => {
+    appDispatch(gardenActions.addBed({ id: selectedGardenId }));
+  };
 
   return (
     <View>
@@ -35,6 +40,7 @@ export const BedCards: FunctionComponent<BedCardsProps> = ({
           </Pressable>
         )}
       ></FlatList>
+      <Button onPress={handlePress}>Add Bed</Button>
     </View>
   );
 };

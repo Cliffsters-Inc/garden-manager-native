@@ -25,7 +25,7 @@ export type NewGardenForm = {
 export type Bed = {
   name: string;
   id: string;
-  veggies: Veggie[];
+  veggies?: Veggie[];
 };
 
 export type Veggie = {
