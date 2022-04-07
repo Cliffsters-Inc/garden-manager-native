@@ -22,6 +22,10 @@ export type NewGardenForm = {
   newGardenName: string;
 };
 
+export type NewBedForm = {
+  newBedName: string;
+};
+
 export type Bed = {
   name: string;
   id: string;

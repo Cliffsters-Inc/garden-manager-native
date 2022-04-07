@@ -12,7 +12,6 @@ type BedCardsProps = {
 export const BedCards: FunctionComponent<BedCardsProps> = ({
   selectedGardenId,
 }) => {
-  const appDispatch = useAppDispatch();
   const gardens = useAppSelector(gardenSelectors.selectGardens);
 
   const selectedGardenObject = gardens.find(
@@ -20,10 +19,6 @@ export const BedCards: FunctionComponent<BedCardsProps> = ({
   );
 
   const beds = selectedGardenObject?.beds;
-
-  const handlePress = () => {
-    appDispatch(gardenActions.addBed({ id: selectedGardenId }));
-  };
 
   return (
     <View>
@@ -40,7 +35,6 @@ export const BedCards: FunctionComponent<BedCardsProps> = ({
           </Pressable>
         )}
       ></FlatList>
-      <Button onPress={handlePress}>Add Bed</Button>
     </View>
   );
 };

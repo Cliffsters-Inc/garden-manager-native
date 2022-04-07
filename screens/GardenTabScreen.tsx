@@ -5,6 +5,7 @@ import { GardenCards } from "../components/GardenCards";
 import { AddGardenCard } from "../components/AddGardenCard";
 import { useState } from "react";
 import { BedCards } from "../components/BedCards";
+import { AddBedCard } from "../components/AddBedCard";
 
 export const GardenTabScreen = ({
   navigation,
@@ -17,6 +18,11 @@ export const GardenTabScreen = ({
       </View>
       <View>
         <GardenCards setSelectedGardenId={setSelectedGardenId} />
+      </View>
+      <View>
+        <AddBedCard selectedGardenId={selectedGardenId} />
+      </View>
+      <View>
         <BedCards selectedGardenId={selectedGardenId} />
       </View>
     </View>
