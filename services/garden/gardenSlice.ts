@@ -1,12 +1,11 @@
 import React from "react";
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
-import { Garden } from "../types";
 import { initialGardenState } from "./initialGardenState";
 import { RootState } from "../../store";
 
 export const gardenSlice = createSlice({
   name: "gardens",
-  initialState: initialGardenState as unknown as Garden[],
+  initialState: initialGardenState,
   reducers: {
     addGarden: (gardens, action: PayloadAction<{ name: string }>) => {
       const { payload } = action;

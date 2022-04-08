@@ -34,27 +34,28 @@ export type Bed = {
 
 export type Veggie = {
   id: string;
-  veggieInfoId: string;
+  veggieInfoId?: string; // TODO: won't be optional once adding from veggies list implemented
   name: string;
-  sowDate: string;
-  harvestDate: string;
-  logs: VeggieLog[];
+  notes?: string;
+  sowDate?: string;
+  harvestDate?: string;
+  logs?: VeggieLog[];
 };
 
 export type VeggieLog = {
   id: string;
   creationDate: string;
-  editedDate: string;
-  soilDescription: string;
-  phLevel: number;
-  notes: string;
-  photos: string[];
+  editedDate?: string;
+  soilDescription?: string;
+  phLevel?: number;
+  notes?: string;
+  photos?: string[];
 };
 
 export type VeggieInfo = {
   id: string;
   name: string;
-  description: string;
+  description?: string; // TODO: won't be optional once all veggies added with descriptions
   growSeason: { from: Months; to: Months };
   companionVeggieIds?: string[];
   combativeVeggieIds?: string[];
