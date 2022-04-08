@@ -17,7 +17,10 @@ export const GardenTabScreen = ({
         <AddGardenCard />
       </View>
       <View>
-        <GardenCards setSelectedGardenId={setSelectedGardenId} />
+        <GardenCards
+          navigation={navigation}
+          setSelectedGardenId={setSelectedGardenId}
+        />
       </View>
       <View>
         <AddBedCard selectedGardenId={selectedGardenId} />

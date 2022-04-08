@@ -1,20 +1,24 @@
 import React from "react";
-import { FunctionComponent } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
 import { Button, Card } from "react-native-elements";
-import { SafeAreaView } from "react-native-safe-area-context";
+import Navigation from "../navigation";
+import { BedsTabScreen } from "../screens/BedsTabScreen";
 import { gardenSelectors } from "../services/garden/gardenSlice";
 import { useAppSelector } from "../store";
 import { GardenTabScreenProps } from "../types";
+import { View } from "./Themed";
 
 type GardenCardsProps = {
   setSelectedGardenId: React.Dispatch<React.SetStateAction<string>>;
   navigation: GardenTabScreenProps<"GardenTabScreen">["navigation"];
 };
 
-export const GardenCards = (props: any, { navigation }: GardenCardsProps) => {
+export const GardenCards = ({
+  setSelectedGardenId,
+  navigation,
+}: GardenCardsProps) => {
   const gardens = useAppSelector(gardenSelectors.selectGardens);
-  const setSelectedGarden = props.setSelectedGardenId;
+  const setSelectedGarden = setSelectedGardenId;
 
   const nav = () => {
     console.log("navTest");
@@ -22,7 +26,7 @@ export const GardenCards = (props: any, { navigation }: GardenCardsProps) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <FlatList
         numColumns={2}
         keyExtractor={(item) => item.id}
@@ -36,7 +40,7 @@ export const GardenCards = (props: any, { navigation }: GardenCardsProps) => {
         )}
       />
       <Button onPress={nav}>nav</Button>
-    </SafeAreaView>
+    </View>
   );
 };
 
