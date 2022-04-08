@@ -3,17 +3,14 @@ import { FlatList, Pressable, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
 import { gardenSelectors } from "../services/garden/gardenSlice";
 import { useAppSelector } from "../store";
-import { GardenTabScreenProps } from "../types";
 import { Text, View } from "./Themed";
 
 type BedCardsProps = {
   selectedGardenId: string;
-  navigation: GardenTabScreenProps<"GardenTabScreen">["navigation"];
 };
 
 export const BedCards: FunctionComponent<BedCardsProps> = ({
   selectedGardenId,
-  navigation,
 }) => {
   const gardens = useAppSelector(gardenSelectors.selectGardens);
 
@@ -31,15 +28,13 @@ export const BedCards: FunctionComponent<BedCardsProps> = ({
         keyExtractor={(item) => item.id}
         data={beds}
         renderItem={({ item }) => (
-          <Pressable
-            onPress={() => navigation.navigate("BedScreen", { bed: item })}
-          >
+          <Pressable>
             <Card containerStyle={styles.card}>
               <Card.Title>{item.name}</Card.Title>
             </Card>
           </Pressable>
         )}
-      />
+      ></FlatList>
     </View>
   );
 };

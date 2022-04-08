@@ -1,13 +1,14 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { StyleSheet } from "react-native";
 import { AddBedCard } from "../components/AddBedCard";
 import { BedCards } from "../components/BedCards";
 import { View } from "../components/Themed";
-import { GardenTabScreenProps } from "../types";
+import { GardenTabParamList } from "../types";
 
 export const BedsTabScreen = ({
   navigation,
   route,
-}: GardenTabScreenProps<"BedsTabScreen">) => {
+}: NativeStackScreenProps<GardenTabParamList, "BedsTabScreen">) => {
   const { id } = route.params;
 
   return (
@@ -16,7 +17,7 @@ export const BedsTabScreen = ({
         <AddBedCard selectedGardenId={id} />
       </View>
       <View>
-        <BedCards selectedGardenId={id} navigation={navigation} />
+        <BedCards selectedGardenId={id} />
       </View>
     </View>
   );
