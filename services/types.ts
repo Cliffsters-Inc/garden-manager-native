@@ -64,5 +64,5 @@ export type VeggieInfo = {
 };
 
 export type MockData = {
-  veggies: VeggieInfo[];
+  veggieInfos: VeggieInfo[];
 };

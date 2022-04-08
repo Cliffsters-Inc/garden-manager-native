@@ -34,6 +34,7 @@ import {
 import LinkingConfiguration from "./LinkingConfiguration";
 import { BedsTabScreen } from "../screens/BedsTabScreen";
 import { BedScreen } from "../screens/BedScreen";
+import { VeggieScreen } from "../screens/VeggieScreen";
 
 export default function Navigation({
   colorScheme,
@@ -152,6 +153,11 @@ function GardenTabNavigator() {
         name="BedScreen"
         component={BedScreen}
         options={{ title: "Bed" }}
+      />
+      <GardenStack.Screen
+        name="VeggieScreen"
+        component={VeggieScreen}
+        options={{ title: "Veggie" }}
       />
     </GardenStack.Navigator>
   );

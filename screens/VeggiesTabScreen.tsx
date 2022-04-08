@@ -4,20 +4,21 @@ import { VeggiesTabScreenProps } from "../types";
 import { View } from "../components/Themed";
 import { VeggieList } from "../components/VeggieList";
 import { mockData } from "../services/mockData";
+import { VeggieInfo } from "../services/types";
 
 export const VeggiesTabScreen = ({
   navigation,
 }: VeggiesTabScreenProps<"VeggiesTabScreen">) => {
-  const { veggies } = mockData;
+  const { veggieInfos } = mockData;
 
   return (
     <View style={styles.container}>
       <VeggieList
-        veggies={veggies}
-        navigationHandler={(veggie) =>
+        veggies={veggieInfos}
+        navigationHandler={(veggieInfo: VeggieInfo) =>
           navigation.navigate("VeggieInfoScreen", {
-            title: veggie.name,
-            veggieInfo: veggie,
+            title: veggieInfo.name,
+            veggieInfo: veggieInfo,
           })
         }
       />
