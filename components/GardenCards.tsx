@@ -26,7 +26,6 @@ export const GardenCards = ({
   };
 
   useEffect(() => {
-    console.log("effecr ran");
     if (selectedGardenId !== "") {
       navigation.navigate("BedsTabScreen", { id: selectedGardenId });
     }
@@ -52,7 +51,7 @@ export const GardenCards = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 0.5,
     alignItems: "center",
     justifyContent: "center",
     width: "100%",

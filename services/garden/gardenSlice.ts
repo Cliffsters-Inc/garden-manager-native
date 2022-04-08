@@ -6,12 +6,16 @@ import { RootState } from "../../store";
 
 export const gardenSlice = createSlice({
   name: "gardens",
-  initialState: initialGardenState as Garden[],
+  initialState: initialGardenState as unknown as Garden[],
   reducers: {
     addGarden: (gardens, action: PayloadAction<{ name: string }>) => {
       const { payload } = action;
 
-      gardens.push({ name: payload.name, id: nanoid(), beds: [] });
+      gardens.push({
+        name: payload.name,
+        id: nanoid(),
+        beds: [{ name: "1", id: nanoid(), veggies: [] }],
+      });
     },
     removeGarden: (gardens, action: PayloadAction<{ id: string }>) => {
       const { payload } = action;

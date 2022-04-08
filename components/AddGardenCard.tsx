@@ -79,16 +79,17 @@ export const AddGardenCard: React.FunctionComponent = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.5,
+    flex: 0.3,
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
     padding: 15,
+    marginTop: 100,
   },
   card: {
     minHeight: 80,
     minWidth: 100,
-    borderWidth: 1,
+    borderWidth: 2,
   },
   bottomSheet: {
     flex: 1,

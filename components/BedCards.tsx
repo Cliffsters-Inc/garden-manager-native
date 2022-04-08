@@ -1,8 +1,8 @@
 import { FunctionComponent } from "react";
-import { FlatList, Pressable } from "react-native";
-import { Button, Card } from "react-native-elements";
-import { gardenActions, gardenSelectors } from "../services/garden/gardenSlice";
-import { useAppDispatch, useAppSelector } from "../store";
+import { FlatList, Pressable, StyleSheet } from "react-native";
+import { Card } from "react-native-elements";
+import { gardenSelectors } from "../services/garden/gardenSlice";
+import { useAppSelector } from "../store";
 import { Text, View } from "./Themed";
 
 type BedCardsProps = {
@@ -21,7 +21,7 @@ export const BedCards: FunctionComponent<BedCardsProps> = ({
   const beds = selectedGardenObject?.beds;
 
   return (
-    <View>
+    <View style={styles.container}>
       <Text>{selectedGardenObject?.name}</Text>
       <FlatList
         numColumns={2}
@@ -29,7 +29,7 @@ export const BedCards: FunctionComponent<BedCardsProps> = ({
         data={beds}
         renderItem={({ item }) => (
           <Pressable>
-            <Card>
+            <Card containerStyle={styles.card}>
               <Card.Title>{item.name}</Card.Title>
             </Card>
           </Pressable>
@@ -38,3 +38,18 @@ export const BedCards: FunctionComponent<BedCardsProps> = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 0.7,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    padding: 15,
+  },
+  card: {
+    minHeight: 100,
+    minWidth: 150,
+    borderWidth: 1,
+  },
+});

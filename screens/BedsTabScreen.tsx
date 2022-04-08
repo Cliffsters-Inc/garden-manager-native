@@ -1,4 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { StyleSheet } from "react-native";
 import { AddBedCard } from "../components/AddBedCard";
 import { BedCards } from "../components/BedCards";
 import { View } from "../components/Themed";
@@ -11,7 +12,7 @@ export const BedsTabScreen = ({
   const { id } = route.params;
 
   return (
-    <View>
+    <View style={styles.container}>
       <View>
         <AddBedCard selectedGardenId={id} />
       </View>
@@ -21,3 +22,16 @@ export const BedsTabScreen = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginTop: "50%",
+  },
+});
