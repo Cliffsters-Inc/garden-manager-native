@@ -1,48 +1,57 @@
 import React from "react";
 import { Text, View } from "./Themed";
 import { FlatList, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { mockData } from "../services/mockData";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { VeggiesTabScreenProps } from "../types";
+import { Veggie, VeggieInfo } from "../services/types";
+import { format } from "date-fns";
 
 type Props = {
-  navigation: VeggiesTabScreenProps<"VeggiesTabScreen">["navigation"];
+  veggies: VeggieInfo[] | Veggie[];
+  navigationHandler: (veggie: any) => void;
 };
 
-export const VeggieList = ({ navigation }: Props) => {
-  const { veggies } = mockData;
-
-  return veggies ? (
-    <FlatList
-      style={styles.container}
+export const VeggieList = ({ veggies, navigationHandler }: Props) => {
+  return (
+    <FlatList<VeggieInfo | Veggie>
       data={veggies}
       keyExtractor={(item) => item.id}
+      style={styles.container}
       renderItem={({ item }) => (
         <TouchableOpacity
-          style={[styles.veggieContainer]}
-          onPress={() =>
-            navigation.navigate("VeggieInfoScreen", {
-              title: item.name,
-              veggieInfo: item,
-            })
-          }
+          style={styles.veggieContainer}
+          onPress={() => navigationHandler(item)}
         >
           <View style={styles.veggieL}>
-            <Image style={styles.img} source={{ uri: item.image }} />
+            {"image" in item && (
+              <Image style={styles.img} source={{ uri: item.image }} />
+            )}
             <Text style={{ color: "green", fontWeight: "bold" }}>
               {item.name}
             </Text>
           </View>
           <View style={styles.veggieR}>
             <Text style={{ color: "gray" }}>
-              {`${item.growSeason.from} - ${item.growSeason.to}   `}
-              <FontAwesome5 name="angle-right" size={12} />
+              {"growSeason" in item &&
+                `${item.growSeason.from} - ${item.growSeason.to}   `}
             </Text>
+            <View style={{ flexDirection: "column", marginRight: 15 }}>
+              <Text style={{ color: "gray", textAlign: "right" }}>
+                {"sowDate" in item &&
+                  item.sowDate &&
+                  `Sown: ${format(new Date(item.sowDate), "dd/MM/yy")}`}
+              </Text>
+              <Text style={{ color: "gray", textAlign: "right" }}>
+                {"harvestDate" in item &&
+                  item.harvestDate &&
+                  `Harvest: ${format(new Date(item.harvestDate), "dd/MM/yy")}`}
+              </Text>
+            </View>
+            <FontAwesome5 name="angle-right" size={12} />
           </View>
         </TouchableOpacity>
       )}
     />
-  ) : null;
+  );
 };
 
 const styles = StyleSheet.create({

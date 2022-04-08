@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text } from "../components/Themed";
+import { VeggieList } from "../components/VeggieList";
 import { GardenTabScreenProps } from "../types";
 
 export const BedScreen = ({
@@ -8,11 +9,10 @@ export const BedScreen = ({
 }: GardenTabScreenProps<"BedScreen">) => {
   const { bed } = route.params;
 
-  console.log("Bed on bed screen", { bed });
-
   return (
     <View>
       <Text>Bed Name: {bed.name}</Text>
+      {bed.veggies && <VeggieList veggies={bed.veggies} />}
     </View>
   );
 };
