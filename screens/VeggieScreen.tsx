@@ -1,3 +1,4 @@
+import { StyleSheet } from "react-native";
 import { View, Text } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 
@@ -7,7 +8,7 @@ export const VeggieScreen = ({
 }: GardenTabScreenProps<"VeggieScreen">) => {
   const { veggie } = route.params;
   return (
-    <View>
+    <View style={styles.container}>
       <Text>Name: {veggie.name}</Text>
       {veggie.sowDate && <Text>Sowed: {veggie.sowDate}</Text>}
       {veggie.harvestDate && <Text>Harvest: {veggie.harvestDate}</Text>}
@@ -15,3 +16,11 @@ export const VeggieScreen = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});

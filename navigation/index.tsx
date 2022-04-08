@@ -12,13 +12,12 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName } from "react-native";
+import { Button, ColorSchemeName } from "react-native";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import { CalendarTabScreen } from "../screens/CalendarTabScreen";
 import { GardenTabScreen } from "../screens/GardenTabScreen";
-import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import { VeggieInfoScreen } from "../screens/VeggieInfoScreen";
 import { VeggiesTabScreen } from "../screens/VeggiesTabScreen";
@@ -35,6 +34,7 @@ import LinkingConfiguration from "./LinkingConfiguration";
 import { BedsTabScreen } from "../screens/BedsTabScreen";
 import { BedScreen } from "../screens/BedScreen";
 import { VeggieScreen } from "../screens/VeggieScreen";
+import { AddVeggieModalScreen } from "../screens/AddVeggieModalScreen";
 
 export default function Navigation({
   colorScheme,
@@ -71,7 +71,19 @@ function RootNavigator() {
         options={{ title: "Oops!" }}
       />
       <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
+        <Stack.Screen
+          name="AddVeggieModal"
+          component={AddVeggieModalScreen}
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <Button title="Cancel" onPress={navigation.goBack} />
+            ),
+            title: "Add a Veggie",
+            headerRight: () => (
+              <Button title="Add" onPress={navigation.goBack} disabled={true} />
+            ),
+          })}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );

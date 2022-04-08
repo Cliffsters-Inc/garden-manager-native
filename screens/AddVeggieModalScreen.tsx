@@ -4,7 +4,7 @@ import { Platform, StyleSheet } from "react-native";
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
 
-export default function ModalScreen() {
+export const AddVeggieModalScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Modal</Text>
@@ -19,7 +19,7 @@ export default function ModalScreen() {
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
