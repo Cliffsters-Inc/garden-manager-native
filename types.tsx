@@ -3,6 +3,8 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
+import { Bed } from "./services/types";
+
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
   CompositeScreenProps,
@@ -51,6 +53,7 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
 export type GardenTabParamList = {
   GardenTabScreen: undefined;
   BedsTabScreen: { id: string };
+  BedScreen: { bed: Bed };
 };
 
 export type GardenTabScreenProps<Screen extends keyof GardenTabParamList> =

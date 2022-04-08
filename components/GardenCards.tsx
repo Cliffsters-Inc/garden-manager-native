@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
 import { gardenSelectors } from "../services/garden/gardenSlice";
@@ -7,29 +7,11 @@ import { GardenTabScreenProps } from "../types";
 import { View } from "./Themed";
 
 type GardenCardsProps = {
-  setSelectedGardenId: React.Dispatch<React.SetStateAction<string>>;
   navigation: GardenTabScreenProps<"GardenTabScreen">["navigation"];
-  selectedGardenId: string;
 };
 
-export const GardenCards = ({
-  setSelectedGardenId,
-  navigation,
-  selectedGardenId,
-}: GardenCardsProps) => {
+export const GardenCards = ({ navigation }: GardenCardsProps) => {
   const gardens = useAppSelector(gardenSelectors.selectGardens);
-  const setSelectedGarden = setSelectedGardenId;
-
-  const handlePress = async (id: string) => {
-    setSelectedGarden(id);
-    console.log("id: ", selectedGardenId);
-  };
-
-  useEffect(() => {
-    if (selectedGardenId !== "") {
-      navigation.navigate("BedsTabScreen", { id: selectedGardenId });
-    }
-  }, [selectedGardenId]);
 
   return (
     <View style={styles.container}>
@@ -38,7 +20,11 @@ export const GardenCards = ({
         keyExtractor={(item) => item.id}
         data={gardens}
         renderItem={({ item }) => (
-          <Pressable onPress={() => handlePress(item.id)}>
+          <Pressable
+            onPress={() =>
+              navigation.navigate("BedsTabScreen", { id: item.id })
+            }
+          >
             <Card containerStyle={styles.card}>
               <Card.Title>{item.name}</Card.Title>
             </Card>
