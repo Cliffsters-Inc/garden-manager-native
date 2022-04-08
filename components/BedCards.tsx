@@ -1,57 +1,47 @@
-import React, { useEffect } from "react";
+import { FunctionComponent } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
 import { gardenSelectors } from "../services/garden/gardenSlice";
 import { useAppSelector } from "../store";
-import { GardenTabScreenProps } from "../types";
-import { View } from "./Themed";
+import { Text, View } from "./Themed";
 
-type GardenCardsProps = {
-  setSelectedGardenId: React.Dispatch<React.SetStateAction<string>>;
-  navigation: GardenTabScreenProps<"GardenTabScreen">["navigation"];
+type BedCardsProps = {
   selectedGardenId: string;
 };
 
-export const GardenCards = ({
-  setSelectedGardenId,
-  navigation,
+export const BedCards: FunctionComponent<BedCardsProps> = ({
   selectedGardenId,
-}: GardenCardsProps) => {
+}) => {
   const gardens = useAppSelector(gardenSelectors.selectGardens);
-  const setSelectedGarden = setSelectedGardenId;
 
-  const handlePress = async (id: string) => {
-    setSelectedGarden(id);
-    console.log("id: ", selectedGardenId);
-  };
+  const selectedGardenObject = gardens.find(
+    (garden) => garden.id === selectedGardenId
+  );
 
-  useEffect(() => {
-    if (selectedGardenId !== "") {
-      navigation.navigate("BedsTabScreen", { id: selectedGardenId });
-    }
-  }, [selectedGardenId]);
+  const beds = selectedGardenObject?.beds;
 
   return (
     <View style={styles.container}>
+      <Text>{selectedGardenObject?.name}</Text>
       <FlatList
         numColumns={2}
         keyExtractor={(item) => item.id}
-        data={gardens}
+        data={beds}
         renderItem={({ item }) => (
-          <Pressable onPress={() => handlePress(item.id)}>
+          <Pressable>
             <Card containerStyle={styles.card}>
               <Card.Title>{item.name}</Card.Title>
             </Card>
           </Pressable>
         )}
-      />
+      ></FlatList>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.5,
+    flex: 0.7,
     alignItems: "center",
     justifyContent: "center",
     width: "100%",

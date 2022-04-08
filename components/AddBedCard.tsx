@@ -1,14 +1,20 @@
 import { Feather } from "@expo/vector-icons";
-import { useState } from "react";
-import { Pressable, StyleSheet, TextInput } from "react-native";
-import { BottomSheet, Button, Card, Text } from "react-native-elements";
-import { View } from "./Themed";
+import { FunctionComponent, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useAppDispatch } from "../store";
+import { Pressable, StyleSheet, TextInput } from "react-native";
+import { BottomSheet, Button, Card } from "react-native-elements";
 import { gardenActions } from "../services/garden/gardenSlice";
-import { NewGardenForm } from "../services/types";
+import { NewBedForm } from "../services/types";
+import { useAppDispatch } from "../store";
+import { Text, View } from "./Themed";
 
-export const AddGardenCard: React.FunctionComponent = () => {
+type BedCardsProps = {
+  selectedGardenId: string;
+};
+
+export const AddBedCard: FunctionComponent<BedCardsProps> = ({
+  selectedGardenId,
+}) => {
   const [isVisible, setIsVisible] = useState(false);
   const appDispatch = useAppDispatch();
 
@@ -19,14 +25,17 @@ export const AddGardenCard: React.FunctionComponent = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      newGardenName: "",
+      newBedName: "",
     },
   });
 
-  const onSubmit = (data: NewGardenForm) => {
-    appDispatch(gardenActions.addGarden({ name: data.newGardenName }));
+  const onSubmit = (data: NewBedForm) => {
+    appDispatch(
+      gardenActions.addBed({ name: data.newBedName, id: selectedGardenId })
+    );
     setIsVisible(false);
-    reset({ ...data, newGardenName: "" });
+    reset({ ...data, newBedName: "" });
+    console.log("newBedName: ", data.newBedName);
   };
 
   const toggleHide = () => {
@@ -34,10 +43,10 @@ export const AddGardenCard: React.FunctionComponent = () => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <Pressable style={styles.container} onPress={() => setIsVisible(true)}>
         <Card containerStyle={styles.card}>
-          <Card.Title>Add Garden</Card.Title>
+          <Card.Title>Add New Bed</Card.Title>
           <Feather name="plus-circle" size={24} color="black" />
         </Card>
       </Pressable>
@@ -58,7 +67,7 @@ export const AddGardenCard: React.FunctionComponent = () => {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                placeholder="New garden Name"
+                placeholder="New Bed Name"
                 style={styles.input}
                 onBlur={onBlur}
                 onChangeText={(value) => onChange(value)}
@@ -66,9 +75,9 @@ export const AddGardenCard: React.FunctionComponent = () => {
                 autoCapitalize={"sentences"}
               />
             )}
-            name="newGardenName"
+            name="newBedName"
           />
-          {errors.newGardenName && <Text>{errors.newGardenName.message}</Text>}
+          {errors.newBedName && <Text>{errors.newBedName.message}</Text>}
           <Button title="Submit" onPress={handleSubmit(onSubmit)} />
         </View>
         <Button onPress={toggleHide}>Hide</Button>
