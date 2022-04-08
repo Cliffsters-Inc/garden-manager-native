@@ -1,8 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
-import { Button, Card } from "react-native-elements";
-import Navigation from "../navigation";
-import { BedsTabScreen } from "../screens/BedsTabScreen";
+import { Card } from "react-native-elements";
 import { gardenSelectors } from "../services/garden/gardenSlice";
 import { useAppSelector } from "../store";
 import { GardenTabScreenProps } from "../types";
@@ -11,19 +9,28 @@ import { View } from "./Themed";
 type GardenCardsProps = {
   setSelectedGardenId: React.Dispatch<React.SetStateAction<string>>;
   navigation: GardenTabScreenProps<"GardenTabScreen">["navigation"];
+  selectedGardenId: string;
 };
 
 export const GardenCards = ({
   setSelectedGardenId,
   navigation,
+  selectedGardenId,
 }: GardenCardsProps) => {
   const gardens = useAppSelector(gardenSelectors.selectGardens);
   const setSelectedGarden = setSelectedGardenId;
 
-  const nav = () => {
-    console.log("navTest");
-    navigation.navigate("BedsTabScreen");
+  const handlePress = async (id: string) => {
+    setSelectedGarden(id);
+    console.log("id: ", selectedGardenId);
   };
+
+  useEffect(() => {
+    console.log("effecr ran");
+    if (selectedGardenId !== "") {
+      navigation.navigate("BedsTabScreen", { id: selectedGardenId });
+    }
+  }, [selectedGardenId]);
 
   return (
     <View style={styles.container}>
@@ -32,14 +39,13 @@ export const GardenCards = ({
         keyExtractor={(item) => item.id}
         data={gardens}
         renderItem={({ item }) => (
-          <Pressable onPress={() => setSelectedGarden(item.id)}>
+          <Pressable onPress={() => handlePress(item.id)}>
             <Card containerStyle={styles.card}>
               <Card.Title>{item.name}</Card.Title>
             </Card>
           </Pressable>
         )}
       />
-      <Button onPress={nav}>nav</Button>
     </View>
   );
 };

@@ -8,13 +8,15 @@ export const BedsTabScreen = ({
   navigation,
   route,
 }: NativeStackScreenProps<GardenTabParamList, "BedsTabScreen">) => {
+  const { id } = route.params;
+
   return (
     <View>
       <View>
-        <AddBedCard selectedGardenId={""} />
+        <AddBedCard selectedGardenId={id} />
       </View>
       <View>
-        <BedCards selectedGardenId={""} />
+        <BedCards selectedGardenId={id} />
       </View>
     </View>
   );

@@ -1,11 +1,9 @@
 import { StyleSheet } from "react-native";
-import { Text, View } from "../components/Themed";
+import { View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 import { GardenCards } from "../components/GardenCards";
 import { AddGardenCard } from "../components/AddGardenCard";
 import { useState } from "react";
-import { BedCards } from "../components/BedCards";
-import { AddBedCard } from "../components/AddBedCard";
 
 export const GardenTabScreen = ({
   navigation,
@@ -20,13 +18,8 @@ export const GardenTabScreen = ({
         <GardenCards
           navigation={navigation}
           setSelectedGardenId={setSelectedGardenId}
+          selectedGardenId={selectedGardenId}
         />
-      </View>
-      <View>
-        <AddBedCard selectedGardenId={selectedGardenId} />
-      </View>
-      <View>
-        <BedCards selectedGardenId={selectedGardenId} />
       </View>
     </View>
   );
