@@ -2,63 +2,56 @@ import React from "react";
 import { Text, View } from "./Themed";
 import { FlatList, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { Veggie, VeggieInfo } from "../services/types";
+import { Veggie } from "../services/types";
 import { format } from "date-fns";
-import { Button } from "react-native";
 
 type Props = {
-  veggies: VeggieInfo[] | Veggie[];
-  navigationHandler?: (veggie: any) => void;
-  addHandler?: (veggieInfo: any) => void;
+  veggies: Veggie[];
+  navigationHandler: (veggie: Veggie) => void;
 };
 
-export const VeggieList = ({
-  veggies,
-  navigationHandler,
-  addHandler,
-}: Props) => {
+export const VeggieList = ({ veggies, navigationHandler }: Props) => {
   return (
-    <FlatList<VeggieInfo | Veggie>
+    <FlatList
       data={veggies}
       keyExtractor={(item) => item.id}
       style={styles.container}
-      renderItem={({ item }) => (
-        <TouchableOpacity
-          style={styles.veggieContainer}
-          onPress={() => navigationHandler && navigationHandler(item)}
-        >
-          <View style={styles.veggieL}>
-            {"image" in item && (
-              <Image style={styles.img} source={{ uri: item.image }} />
-            )}
-            <Text style={{ color: "green", fontWeight: "bold" }}>
-              {item.name}
-            </Text>
-          </View>
-          <View style={styles.veggieR}>
-            <Text style={{ color: "gray" }}>
-              {"growSeason" in item &&
-                `${item.growSeason.from} - ${item.growSeason.to}   `}
-            </Text>
-            <View style={{ flexDirection: "column", marginRight: 15 }}>
-              {"sowDate" in item && item.sowDate && (
-                <Text style={{ color: "gray", textAlign: "right" }}>
-                  Sown: {format(new Date(item.sowDate), "dd/MM/yy")}
-                </Text>
+      renderItem={({ item }) => {
+        return (
+          <TouchableOpacity
+            style={styles.veggieContainer}
+            onPress={() => navigationHandler && navigationHandler(item)}
+          >
+            <View style={styles.veggieL}>
+              {item.veggieInfo.image && (
+                <Image
+                  style={styles.img}
+                  source={{ uri: item.veggieInfo.image }}
+                />
               )}
-              {"harvestDate" in item && item.harvestDate && (
-                <Text style={{ color: "gray", textAlign: "right" }}>
-                  Harvest: {format(new Date(item.harvestDate), "dd/MM/yy")}
-                </Text>
-              )}
+              <Text style={{ color: "green", fontWeight: "bold" }}>
+                {item.veggieInfo.name}
+              </Text>
             </View>
-            {addHandler && (
-              <Button title="Add" onPress={() => addHandler(item)} />
-            )}
-            {navigationHandler && <FontAwesome5 name="angle-right" size={12} />}
-          </View>
-        </TouchableOpacity>
-      )}
+            <View style={styles.veggieR}>
+              <View style={{ flexDirection: "column", marginRight: 15 }}>
+                {"sowDate" in item && item.sowDate && (
+                  <Text style={{ color: "gray", textAlign: "right" }}>
+                    Sown: {format(new Date(item.sowDate), "dd/MM/yy")}
+                  </Text>
+                )}
+                {"harvestDate" in item && item.harvestDate && (
+                  <Text style={{ color: "gray", textAlign: "right" }}>
+                    Harvest: {format(new Date(item.harvestDate), "dd/MM/yy")}
+                  </Text>
+                )}
+              </View>
+
+              <FontAwesome5 name="angle-right" size={12} />
+            </View>
+          </TouchableOpacity>
+        );
+      }}
     />
   );
 };

@@ -2,10 +2,9 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { VeggiesTabScreenProps } from "../types";
 import { View } from "../components/Themed";
-import { VeggieList } from "../components/VeggieList";
-import { VeggieInfo } from "../services/types";
 import { useAppSelector } from "../store";
 import { veggieInfoSelectors } from "../services/veggieInfo/veggieInfoSlice";
+import { VeggieInfoList } from "../components/VeggieInfoList";
 
 export const VeggiesTabScreen = ({
   navigation,
@@ -14,9 +13,9 @@ export const VeggiesTabScreen = ({
 
   return (
     <View style={styles.container}>
-      <VeggieList
-        veggies={veggieInfos}
-        navigationHandler={(veggieInfo: VeggieInfo) =>
+      <VeggieInfoList
+        veggieInfos={veggieInfos}
+        navigationHandler={(veggieInfo) =>
           navigation.navigate("VeggieInfoScreen", {
             title: veggieInfo.name,
             veggieInfo: veggieInfo,

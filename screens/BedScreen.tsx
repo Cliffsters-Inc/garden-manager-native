@@ -3,7 +3,6 @@ import { Pressable, StyleSheet } from "react-native";
 import { View, Text } from "../components/Themed";
 import { VeggieList } from "../components/VeggieList";
 import { gardenSelectors } from "../services/garden/gardenSlice";
-import { Veggie } from "../services/types";
 import { useAppSelector } from "../store";
 import { GardenTabScreenProps } from "../types";
 
@@ -22,7 +21,7 @@ export const BedScreen = ({
       {bed.veggies && (
         <VeggieList
           veggies={bed.veggies}
-          navigationHandler={(veggie: Veggie) =>
+          navigationHandler={(veggie) =>
             navigation.navigate("VeggieScreen", { veggie })
           }
         />

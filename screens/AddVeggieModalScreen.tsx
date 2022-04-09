@@ -1,11 +1,11 @@
 import { StyleSheet } from "react-native";
 
 import { Text, View } from "../components/Themed";
-import { VeggieList } from "../components/VeggieList";
 import { useAppDispatch, useAppSelector } from "../store";
 import { RootStackScreenProps } from "../types";
 import { gardenActions } from "../services/garden/gardenSlice";
 import { veggieInfoSelectors } from "../services/veggieInfo/veggieInfoSlice";
+import { VeggieInfoList } from "../components/VeggieInfoList";
 
 export const AddVeggieModalScreen = ({
   navigation,
@@ -17,8 +17,8 @@ export const AddVeggieModalScreen = ({
 
   return (
     <View style={styles.container}>
-      <VeggieList
-        veggies={veggieInfos}
+      <VeggieInfoList
+        veggieInfos={veggieInfos}
         addHandler={(veggieInfo) => {
           appDispatch(gardenActions.addVeggie({ gardenId, bedId, veggieInfo }));
           navigation.goBack();

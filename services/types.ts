@@ -34,8 +34,7 @@ export type Bed = {
 
 export type Veggie = {
   id: string;
-  veggieInfoId: string;
-  name: string;
+  veggieInfo: { id: string; name?: string; image?: string }; // name & image should be generated with id from veggieInfo to allow changes to veggieInfo apply to all veggies
   notes?: string;
   sowDate?: string;
   harvestDate?: string;

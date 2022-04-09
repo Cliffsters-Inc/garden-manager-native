@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
 import { initialGardenState } from "./initialGardenState";
 import { RootState } from "../../store";
-import { VeggieInfo } from "../types";
+import { Veggie, VeggieInfo } from "../types";
+import { appendVeggieInfoToVeggie } from "./gardenSliceUtils";
 
 export const gardenSlice = createSlice({
   name: "gardens",
@@ -48,8 +49,7 @@ export const gardenSlice = createSlice({
       if (bed && veggieInfo) {
         bed?.veggies?.push({
           id: nanoid(),
-          name: veggieInfo.name,
-          veggieInfoId: veggieInfo.id,
+          veggieInfo: { id: veggieInfo.id },
         });
       }
     },
@@ -64,8 +64,18 @@ export type GardenSlice = {
 
 export const gardenSelectors = {
   selectGardens: (state: RootState) => state.gardens,
-  selectBed: (state: RootState, gardenId: string, bedId: string) =>
-    state.gardens
+  selectBed: (state: RootState, gardenId: string, bedId: string) => {
+    // Coded immutably as Redux TK only wraps immer on reducers
+    const bed = state.gardens
       .find((garden) => garden.id === gardenId)
-      ?.beds?.find((bed) => bed.id === bedId),
+      ?.beds?.find((bed) => bed.id === bedId);
+
+    if (!bed?.veggies) return bed;
+
+    const veggiesWithInfo = bed.veggies.map((veggie) =>
+      appendVeggieInfoToVeggie(state, veggie)
+    );
+
+    return { ...bed, veggies: veggiesWithInfo };
+  },
 };

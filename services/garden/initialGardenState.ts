@@ -10,9 +10,8 @@ export const initialGardenState: Garden[] = [
         id: "23kl4hj23645hj",
         veggies: [
           {
-            veggieInfoId: "aosjfosadjf",
+            veggieInfo: { id: "32089ghv290123asg3b21309" },
             id: "3p9314y3hfo3i1nv1320n123f",
-            name: "carrot",
             sowDate: "2022-03-16T07:59:10.647Z",
             harvestDate: "2023-01-14T13:00:00.000Z",
             notes:
@@ -25,9 +24,8 @@ export const initialGardenState: Garden[] = [
         id: "2hjk3afv89",
         veggies: [
           {
-            veggieInfoId: "aosjfosaasdgdjf",
+            veggieInfo: { id: "32089ghv2ags90aosjdsalkb21309" },
             id: "hi34fp78934ch21398op",
-            name: "capsicum",
             sowDate: "2022-03-16T07:59:10.647Z",
             harvestDate: "2023-01-14T13:00:00.000Z",
             notes: "Feed these within a week.",
@@ -45,9 +43,8 @@ export const initialGardenState: Garden[] = [
         id: "bkghefuhefku865766",
         veggies: [
           {
-            veggieInfoId: "aosjfo54v4sadjstpf",
+            veggieInfo: { id: "89ghvsg2ags90aosjdsalkb21309" },
             id: "paosgypaosighpaiosghjk3n3u9i23",
-            name: "onions",
             sowDate: "2022-03-16T07:59:10.647Z",
             harvestDate: "2023-01-14T13:00:00.000Z",
             notes: "Set up shadecloth for extra protection.",
