@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
 import { initialGardenState } from "./initialGardenState";
 import { RootState } from "../../store";
-import { mockData } from "../mockData";
+import { VeggieInfo } from "../types";
 
 export const gardenSlice = createSlice({
   name: "gardens",
@@ -37,23 +37,19 @@ export const gardenSlice = createSlice({
       action: PayloadAction<{
         gardenId: string;
         bedId: string;
-        veggieInfoId: string;
+        veggieInfo: VeggieInfo;
       }>
     ) => {
-      const { gardenId, bedId, veggieInfoId } = action.payload;
+      const { gardenId, bedId, veggieInfo } = action.payload;
 
       const garden = gardens.find((garden) => garden.id === gardenId);
       const bed = garden?.beds?.find((bed) => bed.id === bedId);
-
-      const veggieInfo = mockData.veggieInfos.find(
-        (veggieInfo) => veggieInfo.id === veggieInfoId
-      );
 
       if (bed && veggieInfo) {
         bed?.veggies?.push({
           id: nanoid(),
           name: veggieInfo.name,
-          veggieInfoId,
+          veggieInfoId: veggieInfo.id,
         });
       }
     },
@@ -72,6 +68,4 @@ export const gardenSelectors = {
     state.gardens
       .find((garden) => garden.id === gardenId)
       ?.beds?.find((bed) => bed.id === bedId),
-  // selectBed: (state: RootState, bedId: string) =>
-  //   state.garden.beds.find((bed) => bed.id === bedId),
 };

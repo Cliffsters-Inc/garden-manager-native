@@ -9,7 +9,7 @@ import { Button } from "react-native";
 type Props = {
   veggies: VeggieInfo[] | Veggie[];
   navigationHandler?: (veggie: any) => void;
-  addHandler?: (veggieInfoId: string) => void;
+  addHandler?: (veggieInfo: any) => void;
 };
 
 export const VeggieList = ({
@@ -53,7 +53,7 @@ export const VeggieList = ({
               )}
             </View>
             {addHandler && (
-              <Button title="Add" onPress={() => addHandler(item.id)} />
+              <Button title="Add" onPress={() => addHandler(item)} />
             )}
             {navigationHandler && <FontAwesome5 name="angle-right" size={12} />}
           </View>

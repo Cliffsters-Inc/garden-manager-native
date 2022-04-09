@@ -8,7 +8,6 @@ import {
   ListenerEffectAPI,
   addListener,
 } from "@reduxjs/toolkit";
-import { gardenSlice } from "./services/garden/gardenSlice";
 import {
   persistStore,
   persistReducer,
@@ -21,6 +20,9 @@ import {
 } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { gardenSlice } from "./services/garden/gardenSlice";
+import { veggieInfoSlice } from "./services/veggieInfo/veggieInfoSlice";
+
 const persistConfig = {
   key: "root",
   version: 1,
@@ -29,6 +31,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   [gardenSlice.name]: gardenSlice.reducer,
+  [veggieInfoSlice.name]: veggieInfoSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

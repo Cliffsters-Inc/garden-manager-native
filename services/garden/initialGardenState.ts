@@ -10,6 +10,7 @@ export const initialGardenState: Garden[] = [
         id: "23kl4hj23645hj",
         veggies: [
           {
+            veggieInfoId: "aosjfosadjf",
             id: "3p9314y3hfo3i1nv1320n123f",
             name: "carrot",
             sowDate: "2022-03-16T07:59:10.647Z",
@@ -24,6 +25,7 @@ export const initialGardenState: Garden[] = [
         id: "2hjk3afv89",
         veggies: [
           {
+            veggieInfoId: "aosjfosaasdgdjf",
             id: "hi34fp78934ch21398op",
             name: "capsicum",
             sowDate: "2022-03-16T07:59:10.647Z",
@@ -43,6 +45,7 @@ export const initialGardenState: Garden[] = [
         id: "bkghefuhefku865766",
         veggies: [
           {
+            veggieInfoId: "aosjfo54v4sadjstpf",
             id: "paosgypaosighpaiosghjk3n3u9i23",
             name: "onions",
             sowDate: "2022-03-16T07:59:10.647Z",

@@ -3,13 +3,14 @@ import { StyleSheet } from "react-native";
 import { VeggiesTabScreenProps } from "../types";
 import { View } from "../components/Themed";
 import { VeggieList } from "../components/VeggieList";
-import { mockData } from "../services/mockData";
 import { VeggieInfo } from "../services/types";
+import { useAppSelector } from "../store";
+import { veggieInfoSelectors } from "../services/veggieInfo/veggieInfoSlice";
 
 export const VeggiesTabScreen = ({
   navigation,
 }: VeggiesTabScreenProps<"VeggiesTabScreen">) => {
-  const { veggieInfos } = mockData;
+  const veggieInfos = useAppSelector(veggieInfoSelectors.selectVeggieInfos);
 
   return (
     <View style={styles.container}>

@@ -2,10 +2,10 @@ import { StyleSheet } from "react-native";
 
 import { Text, View } from "../components/Themed";
 import { VeggieList } from "../components/VeggieList";
-import { mockData } from "../services/mockData";
-import { useAppDispatch } from "../store";
+import { useAppDispatch, useAppSelector } from "../store";
 import { RootStackScreenProps } from "../types";
 import { gardenActions } from "../services/garden/gardenSlice";
+import { veggieInfoSelectors } from "../services/veggieInfo/veggieInfoSlice";
 
 export const AddVeggieModalScreen = ({
   navigation,
@@ -13,17 +13,14 @@ export const AddVeggieModalScreen = ({
 }: RootStackScreenProps<"AddVeggieModal">) => {
   const appDispatch = useAppDispatch();
   const { gardenId, bedId } = route.params;
-  console.log("MODAL route params", route.params);
+  const veggieInfos = useAppSelector(veggieInfoSelectors.selectVeggieInfos);
 
-  const { veggieInfos } = mockData;
   return (
     <View style={styles.container}>
       <VeggieList
         veggies={veggieInfos}
-        addHandler={(veggieInfoId) => {
-          appDispatch(
-            gardenActions.addVeggie({ gardenId, bedId, veggieInfoId })
-          );
+        addHandler={(veggieInfo) => {
+          appDispatch(gardenActions.addVeggie({ gardenId, bedId, veggieInfo }));
           navigation.goBack();
         }}
       />

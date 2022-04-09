@@ -62,7 +62,3 @@ export type VeggieInfo = {
   image?: string;
   starred: boolean;
 };
-
-export type MockData = {
-  veggieInfos: VeggieInfo[];
-};
