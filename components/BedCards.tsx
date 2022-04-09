@@ -32,7 +32,12 @@ export const BedCards: FunctionComponent<BedCardsProps> = ({
         data={beds}
         renderItem={({ item }) => (
           <Pressable
-            onPress={() => navigation.navigate("BedScreen", { bed: item })}
+            onPress={() =>
+              navigation.navigate("BedScreen", {
+                bedId: item.id,
+                gardenId: selectedGardenId,
+              })
+            }
           >
             <Card containerStyle={styles.card}>
               <Card.Title>{item.name}</Card.Title>

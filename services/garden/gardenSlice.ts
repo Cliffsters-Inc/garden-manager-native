@@ -1,7 +1,7 @@
-import React from "react";
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
 import { initialGardenState } from "./initialGardenState";
 import { RootState } from "../../store";
+import { mockData } from "../mockData";
 
 export const gardenSlice = createSlice({
   name: "gardens",
@@ -32,6 +32,31 @@ export const gardenSlice = createSlice({
         veggies: [],
       });
     },
+    addVeggie: (
+      gardens,
+      action: PayloadAction<{
+        gardenId: string;
+        bedId: string;
+        veggieInfoId: string;
+      }>
+    ) => {
+      const { gardenId, bedId, veggieInfoId } = action.payload;
+
+      const garden = gardens.find((garden) => garden.id === gardenId);
+      const bed = garden?.beds?.find((bed) => bed.id === bedId);
+
+      const veggieInfo = mockData.veggieInfos.find(
+        (veggieInfo) => veggieInfo.id === veggieInfoId
+      );
+
+      if (bed && veggieInfo) {
+        bed?.veggies?.push({
+          id: nanoid(),
+          name: veggieInfo.name,
+          veggieInfoId,
+        });
+      }
+    },
   },
 });
 
@@ -43,6 +68,10 @@ export type GardenSlice = {
 
 export const gardenSelectors = {
   selectGardens: (state: RootState) => state.gardens,
+  selectBed: (state: RootState, gardenId: string, bedId: string) =>
+    state.gardens
+      .find((garden) => garden.id === gardenId)
+      ?.beds?.find((bed) => bed.id === bedId),
   // selectBed: (state: RootState, bedId: string) =>
   //   state.garden.beds.find((bed) => bed.id === bedId),
 };

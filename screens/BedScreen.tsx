@@ -2,16 +2,21 @@ import React from "react";
 import { Pressable, StyleSheet } from "react-native";
 import { View, Text } from "../components/Themed";
 import { VeggieList } from "../components/VeggieList";
+import { gardenSelectors } from "../services/garden/gardenSlice";
 import { Veggie } from "../services/types";
+import { useAppSelector } from "../store";
 import { GardenTabScreenProps } from "../types";
 
 export const BedScreen = ({
   navigation,
   route,
 }: GardenTabScreenProps<"BedScreen">) => {
-  const { bed } = route.params;
+  const { bedId, gardenId } = route.params;
+  const bed = useAppSelector((state) =>
+    gardenSelectors.selectBed(state, gardenId, bedId)
+  );
 
-  return (
+  return bed ? (
     <View style={styles.container}>
       <Text>Bed Name: {bed.name}</Text>
       {bed.veggies && (
@@ -23,13 +28,15 @@ export const BedScreen = ({
         />
       )}
       <Pressable
-        onPress={() => navigation.navigate("AddVeggieModal")}
+        onPress={() =>
+          navigation.navigate("AddVeggieModal", { gardenId, bedId })
+        }
         style={styles.createBtnContainer}
       >
         <Text style={styles.createBtn}>Add Veggie</Text>
       </Pressable>
     </View>
-  );
+  ) : null;
 };
 
 const styles = StyleSheet.create({

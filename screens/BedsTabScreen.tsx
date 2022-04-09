@@ -8,15 +8,15 @@ export const BedsTabScreen = ({
   navigation,
   route,
 }: GardenTabScreenProps<"BedsTabScreen">) => {
-  const { id } = route.params;
+  const { gardenId } = route.params;
 
   return (
     <View style={styles.container}>
       <View>
-        <AddBedCard selectedGardenId={id} />
+        <AddBedCard selectedGardenId={gardenId} />
       </View>
       <View>
-        <BedCards selectedGardenId={id} navigation={navigation} />
+        <BedCards selectedGardenId={gardenId} navigation={navigation} />
       </View>
     </View>
   );

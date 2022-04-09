@@ -22,7 +22,7 @@ export const GardenCards = ({ navigation }: GardenCardsProps) => {
         renderItem={({ item }) => (
           <Pressable
             onPress={() =>
-              navigation.navigate("BedsTabScreen", { id: item.id })
+              navigation.navigate("BedsTabScreen", { gardenId: item.id })
             }
           >
             <Card containerStyle={styles.card}>

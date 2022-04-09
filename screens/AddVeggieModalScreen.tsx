@@ -1,22 +1,32 @@
-import { StatusBar } from "expo-status-bar";
-import { Platform, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
-import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
+import { VeggieList } from "../components/VeggieList";
+import { mockData } from "../services/mockData";
+import { useAppDispatch } from "../store";
+import { RootStackScreenProps } from "../types";
+import { gardenActions } from "../services/garden/gardenSlice";
 
-export const AddVeggieModalScreen = () => {
+export const AddVeggieModalScreen = ({
+  navigation,
+  route,
+}: RootStackScreenProps<"AddVeggieModal">) => {
+  const appDispatch = useAppDispatch();
+  const { gardenId, bedId } = route.params;
+  console.log("MODAL route params", route.params);
+
+  const { veggieInfos } = mockData;
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Modal</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
+      <VeggieList
+        veggies={veggieInfos}
+        addHandler={(veggieInfoId) => {
+          appDispatch(
+            gardenActions.addVeggie({ gardenId, bedId, veggieInfoId })
+          );
+          navigation.goBack();
+        }}
       />
-      <EditScreenInfo path="/screens/ModalScreen.tsx" />
-
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
     </View>
   );
 };

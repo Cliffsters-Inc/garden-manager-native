@@ -4,13 +4,19 @@ import { FlatList, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Veggie, VeggieInfo } from "../services/types";
 import { format } from "date-fns";
+import { Button } from "react-native";
 
 type Props = {
   veggies: VeggieInfo[] | Veggie[];
-  navigationHandler: (veggie: any) => void;
+  navigationHandler?: (veggie: any) => void;
+  addHandler?: (veggieInfoId: string) => void;
 };
 
-export const VeggieList = ({ veggies, navigationHandler }: Props) => {
+export const VeggieList = ({
+  veggies,
+  navigationHandler,
+  addHandler,
+}: Props) => {
   return (
     <FlatList<VeggieInfo | Veggie>
       data={veggies}
@@ -19,7 +25,7 @@ export const VeggieList = ({ veggies, navigationHandler }: Props) => {
       renderItem={({ item }) => (
         <TouchableOpacity
           style={styles.veggieContainer}
-          onPress={() => navigationHandler(item)}
+          onPress={() => navigationHandler && navigationHandler(item)}
         >
           <View style={styles.veggieL}>
             {"image" in item && (
@@ -35,18 +41,21 @@ export const VeggieList = ({ veggies, navigationHandler }: Props) => {
                 `${item.growSeason.from} - ${item.growSeason.to}   `}
             </Text>
             <View style={{ flexDirection: "column", marginRight: 15 }}>
-              <Text style={{ color: "gray", textAlign: "right" }}>
-                {"sowDate" in item &&
-                  item.sowDate &&
-                  `Sown: ${format(new Date(item.sowDate), "dd/MM/yy")}`}
-              </Text>
-              <Text style={{ color: "gray", textAlign: "right" }}>
-                {"harvestDate" in item &&
-                  item.harvestDate &&
-                  `Harvest: ${format(new Date(item.harvestDate), "dd/MM/yy")}`}
-              </Text>
+              {"sowDate" in item && item.sowDate && (
+                <Text style={{ color: "gray", textAlign: "right" }}>
+                  Sown: {format(new Date(item.sowDate), "dd/MM/yy")}
+                </Text>
+              )}
+              {"harvestDate" in item && item.harvestDate && (
+                <Text style={{ color: "gray", textAlign: "right" }}>
+                  Harvest: {format(new Date(item.harvestDate), "dd/MM/yy")}
+                </Text>
+              )}
             </View>
-            <FontAwesome5 name="angle-right" size={12} />
+            {addHandler && (
+              <Button title="Add" onPress={() => addHandler(item.id)} />
+            )}
+            {navigationHandler && <FontAwesome5 name="angle-right" size={12} />}
           </View>
         </TouchableOpacity>
       )}

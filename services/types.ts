@@ -34,7 +34,7 @@ export type Bed = {
 
 export type Veggie = {
   id: string;
-  veggieInfoId?: string; // TODO: won't be optional once adding from veggies list implemented
+  veggieInfoId: string;
   name: string;
   notes?: string;
   sowDate?: string;

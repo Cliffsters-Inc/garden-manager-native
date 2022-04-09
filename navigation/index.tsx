@@ -79,9 +79,6 @@ function RootNavigator() {
               <Button title="Cancel" onPress={navigation.goBack} />
             ),
             title: "Add a Veggie",
-            headerRight: () => (
-              <Button title="Add" onPress={navigation.goBack} disabled={true} />
-            ),
           })}
         />
       </Stack.Group>
