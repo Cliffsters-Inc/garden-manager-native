@@ -1,6 +1,7 @@
 import { StyleSheet, Image } from "react-native";
 import { View, Text } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
+import { format } from "date-fns";
 
 export const VeggieScreen = ({
   navigation,
@@ -11,9 +12,14 @@ export const VeggieScreen = ({
     <View style={styles.container}>
       <Image style={styles.img} source={{ uri: veggie.veggieInfo.image }} />
       <Text>Name: {veggie.veggieInfo.name}</Text>
-      {veggie.sowDate && <Text>Sowed: {veggie.sowDate}</Text>}
-      {veggie.harvestDate && <Text>Harvest: {veggie.harvestDate}</Text>}
-      {veggie.notes && <Text>Notes: {veggie.notes}</Text>}
+      <Text>
+        Sowed: {veggie.sowDate && format(new Date(veggie.sowDate), "dd/MM/yy")}
+      </Text>
+      <Text>
+        Harvest:{" "}
+        {veggie.harvestDate && format(new Date(veggie.harvestDate), "dd/MM/yy")}
+      </Text>
+      <Text>Notes: {veggie.notes && veggie.notes}</Text>
     </View>
   );
 };
