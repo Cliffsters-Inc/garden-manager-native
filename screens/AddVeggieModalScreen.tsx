@@ -1,26 +1,28 @@
-import React from "react";
 import { StyleSheet } from "react-native";
-import { VeggiesTabScreenProps } from "../types";
-import { View } from "../components/Themed";
-import { useAppSelector } from "../store";
+
+import { Text, View } from "../components/Themed";
+import { useAppDispatch, useAppSelector } from "../store";
+import { RootStackScreenProps } from "../types";
+import { gardenActions } from "../services/garden/gardenSlice";
 import { veggieInfoSelectors } from "../services/veggieInfo/veggieInfoSlice";
 import { VeggieInfoList } from "../components/VeggieInfoList";
 
-export const VeggiesTabScreen = ({
+export const AddVeggieModalScreen = ({
   navigation,
-}: VeggiesTabScreenProps<"VeggiesTabScreen">) => {
+  route,
+}: RootStackScreenProps<"AddVeggieModal">) => {
+  const appDispatch = useAppDispatch();
+  const { gardenId, bedId } = route.params;
   const veggieInfos = useAppSelector(veggieInfoSelectors.selectVeggieInfos);
 
   return (
     <View style={styles.container}>
       <VeggieInfoList
         veggieInfos={veggieInfos}
-        navigationHandler={(veggieInfo) =>
-          navigation.navigate("VeggieInfoScreen", {
-            title: veggieInfo.name,
-            veggieInfo: veggieInfo,
-          })
-        }
+        addHandler={(veggieInfo) => {
+          appDispatch(gardenActions.addVeggie({ gardenId, bedId, veggieInfo }));
+          navigation.goBack();
+        }}
       />
     </View>
   );

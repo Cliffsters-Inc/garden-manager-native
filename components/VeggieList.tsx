@@ -1,48 +1,59 @@
 import React from "react";
 import { Text, View } from "./Themed";
 import { FlatList, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { mockData } from "../services/mockData";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { VeggiesTabScreenProps } from "../types";
+import { Veggie } from "../services/types";
+import { format } from "date-fns";
 
 type Props = {
-  navigation: VeggiesTabScreenProps<"VeggiesTabScreen">["navigation"];
+  veggies: Veggie[];
+  navigationHandler: (veggie: Veggie) => void;
 };
 
-export const VeggieList = ({ navigation }: Props) => {
-  const { veggies } = mockData;
-
-  return veggies ? (
+export const VeggieList = ({ veggies, navigationHandler }: Props) => {
+  return (
     <FlatList
-      style={styles.container}
       data={veggies}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <TouchableOpacity
-          style={[styles.veggieContainer]}
-          onPress={() =>
-            navigation.navigate("VeggieInfoScreen", {
-              title: item.name,
-              veggieInfo: item,
-            })
-          }
-        >
-          <View style={styles.veggieL}>
-            <Image style={styles.img} source={{ uri: item.image }} />
-            <Text style={{ color: "green", fontWeight: "bold" }}>
-              {item.name}
-            </Text>
-          </View>
-          <View style={styles.veggieR}>
-            <Text style={{ color: "gray" }}>
-              {`${item.growSeason.from} - ${item.growSeason.to}   `}
+      style={styles.container}
+      renderItem={({ item }) => {
+        return (
+          <TouchableOpacity
+            style={styles.veggieContainer}
+            onPress={() => navigationHandler && navigationHandler(item)}
+          >
+            <View style={styles.veggieL}>
+              {item.veggieInfo.image && (
+                <Image
+                  style={styles.img}
+                  source={{ uri: item.veggieInfo.image }}
+                />
+              )}
+              <Text style={{ color: "green", fontWeight: "bold" }}>
+                {item.veggieInfo.name}
+              </Text>
+            </View>
+            <View style={styles.veggieR}>
+              <View style={{ flexDirection: "column", marginRight: 15 }}>
+                {"sowDate" in item && item.sowDate && (
+                  <Text style={{ color: "gray", textAlign: "right" }}>
+                    Sown: {format(new Date(item.sowDate), "dd/MM/yy")}
+                  </Text>
+                )}
+                {"harvestDate" in item && item.harvestDate && (
+                  <Text style={{ color: "gray", textAlign: "right" }}>
+                    Harvest: {format(new Date(item.harvestDate), "dd/MM/yy")}
+                  </Text>
+                )}
+              </View>
+
               <FontAwesome5 name="angle-right" size={12} />
-            </Text>
-          </View>
-        </TouchableOpacity>
-      )}
+            </View>
+          </TouchableOpacity>
+        );
+      }}
     />
-  ) : null;
+  );
 };
 
 const styles = StyleSheet.create({

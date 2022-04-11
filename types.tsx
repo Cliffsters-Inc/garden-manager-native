@@ -3,6 +3,8 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
+import { Bed, Veggie } from "./services/types";
+
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
   CompositeScreenProps,
@@ -22,7 +24,7 @@ declare global {
  */
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
-  Modal: undefined;
+  AddVeggieModal: { gardenId: string; bedId: string };
   NotFound: undefined;
 };
 
@@ -50,7 +52,9 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
  */
 export type GardenTabParamList = {
   GardenTabScreen: undefined;
-  BedsTabScreen: { id: string };
+  BedsTabScreen: { gardenId: string };
+  BedScreen: { bedId: string; gardenId: string };
+  VeggieScreen: { veggie: Veggie };
 };
 
 export type GardenTabScreenProps<Screen extends keyof GardenTabParamList> =
