@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
 import { initialGardenState } from "./initialGardenState";
 import { RootState } from "../../store";
-import { Veggie, VeggieInfo } from "../types";
+import { VeggieInfo } from "../types";
 import { appendVeggieInfoToVeggie } from "./gardenSliceUtils";
 
 export const gardenSlice = createSlice({

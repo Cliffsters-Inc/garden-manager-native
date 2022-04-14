@@ -56,6 +56,16 @@ export type VeggieInfo = {
   name: string;
   description?: string; // TODO: won't be optional once all veggies added with descriptions
   growSeason: { from: Months; to: Months };
+  germinationPeriod: {
+    from: number;
+    to: number;
+    timeFrameType: "days" | "weeks";
+  };
+  sproutToHarvestPeriod: {
+    from: number;
+    to: number;
+    timeFrameType: "days" | "weeks" | "years";
+  };
   companionVeggieIds?: string[];
   combativeVeggieIds?: string[];
   image?: string;
