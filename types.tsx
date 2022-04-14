@@ -53,8 +53,8 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
 export type GardenTabParamList = {
   GardenTabScreen: undefined;
   BedsTabScreen: { gardenId: string };
-  BedScreen: { bedId: string; gardenId: string };
-  VeggieScreen: { veggie: Veggie };
+  BedScreen: { gardenId: string; bedId: string };
+  VeggieScreen: { gardenId: string; bedId: string; veggieId: string };
 };
 
 export type GardenTabScreenProps<Screen extends keyof GardenTabParamList> =

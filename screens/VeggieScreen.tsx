@@ -2,13 +2,33 @@ import { StyleSheet, Image } from "react-native";
 import { View, Text } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 import { format } from "date-fns";
+import { useAppSelector, useAppDispatch } from "../store";
+import { gardenActions, gardenSelectors } from "../services/garden/gardenSlice";
+import { VeggieNotesField } from "../components/VeggieNotesField";
 
 export const VeggieScreen = ({
   navigation,
   route,
 }: GardenTabScreenProps<"VeggieScreen">) => {
-  const { veggie } = route.params;
-  return (
+  const dispatch = useAppDispatch();
+  const { gardenId, bedId, veggieId } = route.params;
+  const veggie = useAppSelector((state) =>
+    gardenSelectors.selectVeggie(state, gardenId, bedId, veggieId)
+  );
+
+  const handleNoteChange = (text: string) => {
+    dispatch(
+      gardenActions.updateVeggieField({
+        gardenId,
+        bedId,
+        veggieId,
+        field: "notes",
+        update: text,
+      })
+    );
+  };
+
+  return veggie ? (
     <View style={styles.container}>
       <View
         style={{
@@ -31,9 +51,14 @@ export const VeggieScreen = ({
         </View>
       </View>
       <Text style={styles.title}>{veggie.veggieInfo.name}</Text>
-      <Text>Notes: {veggie.notes && veggie.notes}</Text>
+
+      <VeggieNotesField
+        notes={veggie.notes}
+        changeHandler={handleNoteChange}
+        navigation={navigation}
+      />
     </View>
-  );
+  ) : null;
 };
 
 const styles = StyleSheet.create({

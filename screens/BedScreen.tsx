@@ -22,7 +22,11 @@ export const BedScreen = ({
         <VeggieList
           veggies={bed.veggies}
           navigationHandler={(veggie) =>
-            navigation.navigate("VeggieScreen", { veggie })
+            navigation.navigate("VeggieScreen", {
+              gardenId,
+              bedId,
+              veggieId: veggie.id,
+            })
           }
         />
       )}
