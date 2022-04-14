@@ -75,7 +75,7 @@ function RootNavigator() {
           name="AddVeggieModal"
           component={AddVeggieModalScreen}
           options={({ navigation }) => ({
-            headerLeft: () => (
+            headerRight: () => (
               <Button title="Cancel" onPress={navigation.goBack} />
             ),
             title: "Add a Veggie",
