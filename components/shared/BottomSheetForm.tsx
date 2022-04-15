@@ -57,7 +57,9 @@ export const BottomSheetForm: React.FunctionComponent<props> = ({
         <Text onPress={() => setIsVisible(false)} style={{ fontSize: 20 }}>
           Cancel
         </Text>
-        <Text style={{ fontWeight: "bold", fontSize: 25 }}>Name Garden</Text>
+        <Text
+          style={{ fontWeight: "bold", fontSize: 25 }}
+        >{`Name ${areaTitle}`}</Text>
         <Text onPress={handleSubmit(submitName)} style={{ fontSize: 20 }}>
           Done
         </Text>
@@ -80,6 +82,7 @@ export const BottomSheetForm: React.FunctionComponent<props> = ({
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
               value={value}
+              autoFocus={true}
               autoCapitalize={"sentences"}
             />
           </View>

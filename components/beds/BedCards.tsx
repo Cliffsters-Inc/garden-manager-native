@@ -1,10 +1,10 @@
 import { FunctionComponent } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
-import { Card } from "react-native-elements";
+import { Card, Text } from "react-native-elements";
 import { gardenSelectors } from "../../services/garden/gardenSlice";
 import { useAppSelector } from "../../store";
 import { GardenTabScreenProps } from "../../types";
-import { Text, View } from "../Themed";
+import { View } from "../Themed";
 
 type BedCardsProps = {
   selectedGardenId: string;
@@ -25,7 +25,9 @@ export const BedCards: FunctionComponent<BedCardsProps> = ({
 
   return (
     <View style={styles.container}>
-      <Text>{selectedGardenObject?.name}</Text>
+      <Text h1 style={styles.title}>
+        {selectedGardenObject?.name}
+      </Text>
       <FlatList
         numColumns={2}
         keyExtractor={(item) => item.id}
@@ -56,11 +58,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     padding: 15,
-    backgroundColor: "red",
+    marginTop: 50,
+  },
+  title: {
+    textTransform: "uppercase",
   },
   card: {
     minHeight: 100,
     minWidth: 150,
     borderWidth: 1,
+    marginTop: 40,
   },
 });

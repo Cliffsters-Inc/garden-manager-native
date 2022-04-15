@@ -31,6 +31,5 @@ export const BedsTabScreen = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "green",
   },
 });

@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 15,
     marginTop: 50,
-    // backgroundColor: "red",
   },
   card: {
     minHeight: 100,
