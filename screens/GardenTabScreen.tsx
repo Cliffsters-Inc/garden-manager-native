@@ -1,10 +1,10 @@
 import { StyleSheet } from "react-native";
 import { View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
-import { GardenCards } from "../components/GardenCards";
-import { AddGardenButton } from "../components/AddGardenButton";
+import { AddGardenButton } from "../components/gardens/AddGardenButton";
 import { useState } from "react";
-import { FormBottomSheet } from "../components/BottomSheetForm";
+import { FormBottomSheet } from "../components/shared/BottomSheetForm";
+import { GardenCards } from "../components/gardens/GardenCards";
 
 export const GardenTabScreen = ({
   navigation,
@@ -26,9 +26,6 @@ const styles = StyleSheet.create({
   },
   cardsContainer: {
     flex: 5,
-    alignItems: "center",
-    justifyContent: "center",
-    // marginTop: 50,
   },
   buttonContainer: {
     flex: 1,

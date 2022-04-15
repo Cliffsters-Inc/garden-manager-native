@@ -1,42 +1,28 @@
-import { FunctionComponent } from "react";
+import React from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
-import { gardenSelectors } from "../services/garden/gardenSlice";
-import { useAppSelector } from "../store";
-import { GardenTabScreenProps } from "../types";
-import { Text, View } from "./Themed";
+import { gardenSelectors } from "../../services/garden/gardenSlice";
+import { useAppSelector } from "../../store";
+import { GardenTabScreenProps } from "../../types";
+import { View } from "../Themed";
 
-type BedCardsProps = {
-  selectedGardenId: string;
+type GardenCardsProps = {
   navigation: GardenTabScreenProps<"GardenTabScreen">["navigation"];
 };
 
-export const BedCards: FunctionComponent<BedCardsProps> = ({
-  selectedGardenId,
-  navigation,
-}) => {
+export const GardenCards = ({ navigation }: GardenCardsProps) => {
   const gardens = useAppSelector(gardenSelectors.selectGardens);
-
-  const selectedGardenObject = gardens.find(
-    (garden) => garden.id === selectedGardenId
-  );
-
-  const beds = selectedGardenObject?.beds;
 
   return (
     <View style={styles.container}>
-      <Text>{selectedGardenObject?.name}</Text>
       <FlatList
         numColumns={2}
         keyExtractor={(item) => item.id}
-        data={beds}
+        data={gardens}
         renderItem={({ item }) => (
           <Pressable
             onPress={() =>
-              navigation.navigate("BedScreen", {
-                bedId: item.id,
-                gardenId: selectedGardenId,
-              })
+              navigation.navigate("BedsTabScreen", { gardenId: item.id })
             }
           >
             <Card containerStyle={styles.card}>
@@ -56,7 +42,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     padding: 15,
-    backgroundColor: "red",
+    marginTop: 50,
+    // backgroundColor: "red",
   },
   card: {
     minHeight: 100,

@@ -1,12 +1,11 @@
-import { Feather } from "@expo/vector-icons";
 import { FunctionComponent, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Pressable, StyleSheet, TextInput } from "react-native";
-import { BottomSheet, Button, Card } from "react-native-elements";
-import { gardenActions } from "../services/garden/gardenSlice";
-import { NewBedForm } from "../services/types";
-import { useAppDispatch } from "../store";
-import { Text, View } from "./Themed";
+import { BottomSheet, Button } from "react-native-elements";
+import { gardenActions } from "../../services/garden/gardenSlice";
+import { NewBedForm } from "../../services/types";
+import { useAppDispatch } from "../../store";
+import { Text, View } from "../Themed";
 
 type BedCardsProps = {
   selectedGardenId: string;

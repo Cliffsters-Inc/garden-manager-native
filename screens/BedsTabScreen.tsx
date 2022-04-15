@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
-import { AddBedButton } from "../components/AddBedButton";
-import { BedCards } from "../components/BedCards";
+import { AddBedButton } from "../components/beds/AddBedButton";
+import { BedCards } from "../components/beds/BedCards";
 import { View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 

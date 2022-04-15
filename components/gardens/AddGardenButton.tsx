@@ -1,11 +1,6 @@
-import { useState } from "react";
-import { StyleSheet, TextInput } from "react-native";
-import { BottomSheet, Button, Divider, Text } from "react-native-elements";
-import { View } from "./Themed";
-import { Controller, useForm } from "react-hook-form";
-import { useAppDispatch } from "../store";
-import { gardenActions } from "../services/garden/gardenSlice";
-import { NewGardenForm } from "../services/types";
+import { StyleSheet } from "react-native";
+import { Button } from "react-native-elements";
+import { View } from "../Themed";
 
 type props = {
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
