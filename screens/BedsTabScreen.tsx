@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { StyleSheet } from "react-native";
-import { AddBedCard } from "../components/AddBedCard";
 import { BedCards } from "../components/BedCards";
+import { AddCardButton } from "../components/shared/AddCardButton";
+import { BottomSheetForm } from "../components/shared/BottomSheetForm";
 import { View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 
@@ -9,15 +11,19 @@ export const BedsTabScreen = ({
   route,
 }: GardenTabScreenProps<"BedsTabScreen">) => {
   const { gardenId } = route.params;
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const areaTitle = "bed";
 
   return (
     <View style={styles.container}>
-      <View>
-        <AddBedCard selectedGardenId={gardenId} />
-      </View>
-      <View>
-        <BedCards selectedGardenId={gardenId} navigation={navigation} />
-      </View>
+      <BedCards selectedGardenId={gardenId} navigation={navigation} />
+      <AddCardButton setIsVisible={setIsVisible} areaTitle={areaTitle} />
+      <BottomSheetForm
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
+        areaTitle={areaTitle}
+        selectedGardenId={gardenId}
+      />
     </View>
   );
 };
@@ -25,12 +31,5 @@ export const BedsTabScreen = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginTop: "50%",
   },
 });

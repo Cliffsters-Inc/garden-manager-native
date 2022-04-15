@@ -1,20 +1,26 @@
 import { StyleSheet } from "react-native";
 import { View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
+import { useState } from "react";
 import { GardenCards } from "../components/GardenCards";
-import { AddGardenCard } from "../components/AddGardenCard";
+import { BottomSheetForm } from "../components/shared/BottomSheetForm";
+import { AddCardButton } from "../components/shared/AddCardButton";
 
 export const GardenTabScreen = ({
   navigation,
 }: GardenTabScreenProps<"GardenTabScreen">) => {
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const areaTitle = "garden";
+
   return (
     <View style={styles.container}>
-      <View>
-        <AddGardenCard />
-      </View>
-      <View>
-        <GardenCards navigation={navigation} />
-      </View>
+      <GardenCards navigation={navigation} />
+      <AddCardButton setIsVisible={setIsVisible} areaTitle={areaTitle} />
+      <BottomSheetForm
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
+        areaTitle={areaTitle}
+      />
     </View>
   );
 };
@@ -22,12 +28,5 @@ export const GardenTabScreen = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginTop: "50%",
   },
 });
