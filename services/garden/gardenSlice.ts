@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
 import { initialGardenState } from "./initialGardenState";
 import { RootState } from "../../store";
-import { Veggie, VeggieInfo } from "../types";
+import { VeggieInfo } from "../types";
 import { appendVeggieInfoToVeggie } from "./gardenSliceUtils";
 
 export const gardenSlice = createSlice({
@@ -53,6 +53,23 @@ export const gardenSlice = createSlice({
         });
       }
     },
+    updateVeggieField: (
+      gardens,
+      action: PayloadAction<{
+        gardenId: string;
+        bedId: string;
+        veggieId: string;
+        field: "notes" | "sowDate" | "harvestDate";
+        update: string;
+      }>
+    ) => {
+      const { gardenId, bedId, veggieId, field, update } = action.payload;
+
+      const garden = gardens.find((garden) => garden.id === gardenId);
+      const bed = garden?.beds?.find((bed) => bed.id === bedId);
+      const veggie = bed?.veggies?.find((veggie) => veggie.id === veggieId);
+      if (veggie) veggie[field] = update;
+    },
   },
 });
 
@@ -77,5 +94,22 @@ export const gardenSelectors = {
     );
 
     return { ...bed, veggies: veggiesWithInfo };
+  },
+  selectVeggie: (
+    state: RootState,
+    gardenId: string,
+    bedId: string,
+    veggieId: string
+  ) => {
+    const veggie = state.gardens
+      .find((garden) => garden.id === gardenId)
+      ?.beds?.find((bed) => bed.id === bedId)
+      ?.veggies?.find((veggie) => veggie.id === veggieId);
+
+    if (!veggie) return null;
+
+    const veggieWithInfo = appendVeggieInfoToVeggie(state, veggie);
+
+    return veggieWithInfo;
   },
 };
