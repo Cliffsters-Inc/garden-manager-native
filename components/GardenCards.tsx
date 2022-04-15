@@ -37,11 +37,13 @@ export const GardenCards = ({ navigation }: GardenCardsProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.5,
+    flex: 5,
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
     padding: 15,
+    marginTop: 50,
+    // backgroundColor: "red",
   },
   card: {
     minHeight: 100,

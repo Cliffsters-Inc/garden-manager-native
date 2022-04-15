@@ -51,11 +51,12 @@ export const BedCards: FunctionComponent<BedCardsProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.7,
+    flex: 5,
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
     padding: 15,
+    backgroundColor: "red",
   },
   card: {
     minHeight: 100,

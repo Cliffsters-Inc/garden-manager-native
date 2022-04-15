@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { AddBedCard } from "../components/AddBedCard";
+import { AddBedButton } from "../components/AddBedButton";
 import { BedCards } from "../components/BedCards";
 import { View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
@@ -12,12 +12,8 @@ export const BedsTabScreen = ({
 
   return (
     <View style={styles.container}>
-      <View>
-        <AddBedCard selectedGardenId={gardenId} />
-      </View>
-      <View>
-        <BedCards selectedGardenId={gardenId} navigation={navigation} />
-      </View>
+      <BedCards selectedGardenId={gardenId} navigation={navigation} />
+      <AddBedButton selectedGardenId={gardenId} />
     </View>
   );
 };
@@ -25,12 +21,6 @@ export const BedsTabScreen = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginTop: "50%",
+    backgroundColor: "green",
   },
 });

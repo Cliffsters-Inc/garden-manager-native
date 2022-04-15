@@ -12,7 +12,7 @@ type BedCardsProps = {
   selectedGardenId: string;
 };
 
-export const AddBedCard: FunctionComponent<BedCardsProps> = ({
+export const AddBedButton: FunctionComponent<BedCardsProps> = ({
   selectedGardenId,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -45,10 +45,15 @@ export const AddBedCard: FunctionComponent<BedCardsProps> = ({
   return (
     <View style={styles.container}>
       <Pressable style={styles.container} onPress={() => setIsVisible(true)}>
-        <Card containerStyle={styles.card}>
-          <Card.Title>Add New Bed</Card.Title>
-          <Feather name="plus-circle" size={24} color="black" />
-        </Card>
+        <Button
+          onPress={() => setIsVisible(true)}
+          title={"Add New Bed"}
+          // buttonStyle={}
+          containerStyle={{
+            marginHorizontal: 40,
+            marginVertical: 30,
+          }}
+        />
       </Pressable>
       <BottomSheet
         modalProps={{}}
@@ -88,12 +93,13 @@ export const AddBedCard: FunctionComponent<BedCardsProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.3,
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    padding: 15,
-    marginTop: 100,
+    // padding: 15,
+    // marginTop: 100,
+    backgroundColor: "blue",
   },
   card: {
     minHeight: 80,
@@ -101,7 +107,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   bottomSheet: {
-    flex: 1,
+    // flex: 1,
     justifyContent: "center",
     backgroundColor: "black",
   },
