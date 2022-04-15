@@ -2,18 +2,22 @@ import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, TextInput } from "react-native";
 import { BottomSheet, Divider } from "react-native-elements";
 import { gardenActions } from "../../services/garden/gardenSlice";
-import { NewGardenForm } from "../../services/types";
+import { NewCardForm } from "../../services/types";
 import { useAppDispatch } from "../../store";
 import { Text, View } from "../Themed";
 
 type props = {
   isVisible: boolean | undefined;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  areaTitle: string;
+  selectedGardenId?: string;
 };
 
-export const FormBottomSheet: React.FunctionComponent<props> = ({
+export const BottomSheetForm: React.FunctionComponent<props> = ({
   isVisible,
   setIsVisible,
+  areaTitle,
+  selectedGardenId,
 }) => {
   const appDispatch = useAppDispatch();
 
@@ -24,14 +28,19 @@ export const FormBottomSheet: React.FunctionComponent<props> = ({
     formState: { errors },
   } = useForm({
     defaultValues: {
-      newGardenName: "",
+      newCardName: "",
     },
   });
+  console.log("areaTitle: ", areaTitle);
 
-  const submitName = (data: NewGardenForm) => {
-    appDispatch(gardenActions.addGarden({ name: data.newGardenName }));
+  const submitName = (data: NewCardForm) => {
+    areaTitle === "garden"
+      ? appDispatch(gardenActions.addGarden({ name: data.newCardName }))
+      : appDispatch(
+          gardenActions.addBed({ name: data.newCardName, id: selectedGardenId })
+        );
     setIsVisible(false);
-    reset({ ...data, newGardenName: "" });
+    reset({ ...data, newCardName: "" });
   };
 
   return (
@@ -66,7 +75,7 @@ export const FormBottomSheet: React.FunctionComponent<props> = ({
         render={({ field: { onChange, onBlur, value } }) => (
           <View style={styles.inputContainer}>
             <TextInput
-              placeholder="New garden Name"
+              placeholder={`New ${areaTitle} name`}
               style={styles.input}
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
@@ -75,9 +84,9 @@ export const FormBottomSheet: React.FunctionComponent<props> = ({
             />
           </View>
         )}
-        name="newGardenName"
+        name="newCardName"
       />
-      {errors.newGardenName && <Text>{errors.newGardenName.message}</Text>}
+      {errors.newCardName && <Text>{errors.newCardName.message}</Text>}
     </BottomSheet>
   );
 };

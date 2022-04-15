@@ -18,8 +18,8 @@ export type Garden = {
   beds?: Bed[];
 };
 
-export type NewGardenForm = {
-  newGardenName: string;
+export type NewCardForm = {
+  newCardName: string;
 };
 
 export type NewBedForm = {
