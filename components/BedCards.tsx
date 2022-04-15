@@ -1,10 +1,10 @@
 import { FunctionComponent } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
 import { Card, Text } from "react-native-elements";
-import { gardenSelectors } from "../../services/garden/gardenSlice";
-import { useAppSelector } from "../../store";
-import { GardenTabScreenProps } from "../../types";
-import { View } from "../Themed";
+import { gardenSelectors } from "../services/garden/gardenSlice";
+import { useAppSelector } from "../store";
+import { GardenTabScreenProps } from "../types";
+import { View } from "./Themed";
 
 type BedCardsProps = {
   selectedGardenId: string;

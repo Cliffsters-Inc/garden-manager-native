@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { StyleSheet } from "react-native";
-import { BedCards } from "../components/beds/BedCards";
+import { BedCards } from "../components/BedCards";
 import { AddCardButton } from "../components/shared/AddCardButton";
 import { BottomSheetForm } from "../components/shared/BottomSheetForm";
 import { View } from "../components/Themed";

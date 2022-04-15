@@ -1,10 +1,10 @@
 import React from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
-import { gardenSelectors } from "../../services/garden/gardenSlice";
-import { useAppSelector } from "../../store";
-import { GardenTabScreenProps } from "../../types";
-import { View } from "../Themed";
+import { gardenSelectors } from "../services/garden/gardenSlice";
+import { useAppSelector } from "../store";
+import { GardenTabScreenProps } from "../types";
+import { View } from "./Themed";
 
 type GardenCardsProps = {
   navigation: GardenTabScreenProps<"GardenTabScreen">["navigation"];

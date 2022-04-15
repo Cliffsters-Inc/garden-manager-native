@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import { View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 import { useState } from "react";
-import { GardenCards } from "../components/gardens/GardenCards";
+import { GardenCards } from "../components/GardenCards";
 import { BottomSheetForm } from "../components/shared/BottomSheetForm";
 import { AddCardButton } from "../components/shared/AddCardButton";
 
