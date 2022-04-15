@@ -4,16 +4,18 @@ import { View } from "../Themed";
 
 type props = {
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  areaTitle: string;
 };
 
-export const AddGardenButton: React.FunctionComponent<props> = ({
+export const AddCardButton: React.FunctionComponent<props> = ({
   setIsVisible,
+  areaTitle,
 }) => {
   return (
     <View style={styles.container}>
       <Button
         onPress={() => setIsVisible(true)}
-        title={"Add New Garden"}
+        title={`Add new ${areaTitle}`}
         containerStyle={{
           borderRadius: 30,
           marginHorizontal: 40,
@@ -29,6 +31,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "flex-end",
-    // backgroundColor: "blue",
   },
 });

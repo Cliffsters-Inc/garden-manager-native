@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { StyleSheet } from "react-native";
-import { AddBedButton } from "../components/beds/AddBedButton";
 import { BedCards } from "../components/beds/BedCards";
+import { AddCardButton } from "../components/shared/AddCardButton";
 import { BottomSheetForm } from "../components/shared/BottomSheetForm";
 import { View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
@@ -17,7 +17,7 @@ export const BedsTabScreen = ({
   return (
     <View style={styles.container}>
       <BedCards selectedGardenId={gardenId} navigation={navigation} />
-      <AddBedButton selectedGardenId={gardenId} />
+      <AddCardButton setIsVisible={setIsVisible} areaTitle={areaTitle} />
       <BottomSheetForm
         isVisible={isVisible}
         setIsVisible={setIsVisible}

@@ -1,10 +1,10 @@
 import { StyleSheet } from "react-native";
 import { View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
-import { AddGardenButton } from "../components/gardens/AddGardenButton";
 import { useState } from "react";
 import { GardenCards } from "../components/gardens/GardenCards";
 import { BottomSheetForm } from "../components/shared/BottomSheetForm";
+import { AddCardButton } from "../components/shared/AddCardButton";
 
 export const GardenTabScreen = ({
   navigation,
@@ -15,7 +15,7 @@ export const GardenTabScreen = ({
   return (
     <View style={styles.container}>
       <GardenCards navigation={navigation} />
-      <AddGardenButton setIsVisible={setIsVisible} />
+      <AddCardButton setIsVisible={setIsVisible} areaTitle={areaTitle} />
       <BottomSheetForm
         isVisible={isVisible}
         setIsVisible={setIsVisible}
