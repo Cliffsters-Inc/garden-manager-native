@@ -13,11 +13,11 @@ type Props = {
 
 export const VeggieNotesField = ({ notes, navigation, route }: Props) => {
   const dispatch = useAppDispatch();
-  const [notesFieldEditing, setNotesFieldEditing] = useState(false);
-  const [text, setText] = useState(notes);
+  const [editingText, setEditingText] = useState<string | null>(null);
+  const notesFieldEditing = !!editingText;
   const { gardenId, bedId, veggieId } = route.params;
 
-  const handleChange = (text: string) => {
+  const handleSubmit = (text: string) => {
     dispatch(
       gardenActions.updateVeggieField({
         gardenId,
@@ -29,28 +29,34 @@ export const VeggieNotesField = ({ notes, navigation, route }: Props) => {
     );
   };
 
+  const handleCancel = () => setEditingText(null);
+
   const handleDone = () => {
-    if (typeof text === "string") handleChange(text);
-    setNotesFieldEditing(false);
+    if (editingText) handleSubmit(editingText);
+    setEditingText(null);
   };
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerLeft: () =>
+        notesFieldEditing ? (
+          <Button title="Cancel" onPress={handleCancel} />
+        ) : null,
       headerRight: () =>
         notesFieldEditing ? <Button title="Done" onPress={handleDone} /> : null,
     });
-  }, [navigation, notesFieldEditing, text]);
+  }, [navigation, notesFieldEditing, editingText]);
 
   const notesText = (
     <ScrollView style={styles.border}>
-      <Text onPress={() => setNotesFieldEditing(true)}>{notes}</Text>
+      <Text onPress={() => notes && setEditingText(notes)}>{notes}</Text>
     </ScrollView>
   );
 
-  const notesField = (
+  const notesField = editingText && (
     <TextInput
-      value={text}
-      onChangeText={setText}
+      value={editingText}
+      onChangeText={setEditingText}
       onBlur={handleDone}
       autoFocus
       multiline
@@ -60,7 +66,7 @@ export const VeggieNotesField = ({ notes, navigation, route }: Props) => {
 
   const addNoteBtn = (
     <View style={{ alignItems: "flex-start" }}>
-      <Button title="Add note" onPress={() => setNotesFieldEditing(true)} />
+      <Button title="Add note" onPress={() => notes && setEditingText(notes)} />
     </View>
   );
 
