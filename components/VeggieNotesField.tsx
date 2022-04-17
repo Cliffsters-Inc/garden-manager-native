@@ -14,7 +14,7 @@ type Props = {
 export const VeggieNotesField = ({ notes, navigation, route }: Props) => {
   const dispatch = useAppDispatch();
   const [editingText, setEditingText] = useState<string | null>(null);
-  const notesFieldEditing = !!editingText;
+  const notesFieldEditing = editingText !== null;
   const { gardenId, bedId, veggieId } = route.params;
 
   const handleSubmit = (text: string) => {
@@ -32,7 +32,7 @@ export const VeggieNotesField = ({ notes, navigation, route }: Props) => {
   const handleCancel = () => setEditingText(null);
 
   const handleDone = () => {
-    if (editingText) handleSubmit(editingText);
+    if (editingText !== null) handleSubmit(editingText);
     setEditingText(null);
   };
 
@@ -53,7 +53,7 @@ export const VeggieNotesField = ({ notes, navigation, route }: Props) => {
     </ScrollView>
   );
 
-  const notesField = editingText && (
+  const notesField = notesFieldEditing && (
     <TextInput
       value={editingText}
       onChangeText={setEditingText}
@@ -66,7 +66,7 @@ export const VeggieNotesField = ({ notes, navigation, route }: Props) => {
 
   const addNoteBtn = (
     <View style={{ alignItems: "flex-start" }}>
-      <Button title="Add note" onPress={() => notes && setEditingText(notes)} />
+      <Button title="Add note" onPress={() => setEditingText("")} />
     </View>
   );
 
