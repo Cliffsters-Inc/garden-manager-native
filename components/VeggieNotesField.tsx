@@ -1,24 +1,36 @@
 import { useLayoutEffect, useState } from "react";
 import { Button, ScrollView, StyleSheet, TextInput } from "react-native";
+import { gardenActions } from "../services/garden/gardenSlice";
+import { useAppDispatch } from "../store";
 import { GardenTabScreenProps } from "../types";
 import { Text, View } from "./Themed";
 
 type Props = {
   notes: string | undefined;
-  changeHandler: (note: string) => void;
   navigation: GardenTabScreenProps<"VeggieScreen">["navigation"];
+  route: GardenTabScreenProps<"VeggieScreen">["route"];
 };
 
-export const VeggieNotesField = ({
-  notes,
-  changeHandler,
-  navigation,
-}: Props) => {
+export const VeggieNotesField = ({ notes, navigation, route }: Props) => {
+  const dispatch = useAppDispatch();
   const [notesFieldEditing, setNotesFieldEditing] = useState(false);
   const [text, setText] = useState(notes);
+  const { gardenId, bedId, veggieId } = route.params;
+
+  const handleChange = (text: string) => {
+    dispatch(
+      gardenActions.updateVeggieField({
+        gardenId,
+        bedId,
+        veggieId,
+        field: "notes",
+        update: text,
+      })
+    );
+  };
 
   const handleDone = () => {
-    if (typeof text === "string") changeHandler(text);
+    if (typeof text === "string") handleChange(text);
     setNotesFieldEditing(false);
   };
 
