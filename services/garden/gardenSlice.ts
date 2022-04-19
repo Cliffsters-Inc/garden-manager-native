@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
 import { initialGardenState } from "./initialGardenState";
 import { RootState } from "../../store";
-import { VeggieInfo } from "../types";
+import { VeggieInfo, VeggieLog } from "../types";
 import { appendVeggieInfoToVeggie } from "./gardenSliceUtils";
 
 export const gardenSlice = createSlice({
@@ -72,6 +72,22 @@ export const gardenSlice = createSlice({
       const bed = garden?.beds?.find((bed) => bed.id === bedId);
       const veggie = bed?.veggies?.find((veggie) => veggie.id === veggieId);
       if (veggie) veggie[field] = update;
+    },
+    addVeggieLog: (
+      gardens,
+      action: PayloadAction<{
+        gardenId: string;
+        bedId: string;
+        veggieId: string;
+        newLog: Pick<VeggieLog, "date" | "notes">;
+      }>
+    ) => {
+      const { gardenId, bedId, veggieId, newLog } = action.payload;
+      const garden = gardens.find((garden) => garden.id === gardenId);
+      const bed = garden?.beds?.find((bed) => bed.id === bedId);
+      const veggie = bed?.veggies?.find((veggie) => veggie.id === veggieId);
+
+      veggie?.logs?.unshift({ id: nanoid(), ...newLog });
     },
   },
 });

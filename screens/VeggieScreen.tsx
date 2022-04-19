@@ -1,4 +1,4 @@
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet, Image, FlatList } from "react-native";
 import { View, Text } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 import { format } from "date-fns";
@@ -45,12 +45,36 @@ export const VeggieScreen = ({
         navigation={navigation}
         route={route}
       />
+      <View>
+        <Text style={styles.heading}>Logs</Text>
+        <FlatList
+          data={veggie.logs}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                borderColor: "#d5d5d5",
+                borderWidth: 2,
+                borderRadius: 10,
+                padding: 10,
+                marginVertical: 5,
+              }}
+            >
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                {format(new Date(item.date), "d MMM yy")}
+              </Text>
+              <Text>Notes: {item.notes}</Text>
+            </View>
+          )}
+        />
+      </View>
       <ActionButton
         text="Add Log"
         onPress={() =>
           navigation.navigate("NewVeggieLogModal", {
-            navigation,
-            route,
+            gardenId,
+            bedId,
+            veggieId,
           })
         }
       />
@@ -65,6 +89,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 40,
+    fontWeight: "bold",
+  },
+  heading: {
+    fontSize: 30,
     fontWeight: "bold",
   },
   img: {
