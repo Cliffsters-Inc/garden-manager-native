@@ -1,44 +1,62 @@
 import { useLayoutEffect, useState } from "react";
 import { Button, ScrollView, StyleSheet, TextInput } from "react-native";
+import { gardenActions } from "../services/garden/gardenSlice";
+import { useAppDispatch } from "../store";
 import { GardenTabScreenProps } from "../types";
 import { Text, View } from "./Themed";
 
 type Props = {
   notes: string | undefined;
-  changeHandler: (note: string) => void;
   navigation: GardenTabScreenProps<"VeggieScreen">["navigation"];
+  route: GardenTabScreenProps<"VeggieScreen">["route"];
 };
 
-export const VeggieNotesField = ({
-  notes,
-  changeHandler,
-  navigation,
-}: Props) => {
-  const [notesFieldEditing, setNotesFieldEditing] = useState(false);
-  const [text, setText] = useState(notes);
+export const VeggieNotesField = ({ notes, navigation, route }: Props) => {
+  const dispatch = useAppDispatch();
+  const [editingText, setEditingText] = useState<string | null>(null);
+  const notesFieldEditing = editingText !== null;
+  const { gardenId, bedId, veggieId } = route.params;
+
+  const handleSubmit = (text: string) => {
+    dispatch(
+      gardenActions.updateVeggieField({
+        gardenId,
+        bedId,
+        veggieId,
+        field: "notes",
+        update: text,
+      })
+    );
+  };
+
+  const handleCancel = () => setEditingText(null);
 
   const handleDone = () => {
-    if (typeof text === "string") changeHandler(text);
-    setNotesFieldEditing(false);
+    if (editingText !== null) handleSubmit(editingText);
+    setEditingText(null);
   };
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerLeft: () =>
+        notesFieldEditing ? (
+          <Button title="Cancel" onPress={handleCancel} />
+        ) : null,
       headerRight: () =>
         notesFieldEditing ? <Button title="Done" onPress={handleDone} /> : null,
     });
-  }, [navigation, notesFieldEditing, text]);
+  }, [navigation, notesFieldEditing, editingText]);
 
   const notesText = (
     <ScrollView style={styles.border}>
-      <Text onPress={() => setNotesFieldEditing(true)}>{notes}</Text>
+      <Text onPress={() => notes && setEditingText(notes)}>{notes}</Text>
     </ScrollView>
   );
 
-  const notesField = (
+  const notesField = notesFieldEditing && (
     <TextInput
-      value={text}
-      onChangeText={setText}
+      value={editingText}
+      onChangeText={setEditingText}
       onBlur={handleDone}
       autoFocus
       multiline
@@ -48,7 +66,7 @@ export const VeggieNotesField = ({
 
   const addNoteBtn = (
     <View style={{ alignItems: "flex-start" }}>
-      <Button title="Add note" onPress={() => setNotesFieldEditing(true)} />
+      <Button title="Add note" onPress={() => setEditingText("")} />
     </View>
   );
 
