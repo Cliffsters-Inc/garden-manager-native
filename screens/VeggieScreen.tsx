@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { useAppSelector } from "../store";
 import { gardenSelectors } from "../services/garden/gardenSlice";
 import { VeggieNotesField } from "../components/VeggieNotesField";
+import { ActionButton } from "../components/shared/ActionButton";
 
 export const VeggieScreen = ({
   navigation,
@@ -43,6 +44,15 @@ export const VeggieScreen = ({
         notes={veggie.notes}
         navigation={navigation}
         route={route}
+      />
+      <ActionButton
+        text="Add Log"
+        onPress={() =>
+          navigation.navigate("NewVeggieLogModal", {
+            navigation,
+            route,
+          })
+        }
       />
     </View>
   ) : null;
