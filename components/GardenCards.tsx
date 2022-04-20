@@ -1,16 +1,16 @@
 import React from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
-import { Card } from "react-native-elements";
+import { Card, Divider } from "react-native-elements";
 import { gardenSelectors } from "../services/garden/gardenSlice";
 import { useAppSelector } from "../store";
 import { GardenTabScreenProps } from "../types";
 import { View } from "./Themed";
+import { Entypo } from "@expo/vector-icons";
 
-type GardenCardsProps = {
-  navigation: GardenTabScreenProps<"GardenTabScreen">["navigation"];
-};
-
-export const GardenCards = ({ navigation }: GardenCardsProps) => {
+export const GardenCards = ({
+  navigation,
+  route,
+}: GardenTabScreenProps<"GardenTabScreen">) => {
   const gardens = useAppSelector(gardenSelectors.selectGardens);
 
   return (
@@ -22,11 +22,23 @@ export const GardenCards = ({ navigation }: GardenCardsProps) => {
         renderItem={({ item }) => (
           <Pressable
             onPress={() =>
-              navigation.navigate("BedsTabScreen", { gardenId: item.id })
+              navigation.navigate("BedsTabScreen", {
+                gardenId: item.id,
+              })
             }
           >
             <Card containerStyle={styles.card}>
               <Card.Title>{item.name}</Card.Title>
+              <Divider />
+              <Pressable
+                onPress={() =>
+                  navigation.navigate("CardOptionsModal", {
+                    selectedGardenId: item.id,
+                  })
+                }
+              >
+                <Entypo name="dots-three-horizontal" size={24} color="black" />
+              </Pressable>
             </Card>
           </Pressable>
         )}

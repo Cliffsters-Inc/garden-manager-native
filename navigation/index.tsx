@@ -35,6 +35,8 @@ import { BedsTabScreen } from "../screens/BedsTabScreen";
 import { BedScreen } from "../screens/BedScreen";
 import { VeggieScreen } from "../screens/VeggieScreen";
 import { AddVeggieModalScreen } from "../screens/AddVeggieModalScreen";
+import { CardOptionsModalScreen } from "../screens/CardOptionsModalScreen";
+import { GardenCards } from "../components/GardenCards";
 
 export default function Navigation({
   colorScheme,
@@ -79,6 +81,16 @@ function RootNavigator() {
               <Button title="Cancel" onPress={navigation.goBack} />
             ),
             title: "Add a Veggie",
+          })}
+        />
+        <Stack.Screen
+          name="CardOptionsModal"
+          component={CardOptionsModalScreen}
+          options={({ navigation, route }) => ({
+            headerRight: () => (
+              <Button title="Cancel" onPress={navigation.goBack} />
+            ),
+            title: route.params.selectedGardenId,
           })}
         />
       </Stack.Group>

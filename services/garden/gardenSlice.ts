@@ -17,11 +17,12 @@ export const gardenSlice = createSlice({
         beds: [{ name: "1", id: nanoid(), veggies: [] }],
       });
     },
-    removeGarden: (gardens, action: PayloadAction<{ id: string }>) => {
+    removeCard: (gardens, action: PayloadAction<any>) => {
       const { payload } = action;
-
-      const updatedBeds = gardens.filter((bed) => bed.id !== payload.id);
-      gardens = updatedBeds;
+      let gardenIndex = gardens.findIndex((garden) => garden.id === payload);
+      if (gardenIndex > -1) {
+        gardens.splice(gardenIndex, 1);
+      }
     },
     addBed: (
       gardens,
