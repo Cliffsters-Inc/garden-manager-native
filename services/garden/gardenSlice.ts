@@ -17,7 +17,7 @@ export const gardenSlice = createSlice({
         beds: [{ name: "1", id: nanoid(), veggies: [] }],
       });
     },
-    removeCard: (gardens, action: PayloadAction<any>) => {
+    removeGarden: (gardens, action: PayloadAction<string>) => {
       const { payload } = action;
       let gardenIndex = gardens.findIndex((garden) => garden.id === payload);
       if (gardenIndex > -1) {
@@ -36,6 +36,21 @@ export const gardenSlice = createSlice({
         id: nanoid(),
         veggies: [],
       });
+    },
+    removeBed: (
+      gardens,
+      action: PayloadAction<{ gardenId: string; bedId: string | undefined }>
+    ) => {
+      const { gardenId, bedId } = action.payload;
+      const garden = gardens.find((garden) => garden.id === gardenId);
+      let bedIndex: number | undefined = garden?.beds?.findIndex(
+        (bed) => bed.id === bedId
+      );
+      console.log("bedIndex: ", bedIndex);
+      if (bedIndex !== undefined && bedIndex > -1) {
+        garden?.beds?.splice(bedIndex, 1);
+        console.log("***action");
+      }
     },
     addVeggie: (
       gardens,

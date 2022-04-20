@@ -1,7 +1,7 @@
-import { Divider } from "react-native-elements";
+import { Button, Divider } from "react-native-elements";
 import { Text, View } from "../components/Themed";
-import { gardenActions, gardenSelectors } from "../services/garden/gardenSlice";
-import { useAppDispatch, useAppSelector } from "../store";
+import { gardenSelectors } from "../services/garden/gardenSlice";
+import { useAppSelector } from "../store";
 import { RootStackScreenProps } from "../types";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Pressable, StyleSheet } from "react-native";
@@ -12,20 +12,17 @@ export const CardOptionsModalScreen = ({
 }: RootStackScreenProps<"CardOptionsModal">) => {
   const gardens = useAppSelector(gardenSelectors.selectGardens);
 
-  const { selectedGardenId } = route.params;
+  const { selectedGardenId, bedId } = route.params;
+
   const selectedGardenObject = gardens.find(
     (garden) => garden.id === selectedGardenId
   );
-  console.log("selected: ", selectedGardenId);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{selectedGardenObject?.name}</Text>
       <Divider />
-      <Pressable
-        style={styles.optionContainer}
-        onPress={() => console.log("test1")}
-      >
+      <Pressable style={styles.optionContainer}>
         <MaterialIcons
           name="drive-file-rename-outline"
           size={24}
@@ -39,6 +36,7 @@ export const CardOptionsModalScreen = ({
         onPress={() =>
           navigation.navigate("DeleteConfirmationModal", {
             selectedGardenId,
+            bedId,
           })
         }
       >

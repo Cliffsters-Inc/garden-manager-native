@@ -26,8 +26,8 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   AddVeggieModal: { gardenId: string; bedId: string };
   NotFound: undefined;
-  CardOptionsModal: { selectedGardenId: string };
-  DeleteConfirmationModal: { selectedGardenId: string };
+  CardOptionsModal: { selectedGardenId: string; bedId?: string };
+  DeleteConfirmationModal: { selectedGardenId: string; bedId?: string };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

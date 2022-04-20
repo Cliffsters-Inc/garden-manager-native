@@ -9,17 +9,30 @@ export const DeleteConfirmationModalScreen = ({
   route,
 }: RootStackScreenProps<"DeleteConfirmationModal">) => {
   const appDispatch = useAppDispatch();
-  const { selectedGardenId } = route.params;
+  const { selectedGardenId, bedId } = route.params;
 
-  const deleteCard = () => {
-    appDispatch(gardenActions.removeCard(selectedGardenId));
+  const deleteGardenCard = () => {
+    appDispatch(gardenActions.removeGarden(selectedGardenId));
     console.log(`***Deleting ${selectedGardenId}`);
-    navigation.goBack();
+    navigation.popToTop();
+  };
+
+  const deleteBedCard = () => {
+    appDispatch(
+      gardenActions.removeBed({ gardenId: selectedGardenId, bedId: bedId })
+    );
+    console.log(`***Deleting ${selectedGardenId}`);
+    navigation.popToTop();
   };
 
   return (
     <View>
-      <Button title={"Delete"} onPress={deleteCard} />
+      {!bedId ? (
+        <Button title={"Delete"} onPress={deleteGardenCard} />
+      ) : (
+        <Button title={"Delete"} onPress={deleteBedCard} />
+      )}
+
       <Button title={"Cancel"} onPress={() => navigation.goBack()} />
     </View>
   );
