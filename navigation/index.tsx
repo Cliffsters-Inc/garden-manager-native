@@ -36,7 +36,7 @@ import { BedScreen } from "../screens/BedScreen";
 import { VeggieScreen } from "../screens/VeggieScreen";
 import { AddVeggieModalScreen } from "../screens/AddVeggieModalScreen";
 import { CardOptionsModalScreen } from "../screens/CardOptionsModalScreen";
-import { GardenCards } from "../components/GardenCards";
+import { DeleteConfirmationModalScreen } from "../screens/DeleteConfirmationModalScreen";
 
 export default function Navigation({
   colorScheme,
@@ -86,12 +86,14 @@ function RootNavigator() {
         <Stack.Screen
           name="CardOptionsModal"
           component={CardOptionsModalScreen}
-          options={({ navigation, route }) => ({
-            headerRight: () => (
-              <Button title="Cancel" onPress={navigation.goBack} />
-            ),
+          options={({ route }) => ({
             title: route.params.selectedGardenId,
           })}
+        />
+        <Stack.Screen
+          name="DeleteConfirmationModal"
+          component={DeleteConfirmationModalScreen}
+          options={{ title: "Are you sure you want to delete this item?" }}
         />
       </Stack.Group>
     </Stack.Navigator>

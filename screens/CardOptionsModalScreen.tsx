@@ -10,7 +10,6 @@ export const CardOptionsModalScreen = ({
   navigation,
   route,
 }: RootStackScreenProps<"CardOptionsModal">) => {
-  const appDispatch = useAppDispatch();
   const gardens = useAppSelector(gardenSelectors.selectGardens);
 
   const { selectedGardenId } = route.params;
@@ -18,10 +17,7 @@ export const CardOptionsModalScreen = ({
     (garden) => garden.id === selectedGardenId
   );
   console.log("selected: ", selectedGardenId);
-  const deleteCard = () => {
-    // appDispatch(gardenActions.removeCard(selectedGardenObject?.id));
-    console.log(`***Deleting ${selectedGardenId}`);
-  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{selectedGardenObject?.name}</Text>
@@ -38,7 +34,14 @@ export const CardOptionsModalScreen = ({
         <Text style={styles.optionText}>Rename</Text>
       </Pressable>
       <Divider />
-      <Pressable style={styles.optionContainer} onPress={deleteCard}>
+      <Pressable
+        style={styles.optionContainer}
+        onPress={() =>
+          navigation.navigate("DeleteConfirmationModal", {
+            selectedGardenId,
+          })
+        }
+      >
         <MaterialCommunityIcons
           name="delete-alert-outline"
           size={36}

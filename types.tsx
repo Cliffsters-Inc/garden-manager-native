@@ -27,6 +27,7 @@ export type RootStackParamList = {
   AddVeggieModal: { gardenId: string; bedId: string };
   NotFound: undefined;
   CardOptionsModal: { selectedGardenId: string };
+  DeleteConfirmationModal: { selectedGardenId: string };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
