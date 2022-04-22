@@ -60,6 +60,7 @@ export const VeggieScreen = ({
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
+            marginTop: 10,
           }}
         >
           <Text style={styles.heading}>Logs</Text>
