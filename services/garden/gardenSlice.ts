@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
 import { initialGardenState } from "./initialGardenState";
 import { RootState } from "../../store";
 import { VeggieInfo, VeggieLog } from "../types";
-import { appendVeggieInfoToVeggie } from "./gardenSliceUtils";
+import { appendVeggieInfoToVeggie, sortLogsByDate } from "./gardenSliceUtils";
 
 export const gardenSlice = createSlice({
   name: "gardens",
@@ -119,7 +119,8 @@ export const gardenSelectors = {
     state: RootState,
     gardenId: string,
     bedId: string,
-    veggieId: string
+    veggieId: string,
+    logsDescending = true
   ) => {
     const veggie = state.gardens
       .find((garden) => garden.id === gardenId)
@@ -130,13 +131,7 @@ export const gardenSelectors = {
 
     const veggieWithInfo = appendVeggieInfoToVeggie(state, veggie);
 
-    const sortLogsByDate = (logs: VeggieLog[], descending = true) => {
-      return logs
-        .slice()
-        .sort((a, b) => (descending ? b.date - a.date : a.date - b.date));
-    };
-
-    const sortedLogs = sortLogsByDate(veggieWithInfo.logs);
+    const sortedLogs = sortLogsByDate(veggieWithInfo.logs, logsDescending);
 
     return { ...veggieWithInfo, logs: sortedLogs };
   },

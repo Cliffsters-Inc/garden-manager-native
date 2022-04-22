@@ -6,14 +6,23 @@ import { useAppSelector } from "../store";
 import { gardenSelectors } from "../services/garden/gardenSlice";
 import { VeggieNotesField } from "../components/VeggieNotesField";
 import { ActionButton } from "../components/shared/ActionButton";
+import { useState } from "react";
+import { SortBtn } from "../components/shared/SortBtn";
 
 export const VeggieScreen = ({
   navigation,
   route,
 }: GardenTabScreenProps<"VeggieScreen">) => {
   const { gardenId, bedId, veggieId } = route.params;
+  const [logsDescending, setLogsDescending] = useState(true);
   const veggie = useAppSelector((state) =>
-    gardenSelectors.selectVeggie(state, gardenId, bedId, veggieId)
+    gardenSelectors.selectVeggie(
+      state,
+      gardenId,
+      bedId,
+      veggieId,
+      logsDescending
+    )
   );
 
   return veggie ? (
@@ -46,7 +55,19 @@ export const VeggieScreen = ({
         route={route}
       />
       <View>
-        <Text style={styles.heading}>Logs</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Text style={styles.heading}>Logs</Text>
+          <SortBtn
+            descending={logsDescending}
+            onPress={() => setLogsDescending((prev) => !prev)}
+          />
+        </View>
         <FlatList
           data={veggie.logs}
           keyExtractor={(item) => item.id}
