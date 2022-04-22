@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import {
   Pressable,
   Text,
@@ -13,8 +14,10 @@ import {
 type Props = {
   text: string;
   onPress: (event: GestureResponderEvent) => void;
+  color?: ViewStyle["backgroundColor"];
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
+  children?: ReactNode;
   rest?: React.ForwardRefExoticComponent<
     PressableProps & React.RefAttributes<View>
   >;
@@ -22,27 +25,39 @@ type Props = {
 
 export const ActionButton = ({
   text,
+  color = "#ffaa72",
   onPress,
   style,
   textStyle,
-  ...rest
+  children,
+  ...restOfProps
 }: Props) => {
   return (
-    <Pressable onPress={onPress} style={[styles.container, style]} {...rest}>
-      <Text style={[styles.btn, textStyle]}>{text}</Text>
+    <Pressable
+      onPress={onPress}
+      style={[
+        styles.container,
+        { backgroundColor: color, shadowColor: color },
+        style,
+      ]}
+      {...restOfProps}
+    >
+      {children ? (
+        children
+      ) : (
+        <Text style={[styles.btn, textStyle]}>{text}</Text>
+      )}
     </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#ffaa72",
     padding: 15,
     borderRadius: 200,
     position: "absolute",
     bottom: 20,
     right: 20,
-    shadowColor: "#ffaa72",
     shadowOpacity: 0.75,
     shadowOffset: { width: 3, height: 3 },
   },
