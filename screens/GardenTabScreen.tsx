@@ -8,13 +8,14 @@ import { AddCardButton } from "../components/shared/AddCardButton";
 
 export const GardenTabScreen = ({
   navigation,
+  route,
 }: GardenTabScreenProps<"GardenTabScreen">) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const areaTitle = "garden";
 
   return (
     <View style={styles.container}>
-      <GardenCards navigation={navigation} />
+      <GardenCards navigation={navigation} route={route} />
       <AddCardButton setIsVisible={setIsVisible} areaTitle={areaTitle} />
       <BottomSheetForm
         isVisible={isVisible}
