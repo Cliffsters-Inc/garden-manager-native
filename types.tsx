@@ -27,6 +27,8 @@ export type RootStackParamList = {
   NotFound: undefined;
   AddVeggieModal: { gardenId: string; bedId: string };
   NewVeggieLogModal: { gardenId: string; bedId: string; veggieId: string };
+  CardOptionsModal: { selectedGardenId: string; bedId?: string };
+  DeleteConfirmationModal: { selectedGardenId: string; bedId?: string };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -52,7 +54,9 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
  * Garden Tab
  */
 export type GardenTabParamList = {
-  GardenTabScreen: undefined;
+  GardenTabScreen: { gardenId: string; bedId: string };
+  GardenCards: { gardenId: string };
+  CardOptionsModalScreen: { gardenId: string; bedId?: string };
   BedsTabScreen: { gardenId: string };
   BedScreen: { gardenId: string; bedId: string };
   VeggieScreen: { gardenId: string; bedId: string; veggieId: string };

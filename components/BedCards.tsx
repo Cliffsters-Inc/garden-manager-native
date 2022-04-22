@@ -1,6 +1,7 @@
+import { Entypo } from "@expo/vector-icons";
 import { FunctionComponent } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
-import { Card, Text } from "react-native-elements";
+import { Card, Divider, Text } from "react-native-elements";
 import { gardenSelectors } from "../services/garden/gardenSlice";
 import { useAppSelector } from "../store";
 import { GardenTabScreenProps } from "../types";
@@ -43,6 +44,17 @@ export const BedCards: FunctionComponent<BedCardsProps> = ({
           >
             <Card containerStyle={styles.card}>
               <Card.Title>{item.name}</Card.Title>
+              <Divider />
+              <Pressable
+                onPress={() =>
+                  navigation.navigate("CardOptionsModal", {
+                    bedId: item.id,
+                    selectedGardenId,
+                  })
+                }
+              >
+                <Entypo name="dots-three-horizontal" size={24} color="black" />
+              </Pressable>
             </Card>
           </Pressable>
         )}
