@@ -53,6 +53,7 @@ export const gardenSlice = createSlice({
         bed?.veggies?.push({
           id: nanoid(),
           veggieInfo: { id: veggieInfo.id },
+          logs: [],
         });
       }
     },
@@ -87,7 +88,7 @@ export const gardenSlice = createSlice({
       const bed = garden?.beds?.find((bed) => bed.id === bedId);
       const veggie = bed?.veggies?.find((veggie) => veggie.id === veggieId);
 
-      veggie?.logs?.unshift({ id: nanoid(), ...newLog });
+      veggie?.logs?.push({ id: nanoid(), ...newLog });
     },
   },
 });
@@ -129,6 +130,14 @@ export const gardenSelectors = {
 
     const veggieWithInfo = appendVeggieInfoToVeggie(state, veggie);
 
-    return veggieWithInfo;
+    const sortLogsByDate = (logs: VeggieLog[], descending = true) => {
+      return logs
+        .slice()
+        .sort((a, b) => (descending ? b.date - a.date : a.date - b.date));
+    };
+
+    const sortedLogs = sortLogsByDate(veggieWithInfo.logs);
+
+    return { ...veggieWithInfo, logs: sortedLogs };
   },
 };
