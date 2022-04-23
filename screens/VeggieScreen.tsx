@@ -1,18 +1,28 @@
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet, Image, FlatList } from "react-native";
 import { View, Text } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 import { format } from "date-fns";
 import { useAppSelector } from "../store";
 import { gardenSelectors } from "../services/garden/gardenSlice";
 import { VeggieNotesField } from "../components/VeggieNotesField";
+import { ActionButton } from "../components/shared/ActionButton";
+import { useState } from "react";
+import { SortBtn } from "../components/shared/SortBtn";
 
 export const VeggieScreen = ({
   navigation,
   route,
 }: GardenTabScreenProps<"VeggieScreen">) => {
   const { gardenId, bedId, veggieId } = route.params;
+  const [logsDescending, setLogsDescending] = useState(true);
   const veggie = useAppSelector((state) =>
-    gardenSelectors.selectVeggie(state, gardenId, bedId, veggieId)
+    gardenSelectors.selectVeggie(
+      state,
+      gardenId,
+      bedId,
+      veggieId,
+      logsDescending
+    )
   );
 
   return veggie ? (
@@ -44,6 +54,52 @@ export const VeggieScreen = ({
         navigation={navigation}
         route={route}
       />
+      <View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginTop: 10,
+          }}
+        >
+          <Text style={styles.heading}>Logs</Text>
+          <SortBtn
+            descending={logsDescending}
+            onPress={() => setLogsDescending((prev) => !prev)}
+          />
+        </View>
+        <FlatList
+          data={veggie.logs}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                borderColor: "#d5d5d5",
+                borderWidth: 2,
+                borderRadius: 10,
+                padding: 10,
+                marginVertical: 5,
+              }}
+            >
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                {format(new Date(item.date), "d MMM yy")}
+              </Text>
+              <Text>Notes: {item.notes}</Text>
+            </View>
+          )}
+        />
+      </View>
+      <ActionButton
+        text="Add Log"
+        onPress={() =>
+          navigation.navigate("NewVeggieLogModal", {
+            gardenId,
+            bedId,
+            veggieId,
+          })
+        }
+      />
     </View>
   ) : null;
 };
@@ -55,6 +111,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 40,
+    fontWeight: "bold",
+  },
+  heading: {
+    fontSize: 30,
     fontWeight: "bold",
   },
   img: {

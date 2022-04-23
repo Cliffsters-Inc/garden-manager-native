@@ -16,6 +16,7 @@ export const initialGardenState: Garden[] = [
             harvestDate: "2023-01-14T13:00:00.000Z",
             notes:
               "Left half sowed tightly while right half is more spread out.",
+            logs: [],
           },
         ],
       },
@@ -29,6 +30,7 @@ export const initialGardenState: Garden[] = [
             sowDate: "2022-03-16T07:59:10.647Z",
             harvestDate: "2023-01-14T13:00:00.000Z",
             notes: "Feed these within a week.",
+            logs: [],
           },
         ],
       },
@@ -48,6 +50,7 @@ export const initialGardenState: Garden[] = [
             sowDate: "2022-03-16T07:59:10.647Z",
             harvestDate: "2023-01-14T13:00:00.000Z",
             notes: "Set up shadecloth for extra protection.",
+            logs: [],
           },
         ],
       },

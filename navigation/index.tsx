@@ -35,6 +35,7 @@ import { BedsTabScreen } from "../screens/BedsTabScreen";
 import { BedScreen } from "../screens/BedScreen";
 import { VeggieScreen } from "../screens/VeggieScreen";
 import { AddVeggieModalScreen } from "../screens/AddVeggieModalScreen";
+import { NewVeggieLogModalScreen } from "../screens/NewVeggieLogModalScreen";
 import { CardOptionsModalScreen } from "../screens/CardOptionsModalScreen";
 import { DeleteConfirmationModalScreen } from "../screens/DeleteConfirmationModalScreen";
 
@@ -81,6 +82,16 @@ function RootNavigator() {
               <Button title="Cancel" onPress={navigation.goBack} />
             ),
             title: "Add a Veggie",
+          })}
+        />
+         <Stack.Screen
+          name="NewVeggieLogModal"
+          component={NewVeggieLogModalScreen}
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <Button title="Cancel" onPress={navigation.goBack} />
+            ),
+            title: "New Log",
           })}
         />
         <Stack.Screen

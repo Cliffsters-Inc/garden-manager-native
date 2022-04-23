@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
 import { initialGardenState } from "./initialGardenState";
 import { RootState } from "../../store";
-import { VeggieInfo } from "../types";
-import { appendVeggieInfoToVeggie } from "./gardenSliceUtils";
+import { VeggieInfo, VeggieLog } from "../types";
+import { appendVeggieInfoToVeggie, sortLogsByDate } from "./gardenSliceUtils";
 
 export const gardenSlice = createSlice({
   name: "gardens",
@@ -69,6 +69,7 @@ export const gardenSlice = createSlice({
         bed?.veggies?.push({
           id: nanoid(),
           veggieInfo: { id: veggieInfo.id },
+          logs: [],
         });
       }
     },
@@ -88,6 +89,22 @@ export const gardenSlice = createSlice({
       const bed = garden?.beds?.find((bed) => bed.id === bedId);
       const veggie = bed?.veggies?.find((veggie) => veggie.id === veggieId);
       if (veggie) veggie[field] = update;
+    },
+    addVeggieLog: (
+      gardens,
+      action: PayloadAction<{
+        gardenId: string;
+        bedId: string;
+        veggieId: string;
+        newLog: Pick<VeggieLog, "date" | "notes">;
+      }>
+    ) => {
+      const { gardenId, bedId, veggieId, newLog } = action.payload;
+      const garden = gardens.find((garden) => garden.id === gardenId);
+      const bed = garden?.beds?.find((bed) => bed.id === bedId);
+      const veggie = bed?.veggies?.find((veggie) => veggie.id === veggieId);
+
+      veggie?.logs?.push({ id: nanoid(), ...newLog });
     },
   },
 });
@@ -118,7 +135,8 @@ export const gardenSelectors = {
     state: RootState,
     gardenId: string,
     bedId: string,
-    veggieId: string
+    veggieId: string,
+    logsDescending = true
   ) => {
     const veggie = state.gardens
       .find((garden) => garden.id === gardenId)
@@ -129,6 +147,8 @@ export const gardenSelectors = {
 
     const veggieWithInfo = appendVeggieInfoToVeggie(state, veggie);
 
-    return veggieWithInfo;
+    const sortedLogs = sortLogsByDate(veggieWithInfo.logs, logsDescending);
+
+    return { ...veggieWithInfo, logs: sortedLogs };
   },
 };
