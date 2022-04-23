@@ -55,6 +55,7 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
 export type GardenTabParamList = {
   GardenTabScreen: { gardenId: string; bedId: string };
   GardenCards: { gardenId: string };
+  CustomCard: { title: string; bedId?: string };
   CardOptionsModalScreen: { gardenId: string; bedId?: string };
   BedsTabScreen: { gardenId: string };
   BedScreen: { gardenId: string; bedId: string };

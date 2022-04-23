@@ -1,15 +1,13 @@
 import React from "react";
-import { FlatList, Pressable, StyleSheet } from "react-native";
-import { Card, Divider } from "react-native-elements";
+import { FlatList, StyleSheet } from "react-native";
 import { gardenSelectors } from "../services/garden/gardenSlice";
 import { useAppSelector } from "../store";
 import { GardenTabScreenProps } from "../types";
+import { CustomCard } from "./shared/CustomCard";
 import { View } from "./Themed";
-import { Entypo } from "@expo/vector-icons";
 
 export const GardenCards = ({
   navigation,
-  route,
 }: GardenTabScreenProps<"GardenTabScreen">) => {
   const gardens = useAppSelector(gardenSelectors.selectGardens);
 
@@ -20,27 +18,11 @@ export const GardenCards = ({
         keyExtractor={(item) => item.id}
         data={gardens}
         renderItem={({ item }) => (
-          <Pressable
-            onPress={() =>
-              navigation.navigate("BedsTabScreen", {
-                gardenId: item.id,
-              })
-            }
-          >
-            <Card containerStyle={styles.card}>
-              <Card.Title>{item.name}</Card.Title>
-              <Divider />
-              <Pressable
-                onPress={() =>
-                  navigation.navigate("CardOptionsModal", {
-                    selectedGardenId: item.id,
-                  })
-                }
-              >
-                <Entypo name="dots-three-horizontal" size={24} color="black" />
-              </Pressable>
-            </Card>
-          </Pressable>
+          <CustomCard
+            title={item.name}
+            selectedGardenId={item.id}
+            navigation={navigation}
+          />
         )}
       />
     </View>
@@ -49,7 +31,7 @@ export const GardenCards = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 5,
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
@@ -57,8 +39,10 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   card: {
+    // flex: 1,
     minHeight: 100,
     minWidth: 150,
     borderWidth: 1,
+    backgroundColor: "black",
   },
 });

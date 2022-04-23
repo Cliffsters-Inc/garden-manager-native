@@ -15,13 +15,19 @@ export const GardenTabScreen = ({
 
   return (
     <View style={styles.container}>
-      <GardenCards navigation={navigation} route={route} />
-      <AddCardButton setIsVisible={setIsVisible} areaTitle={areaTitle} />
-      <BottomSheetForm
-        isVisible={isVisible}
-        setIsVisible={setIsVisible}
-        areaTitle={areaTitle}
-      />
+      <View style={styles.cards}>
+        <GardenCards navigation={navigation} route={route} />
+      </View>
+      <View style={styles.button}>
+        <AddCardButton setIsVisible={setIsVisible} areaTitle={areaTitle} />
+      </View>
+      <View>
+        <BottomSheetForm
+          isVisible={isVisible}
+          setIsVisible={setIsVisible}
+          areaTitle={areaTitle}
+        />
+      </View>
     </View>
   );
 };
@@ -29,5 +35,13 @@ export const GardenTabScreen = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  cards: {
+    flex: 5,
+  },
+  button: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
   },
 });

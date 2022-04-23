@@ -29,7 +29,6 @@ export const AddCardButton: React.FunctionComponent<props> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "flex-end",
+    // flex: 1,
   },
 });
