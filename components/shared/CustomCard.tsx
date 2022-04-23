@@ -17,21 +17,29 @@ export const CustomCard: FunctionComponent<props> = ({
 }) => {
   const selectedGardenId = props.selectedGardenId;
   return (
-    <Card wrapperStyle={styles.container} containerStyle={styles.outer}>
-      <Card.Title style={styles.title}>{props.title}</Card.Title>
-      <Divider style={{ marginTop: 5 }} />
-      <Pressable
-        onPress={() =>
-          navigation.navigate("CardOptionsModal", {
-            selectedGardenId,
-          })
-        }
-      >
-        <View style={styles.options}>
-          <Entypo name="dots-three-horizontal" size={24} color="black" />
-        </View>
-      </Pressable>
-    </Card>
+    <Pressable
+      onPress={() =>
+        navigation.navigate("BedsTabScreen", {
+          selectedGardenId,
+        })
+      }
+    >
+      <Card wrapperStyle={styles.container} containerStyle={styles.outer}>
+        <Card.Title style={styles.title}>{props.title}</Card.Title>
+        <Divider style={{ marginTop: 5 }} />
+        <Pressable
+          onPress={() =>
+            navigation.navigate("CardOptionsModal", {
+              selectedGardenId,
+            })
+          }
+        >
+          <View style={styles.options}>
+            <Entypo name="dots-three-horizontal" size={24} color="black" />
+          </View>
+        </Pressable>
+      </Card>
+    </Pressable>
   );
 };
 

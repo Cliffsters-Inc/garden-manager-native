@@ -10,19 +10,19 @@ export const BedsTabScreen = ({
   navigation,
   route,
 }: GardenTabScreenProps<"BedsTabScreen">) => {
-  const { gardenId } = route.params;
+  const { selectedGardenId } = route.params;
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const areaTitle = "bed";
 
   return (
     <View style={styles.container}>
-      <BedCards selectedGardenId={gardenId} navigation={navigation} />
+      <BedCards selectedGardenId={selectedGardenId} navigation={navigation} />
       <AddCardButton setIsVisible={setIsVisible} areaTitle={areaTitle} />
       <BottomSheetForm
         isVisible={isVisible}
         setIsVisible={setIsVisible}
         areaTitle={areaTitle}
-        selectedGardenId={gardenId}
+        selectedGardenId={selectedGardenId}
       />
     </View>
   );
