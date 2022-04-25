@@ -39,6 +39,7 @@ export const CustomCard: FunctionComponent<props> = ({
           onPress={() =>
             navigation.navigate("CardOptionsModal", {
               selectedGardenId,
+              selectedBedId,
             })
           }
         >

@@ -55,15 +55,15 @@ export const gardenSlice = createSlice({
     addVeggie: (
       gardens,
       action: PayloadAction<{
-        gardenId: string;
-        bedId: string;
+        selectedGardenId: string;
+        selectedBedId: string;
         veggieInfo: VeggieInfo;
       }>
     ) => {
-      const { gardenId, bedId, veggieInfo } = action.payload;
+      const { selectedGardenId, selectedBedId, veggieInfo } = action.payload;
 
-      const garden = gardens.find((garden) => garden.id === gardenId);
-      const bed = garden?.beds?.find((bed) => bed.id === bedId);
+      const garden = gardens.find((garden) => garden.id === selectedGardenId);
+      const bed = garden?.beds?.find((bed) => bed.id === selectedBedId);
 
       if (bed && veggieInfo) {
         bed?.veggies?.push({

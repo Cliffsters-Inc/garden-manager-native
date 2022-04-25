@@ -24,15 +24,15 @@ declare global {
  */
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
-<<<<<<< HEAD
   AddVeggieModal: { selectedGardenId: string; selectedBedId: string };
-=======
->>>>>>> dev
   NotFound: undefined;
-  AddVeggieModal: { gardenId: string; bedId: string };
-  NewVeggieLogModal: { gardenId: string; bedId: string; veggieId: string };
-  CardOptionsModal: { selectedGardenId: string; bedId?: string };
-  DeleteConfirmationModal: { selectedGardenId: string; bedId?: string };
+  NewVeggieLogModal: {
+    selectedGardenId: string;
+    selectedBedId: string;
+    veggieId: string;
+  };
+  CardOptionsModal: { selectedGardenId: string; selectedBedId?: string };
+  DeleteConfirmationModal: { selectedGardenId: string; selectedBedId?: string };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -59,7 +59,7 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
  */
 export type GardenTabParamList = {
   GardenTabScreen: undefined;
-  GardenCards: { gardenId: string };
+  GardenCards: undefined;
   CustomCard: { selectedGardenId: string; title: string };
   CardOptionsModalScreen: { gardenId: string; bedId?: string };
   BedsTabScreen: { selectedGardenId: string; selectedBedId?: string };

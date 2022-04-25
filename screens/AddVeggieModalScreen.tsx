@@ -12,7 +12,7 @@ export const AddVeggieModalScreen = ({
   route,
 }: RootStackScreenProps<"AddVeggieModal">) => {
   const appDispatch = useAppDispatch();
-  const { gardenId, bedId } = route.params;
+  const { selectedGardenId, selectedBedId } = route.params;
   const veggieInfos = useAppSelector(veggieInfoSelectors.selectVeggieInfos);
 
   return (
@@ -20,7 +20,13 @@ export const AddVeggieModalScreen = ({
       <VeggieInfoList
         veggieInfos={veggieInfos}
         addHandler={(veggieInfo) => {
-          appDispatch(gardenActions.addVeggie({ gardenId, bedId, veggieInfo }));
+          appDispatch(
+            gardenActions.addVeggie({
+              selectedGardenId,
+              selectedBedId,
+              veggieInfo,
+            })
+          );
           navigation.goBack();
         }}
       />
