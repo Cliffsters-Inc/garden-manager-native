@@ -38,17 +38,16 @@ export type Veggie = {
   notes?: string;
   sowDate?: string;
   harvestDate?: string;
-  logs?: VeggieLog[];
+  logs: VeggieLog[];
 };
 
 export type VeggieLog = {
   id: string;
-  creationDate: string;
-  editedDate?: string;
-  soilDescription?: string;
-  phLevel?: number;
+  date: number;
   notes?: string;
   photos?: string[];
+  soilDescription?: string;
+  phLevel?: number;
 };
 
 export type VeggieInfo = {

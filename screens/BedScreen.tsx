@@ -1,5 +1,6 @@
 import React from "react";
-import { Pressable, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
+import { ActionButton } from "../components/shared/ActionButton";
 import { View, Text } from "../components/Themed";
 import { VeggieList } from "../components/VeggieList";
 import { gardenSelectors } from "../services/garden/gardenSlice";
@@ -29,17 +30,15 @@ export const BedScreen = ({
           }
         />
       )}
-      <Pressable
+      <ActionButton
+        text="Add Veggie"
         onPress={() =>
           navigation.navigate("AddVeggieModal", {
             selectedGardenId,
             selectedBedId,
           })
         }
-        style={styles.createBtnContainer}
-      >
-        <Text style={styles.createBtn}>Add Veggie</Text>
-      </Pressable>
+      />
     </View>
   ) : null;
 };
@@ -50,16 +49,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  createBtnContainer: {
-    backgroundColor: "#ffaa72",
-    padding: 15,
-    borderRadius: 200,
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    shadowColor: "#ffaa72",
-    shadowOpacity: 0.75,
-    shadowOffset: { width: 3, height: 3 },
-  },
-  createBtn: { color: "#ffffff", fontSize: 16, fontWeight: "bold" },
 });

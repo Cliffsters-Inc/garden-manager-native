@@ -24,8 +24,13 @@ declare global {
  */
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
+<<<<<<< HEAD
   AddVeggieModal: { selectedGardenId: string; selectedBedId: string };
+=======
+>>>>>>> dev
   NotFound: undefined;
+  AddVeggieModal: { gardenId: string; bedId: string };
+  NewVeggieLogModal: { gardenId: string; bedId: string; veggieId: string };
   CardOptionsModal: { selectedGardenId: string; bedId?: string };
   DeleteConfirmationModal: { selectedGardenId: string; bedId?: string };
 };

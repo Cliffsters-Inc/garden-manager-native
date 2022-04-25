@@ -1,5 +1,5 @@
 import { RootState } from "../../store";
-import { Veggie } from "../types";
+import { Veggie, VeggieLog } from "../types";
 
 export const appendVeggieInfoToVeggie = (
   state: RootState,
@@ -18,3 +18,6 @@ export const appendVeggieInfoToVeggie = (
     },
   };
 };
+
+export const sortLogsByDate = (logs: VeggieLog[], descending = true) =>
+  logs.slice().sort((a, b) => (descending ? b.date - a.date : a.date - b.date));
