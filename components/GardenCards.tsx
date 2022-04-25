@@ -38,15 +38,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    width: "100%",
     padding: 15,
     marginTop: 50,
-  },
-  card: {
-    // flex: 1,
-    minHeight: 100,
-    minWidth: 150,
-    borderWidth: 1,
-    backgroundColor: "black",
   },
 });

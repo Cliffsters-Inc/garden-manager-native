@@ -16,14 +16,20 @@ export const BedsTabScreen = ({
 
   return (
     <View style={styles.container}>
-      <BedCards selectedGardenId={selectedGardenId} navigation={navigation} />
-      <AddCardButton setIsVisible={setIsVisible} areaTitle={areaTitle} />
-      <BottomSheetForm
-        isVisible={isVisible}
-        setIsVisible={setIsVisible}
-        areaTitle={areaTitle}
-        selectedGardenId={selectedGardenId}
-      />
+      <View style={styles.cards}>
+        <BedCards selectedGardenId={selectedGardenId} navigation={navigation} />
+      </View>
+      <View style={styles.button}>
+        <AddCardButton setIsVisible={setIsVisible} areaTitle={areaTitle} />
+      </View>
+      <View>
+        <BottomSheetForm
+          isVisible={isVisible}
+          setIsVisible={setIsVisible}
+          areaTitle={areaTitle}
+          selectedGardenId={selectedGardenId}
+        />
+      </View>
     </View>
   );
 };
@@ -31,5 +37,13 @@ export const BedsTabScreen = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  cards: {
+    flex: 5,
+  },
+  button: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
   },
 });

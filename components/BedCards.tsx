@@ -1,20 +1,19 @@
-import { Entypo } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { FunctionComponent } from "react";
-import { FlatList, Pressable, StyleSheet } from "react-native";
-import { Card, Divider, Text } from "react-native-elements";
+import { FlatList, StyleSheet } from "react-native";
+import { Text } from "react-native-elements";
 import { gardenSelectors } from "../services/garden/gardenSlice";
 import { useAppSelector } from "../store";
 import { GardenTabScreenProps } from "../types";
 import { CustomCard } from "./shared/CustomCard";
 import { View } from "./Themed";
 
-type BedCardsProps = {
+type props = {
   selectedGardenId: string;
   navigation: GardenTabScreenProps<"GardenTabScreen">["navigation"];
 };
 
-export const BedCards: FunctionComponent<BedCardsProps> = ({
+export const BedCards: FunctionComponent<props> = ({
   selectedGardenId,
   navigation,
 }) => {
@@ -57,17 +56,10 @@ const styles = StyleSheet.create({
     flex: 5,
     alignItems: "center",
     justifyContent: "center",
-    width: "100%",
     padding: 15,
     marginTop: 50,
   },
   title: {
     textTransform: "uppercase",
-  },
-  card: {
-    minHeight: 100,
-    minWidth: 150,
-    borderWidth: 1,
-    marginTop: 40,
   },
 });
