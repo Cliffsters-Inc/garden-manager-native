@@ -1,5 +1,5 @@
 import { Entypo } from "@expo/vector-icons";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 import { Pressable, StyleSheet } from "react-native";
 import { Card, Divider } from "react-native-elements";
 import { GardenTabScreenProps } from "../../types";
@@ -8,24 +8,32 @@ import { View } from "../Themed";
 type props = {
   title: string;
   selectedGardenId: string;
+  selectedBedId?: string;
   navigation: GardenTabScreenProps<"GardenTabScreen">["navigation"];
+  routeName: string;
 };
 
 export const CustomCard: FunctionComponent<props> = ({
   navigation,
-  ...props
+  title,
+  selectedGardenId,
+  selectedBedId,
+  routeName,
 }) => {
-  const selectedGardenId = props.selectedGardenId;
   return (
     <Pressable
       onPress={() =>
-        navigation.navigate("BedsTabScreen", {
-          selectedGardenId,
-        })
+        navigation.navigate(
+          routeName === "GardenTabScreen" ? "BedsTabScreen" : "BedScreen",
+          {
+            selectedGardenId,
+            selectedBedId,
+          }
+        )
       }
     >
       <Card wrapperStyle={styles.container} containerStyle={styles.outer}>
-        <Card.Title style={styles.title}>{props.title}</Card.Title>
+        <Card.Title style={styles.title}>{title}</Card.Title>
         <Divider style={{ marginTop: 5 }} />
         <Pressable
           onPress={() =>
