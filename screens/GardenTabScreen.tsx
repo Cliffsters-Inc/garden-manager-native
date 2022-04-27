@@ -3,7 +3,6 @@ import { View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 import { useState } from "react";
 import { GardenCards } from "../components/GardenCards";
-import { BottomSheetForm } from "../components/shared/BottomSheetForm";
 import { AddCardButton } from "../components/shared/AddCardButton";
 
 export const GardenTabScreen = ({
@@ -12,6 +11,7 @@ export const GardenTabScreen = ({
 }: GardenTabScreenProps<"GardenTabScreen">) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const areaTitle = "garden";
+  const routeName = route.name;
 
   return (
     <View style={styles.container}>
@@ -19,14 +19,7 @@ export const GardenTabScreen = ({
         <GardenCards navigation={navigation} route={route} />
       </View>
       <View style={styles.button}>
-        <AddCardButton setIsVisible={setIsVisible} areaTitle={areaTitle} />
-      </View>
-      <View>
-        <BottomSheetForm
-          isVisible={isVisible}
-          setIsVisible={setIsVisible}
-          areaTitle={areaTitle}
-        />
+        <AddCardButton routeName={routeName} />
       </View>
     </View>
   );

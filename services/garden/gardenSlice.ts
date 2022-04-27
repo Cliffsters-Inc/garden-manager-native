@@ -26,7 +26,7 @@ export const gardenSlice = createSlice({
     },
     addBed: (
       gardens,
-      action: PayloadAction<{ name: string; id: string | undefined }>
+      action: PayloadAction<{ name: string; id: String | undefined }>
     ) => {
       const { payload } = action;
 

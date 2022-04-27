@@ -1,20 +1,24 @@
+import { useNavigation } from "@react-navigation/native";
+import { FC } from "react";
 import { StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 import { View } from "../Themed";
 
 type props = {
-  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  areaTitle: string;
+  routeName: string;
 };
 
-export const AddCardButton: React.FunctionComponent<props> = ({
-  setIsVisible,
-  areaTitle,
-}) => {
+export const AddCardButton: FC<props> = ({ routeName }) => {
+  const navigation = useNavigation();
+  const areaTitle = routeName === "GardenTabScreen" ? "garden" : "bed";
   return (
     <View style={styles.container}>
       <Button
-        onPress={() => setIsVisible(true)}
+        onPress={() =>
+          navigation.navigate("CreateOrRenameModal", {
+            areaTitle,
+          })
+        }
         title={`Add new ${areaTitle}`}
         containerStyle={{
           borderRadius: 30,
