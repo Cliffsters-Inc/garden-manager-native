@@ -6,9 +6,10 @@ import { View } from "../Themed";
 
 type props = {
   routeName: string;
+  selectedGardenId?: string;
 };
 
-export const AddCardButton: FC<props> = ({ routeName }) => {
+export const AddCardButton: FC<props> = ({ routeName, selectedGardenId }) => {
   const navigation = useNavigation();
   const areaTitle = routeName === "GardenTabScreen" ? "garden" : "bed";
   return (
@@ -17,6 +18,8 @@ export const AddCardButton: FC<props> = ({ routeName }) => {
         onPress={() =>
           navigation.navigate("CreateOrRenameModal", {
             areaTitle,
+            routeName,
+            selectedGardenId,
           })
         }
         title={`Add new ${areaTitle}`}

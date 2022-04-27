@@ -46,7 +46,6 @@ export const gardenSlice = createSlice({
       let bedIndex: number | undefined = garden?.beds?.findIndex(
         (bed) => bed.id === bedId
       );
-      console.log("bedIndex: ", bedIndex);
       if (bedIndex !== undefined && bedIndex > -1) {
         garden?.beds?.splice(bedIndex, 1);
         console.log("***action");

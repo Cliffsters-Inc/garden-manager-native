@@ -1,5 +1,5 @@
 import { Entypo } from "@expo/vector-icons";
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent } from "react";
 import { Pressable, StyleSheet } from "react-native";
 import { Card, Divider } from "react-native-elements";
 import { GardenTabScreenProps } from "../../types";

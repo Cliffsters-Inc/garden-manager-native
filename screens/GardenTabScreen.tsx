@@ -9,8 +9,6 @@ export const GardenTabScreen = ({
   navigation,
   route,
 }: GardenTabScreenProps<"GardenTabScreen">) => {
-  const [isVisible, setIsVisible] = useState<boolean>(false);
-  const areaTitle = "garden";
   const routeName = route.name;
 
   return (

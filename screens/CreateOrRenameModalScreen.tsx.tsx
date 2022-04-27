@@ -13,7 +13,10 @@ export const CreateOrRenameModalScreen = ({
 }: RootStackScreenProps<"CreateOrRenameModal">) => {
   const appDispatch = useAppDispatch();
 
-  const { selectedGardenId, areaTitle } = route.params;
+  const { selectedGardenId, areaTitle, routeName } = route.params;
+
+  console.log("id", selectedGardenId);
+  console.log("route", routeName);
 
   const {
     control,
@@ -27,7 +30,7 @@ export const CreateOrRenameModalScreen = ({
   });
 
   const submitName = (data: NewCardForm) => {
-    areaTitle === "garden"
+    routeName === "GardenTabScreen"
       ? appDispatch(gardenActions.addGarden({ name: data.newCardName }))
       : appDispatch(
           gardenActions.addBed({ name: data.newCardName, id: selectedGardenId })
@@ -66,7 +69,6 @@ export const CreateOrRenameModalScreen = ({
               autoFocus={true}
               onChangeText={(value) => onChange(value)}
               onSubmitEditing={handleSubmit(submitName)}
-              // autoCapitalize={"sentences"}
             />
           </View>
         )}
