@@ -12,7 +12,7 @@ export const CardOptionsModalScreen = ({
 }: RootStackScreenProps<"CardOptionsModal">) => {
   const gardens = useAppSelector(gardenSelectors.selectGardens);
 
-  const { selectedGardenId, bedId } = route.params;
+  const { selectedGardenId, selectedBedId } = route.params;
 
   const selectedGardenObject = gardens.find(
     (garden) => garden.id === selectedGardenId
@@ -36,7 +36,7 @@ export const CardOptionsModalScreen = ({
         onPress={() =>
           navigation.navigate("DeleteConfirmationModal", {
             selectedGardenId,
-            bedId,
+            selectedBedId,
           })
         }
       >

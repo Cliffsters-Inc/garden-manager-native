@@ -24,11 +24,15 @@ declare global {
  */
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
+  AddVeggieModal: { selectedGardenId: string; selectedBedId: string };
   NotFound: undefined;
-  AddVeggieModal: { gardenId: string; bedId: string };
-  NewVeggieLogModal: { gardenId: string; bedId: string; veggieId: string };
-  CardOptionsModal: { selectedGardenId: string; bedId?: string };
-  DeleteConfirmationModal: { selectedGardenId: string; bedId?: string };
+  NewVeggieLogModal: {
+    selectedGardenId: string;
+    selectedBedId: string;
+    veggieId: string;
+  };
+  CardOptionsModal: { selectedGardenId: string; selectedBedId?: string };
+  DeleteConfirmationModal: { selectedGardenId: string; selectedBedId?: string };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -54,12 +58,17 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
  * Garden Tab
  */
 export type GardenTabParamList = {
-  GardenTabScreen: { gardenId: string; bedId: string };
-  GardenCards: { gardenId: string };
+  GardenTabScreen: undefined;
+  GardenCards: undefined;
+  CustomCard: { selectedGardenId: string; title: string };
   CardOptionsModalScreen: { gardenId: string; bedId?: string };
-  BedsTabScreen: { gardenId: string };
-  BedScreen: { gardenId: string; bedId: string };
-  VeggieScreen: { gardenId: string; bedId: string; veggieId: string };
+  BedsTabScreen: { selectedGardenId: string; selectedBedId?: string };
+  BedScreen: { selectedGardenId: string; selectedBedId: string };
+  VeggieScreen: {
+    selectedGardenId: string;
+    selectedBedId: string;
+    veggieId: string;
+  };
 };
 
 export type GardenTabScreenProps<Screen extends keyof GardenTabParamList> =
