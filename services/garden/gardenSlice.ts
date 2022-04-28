@@ -24,6 +24,17 @@ export const gardenSlice = createSlice({
         gardens.splice(gardenIndex, 1);
       }
     },
+    renameGarden: (
+      gardens,
+      action: PayloadAction<{ id: string; newName?: string }>
+    ) => {
+      const { payload } = action;
+      let gardenIndex: number = gardens.findIndex(
+        (garden) => garden.id === payload.id
+      );
+
+      gardens[gardenIndex].name = payload.newName;
+    },
     addBed: (
       gardens,
       action: PayloadAction<{ name: string; id: String | undefined }>
@@ -116,6 +127,13 @@ export type GardenSlice = {
 
 export const gardenSelectors = {
   selectGardens: (state: RootState) => state.gardens,
+  selectCurrentGarden: (state: RootState, gardenId: string) => {
+    const selectedGarden = state.gardens.find(
+      (garden) => garden.id === gardenId
+    );
+
+    return selectedGarden;
+  },
   selectBed: (state: RootState, gardenId: string, bedId: string) => {
     // Coded immutably as Redux TK only wraps immer on reducers
     const bed = state.gardens

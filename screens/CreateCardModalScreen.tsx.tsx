@@ -7,10 +7,10 @@ import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
 import React from "react";
 
-export const CreateOrRenameModalScreen = ({
+export const CreateCardModalScreen = ({
   navigation,
   route,
-}: RootStackScreenProps<"CreateOrRenameModal">) => {
+}: RootStackScreenProps<"CreateCardModal">) => {
   const appDispatch = useAppDispatch();
 
   const { selectedGardenId, areaTitle, routeName } = route.params;

@@ -22,7 +22,14 @@ export const CardOptionsModalScreen = ({
     <View style={styles.container}>
       <Text style={styles.title}>{selectedGardenObject?.name}</Text>
       <Divider />
-      <Pressable style={styles.optionContainer}>
+      <Pressable
+        style={styles.optionContainer}
+        onPress={() =>
+          navigation.navigate("RenameCardModal", {
+            selectedGardenId,
+          })
+        }
+      >
         <MaterialIcons
           name="drive-file-rename-outline"
           size={24}

@@ -38,7 +38,8 @@ import { AddVeggieModalScreen } from "../screens/AddVeggieModalScreen";
 import { NewVeggieLogModalScreen } from "../screens/NewVeggieLogModalScreen";
 import { CardOptionsModalScreen } from "../screens/CardOptionsModalScreen";
 import { DeleteConfirmationModalScreen } from "../screens/DeleteConfirmationModalScreen";
-import { CreateOrRenameModalScreen } from "../screens/CreateOrRenameModalScreen.tsx";
+import { CreateCardModalScreen } from "../screens/CreateCardModalScreen.tsx";
+import { RenameCardModalScreen } from "../screens/RenameCardModalScreen";
 
 export default function Navigation({
   colorScheme,
@@ -96,8 +97,17 @@ function RootNavigator() {
           })}
         />
         <Stack.Screen
-          name="CreateOrRenameModal"
-          component={CreateOrRenameModalScreen}
+          name="CreateCardModal"
+          component={CreateCardModalScreen}
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <Button title="Cancel" onPress={navigation.goBack} />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="RenameCardModal"
+          component={RenameCardModalScreen}
           options={({ navigation }) => ({
             headerLeft: () => (
               <Button title="Cancel" onPress={navigation.goBack} />
