@@ -38,6 +38,7 @@ import { AddVeggieModalScreen } from "../screens/AddVeggieModalScreen";
 import { NewVeggieLogModalScreen } from "../screens/NewVeggieLogModalScreen";
 import { CardOptionsModalScreen } from "../screens/CardOptionsModalScreen";
 import { DeleteConfirmationModalScreen } from "../screens/DeleteConfirmationModalScreen";
+import { CreateOrRenameModalScreen } from "../screens/CreateOrRenameModalScreen.tsx";
 
 export default function Navigation({
   colorScheme,
@@ -84,7 +85,7 @@ function RootNavigator() {
             title: "Add a Veggie",
           })}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="NewVeggieLogModal"
           component={NewVeggieLogModalScreen}
           options={({ navigation }) => ({
@@ -92,6 +93,15 @@ function RootNavigator() {
               <Button title="Cancel" onPress={navigation.goBack} />
             ),
             title: "New Log",
+          })}
+        />
+        <Stack.Screen
+          name="CreateOrRenameModal"
+          component={CreateOrRenameModalScreen}
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <Button title="Cancel" onPress={navigation.goBack} />
+            ),
           })}
         />
         <Stack.Screen
@@ -255,4 +265,11 @@ function TabBarIcon(props: {
   color: string;
 }) {
   return <FontAwesome5 size={25} style={{ marginBottom: -3 }} {...props} />;
+}
+function submitName(): (
+  ev: import("react-native").NativeSyntheticEvent<
+    import("react-native").NativeTouchEvent
+  >
+) => void {
+  throw new Error("Function not implemented.");
 }
