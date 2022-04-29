@@ -24,6 +24,17 @@ export const gardenSlice = createSlice({
         gardens.splice(gardenIndex, 1);
       }
     },
+    renameGarden: (
+      gardens,
+      action: PayloadAction<{ id: string; newName?: string }>
+    ) => {
+      const { payload } = action;
+      let gardenIndex: number = gardens.findIndex(
+        (garden) => garden.id === payload.id
+      );
+
+      gardens[gardenIndex].name = payload.newName;
+    },
     addBed: (
       gardens,
       action: PayloadAction<{ name: string; id: String | undefined }>
@@ -49,6 +60,25 @@ export const gardenSlice = createSlice({
       if (bedIndex !== undefined && bedIndex > -1) {
         garden?.beds?.splice(bedIndex, 1);
         console.log("***action");
+      }
+    },
+    renameBed: (
+      gardens,
+      action: PayloadAction<{
+        selectedGardenId: string;
+        selectedBedId?: string | undefined;
+        newName: string | undefined;
+      }>
+    ) => {
+      const { payload } = action;
+      const garden = gardens.find(
+        (garden) => garden.id === payload.selectedGardenId
+      );
+      const bed = garden?.beds?.find((bed) => bed.id === payload.selectedBedId);
+
+      if (bed) {
+        console.log("bedAction");
+        bed.name = payload.newName;
       }
     },
     addVeggie: (
@@ -116,7 +146,14 @@ export type GardenSlice = {
 
 export const gardenSelectors = {
   selectGardens: (state: RootState) => state.gardens,
-  selectBed: (state: RootState, gardenId: string, bedId: string) => {
+  selectCurrentGarden: (state: RootState, gardenId: string) => {
+    const selectedGarden = state.gardens.find(
+      (garden) => garden.id === gardenId
+    );
+
+    return selectedGarden;
+  },
+  selectCurrentBed: (state: RootState, gardenId: string, bedId?: string) => {
     // Coded immutably as Redux TK only wraps immer on reducers
     const bed = state.gardens
       .find((garden) => garden.id === gardenId)

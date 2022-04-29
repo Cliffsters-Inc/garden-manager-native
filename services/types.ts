@@ -13,7 +13,7 @@ type Months =
   | "DEC";
 
 export type Garden = {
-  name: string;
+  name: string | undefined;
   id: string;
   beds?: Bed[];
 };
@@ -22,12 +22,13 @@ export type NewCardForm = {
   newCardName: string;
 };
 
-export type NewBedForm = {
-  newBedName: string;
+export type RenameCardForm = {
+  newCardName: string | undefined;
+  id?: string | undefined;
 };
 
 export type Bed = {
-  name: string;
+  name: string | undefined;
   id: string;
   veggies?: Veggie[];
 };

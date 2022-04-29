@@ -31,12 +31,21 @@ export type RootStackParamList = {
     selectedBedId: string;
     veggieId: string;
   };
-  CreateOrRenameModal: {
+  CreateCardModal: {
     selectedGardenId?: String;
     areaTitle: string;
     routeName: string;
   };
-  CardOptionsModal: { selectedGardenId: string; selectedBedId?: string };
+  RenameCardModal: {
+    selectedGardenId: string;
+    selectedBedId: string | undefined;
+    routeName: string;
+  };
+  CardOptionsModal: {
+    selectedGardenId: string;
+    selectedBedId?: string;
+    routeName: string;
+  };
   DeleteConfirmationModal: { selectedGardenId: string; selectedBedId?: string };
 };
 

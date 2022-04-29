@@ -16,7 +16,7 @@ export const AddCardButton: FC<props> = ({ routeName, selectedGardenId }) => {
     <View style={styles.container}>
       <Button
         onPress={() =>
-          navigation.navigate("CreateOrRenameModal", {
+          navigation.navigate("CreateCardModal", {
             areaTitle,
             routeName,
             selectedGardenId,

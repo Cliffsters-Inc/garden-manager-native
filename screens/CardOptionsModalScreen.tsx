@@ -1,4 +1,4 @@
-import { Button, Divider } from "react-native-elements";
+import { Divider } from "react-native-elements";
 import { Text, View } from "../components/Themed";
 import { gardenSelectors } from "../services/garden/gardenSlice";
 import { useAppSelector } from "../store";
@@ -12,7 +12,7 @@ export const CardOptionsModalScreen = ({
 }: RootStackScreenProps<"CardOptionsModal">) => {
   const gardens = useAppSelector(gardenSelectors.selectGardens);
 
-  const { selectedGardenId, selectedBedId } = route.params;
+  const { selectedGardenId, selectedBedId, routeName } = route.params;
 
   const selectedGardenObject = gardens.find(
     (garden) => garden.id === selectedGardenId
@@ -22,7 +22,16 @@ export const CardOptionsModalScreen = ({
     <View style={styles.container}>
       <Text style={styles.title}>{selectedGardenObject?.name}</Text>
       <Divider />
-      <Pressable style={styles.optionContainer}>
+      <Pressable
+        style={styles.optionContainer}
+        onPress={() =>
+          navigation.navigate("RenameCardModal", {
+            selectedGardenId,
+            selectedBedId,
+            routeName,
+          })
+        }
+      >
         <MaterialIcons
           name="drive-file-rename-outline"
           size={24}

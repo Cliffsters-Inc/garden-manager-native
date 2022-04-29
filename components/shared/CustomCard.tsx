@@ -6,7 +6,7 @@ import { GardenTabScreenProps } from "../../types";
 import { View } from "../Themed";
 
 type props = {
-  title: string;
+  title?: string;
   selectedGardenId: string;
   selectedBedId?: string;
   navigation: GardenTabScreenProps<"GardenTabScreen">["navigation"];
@@ -40,6 +40,7 @@ export const CustomCard: FunctionComponent<props> = ({
             navigation.navigate("CardOptionsModal", {
               selectedGardenId,
               selectedBedId,
+              routeName,
             })
           }
         >
