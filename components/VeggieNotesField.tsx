@@ -15,13 +15,13 @@ export const VeggieNotesField = ({ notes, navigation, route }: Props) => {
   const dispatch = useAppDispatch();
   const [editingText, setEditingText] = useState<string | null>(null);
   const notesFieldEditing = editingText !== null;
-  const { gardenId, bedId, veggieId } = route.params;
+  const { selectedGardenId, selectedBedId, veggieId } = route.params;
 
   const handleSubmit = (text: string) => {
     dispatch(
       gardenActions.updateVeggieField({
-        gardenId,
-        bedId,
+        selectedGardenId,
+        selectedBedId,
         veggieId,
         field: "notes",
         update: text,

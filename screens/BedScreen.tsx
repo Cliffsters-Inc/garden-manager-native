@@ -13,7 +13,7 @@ export const BedScreen = ({
 }: GardenTabScreenProps<"BedScreen">) => {
   const { selectedBedId, selectedGardenId } = route.params;
   const bed = useAppSelector((state) =>
-    gardenSelectors.selectBed(state, selectedGardenId, selectedBedId)
+    gardenSelectors.selectCurrentBed(state, selectedGardenId, selectedBedId)
   );
   return bed ? (
     <View style={styles.container}>
