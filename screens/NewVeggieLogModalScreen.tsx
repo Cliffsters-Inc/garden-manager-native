@@ -15,15 +15,15 @@ export const NewVeggieLogModalScreen = ({
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [date, setDate] = useState(Date.now());
   const [notes, setNotes] = useState("");
-  const { gardenId, bedId, veggieId } = route.params;
+  const { selectedGardenId, selectedBedId, veggieId } = route.params;
 
   const dispatch = useAppDispatch();
 
   const handleSubmit = () => {
     dispatch(
       gardenActions.addVeggieLog({
-        gardenId,
-        bedId,
+        selectedGardenId,
+        selectedBedId,
         veggieId,
         newLog: { date, notes },
       })

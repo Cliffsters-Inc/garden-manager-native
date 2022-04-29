@@ -13,13 +13,13 @@ export const VeggieScreen = ({
   navigation,
   route,
 }: GardenTabScreenProps<"VeggieScreen">) => {
-  const { gardenId, bedId, veggieId } = route.params;
+  const { selectedGardenId, selectedBedId, veggieId } = route.params;
   const [logsDescending, setLogsDescending] = useState(true);
   const veggie = useAppSelector((state) =>
     gardenSelectors.selectVeggie(
       state,
-      gardenId,
-      bedId,
+      selectedGardenId,
+      selectedBedId,
       veggieId,
       logsDescending
     )
@@ -94,8 +94,8 @@ export const VeggieScreen = ({
         text="Add Log"
         onPress={() =>
           navigation.navigate("NewVeggieLogModal", {
-            gardenId,
-            bedId,
+            selectedGardenId,
+            selectedBedId,
             veggieId,
           })
         }

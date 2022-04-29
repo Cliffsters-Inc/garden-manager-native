@@ -105,32 +105,34 @@ export const gardenSlice = createSlice({
     updateVeggieField: (
       gardens,
       action: PayloadAction<{
-        gardenId: string;
-        bedId: string;
+        selectedGardenId: string;
+        selectedBedId: string;
         veggieId: string;
         field: "notes" | "sowDate" | "harvestDate";
         update: string;
       }>
     ) => {
-      const { gardenId, bedId, veggieId, field, update } = action.payload;
+      const { selectedGardenId, selectedBedId, veggieId, field, update } =
+        action.payload;
 
-      const garden = gardens.find((garden) => garden.id === gardenId);
-      const bed = garden?.beds?.find((bed) => bed.id === bedId);
+      const garden = gardens.find((garden) => garden.id === selectedGardenId);
+      const bed = garden?.beds?.find((bed) => bed.id === selectedBedId);
       const veggie = bed?.veggies?.find((veggie) => veggie.id === veggieId);
       if (veggie) veggie[field] = update;
     },
     addVeggieLog: (
       gardens,
       action: PayloadAction<{
-        gardenId: string;
-        bedId: string;
+        selectedGardenId: string;
+        selectedBedId: string;
         veggieId: string;
         newLog: Pick<VeggieLog, "date" | "notes">;
       }>
     ) => {
-      const { gardenId, bedId, veggieId, newLog } = action.payload;
-      const garden = gardens.find((garden) => garden.id === gardenId);
-      const bed = garden?.beds?.find((bed) => bed.id === bedId);
+      const { selectedGardenId, selectedBedId, veggieId, newLog } =
+        action.payload;
+      const garden = gardens.find((garden) => garden.id === selectedGardenId);
+      const bed = garden?.beds?.find((bed) => bed.id === selectedBedId);
       const veggie = bed?.veggies?.find((veggie) => veggie.id === veggieId);
 
       veggie?.logs?.push({ id: nanoid(), ...newLog });
