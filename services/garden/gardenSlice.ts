@@ -153,7 +153,7 @@ export const gardenSelectors = {
 
     return selectedGarden;
   },
-  selectBed: (state: RootState, gardenId: string, bedId: string) => {
+  selectCurrentBed: (state: RootState, gardenId: string, bedId?: string) => {
     // Coded immutably as Redux TK only wraps immer on reducers
     const bed = state.gardens
       .find((garden) => garden.id === gardenId)

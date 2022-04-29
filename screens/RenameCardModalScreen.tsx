@@ -19,6 +19,13 @@ export const RenameCardModalScreen = ({
     (state) =>
       gardenSelectors.selectCurrentGarden(state, selectedGardenId)?.name
   );
+
+  const selectedBedName = useAppSelector(
+    (state) =>
+      gardenSelectors.selectCurrentBed(state, selectedGardenId, selectedBedId)
+        ?.name
+  );
+
   console.log("nameR: ", routeName);
   console.log("selectedGardenName: ", selectedGardenName);
   console.log("selectedGardenId: ", selectedGardenId);
@@ -29,7 +36,8 @@ export const RenameCardModalScreen = ({
     formState: { errors },
   } = useForm({
     defaultValues: {
-      newCardName: "",
+      newCardName:
+        routeName === "GardenTabScreen" ? selectedGardenName : selectedBedName,
     },
   });
   const submitNewName = (data: RenameCardForm) => {
@@ -57,8 +65,10 @@ export const RenameCardModalScreen = ({
       headerRight: () => (
         <Button title="Done" onPress={handleSubmit(submitNewName)} />
       ),
-      //set conditional here
-      title: `Rename ${selectedGardenName}`,
+      title:
+        routeName === "GardenTabScreen"
+          ? `Rename ${selectedGardenName}`
+          : `Rename ${selectedBedName}`,
     });
   }, [navigation]);
 
