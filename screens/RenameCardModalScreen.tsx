@@ -53,7 +53,7 @@ export const RenameCardModalScreen = ({
             selectedBedId: selectedBedId,
           })
         );
-    navigation.goBack();
+    navigation.popToTop();
   };
 
   React.useLayoutEffect(() => {
