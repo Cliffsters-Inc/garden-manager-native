@@ -12,7 +12,7 @@ export const CardOptionsModalScreen = ({
 }: RootStackScreenProps<"CardOptionsModal">) => {
   const gardens = useAppSelector(gardenSelectors.selectGardens);
 
-  const { selectedGardenId, selectedBedId } = route.params;
+  const { selectedGardenId, selectedBedId, routeName } = route.params;
 
   const selectedGardenObject = gardens.find(
     (garden) => garden.id === selectedGardenId
@@ -27,6 +27,8 @@ export const CardOptionsModalScreen = ({
         onPress={() =>
           navigation.navigate("RenameCardModal", {
             selectedGardenId,
+            selectedBedId,
+            routeName,
           })
         }
       >

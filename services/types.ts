@@ -24,10 +24,11 @@ export type NewCardForm = {
 
 export type RenameCardForm = {
   newCardName: string | undefined;
+  id?: string | undefined;
 };
 
 export type Bed = {
-  name: string;
+  name: string | undefined;
   id: string;
   veggies?: Veggie[];
 };

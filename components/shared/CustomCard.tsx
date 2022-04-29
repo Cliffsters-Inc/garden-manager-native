@@ -40,6 +40,7 @@ export const CustomCard: FunctionComponent<props> = ({
             navigation.navigate("CardOptionsModal", {
               selectedGardenId,
               selectedBedId,
+              routeName,
             })
           }
         >

@@ -62,6 +62,25 @@ export const gardenSlice = createSlice({
         console.log("***action");
       }
     },
+    renameBed: (
+      gardens,
+      action: PayloadAction<{
+        selectedGardenId: string;
+        selectedBedId?: string | undefined;
+        newName: string | undefined;
+      }>
+    ) => {
+      const { payload } = action;
+      const garden = gardens.find(
+        (garden) => garden.id === payload.selectedGardenId
+      );
+      const bed = garden?.beds?.find((bed) => bed.id === payload.selectedBedId);
+
+      if (bed) {
+        console.log("bedAction");
+        bed.name = payload.newName;
+      }
+    },
     addVeggie: (
       gardens,
       action: PayloadAction<{

@@ -36,8 +36,16 @@ export type RootStackParamList = {
     areaTitle: string;
     routeName: string;
   };
-  RenameCardModal: { selectedGardenId: string };
-  CardOptionsModal: { selectedGardenId: string; selectedBedId?: string };
+  RenameCardModal: {
+    selectedGardenId: string;
+    selectedBedId: string | undefined;
+    routeName: string;
+  };
+  CardOptionsModal: {
+    selectedGardenId: string;
+    selectedBedId?: string;
+    routeName: string;
+  };
   DeleteConfirmationModal: { selectedGardenId: string; selectedBedId?: string };
 };
 

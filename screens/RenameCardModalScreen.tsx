@@ -14,13 +14,14 @@ export const RenameCardModalScreen = ({
 }: RootStackScreenProps<"RenameCardModal">) => {
   const appDispatch = useAppDispatch();
 
-  const { selectedGardenId } = route.params;
+  const { selectedGardenId, routeName, selectedBedId } = route.params;
   const selectedGardenName = useAppSelector(
     (state) =>
       gardenSelectors.selectCurrentGarden(state, selectedGardenId)?.name
   );
-  console.log("name: ", selectedGardenName);
-
+  console.log("nameR: ", routeName);
+  console.log("selectedGardenName: ", selectedGardenName);
+  console.log("selectedGardenId: ", selectedGardenId);
   const {
     control,
     handleSubmit,
@@ -28,16 +29,27 @@ export const RenameCardModalScreen = ({
     formState: { errors },
   } = useForm({
     defaultValues: {
-      newCardName: selectedGardenName,
+      newCardName: "",
     },
   });
   const submitNewName = (data: RenameCardForm) => {
-    appDispatch(
-      gardenActions.renameGarden({
-        id: selectedGardenId,
-        newName: data.newCardName,
-      })
-    );
+    console.log("functionroute: ", routeName);
+    console.log("newName: ", data.newCardName);
+    console.log("data.id: ", data.id);
+    routeName === "GardenTabScreen"
+      ? appDispatch(
+          gardenActions.renameGarden({
+            id: selectedGardenId,
+            newName: data.newCardName,
+          })
+        )
+      : appDispatch(
+          gardenActions.renameBed({
+            selectedGardenId: selectedGardenId,
+            newName: data.newCardName,
+            selectedBedId: selectedBedId,
+          })
+        );
   };
 
   React.useLayoutEffect(() => {
@@ -45,6 +57,7 @@ export const RenameCardModalScreen = ({
       headerRight: () => (
         <Button title="Done" onPress={handleSubmit(submitNewName)} />
       ),
+      //set conditional here
       title: `Rename ${selectedGardenName}`,
     });
   }, [navigation]);
