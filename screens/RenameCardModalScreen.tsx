@@ -1,7 +1,6 @@
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { StyleSheet, TextInput } from "react-native";
-import { Button } from "react-native-elements";
+import { Button, StyleSheet, TextInput } from "react-native";
 import { Text, View } from "../components/Themed";
 import { gardenActions, gardenSelectors } from "../services/garden/gardenSlice";
 import { RenameCardForm } from "../services/types";
@@ -15,6 +14,7 @@ export const RenameCardModalScreen = ({
   const appDispatch = useAppDispatch();
 
   const { selectedGardenId, routeName, selectedBedId } = route.params;
+
   const selectedGardenName = useAppSelector(
     (state) =>
       gardenSelectors.selectCurrentGarden(state, selectedGardenId)?.name
@@ -26,9 +26,6 @@ export const RenameCardModalScreen = ({
         ?.name
   );
 
-  console.log("nameR: ", routeName);
-  console.log("selectedGardenName: ", selectedGardenName);
-  console.log("selectedGardenId: ", selectedGardenId);
   const {
     control,
     handleSubmit,
@@ -40,10 +37,8 @@ export const RenameCardModalScreen = ({
         routeName === "GardenTabScreen" ? selectedGardenName : selectedBedName,
     },
   });
+
   const submitNewName = (data: RenameCardForm) => {
-    console.log("functionroute: ", routeName);
-    console.log("newName: ", data.newCardName);
-    console.log("data.id: ", data.id);
     routeName === "GardenTabScreen"
       ? appDispatch(
           gardenActions.renameGarden({

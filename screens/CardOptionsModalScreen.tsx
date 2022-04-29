@@ -1,4 +1,4 @@
-import { Button, Divider } from "react-native-elements";
+import { Divider } from "react-native-elements";
 import { Text, View } from "../components/Themed";
 import { gardenSelectors } from "../services/garden/gardenSlice";
 import { useAppSelector } from "../store";
