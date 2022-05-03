@@ -41,6 +41,7 @@ export const CustomCard: FunctionComponent<props> = ({
               selectedGardenId,
               selectedBedId,
               routeName,
+              title,
             })
           }
         >

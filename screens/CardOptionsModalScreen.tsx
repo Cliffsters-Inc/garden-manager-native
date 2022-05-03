@@ -12,15 +12,10 @@ export const CardOptionsModalScreen = ({
 }: RootStackScreenProps<"CardOptionsModal">) => {
   const gardens = useAppSelector(gardenSelectors.selectGardens);
 
-  const { selectedGardenId, selectedBedId, routeName } = route.params;
-
-  const selectedGardenObject = gardens.find(
-    (garden) => garden.id === selectedGardenId
-  );
+  const { selectedGardenId, selectedBedId, routeName, title } = route.params;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{selectedGardenObject?.name}</Text>
       <Divider />
       <Pressable
         style={styles.optionContainer}
@@ -64,10 +59,6 @@ export const CardOptionsModalScreen = ({
 const styles = StyleSheet.create({
   container: {
     flex: 0.7,
-  },
-  title: {
-    flex: 0.1,
-    backgroundColor: "yellow",
   },
   rename: {
     flex: 0.1,

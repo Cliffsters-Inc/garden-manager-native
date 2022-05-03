@@ -118,7 +118,10 @@ function RootNavigator() {
           name="CardOptionsModal"
           component={CardOptionsModalScreen}
           options={({ route }) => ({
-            title: route.params.selectedGardenId,
+            title: `${route.params.title}'s options`,
+            headerStyle: {
+              backgroundColor: "#c3b091",
+            },
           })}
         />
         <Stack.Screen

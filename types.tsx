@@ -45,6 +45,7 @@ export type RootStackParamList = {
     selectedGardenId: string;
     selectedBedId?: string;
     routeName: string;
+    title?: string;
   };
   DeleteConfirmationModal: { selectedGardenId: string; selectedBedId?: string };
 };
