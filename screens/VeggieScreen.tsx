@@ -1,4 +1,4 @@
-import { StyleSheet, Image, FlatList } from "react-native";
+import { StyleSheet, Image, FlatList, Pressable } from "react-native";
 import { View, Text } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 import { format } from "date-fns";
@@ -73,7 +73,15 @@ export const VeggieScreen = ({
           data={veggie.logs}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <View
+            <Pressable
+              onPress={() =>
+                navigation.navigate("EditVeggieLogModal", {
+                  selectedGardenId,
+                  selectedBedId,
+                  veggieId,
+                  logId: item.id,
+                })
+              }
               style={{
                 borderColor: "#d5d5d5",
                 borderWidth: 2,
@@ -86,7 +94,7 @@ export const VeggieScreen = ({
                 {format(new Date(item.date), "d MMM yy")}
               </Text>
               <Text>Notes: {item.notes}</Text>
-            </View>
+            </Pressable>
           )}
         />
       </View>
