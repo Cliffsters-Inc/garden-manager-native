@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
 import { initialGardenState } from "./initialGardenState";
-import { RootState } from "../../store";
 import { VeggieInfo, VeggieLog } from "../types";
-import { appendVeggieInfoToVeggie, sortLogsByDate } from "./gardenSliceUtils";
 
 export const gardenSlice = createSlice({
   name: "gardens",
@@ -137,6 +135,47 @@ export const gardenSlice = createSlice({
 
       veggie?.logs?.push({ id: nanoid(), ...newLog });
     },
+    updateVeggieLog: (
+      gardens,
+      action: PayloadAction<{
+        selectedGardenId: string;
+        selectedBedId: string;
+        veggieId: string;
+        updatedLog: Pick<VeggieLog, "id" | "date" | "notes">;
+      }>
+    ) => {
+      const { selectedGardenId, selectedBedId, veggieId, updatedLog } =
+        action.payload;
+      const garden = gardens.find((garden) => garden.id === selectedGardenId);
+      const bed = garden?.beds?.find((bed) => bed.id === selectedBedId);
+      const veggie = bed?.veggies?.find((veggie) => veggie.id === veggieId);
+
+      const logIndex = veggie?.logs.findIndex(
+        (log) => log.id === updatedLog.id
+      );
+
+      if (logIndex && veggie?.logs[logIndex]) {
+        veggie.logs[logIndex] = updatedLog;
+      }
+    },
+    deleteVeggieLog: (
+      gardens,
+      action: PayloadAction<{
+        selectedGardenId: string;
+        selectedBedId: string;
+        veggieId: string;
+        logId: string;
+      }>
+    ) => {
+      const { selectedGardenId, selectedBedId, veggieId, logId } =
+        action.payload;
+      const garden = gardens.find((garden) => garden.id === selectedGardenId);
+      const bed = garden?.beds?.find((bed) => bed.id === selectedBedId);
+      const veggie = bed?.veggies?.find((veggie) => veggie.id === veggieId);
+
+      const newLogs = veggie?.logs.filter((log) => log.id !== logId);
+      if (veggie && veggie.logs && newLogs) veggie.logs = newLogs;
+    },
   },
 });
 
@@ -144,49 +183,4 @@ export const gardenActions = gardenSlice.actions;
 
 export type GardenSlice = {
   [gardenSlice.name]: ReturnType<typeof gardenSlice["reducer"]>;
-};
-
-export const gardenSelectors = {
-  selectGardens: (state: RootState) => state.gardens,
-  selectCurrentGarden: (state: RootState, gardenId: string) => {
-    const selectedGarden = state.gardens.find(
-      (garden) => garden.id === gardenId
-    );
-
-    return selectedGarden;
-  },
-  selectCurrentBed: (state: RootState, gardenId: string, bedId?: string) => {
-    // Coded immutably as Redux TK only wraps immer on reducers
-    const bed = state.gardens
-      .find((garden) => garden.id === gardenId)
-      ?.beds?.find((bed) => bed.id === bedId);
-
-    if (!bed?.veggies) return bed;
-
-    const veggiesWithInfo = bed.veggies.map((veggie) =>
-      appendVeggieInfoToVeggie(state, veggie)
-    );
-
-    return { ...bed, veggies: veggiesWithInfo };
-  },
-  selectVeggie: (
-    state: RootState,
-    gardenId: string,
-    bedId: string,
-    veggieId: string,
-    logsDescending = true
-  ) => {
-    const veggie = state.gardens
-      .find((garden) => garden.id === gardenId)
-      ?.beds?.find((bed) => bed.id === bedId)
-      ?.veggies?.find((veggie) => veggie.id === veggieId);
-
-    if (!veggie) return null;
-
-    const veggieWithInfo = appendVeggieInfoToVeggie(state, veggie);
-
-    const sortedLogs = sortLogsByDate(veggieWithInfo.logs, logsDescending);
-
-    return { ...veggieWithInfo, logs: sortedLogs };
-  },
 };

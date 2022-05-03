@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import { initialVeggieInfoState } from "./initialVeggieInfoState";
 
@@ -16,4 +16,6 @@ export const veggieInfoActions = veggieInfoSlice.actions;
 
 export const veggieInfoSelectors = {
   selectVeggieInfos: (state: RootState) => state.veggieInfos,
+  selectVeggieInfo: (state: RootState, id: string) =>
+    state.veggieInfos.find((info) => info.id === id),
 };
