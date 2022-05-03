@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from "react";
-import { Button, StyleSheet, TextInput } from "react-native";
+import { Button, Pressable, StyleSheet, TextInput } from "react-native";
 import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
 import { format } from "date-fns";
@@ -12,7 +12,6 @@ export const EditVeggieLogModal = ({
   navigation,
   route,
 }: RootStackScreenProps<"EditVeggieLogModal">) => {
-  const [calendarVisible, setCalendarVisible] = useState(false);
   const { selectedGardenId, selectedBedId, veggieId, logId } = route.params;
   const log = useAppSelector((state) =>
     gardenSelectors.selectVeggie(
@@ -22,14 +21,16 @@ export const EditVeggieLogModal = ({
       veggieId
     )
   )?.logs.find((log) => log.id === logId);
-
   const [date, setDate] = useState(log?.date ?? Date.now());
   const [notes, setNotes] = useState(log?.notes ?? "");
 
-  console.log({ log, date });
+  const [calendarVisible, setCalendarVisible] = useState(false);
+  const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
+    useState(false);
+
   const dispatch = useAppDispatch();
 
-  const handleSubmit = () => {
+  const handleUpdate = () => {
     if (log)
       dispatch(
         gardenActions.updateVeggieLog({
@@ -42,12 +43,25 @@ export const EditVeggieLogModal = ({
     navigation.goBack();
   };
 
+  const handleDelete = () => {
+    if (log)
+      dispatch(
+        gardenActions.deleteVeggieLog({
+          selectedGardenId,
+          selectedBedId,
+          veggieId,
+          logId: log.id,
+        })
+      );
+    navigation.goBack();
+  };
+
   useLayoutEffect(() => {
     const logChanged = notes !== log?.notes || date !== log?.date;
 
     navigation.setOptions({
       headerRight: () =>
-        logChanged ? <Button title="Done" onPress={handleSubmit} /> : null,
+        logChanged ? <Button title="Done" onPress={handleUpdate} /> : null,
     });
   }, [navigation, date, notes]);
 
@@ -55,36 +69,72 @@ export const EditVeggieLogModal = ({
 
   return (
     <View style={styles.container}>
-      {calendarVisible ? (
-        <View style={styles.calendar}>
-          <CrossBtn
-            style={{ padding: 5, alignSelf: "flex-end" }}
-            onPress={() => setCalendarVisible(false)}
-          />
-          <Calendar
-            current={dateCalFormatted}
-            onDayPress={({ timestamp }) => {
-              setDate(timestamp);
-              setCalendarVisible(false);
-            }}
-            markedDates={{
-              [dateCalFormatted]: { selected: true },
-            }}
-          />
+      <View>
+        {calendarVisible ? (
+          <View style={styles.calendar}>
+            <CrossBtn
+              style={{ padding: 5, alignSelf: "flex-end" }}
+              onPress={() => setCalendarVisible(false)}
+            />
+            <Calendar
+              current={dateCalFormatted}
+              onDayPress={({ timestamp }) => {
+                setDate(timestamp);
+                setCalendarVisible(false);
+              }}
+              markedDates={{
+                [dateCalFormatted]: { selected: true },
+              }}
+            />
+          </View>
+        ) : (
+          <Text style={styles.date} onPress={() => setCalendarVisible(true)}>
+            {format(new Date(date), "d MMMM yyyy")}
+          </Text>
+        )}
+        <TextInput
+          placeholder="Notes"
+          value={notes}
+          onChangeText={setNotes}
+          multiline
+          style={styles.notesContainer}
+        />
+      </View>
+      {deleteConfirmationVisible ? (
+        <View>
+          <Text style={{ textAlign: "center", fontWeight: "bold", margin: 5 }}>
+            Confirm deletion
+          </Text>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-evenly" }}
+          >
+            <Pressable
+              onPress={() => setDeleteConfirmationVisible(false)}
+              style={[styles.delBtnContainer, { width: 130 }]}
+            >
+              <Text style={[styles.delBtnText, { color: "gray" }]}>Cancel</Text>
+            </Pressable>
+            <Pressable
+              onPress={handleDelete}
+              style={[
+                styles.delBtnContainer,
+                { width: 130, backgroundColor: "#f93636" },
+              ]}
+            >
+              <Text style={[styles.delBtnText, { color: "white" }]}>
+                Delete log
+              </Text>
+            </Pressable>
+          </View>
         </View>
       ) : (
-        <Text style={styles.date} onPress={() => setCalendarVisible(true)}>
-          {format(new Date(date), "d MMMM yyyy")}
-        </Text>
+        <Pressable
+          onPress={() => setDeleteConfirmationVisible(true)}
+          style={styles.delBtnContainer}
+        >
+          <Text style={styles.delBtnText}>Delete this log</Text>
+        </Pressable>
       )}
-
-      <TextInput
-        placeholder="Notes"
-        value={notes}
-        onChangeText={setNotes}
-        multiline
-        style={styles.notesContainer}
-      />
     </View>
   );
 };
@@ -94,6 +144,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 20,
     paddingHorizontal: 20,
+    justifyContent: "space-between",
   },
   title: {
     fontSize: 20,
@@ -115,5 +166,23 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 92,
     maxHeight: 92,
+  },
+  delBtnContainer: {
+    paddingTop: 10,
+    borderColor: "#d5d5d5",
+    backgroundColor: "#f5f5f5",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    height: 50,
+    width: 200,
+    marginBottom: 5,
+    alignSelf: "center",
+  },
+  delBtnText: {
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#f93636",
   },
 });

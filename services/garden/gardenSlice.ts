@@ -160,6 +160,24 @@ export const gardenSlice = createSlice({
         veggie.logs[logIndex] = updatedLog;
       }
     },
+    deleteVeggieLog: (
+      gardens,
+      action: PayloadAction<{
+        selectedGardenId: string;
+        selectedBedId: string;
+        veggieId: string;
+        logId: string;
+      }>
+    ) => {
+      const { selectedGardenId, selectedBedId, veggieId, logId } =
+        action.payload;
+      const garden = gardens.find((garden) => garden.id === selectedGardenId);
+      const bed = garden?.beds?.find((bed) => bed.id === selectedBedId);
+      const veggie = bed?.veggies?.find((veggie) => veggie.id === veggieId);
+
+      const newLogs = veggie?.logs.filter((log) => log.id !== logId);
+      if (veggie && veggie.logs && newLogs) veggie.logs = newLogs;
+    },
   },
 });
 
