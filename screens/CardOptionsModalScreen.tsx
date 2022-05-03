@@ -1,6 +1,6 @@
 import { Divider } from "react-native-elements";
 import { Text, View } from "../components/Themed";
-import { gardenSelectors } from "../services/garden/gardenSlice";
+import { gardenSelectors } from "../services/garden/garden.selectors";
 import { useAppSelector } from "../store";
 import { RootStackScreenProps } from "../types";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -10,17 +10,15 @@ export const CardOptionsModalScreen = ({
   navigation,
   route,
 }: RootStackScreenProps<"CardOptionsModal">) => {
-  const gardens = useAppSelector(gardenSelectors.selectGardens);
-
   const { selectedGardenId, selectedBedId, routeName } = route.params;
 
-  const selectedGardenObject = gardens.find(
-    (garden) => garden.id === selectedGardenId
+  const garden = useAppSelector((state) =>
+    gardenSelectors.selectGarden(state, selectedGardenId)
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{selectedGardenObject?.name}</Text>
+      <Text style={styles.title}>{garden?.name}</Text>
       <Divider />
       <Pressable
         style={styles.optionContainer}

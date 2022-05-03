@@ -2,7 +2,8 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, StyleSheet, TextInput } from "react-native";
 import { Text, View } from "../components/Themed";
-import { gardenActions, gardenSelectors } from "../services/garden/gardenSlice";
+import { gardenActions } from "../services/garden/gardenSlice";
+import { gardenSelectors } from "../services/garden/garden.selectors";
 import { RenameCardForm } from "../services/types";
 import { useAppDispatch, useAppSelector } from "../store";
 import { RootStackScreenProps } from "../types";
@@ -15,16 +16,19 @@ export const RenameCardModalScreen = ({
 
   const { selectedGardenId, routeName, selectedBedId } = route.params;
 
-  const selectedGardenName = useAppSelector(
-    (state) =>
-      gardenSelectors.selectCurrentGarden(state, selectedGardenId)?.name
-  );
+  const selectedGardenName = useAppSelector((state) =>
+    gardenSelectors.selectGarden(state, selectedGardenId)
+  )?.name;
 
-  const selectedBedName = useAppSelector(
-    (state) =>
-      gardenSelectors.selectCurrentBed(state, selectedGardenId, selectedBedId)
-        ?.name
-  );
+  const selectedBedName =
+    selectedBedId &&
+    useAppSelector((state) =>
+      gardenSelectors.selectBedWithVeggieInfo(
+        state,
+        selectedGardenId,
+        selectedBedId
+      )
+    )?.name;
 
   const {
     control,

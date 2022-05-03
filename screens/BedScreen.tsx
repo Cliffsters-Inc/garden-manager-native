@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { ActionButton } from "../components/shared/ActionButton";
 import { View, Text } from "../components/Themed";
 import { VeggieList } from "../components/VeggieList";
-import { gardenSelectors } from "../services/garden/gardenSlice";
+import { gardenSelectors } from "../services/garden/garden.selectors";
 import { useAppSelector } from "../store";
 import { GardenTabScreenProps } from "../types";
 
@@ -13,7 +13,11 @@ export const BedScreen = ({
 }: GardenTabScreenProps<"BedScreen">) => {
   const { selectedBedId, selectedGardenId } = route.params;
   const bed = useAppSelector((state) =>
-    gardenSelectors.selectCurrentBed(state, selectedGardenId, selectedBedId)
+    gardenSelectors.selectBedWithVeggieInfo(
+      state,
+      selectedGardenId,
+      selectedBedId
+    )
   );
   return bed ? (
     <View style={styles.container}>

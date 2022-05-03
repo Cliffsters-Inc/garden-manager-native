@@ -3,7 +3,7 @@ import { View, Text } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 import { format } from "date-fns";
 import { useAppSelector } from "../store";
-import { gardenSelectors } from "../services/garden/gardenSlice";
+import { gardenSelectors } from "../services/garden/garden.selectors";
 import { VeggieNotesField } from "../components/VeggieNotesField";
 import { ActionButton } from "../components/shared/ActionButton";
 import { useState } from "react";
@@ -16,7 +16,7 @@ export const VeggieScreen = ({
   const { selectedGardenId, selectedBedId, veggieId } = route.params;
   const [logsDescending, setLogsDescending] = useState(true);
   const veggie = useAppSelector((state) =>
-    gardenSelectors.selectVeggie(
+    gardenSelectors.selectVeggieWithSortedLogs(
       state,
       selectedGardenId,
       selectedBedId,
@@ -34,7 +34,9 @@ export const VeggieScreen = ({
           alignItems: "flex-end",
         }}
       >
-        <Image style={styles.img} source={{ uri: veggie.veggieInfo.image }} />
+        {veggie.veggieInfo?.image && (
+          <Image style={styles.img} source={{ uri: veggie.veggieInfo.image }} />
+        )}
         <View style={{ alignItems: "flex-end" }}>
           <Text>
             Sowed:{" "}
@@ -47,7 +49,9 @@ export const VeggieScreen = ({
           </Text>
         </View>
       </View>
-      <Text style={styles.title}>{veggie.veggieInfo.name}</Text>
+      {veggie.veggieInfo?.name && (
+        <Text style={styles.title}>{veggie.veggieInfo.name}</Text>
+      )}
 
       <VeggieNotesField
         notes={veggie.notes}

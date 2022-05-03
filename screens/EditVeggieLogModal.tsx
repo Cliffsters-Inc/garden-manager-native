@@ -4,7 +4,8 @@ import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
 import { format } from "date-fns";
 import { useAppDispatch, useAppSelector } from "../store";
-import { gardenActions, gardenSelectors } from "../services/garden/gardenSlice";
+import { gardenActions } from "../services/garden/gardenSlice";
+import { gardenSelectors } from "../services/garden/garden.selectors";
 import { Calendar } from "../components/shared/Calendar";
 import { CrossBtn } from "../components/shared/CrossBtn";
 
@@ -14,13 +15,14 @@ export const EditVeggieLogModal = ({
 }: RootStackScreenProps<"EditVeggieLogModal">) => {
   const { selectedGardenId, selectedBedId, veggieId, logId } = route.params;
   const log = useAppSelector((state) =>
-    gardenSelectors.selectVeggie(
+    gardenSelectors.selectVeggieLog(
       state,
       selectedGardenId,
       selectedBedId,
-      veggieId
+      veggieId,
+      logId
     )
-  )?.logs.find((log) => log.id === logId);
+  );
   const [date, setDate] = useState(log?.date ?? Date.now());
   const [notes, setNotes] = useState(log?.notes ?? "");
 
