@@ -30,13 +30,13 @@ export const EditVeggieLogModal = ({
   const dispatch = useAppDispatch();
 
   const handleSubmit = () => {
-    if (date)
+    if (log)
       dispatch(
-        gardenActions.addVeggieLog({
+        gardenActions.updateVeggieLog({
           selectedGardenId,
           selectedBedId,
           veggieId,
-          newLog: { date, notes },
+          updatedLog: { id: log.id, date, notes },
         })
       );
     navigation.goBack();

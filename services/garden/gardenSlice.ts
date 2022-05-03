@@ -137,6 +137,29 @@ export const gardenSlice = createSlice({
 
       veggie?.logs?.push({ id: nanoid(), ...newLog });
     },
+    updateVeggieLog: (
+      gardens,
+      action: PayloadAction<{
+        selectedGardenId: string;
+        selectedBedId: string;
+        veggieId: string;
+        updatedLog: Pick<VeggieLog, "id" | "date" | "notes">;
+      }>
+    ) => {
+      const { selectedGardenId, selectedBedId, veggieId, updatedLog } =
+        action.payload;
+      const garden = gardens.find((garden) => garden.id === selectedGardenId);
+      const bed = garden?.beds?.find((bed) => bed.id === selectedBedId);
+      const veggie = bed?.veggies?.find((veggie) => veggie.id === veggieId);
+
+      const logIndex = veggie?.logs.findIndex(
+        (log) => log.id === updatedLog.id
+      );
+
+      if (logIndex && veggie?.logs[logIndex]) {
+        veggie.logs[logIndex] = updatedLog;
+      }
+    },
   },
 });
 
