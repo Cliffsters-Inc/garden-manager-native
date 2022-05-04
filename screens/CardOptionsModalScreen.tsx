@@ -20,54 +20,58 @@ export const CardOptionsModalScreen = ({
 
   return (
     <View style={styles.container}>
-      <Pressable
-        style={styles.optionContainer}
-        onPress={() =>
-          navigation.navigate("RenameCardModal", {
-            selectedGardenId,
-            selectedBedId,
-            routeName,
-          })
-        }
-      >
-        <MaterialIcons
-          name="drive-file-rename-outline"
-          size={24}
-          color="#000000"
-        />
-        <Text style={styles.optionText}>Rename</Text>
-      </Pressable>
-      <Divider />
-      <Pressable style={styles.optionContainer} onPress={popThenNavigate}>
-        <MaterialCommunityIcons
-          name="delete-alert-outline"
-          size={36}
-          color="#ff0000"
-        />
-        <Text style={[styles.optionText, { color: "#ff0000" }]}>Delete</Text>
-      </Pressable>
-      <Divider />
+      <View style={styles.optionContainer}>
+        <Pressable
+          style={styles.button}
+          onPress={() =>
+            navigation.navigate("RenameCardModal", {
+              selectedGardenId,
+              selectedBedId,
+              routeName,
+            })
+          }
+        >
+          <MaterialIcons
+            name="drive-file-rename-outline"
+            size={36}
+            color="#000000"
+          />
+          <Text style={styles.optionText}>Rename</Text>
+        </Pressable>
+        <Divider />
+        <Pressable style={styles.button} onPress={popThenNavigate}>
+          <MaterialCommunityIcons
+            name="delete-alert-outline"
+            size={36}
+            color="#ff0000"
+          />
+          <Text style={[styles.optionText, { color: "#ff0000" }]}>Delete</Text>
+        </Pressable>
+        <Divider />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.7,
-  },
-  rename: {
-    flex: 0.1,
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(52, 52, 52, 0.2)",
   },
   optionContainer: {
-    flex: 0.1,
+    paddingHorizontal: 40,
+    paddingBottom: 100,
+  },
+  button: {
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    marginHorizontal: 10,
+    marginVertical: 10,
   },
   optionText: {
     fontSize: 24,
     fontWeight: "bold",
-    marginHorizontal: 10,
+    paddingLeft: 10,
   },
 });

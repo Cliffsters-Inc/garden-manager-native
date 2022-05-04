@@ -117,18 +117,10 @@ function RootNavigator() {
         <Stack.Screen
           name="CardOptionsModal"
           component={CardOptionsModalScreen}
-          options={({ route }) => ({
-            title: `${route.params.title}'s options`,
+          options={{
+            headerShown: false,
             presentation: "transparentModal",
-
-            headerStyle: {
-              backgroundColor: "#c3b091",
-            },
-            headerTitleStyle: {
-              fontWeight: "bold",
-              fontSize: 20,
-            },
-          })}
+          }}
         />
         <Stack.Screen
           name="DeleteConfirmationModal"

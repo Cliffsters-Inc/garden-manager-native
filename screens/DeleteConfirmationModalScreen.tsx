@@ -64,7 +64,6 @@ export const DeleteConfirmationModalScreen = ({
             />
           )}
         </View>
-
         <Button
           style={styles.button}
           buttonStyle={{
