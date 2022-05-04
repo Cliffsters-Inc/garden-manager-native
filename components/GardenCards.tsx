@@ -1,7 +1,7 @@
 import { useRoute } from "@react-navigation/native";
 import React from "react";
 import { FlatList, StyleSheet } from "react-native";
-import { gardenSelectors } from "../services/garden/gardenSlice";
+import { gardenSelectors } from "../services/garden/garden.selectors";
 import { useAppSelector } from "../store";
 import { GardenTabScreenProps } from "../types";
 import { CustomCard } from "./shared/CustomCard";

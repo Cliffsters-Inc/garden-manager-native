@@ -1,5 +1,7 @@
 import { Divider } from "react-native-elements";
 import { Text, View } from "../components/Themed";
+import { gardenSelectors } from "../services/garden/garden.selectors";
+import { useAppSelector } from "../store";
 import { RootStackScreenProps } from "../types";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Pressable, StyleSheet } from "react-native";
@@ -10,45 +12,44 @@ export const CardOptionsModalScreen = ({
 }: RootStackScreenProps<"CardOptionsModal">) => {
   const { selectedGardenId, selectedBedId, routeName } = route.params;
 
-  const popThenNavigate = () => {
-    navigation.pop(),
-      navigation.navigate("DeleteConfirmationModal", {
-        selectedGardenId,
-        selectedBedId,
-      });
-  };
-
   return (
     <View style={styles.container}>
-      <View style={styles.optionContainer}>
-        <Pressable
-          style={styles.button}
-          onPress={() =>
-            navigation.navigate("RenameCardModal", {
-              selectedGardenId,
-              selectedBedId,
-              routeName,
-            })
-          }
-        >
-          <MaterialIcons
-            name="drive-file-rename-outline"
-            size={36}
-            color="#000000"
-          />
-          <Text style={styles.optionText}>Rename</Text>
-        </Pressable>
-        <Divider />
-        <Pressable style={styles.button} onPress={popThenNavigate}>
-          <MaterialCommunityIcons
-            name="delete-alert-outline"
-            size={36}
-            color="#ff0000"
-          />
-          <Text style={[styles.optionText, { color: "#ff0000" }]}>Delete</Text>
-        </Pressable>
-        <Divider />
-      </View>
+      <Divider />
+      <Pressable
+        style={styles.optionContainer}
+        onPress={() =>
+          navigation.navigate("RenameCardModal", {
+            selectedGardenId,
+            selectedBedId,
+            routeName,
+          })
+        }
+      >
+        <MaterialIcons
+          name="drive-file-rename-outline"
+          size={24}
+          color="black"
+        />
+        <Text style={styles.optionText}>Rename</Text>
+      </Pressable>
+      <Divider />
+      <Pressable
+        style={styles.optionContainer}
+        onPress={() =>
+          navigation.navigate("DeleteConfirmationModal", {
+            selectedGardenId,
+            selectedBedId,
+          })
+        }
+      >
+        <MaterialCommunityIcons
+          name="delete-alert-outline"
+          size={36}
+          color="red"
+        />
+        <Text style={[styles.optionText, { color: "red" }]}>Delete</Text>
+      </Pressable>
+      <Divider />
     </View>
   );
 };

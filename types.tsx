@@ -31,6 +31,12 @@ export type RootStackParamList = {
     selectedBedId: string;
     veggieId: string;
   };
+  EditVeggieLogModal: {
+    selectedGardenId: string;
+    selectedBedId: string;
+    veggieId: string;
+    logId: string;
+  };
   CreateCardModal: {
     selectedGardenId?: String;
     areaTitle: string;

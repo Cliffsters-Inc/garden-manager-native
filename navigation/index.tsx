@@ -40,6 +40,7 @@ import { CardOptionsModalScreen } from "../screens/CardOptionsModalScreen";
 import { DeleteConfirmationModalScreen } from "../screens/DeleteConfirmationModalScreen";
 import { CreateCardModalScreen } from "../screens/CreateCardModalScreen.tsx";
 import { RenameCardModalScreen } from "../screens/RenameCardModalScreen";
+import { EditVeggieLogModal } from "../screens/EditVeggieLogModal";
 
 export default function Navigation({
   colorScheme,
@@ -94,6 +95,16 @@ function RootNavigator() {
               <Button title="Cancel" onPress={navigation.goBack} />
             ),
             title: "New Log",
+          })}
+        />
+        <Stack.Screen
+          name="EditVeggieLogModal"
+          component={EditVeggieLogModal}
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <Button title="Cancel" onPress={navigation.goBack} />
+            ),
+            title: "Log",
           })}
         />
         <Stack.Screen
