@@ -50,7 +50,7 @@ export const DeleteConfirmationModalScreen = ({
           <Divider />
           {!selectedBedId ? (
             <Button
-              style={styles.button}
+              buttonStyle={styles.button}
               type="clear"
               title={"Delete"}
               titleStyle={{ color: "#FF0000", fontWeight: "bold" }}
@@ -58,8 +58,10 @@ export const DeleteConfirmationModalScreen = ({
             />
           ) : (
             <Button
-              style={styles.button}
+              buttonStyle={styles.button}
+              type="clear"
               title={"Delete"}
+              titleStyle={{ color: "#FF0000", fontWeight: "bold" }}
               onPress={deleteBedCard}
             />
           )}
