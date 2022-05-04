@@ -128,14 +128,18 @@ function RootNavigator() {
         <Stack.Screen
           name="CardOptionsModal"
           component={CardOptionsModalScreen}
-          options={({ route }) => ({
-            title: route.params.selectedGardenId,
-          })}
+          options={{
+            headerShown: false,
+            presentation: "transparentModal",
+          }}
         />
         <Stack.Screen
           name="DeleteConfirmationModal"
           component={DeleteConfirmationModalScreen}
-          options={{ title: "Are you sure you want to delete this item?" }}
+          options={{
+            headerShown: false,
+            presentation: "transparentModal",
+          }}
         />
       </Stack.Group>
     </Stack.Navigator>
@@ -286,11 +290,4 @@ function TabBarIcon(props: {
   color: string;
 }) {
   return <FontAwesome5 size={25} style={{ marginBottom: -3 }} {...props} />;
-}
-function submitName(): (
-  ev: import("react-native").NativeSyntheticEvent<
-    import("react-native").NativeTouchEvent
-  >
-) => void {
-  throw new Error("Function not implemented.");
 }

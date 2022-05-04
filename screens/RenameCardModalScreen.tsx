@@ -33,7 +33,6 @@ export const RenameCardModalScreen = ({
   const {
     control,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
