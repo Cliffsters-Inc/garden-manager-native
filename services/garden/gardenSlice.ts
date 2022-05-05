@@ -153,8 +153,9 @@ export const gardenSlice = createSlice({
       const logIndex = veggie?.logs.findIndex(
         (log) => log.id === updatedLog.id
       );
+      const logIndexFound = logIndex !== undefined && logIndex !== -1;
 
-      if (logIndex && veggie?.logs[logIndex]) {
+      if (logIndexFound && veggie?.logs[logIndex]) {
         veggie.logs[logIndex] = updatedLog;
       }
     },
