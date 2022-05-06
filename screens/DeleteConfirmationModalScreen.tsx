@@ -3,7 +3,7 @@ import { RootStackScreenProps } from "../types";
 import { Text, View } from "../components/Themed";
 import { Button, Divider } from "react-native-elements";
 import { gardenActions } from "../services/garden/gardenSlice";
-import { StyleSheet } from "react-native";
+import { GestureResponderEvent, StyleSheet } from "react-native";
 
 export const DeleteConfirmationModalScreen = ({
   navigation,
@@ -29,6 +29,20 @@ export const DeleteConfirmationModalScreen = ({
     navigation.popToTop();
   };
 
+  const deleteButton = (
+    onPressFunc: ((event: GestureResponderEvent) => void) | undefined
+  ) => {
+    return (
+      <Button
+        buttonStyle={styles.button}
+        type="clear"
+        title="Delete"
+        titleStyle={{ color: "#FF0000", fontWeight: "bold" }}
+        onPress={onPressFunc}
+      />
+    );
+  };
+
   return (
     <View
       style={{
@@ -48,23 +62,9 @@ export const DeleteConfirmationModalScreen = ({
             Are you sure you want to delete this item?
           </Text>
           <Divider />
-          {!selectedBedId ? (
-            <Button
-              buttonStyle={styles.button}
-              type="clear"
-              title={"Delete"}
-              titleStyle={{ color: "#FF0000", fontWeight: "bold" }}
-              onPress={deleteGardenCard}
-            />
-          ) : (
-            <Button
-              buttonStyle={styles.button}
-              type="clear"
-              title={"Delete"}
-              titleStyle={{ color: "#FF0000", fontWeight: "bold" }}
-              onPress={deleteBedCard}
-            />
-          )}
+          {!selectedBedId
+            ? deleteButton(deleteGardenCard)
+            : deleteButton(deleteBedCard)}
         </View>
         <Button
           style={styles.button}
