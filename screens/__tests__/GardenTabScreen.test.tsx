@@ -3,12 +3,12 @@ import { ProviderMock } from "../../testing/ProviderMock.util";
 
 describe("<GardenTabScreen />", () => {
   it("renders gardens", async () => {
-    const { findByText } = render(<ProviderMock />);
+    const { findByText, getByText } = render(<ProviderMock />);
 
     const frontYardGarden = await findByText(/^frontyard$/i);
     expect(frontYardGarden).toBeDefined();
 
-    const addGardenBtn = await findByText(/add new garden/i);
+    const addGardenBtn = getByText(/add new garden/i);
     expect(addGardenBtn).toBeDefined();
   });
 

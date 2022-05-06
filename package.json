@@ -6,12 +6,16 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll --detectOpenHandles"
   },
   "jest": {
     "preset": "jest-expo",
     "setupFiles": [
-      "<rootDir>/testing/setupTests.ts"
+      "<rootDir>/testing/setupTests.ts",
+      "./node_modules/react-native-gesture-handler/jestSetup.js"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation)"
     ],
     "setupFilesAfterEnv": [
       "@testing-library/jest-native/extend-expect"
