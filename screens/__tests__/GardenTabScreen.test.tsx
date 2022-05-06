@@ -11,6 +11,22 @@ describe("<GardenTabScreen />", () => {
     const addGardenBtn = getByText(/add new garden/i);
     expect(addGardenBtn).toBeDefined();
   });
+  it("can add a new garden", async () => {
+    const { findByText, getByText, getAllByText, getByPlaceholderText, debug } =
+      render(<ProviderMock />);
+
+    const addGardenBtn = await findByText(/add new garden/i);
+    fireEvent.press(addGardenBtn);
+
+    const gardenNameField = getByPlaceholderText(/new garden name/i);
+    fireEvent.changeText(gardenNameField, "test garden");
+
+    const doneBtns = getAllByText(/done/i);
+
+    fireEvent.press(doneBtns[0]);
+    const newGarden = await waitFor(() => getByText(/test garden/i));
+    expect(newGarden).toBeDefined();
+  });
 
   it.todo("can rename a garden");
   it.todo("can delete a garden");
