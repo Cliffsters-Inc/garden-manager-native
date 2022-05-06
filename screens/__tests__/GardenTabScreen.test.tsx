@@ -11,8 +11,9 @@ describe("<GardenTabScreen />", () => {
     const addGardenBtn = getByText(/add new garden/i);
     expect(addGardenBtn).toBeDefined();
   });
+
   it("can add a new garden", async () => {
-    const { findByText, getByText, getAllByText, getByPlaceholderText, debug } =
+    const { findByText, getByText, getAllByText, getByPlaceholderText } =
       render(<ProviderMock />);
 
     const addGardenBtn = await findByText(/add new garden/i);
@@ -21,32 +22,49 @@ describe("<GardenTabScreen />", () => {
     const gardenNameField = getByPlaceholderText(/new garden name/i);
     fireEvent.changeText(gardenNameField, "test garden");
 
-    const doneBtns = getAllByText(/done/i);
+    const doneBtn = getAllByText(/done/i)[0];
+    fireEvent.press(doneBtn);
 
-    fireEvent.press(doneBtns[0]);
-    const newGarden = await waitFor(() => getByText(/test garden/i));
+    const newGarden = await waitFor(() => getByText(/^test garden$/i));
     expect(newGarden).toBeDefined();
   });
 
-  it.todo("can rename a garden");
-  it.todo("can delete a garden");
-  describe("<BedsTabScreen />", () => {
-    it.todo("renders beds");
-    it.todo("can add a new bed");
-    it.todo("can rename a bed");
-    it.todo("can delete a bed");
-    describe("<BedsTabScreen />", () => {
-      it.todo("renders veggies");
-      it.todo("can add a veggie");
-      describe("<VeggieScreen />", () => {
-        it.todo("renders a veggie");
-        it.todo("renders veggies notes");
-        it.todo("renders veggies logs");
-        describe("<EditVeggieLogModal />", () => {
-          it.todo("can edit a log");
-          it.todo("can delete a log");
-        });
-      });
-    });
+  it("can rename a garden", async () => {
+    const { getByText, findAllByTestId, getByDisplayValue, getAllByText } =
+      render(<ProviderMock />);
+    const cardEditBtns = await findAllByTestId("custom-card-edit-btn");
+
+    fireEvent.press(cardEditBtns[0]);
+    const renameBtn = getByText(/rename/i);
+    fireEvent.press(renameBtn);
+
+    const inputField = getByDisplayValue(/frontyard/i);
+    fireEvent.changeText(inputField, "updated garden");
+
+    const doneBtn = getAllByText(/done/i)[0];
+    fireEvent.press(doneBtn);
+
+    const updatedGarden = await waitFor(() => getByText(/updated garden/i));
+    expect(updatedGarden).toBeDefined();
+  });
+
+  it("can delete a garden", async () => {
+    const { getByText, getAllByText, findByText, getAllByTestId, queryByText } =
+      render(<ProviderMock />);
+    await findByText(/backyard/i);
+
+    const cardEditBtns = getAllByTestId("custom-card-edit-btn");
+
+    fireEvent.press(cardEditBtns[1]);
+    const deleteBtn = getByText(/delete/i);
+    fireEvent.press(deleteBtn);
+
+    await waitFor(() => getByText(/cancel/i));
+    const confirmationDeleteBtn = await waitFor(
+      () => getAllByText(/delete/i)[1]
+    );
+    fireEvent.press(confirmationDeleteBtn);
+
+    expect(queryByText(/backyard/i)).toBeNull();
   });
 });
