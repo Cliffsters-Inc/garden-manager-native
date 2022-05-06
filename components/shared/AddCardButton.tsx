@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
 import { FC } from "react";
-import { StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 import { View } from "../Themed";
 
@@ -13,7 +12,7 @@ export const AddCardButton: FC<props> = ({ routeName, selectedGardenId }) => {
   const navigation = useNavigation();
   const areaTitle = routeName === "GardenTabScreen" ? "garden" : "bed";
   return (
-    <View style={styles.container}>
+    <View>
       <Button
         onPress={() =>
           navigation.navigate("CreateCardModal", {
@@ -33,9 +32,3 @@ export const AddCardButton: FC<props> = ({ routeName, selectedGardenId }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-  },
-});
