@@ -57,7 +57,6 @@ export const gardenSlice = createSlice({
       );
       if (bedIndex !== undefined && bedIndex > -1) {
         garden?.beds?.splice(bedIndex, 1);
-        console.log("***action");
       }
     },
     renameBed: (
@@ -75,7 +74,6 @@ export const gardenSlice = createSlice({
       const bed = garden?.beds?.find((bed) => bed.id === payload.selectedBedId);
 
       if (bed) {
-        console.log("bedAction");
         bed.name = payload.newName;
       }
     },

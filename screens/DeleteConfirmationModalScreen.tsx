@@ -14,7 +14,6 @@ export const DeleteConfirmationModalScreen = ({
 
   const deleteGardenCard = () => {
     appDispatch(gardenActions.removeGarden(selectedGardenId));
-    console.log(`***Deleting ${selectedGardenId}`);
     navigation.popToTop();
   };
 
@@ -25,7 +24,6 @@ export const DeleteConfirmationModalScreen = ({
         bedId: selectedBedId,
       })
     );
-    console.log(`***Deleting ${selectedGardenId}`);
     navigation.popToTop();
   };
 
