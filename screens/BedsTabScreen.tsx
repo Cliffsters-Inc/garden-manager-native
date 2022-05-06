@@ -13,8 +13,6 @@ export const BedsTabScreen = ({
   const areaTitle = "bed";
   const routeName = route.name;
 
-  console.log("testID: ", selectedGardenId);
-
   return (
     <View style={styles.container}>
       <View style={styles.cards}>

@@ -15,9 +15,6 @@ export const CreateCardModalScreen = ({
 
   const { selectedGardenId, areaTitle, routeName } = route.params;
 
-  console.log("id", selectedGardenId);
-  console.log("route", routeName);
-
   const {
     control,
     handleSubmit,
