@@ -41,6 +41,7 @@ import { DeleteConfirmationModalScreen } from "../screens/DeleteConfirmationModa
 import { CreateCardModalScreen } from "../screens/CreateCardModalScreen.tsx";
 import { RenameCardModalScreen } from "../screens/RenameCardModalScreen";
 import { EditVeggieLogModal } from "../screens/EditVeggieLogModal";
+import { TimelineScreen } from "../screens/TimelineScreen";
 
 export default function Navigation({
   colorScheme,
@@ -227,6 +228,11 @@ function GardenTabNavigator() {
         name="VeggieScreen"
         component={VeggieScreen}
         options={{ title: "Veggie" }}
+      />
+      <GardenStack.Screen
+        name="TimelineScreen"
+        component={TimelineScreen}
+        options={{ title: "Timeline" }}
       />
     </GardenStack.Navigator>
   );

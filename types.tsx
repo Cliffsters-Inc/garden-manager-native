@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
-import { Bed, Veggie } from "./services/types";
+import { Bed, Veggie, VeggieLog } from "./services/types";
 
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
@@ -90,6 +90,8 @@ export type GardenTabParamList = {
     selectedBedId: string;
     veggieId: string;
   };
+  //fix type below
+  TimelineScreen: { veggieLogs: VeggieLog[] | undefined };
 };
 
 export type GardenTabScreenProps<Screen extends keyof GardenTabParamList> =
