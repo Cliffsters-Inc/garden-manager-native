@@ -1,5 +1,5 @@
 import { Provider } from "react-redux";
-import { persistor, store } from "../store";
+import { store, persistor } from "../store";
 import Navigation from "../navigation";
 import useColorScheme from "../hooks/useColorScheme";
 import { PersistGate } from "redux-persist/integration/react";

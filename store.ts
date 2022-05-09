@@ -1,4 +1,4 @@
-import { combineReducers } from "@reduxjs/toolkit";
+import { AnyAction, combineReducers } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import {
   configureStore,
@@ -29,10 +29,20 @@ const persistConfig = {
   storage: AsyncStorage,
 };
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   [gardenSlice.name]: gardenSlice.reducer,
   [veggieInfoSlice.name]: veggieInfoSlice.reducer,
 });
+
+const rootReducer = (
+  state: ReturnType<typeof appReducer> | undefined,
+  action: AnyAction
+) => {
+  if (action.type === "RESET_STORE") {
+    return appReducer(undefined, { type: undefined });
+  }
+  return appReducer(state, action);
+};
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

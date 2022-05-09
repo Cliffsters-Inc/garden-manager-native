@@ -47,7 +47,7 @@ export const CustomCard: FunctionComponent<props> = ({
         >
           <View style={styles.options}>
             <Entypo
-              testID="custom-card-edit-btn"
+              testID={`custom-card-edit-btn-${title}`}
               name="dots-three-horizontal"
               size={24}
               color="black"
