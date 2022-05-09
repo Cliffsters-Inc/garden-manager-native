@@ -2,16 +2,6 @@ import { render, fireEvent, waitFor } from "@testing-library/react-native";
 import { ProviderMock } from "../../testing/ProviderMock.util";
 
 describe("<GardenTabScreen />", () => {
-  it("renders gardens", async () => {
-    const { findByText, getByText } = render(<ProviderMock />);
-
-    const frontYardGarden = await findByText(/^frontyard$/i);
-    expect(frontYardGarden).toBeDefined();
-
-    const addGardenBtn = getByText(/add new garden/i);
-    expect(addGardenBtn).toBeDefined();
-  });
-
   it("can add a new garden", async () => {
     const { findByText, getByText, getAllByText, getByPlaceholderText } =
       render(<ProviderMock />);
@@ -20,51 +10,85 @@ describe("<GardenTabScreen />", () => {
     fireEvent.press(addGardenBtn);
 
     const gardenNameField = getByPlaceholderText(/new garden name/i);
-    fireEvent.changeText(gardenNameField, "test garden");
+    fireEvent.changeText(gardenNameField, "TestGarden123");
 
     const doneBtn = getAllByText(/done/i)[0];
     fireEvent.press(doneBtn);
 
-    const newGarden = await waitFor(() => getByText(/^test garden$/i));
+    const newGarden = await waitFor(() => getByText("TestGarden123"));
+
     expect(newGarden).toBeDefined();
   });
 
   it("can rename a garden", async () => {
-    const { getByText, findAllByTestId, getByDisplayValue, getAllByText } =
-      render(<ProviderMock />);
-    const cardEditBtns = await findAllByTestId("custom-card-edit-btn");
+    const {
+      getByText,
+      findByTestId,
+      getByDisplayValue,
+      getAllByText,
+      findByText,
+      getByPlaceholderText,
+    } = render(<ProviderMock />);
 
-    fireEvent.press(cardEditBtns[0]);
+    // creates new garden
+    const addGardenBtn = await findByText(/add new garden/i);
+    fireEvent.press(addGardenBtn);
+    const gardenNameField = getByPlaceholderText(/new garden name/i);
+    fireEvent.changeText(gardenNameField, "TestGarden123");
+    const createGardenDoneBtn = getAllByText(/done/i)[0];
+    fireEvent.press(createGardenDoneBtn);
+    await waitFor(() => getByText("TestGarden123"));
+
+    const cardEditBtn = await findByTestId(
+      "custom-card-edit-btn-TestGarden123"
+    );
+    fireEvent.press(cardEditBtn);
+
     const renameBtn = getByText(/rename/i);
     fireEvent.press(renameBtn);
 
-    const inputField = getByDisplayValue(/frontyard/i);
-    fireEvent.changeText(inputField, "updated garden");
+    const inputField = getByDisplayValue(/TestGarden123/i);
+    fireEvent.changeText(inputField, "UpdatedGarden123");
 
     const doneBtn = getAllByText(/done/i)[0];
     fireEvent.press(doneBtn);
 
-    const updatedGarden = await waitFor(() => getByText(/updated garden/i));
+    const updatedGarden = await waitFor(() => getByText(/UpdatedGarden123/i));
     expect(updatedGarden).toBeDefined();
   });
 
   it("can delete a garden", async () => {
-    const { getByText, getAllByText, findByText, getAllByTestId, queryByText } =
-      render(<ProviderMock />);
-    await findByText(/backyard/i);
+    const {
+      getByText,
+      getAllByText,
+      findByText,
+      queryByText,
+      getByPlaceholderText,
+      getByTestId,
+      findByTestId,
+    } = render(<ProviderMock />);
 
-    const cardEditBtns = getAllByTestId("custom-card-edit-btn");
+    // creates new garden
+    const addGardenBtn = await findByText(/add new garden/i);
+    fireEvent.press(addGardenBtn);
+    const gardenNameField = getByPlaceholderText(/new garden name/i);
+    fireEvent.changeText(gardenNameField, "TestGarden123");
+    const createGardenDoneBtn = getAllByText(/done/i)[0];
+    fireEvent.press(createGardenDoneBtn);
+    await waitFor(() => getByText("TestGarden123"));
 
-    fireEvent.press(cardEditBtns[1]);
+    const cardEditBtn = await findByTestId(
+      "custom-card-edit-btn-TestGarden123"
+    );
+    fireEvent.press(cardEditBtn);
+
     const deleteBtn = getByText(/delete/i);
     fireEvent.press(deleteBtn);
 
-    await waitFor(() => getByText(/cancel/i));
-    const confirmationDeleteBtn = await waitFor(
-      () => getAllByText(/delete/i)[1]
-    );
+    const confirmationDeleteBtn = getByTestId(/delete-confirmation-btn/i);
     fireEvent.press(confirmationDeleteBtn);
 
-    expect(queryByText(/backyard/i)).toBeNull();
+    const deletedGarden = queryByText(/^TestGarden123$/i);
+    expect(deletedGarden).toBeNull();
   });
 });

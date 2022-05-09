@@ -35,6 +35,7 @@ export const DeleteConfirmationModalScreen = ({
         buttonStyle={styles.button}
         type="clear"
         title="Delete"
+        testID="delete-confirmation-btn"
         titleStyle={{ color: "#FF0000", fontWeight: "bold" }}
         onPress={onPressFunc}
       />

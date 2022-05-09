@@ -17,6 +17,7 @@
       "<rootDir>/testing/setupTests.ts"
     ],
     "setupFilesAfterEnv": [
+      "<rootDir>/testing/setupTestsAfterEnvInit.ts",
       "@testing-library/jest-native/extend-expect"
     ]
   },
