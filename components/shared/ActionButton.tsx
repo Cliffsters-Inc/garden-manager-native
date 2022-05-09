@@ -54,6 +54,7 @@ export const ActionButton = ({
 const styles = StyleSheet.create({
   container: {
     padding: 15,
+    minWidth: 200,
     borderRadius: 200,
     position: "absolute",
     bottom: 20,
@@ -61,5 +62,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.75,
     shadowOffset: { width: 3, height: 3 },
   },
-  btn: { color: "#ffffff", fontSize: 16, fontWeight: "bold" },
+  btn: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
 });
