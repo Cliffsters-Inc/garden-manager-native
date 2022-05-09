@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { FC } from "react";
-import { Button } from "react-native-elements";
 import { View } from "../Themed";
+import { ActionButton } from "./ActionButton";
 
 type props = {
   routeName: string;
@@ -13,7 +13,7 @@ export const AddCardButton: FC<props> = ({ routeName, selectedGardenId }) => {
   const areaTitle = routeName === "GardenTabScreen" ? "garden" : "bed";
   return (
     <View>
-      <Button
+      <ActionButton
         onPress={() =>
           navigation.navigate("CreateCardModal", {
             areaTitle,
@@ -21,13 +21,7 @@ export const AddCardButton: FC<props> = ({ routeName, selectedGardenId }) => {
             selectedGardenId,
           })
         }
-        title={`Add new ${areaTitle}`}
-        containerStyle={{
-          borderRadius: 30,
-          marginHorizontal: 40,
-          marginVertical: 30,
-          width: 200,
-        }}
+        text={`Add ${areaTitle}`}
       />
     </View>
   );
