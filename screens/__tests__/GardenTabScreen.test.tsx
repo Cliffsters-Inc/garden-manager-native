@@ -6,7 +6,7 @@ describe("<GardenTabScreen />", () => {
     const { findByText, getByText, getAllByText, getByPlaceholderText } =
       render(<ProviderMock />);
 
-    const addGardenBtn = await findByText(/add new garden/i);
+    const addGardenBtn = await findByText(/add garden/i);
     fireEvent.press(addGardenBtn);
 
     const gardenNameField = getByPlaceholderText(/new garden name/i);
@@ -31,7 +31,7 @@ describe("<GardenTabScreen />", () => {
     } = render(<ProviderMock />);
 
     // creates new garden
-    const addGardenBtn = await findByText(/add new garden/i);
+    const addGardenBtn = await findByText(/add garden/i);
     fireEvent.press(addGardenBtn);
     const gardenNameField = getByPlaceholderText(/new garden name/i);
     fireEvent.changeText(gardenNameField, "TestGarden123");
@@ -69,7 +69,7 @@ describe("<GardenTabScreen />", () => {
     } = render(<ProviderMock />);
 
     // creates new garden
-    const addGardenBtn = await findByText(/add new garden/i);
+    const addGardenBtn = await findByText(/add garden/i);
     fireEvent.press(addGardenBtn);
     const gardenNameField = getByPlaceholderText(/new garden name/i);
     fireEvent.changeText(gardenNameField, "TestGarden123");
