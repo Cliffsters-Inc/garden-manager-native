@@ -7,7 +7,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest --watchAll --detectOpenHandles",
-    "ci-test": "jest --ci"
+    "ci-test": "jest --ci --detectOpenHandles"
   },
   "jest": {
     "preset": "jest-expo",
