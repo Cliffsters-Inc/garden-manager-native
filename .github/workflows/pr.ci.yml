@@ -24,4 +24,4 @@ jobs:
 
       - name: Run tests
         if: always()
-        run: npx jest --ci
+        run: yarn run ci-test
