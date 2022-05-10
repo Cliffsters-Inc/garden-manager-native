@@ -8,6 +8,7 @@ import { VeggieNotesField } from "../components/VeggieNotesField";
 import { ActionButton } from "../components/shared/ActionButton";
 import { useState } from "react";
 import { SortBtn } from "../components/shared/SortBtn";
+import { Button } from "react-native-elements";
 
 export const VeggieScreen = ({
   navigation,
@@ -24,6 +25,11 @@ export const VeggieScreen = ({
       logsDescending
     )
   );
+
+  const veggieLogs = veggie.logs;
+
+  console.log("vegie: ", veggie);
+  console.log("logs: ", veggieLogs);
 
   return veggie ? (
     <View style={styles.container}>
@@ -57,6 +63,14 @@ export const VeggieScreen = ({
         notes={veggie.notes}
         navigation={navigation}
         route={route}
+      />
+      <Button
+        title="Timeline"
+        onPress={() =>
+          navigation.navigate("TimelineScreen", {
+            veggieLogs,
+          })
+        }
       />
       <View>
         <View
