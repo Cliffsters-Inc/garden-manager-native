@@ -41,7 +41,11 @@ export const VeggieInfoList = ({
                 `${item.growSeason.from} - ${item.growSeason.to}   `}
             </Text>
             {addHandler && (
-              <Button title="Add" onPress={() => addHandler(item)} />
+              <Button
+                title="Add"
+                testID={`${item.name}-add-btn`}
+                onPress={() => addHandler(item)}
+              />
             )}
             {navigationHandler && <FontAwesome5 name="angle-right" size={12} />}
           </View>

@@ -1,31 +1,63 @@
-import { render, fireEvent, waitFor } from "@testing-library/react-native";
-import { ProviderMock } from "../../testing/ProviderMock.util";
+import { renderApp, fireEvent, waitFor } from "../../testing/test-utils";
 
 describe("<BedsTabScreen />", () => {
-  it.todo("renders beds");
+  it("can add, rename & delete a bed", async () => {
+    const {
+      findByText,
+      getByPlaceholderText,
+      getAllByText,
+      getByText,
+      findByTestId,
+      getByDisplayValue,
+      getByTestId,
+      queryByText,
+    } = renderApp();
 
-  it.todo("can add a new bed");
+    // creates new garden
+    const addGardenBtn = await findByText(/add garden/i);
+    fireEvent.press(addGardenBtn);
+    const gardenNameField = getByPlaceholderText(/new garden name/i);
+    fireEvent.changeText(gardenNameField, "TestGarden123");
+    const createGardenDoneBtn = getAllByText(/done/i)[0];
+    fireEvent.press(createGardenDoneBtn);
+    await waitFor(() => getByText("TestGarden123"));
 
-  it.todo("can rename a bed");
+    // navigates to beds screen
+    const newGarden = await findByText("TestGarden123");
+    fireEvent.press(newGarden);
 
-  it.todo("can delete a bed");
+    // creates new bed
+    const addBedBtn = await findByText(/add bed/i);
+    fireEvent.press(addBedBtn);
+    const bedNameField = getByPlaceholderText(/new bed name/i);
+    fireEvent.changeText(bedNameField, "TestBed123");
+    const createBedDoneBtn = getAllByText(/done/i)[0];
+    fireEvent.press(createBedDoneBtn);
+    const newBed = await waitFor(() => getByText("TestBed123"));
+    expect(newBed).toBeDefined();
 
-  describe("<Veggie />", () => {
-    it.todo("renders veggies");
+    // renames new bed
+    const newBedEditBtn = await findByTestId("custom-card-edit-btn-TestBed123");
+    fireEvent.press(newBedEditBtn);
+    const renameBtn = getByText(/rename/i);
+    fireEvent.press(renameBtn);
+    const inputField = getByDisplayValue(/TestBed123/i);
+    fireEvent.changeText(inputField, "UpdatedBed123");
+    const doneBtn = getAllByText(/done/i)[0];
+    fireEvent.press(doneBtn);
+    const updatedBed = await waitFor(() => getByText(/UpdatedBed123/i));
+    expect(updatedBed).toBeDefined();
 
-    it.todo("can add a veggie");
-
-    describe("<VeggieScreen />", () => {
-      it.todo("renders a veggie");
-
-      it.todo("renders veggies notes");
-
-      it.todo("renders veggies logs");
-      describe("<EditVeggieLogModal />", () => {
-        it.todo("can edit a log");
-
-        it.todo("can delete a log");
-      });
-    });
+    // deletes new bed
+    const updatedBedEditBtn = await findByTestId(
+      "custom-card-edit-btn-UpdatedBed123"
+    );
+    fireEvent.press(updatedBedEditBtn);
+    const deleteBtn = getByText(/delete/i);
+    fireEvent.press(deleteBtn);
+    const confirmationDeleteBtn = getByTestId(/delete-confirmation-btn/i);
+    fireEvent.press(confirmationDeleteBtn);
+    const deletedBed = queryByText(/^UpdatedBed123$/i);
+    expect(deletedBed).toBeNull();
   });
 });
