@@ -1,10 +1,9 @@
-import { render, fireEvent, waitFor } from "@testing-library/react-native";
-import { ProviderMock } from "../../testing/ProviderMock.util";
+import { renderApp, fireEvent, waitFor } from "../../testing/test-utils";
 
 describe("<GardenTabScreen />", () => {
   it("can add a new garden", async () => {
     const { findByText, getByText, getAllByText, getByPlaceholderText } =
-      render(<ProviderMock />);
+      renderApp();
 
     const addGardenBtn = await findByText(/add garden/i);
     fireEvent.press(addGardenBtn);
@@ -28,7 +27,7 @@ describe("<GardenTabScreen />", () => {
       getAllByText,
       findByText,
       getByPlaceholderText,
-    } = render(<ProviderMock />);
+    } = renderApp();
 
     // creates new garden
     const addGardenBtn = await findByText(/add garden/i);
@@ -66,7 +65,7 @@ describe("<GardenTabScreen />", () => {
       getByPlaceholderText,
       getByTestId,
       findByTestId,
-    } = render(<ProviderMock />);
+    } = renderApp();
 
     // creates new garden
     const addGardenBtn = await findByText(/add garden/i);

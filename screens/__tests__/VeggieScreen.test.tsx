@@ -1,5 +1,4 @@
-import { render, fireEvent, waitFor } from "@testing-library/react-native";
-import { ProviderMock } from "../../testing/ProviderMock.util";
+import { renderApp, fireEvent, waitFor } from "../../testing/test-utils";
 
 describe("<VeggieScreen />", () => {
   it.todo("renders a veggie");
