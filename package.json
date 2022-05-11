@@ -7,6 +7,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest --watchAll --detectOpenHandles",
+    "ci-install": "yarn install --immutable --immutable-cache",
     "ci-test": "jest --ci"
   },
   "jest": {
