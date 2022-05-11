@@ -1,6 +1,6 @@
-import { renderApp, fireEvent, waitFor } from "../../testing/test-utils";
+import { renderApp, fireEvent } from "../../testing/test-utils";
 
-describe("<BedsTabScreen />", () => {
+describe("<BedTabScreen />", () => {
   it("can add a veggie", async () => {
     const {
       findByText,
@@ -17,26 +17,26 @@ describe("<BedsTabScreen />", () => {
     fireEvent.changeText(gardenNameField, "TestGarden123");
     const createGardenDoneBtn = getAllByText(/done/i)[0];
     fireEvent.press(createGardenDoneBtn);
-    await waitFor(() => getByText("TestGarden123"));
+    await findByText("TestGarden123");
 
     // navigates to beds screen
-    const newGarden = await findByText("TestGarden123");
+    const newGarden = getByText("TestGarden123");
     fireEvent.press(newGarden);
 
     // creates new bed
-    const addBedBtn = await findByText(/add bed/i);
+    const addBedBtn = getByText(/add bed/i);
     fireEvent.press(addBedBtn);
     const bedNameField = getByPlaceholderText(/new bed name/i);
     fireEvent.changeText(bedNameField, "TestBed123");
     const createBedDoneBtn = getAllByText(/done/i)[0];
     fireEvent.press(createBedDoneBtn);
-    const newBed = await waitFor(() => getByText("TestBed123"));
+    const newBed = await findByText("TestBed123");
 
     // navigates to bed
     fireEvent.press(newBed);
 
     // adds new veggie
-    const newVeggieBtn = await findByText(/add veggie/i);
+    const newVeggieBtn = getByText(/add veggie/i);
     fireEvent.press(newVeggieBtn);
     const eggplantAddBtn = getByTestId(/eggplant-add-btn/i);
     fireEvent.press(eggplantAddBtn);
