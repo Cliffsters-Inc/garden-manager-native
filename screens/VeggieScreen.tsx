@@ -29,9 +29,6 @@ export const VeggieScreen = ({
 
   const veggieLogs = veggie.logs;
 
-  console.log("vegie: ", veggie);
-  console.log("logs: ", veggieLogs);
-
   return veggie ? (
     <View style={styles.container}>
       <View
