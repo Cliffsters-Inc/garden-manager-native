@@ -6,8 +6,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --watchAll --detectOpenHandles",
-    "ci-test": "jest --ci --detectOpenHandles"
+    "test": "jest --watchAll --detectOpenHandles"
   },
   "jest": {
     "preset": "jest-expo",
