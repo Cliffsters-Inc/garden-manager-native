@@ -9,6 +9,7 @@ import { ActionButton } from "../components/shared/ActionButton";
 import { useState } from "react";
 import { SortBtn } from "../components/shared/SortBtn";
 import { Button } from "react-native-elements";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export const VeggieScreen = ({
   navigation,
@@ -64,19 +65,11 @@ export const VeggieScreen = ({
         navigation={navigation}
         route={route}
       />
-      <Button
-        title="Timeline"
-        onPress={() =>
-          navigation.navigate("TimelineScreen", {
-            veggieLogs,
-          })
-        }
-      />
       <View>
         <View
           style={{
             flexDirection: "row",
-            justifyContent: "space-between",
+            justifyContent: "flex-end",
             alignItems: "center",
             marginTop: 10,
           }}
@@ -85,7 +78,17 @@ export const VeggieScreen = ({
           <SortBtn
             descending={logsDescending}
             onPress={() => setLogsDescending((prev) => !prev)}
+            style={{ marginRight: 20 }}
           />
+          <Pressable
+            onPress={() =>
+              navigation.navigate("TimelineScreen", {
+                veggieLogs,
+              })
+            }
+          >
+            <MaterialIcons name="timeline" size={24} color="black" />
+          </Pressable>
         </View>
         <FlatList
           data={veggie.logs}
@@ -142,6 +145,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 30,
     fontWeight: "bold",
+    marginRight: "auto",
   },
   img: {
     width: 100,
