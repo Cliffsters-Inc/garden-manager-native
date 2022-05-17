@@ -1,4 +1,4 @@
-import { Garden } from "../types";
+import { Garden } from "../../services/types";
 
 export const initialGardenState: Garden[] = [
   {

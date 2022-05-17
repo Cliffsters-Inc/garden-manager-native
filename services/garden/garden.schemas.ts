@@ -1,18 +1,30 @@
 import { schema } from "normalizr";
-import { veggieInfoEntity } from "../veggieInfo/veggieInfo.schemas";
 
-export const gardenEntity = new schema.Entity("gardens");
+function createProcessStrategy(parentKey: string) {
+  return (value: any, parent: any) => ({
+    ...value,
+    [parentKey]: parent.id,
+  });
+}
 
-export const bedEntity = new schema.Entity("beds", { garden: gardenEntity });
+const logEntity = new schema.Entity(
+  "logs",
+  {},
+  { processStrategy: createProcessStrategy("veggie") }
+);
 
-export const veggieEntity = new schema.Entity("veggies", {
-  garden: gardenEntity,
-  bed: bedEntity,
-  veggieInfo: veggieInfoEntity,
-});
+const veggieEntity = new schema.Entity(
+  "veggies",
+  { logs: [logEntity] },
+  { processStrategy: createProcessStrategy("bed") }
+);
 
-export const logEntity = new schema.Entity("logs", {
-  garden: gardenEntity,
-  bed: bedEntity,
-  veggie: veggieEntity,
-});
+const bedEntity = new schema.Entity(
+  "beds",
+  { veggies: [veggieEntity] },
+  { processStrategy: createProcessStrategy("garden") }
+);
+
+const gardenEntity = new schema.Entity("gardens", { beds: [bedEntity] });
+
+export const gardensSchema = [gardenEntity];
