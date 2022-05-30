@@ -2,7 +2,8 @@ import { useRoute } from "@react-navigation/native";
 import { FunctionComponent } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { Text } from "react-native-elements";
-import { gardenSelectors } from "../services/garden/garden.selectors";
+import { bedSelectors } from "../services/bed/bed.slice";
+import { gardenSelectors } from "../services/garden/garden.slice";
 import { useAppSelector } from "../store";
 import { GardenTabScreenProps } from "../types";
 import { CustomCard } from "./shared/CustomCard";
@@ -17,26 +18,25 @@ export const BedCards: FunctionComponent<props> = ({
   selectedGardenId,
   navigation,
 }) => {
-  const gardens = useAppSelector(gardenSelectors.selectGardens);
+  const garden = useAppSelector((state) =>
+    gardenSelectors.selectById(state, selectedGardenId)
+  );
+  const beds = useAppSelector((state) =>
+    bedSelectors.selectByIds(state, garden?.beds ?? [])
+  );
 
   const route = useRoute();
   const routeName = route.name;
 
-  const selectedGardenObject = gardens.find(
-    (garden) => garden.id === selectedGardenId
-  );
-
-  const beds = selectedGardenObject?.beds;
-
   return (
     <View style={styles.container}>
       <Text h1 style={styles.title}>
-        {selectedGardenObject?.name}
+        {garden?.name}
       </Text>
       <FlatList
         numColumns={2}
-        keyExtractor={(item) => item.id}
         data={beds}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <CustomCard
             title={item.name}

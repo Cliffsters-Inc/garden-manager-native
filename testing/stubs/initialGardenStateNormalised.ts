@@ -1,4 +1,6 @@
-export const initialGardenStateNormalised: any = {
+import { GardenNormalisedState } from "../../services/utils/getInitialNormalisedGardenData";
+
+export const initialGardenStateNormalised: GardenNormalisedState = {
   gardens: {
     klj39sadg7sd98: {
       name: "frontyard",
@@ -9,6 +11,11 @@ export const initialGardenStateNormalised: any = {
       name: "backyard",
       id: "nkjun4safgkkhg1",
       beds: ["bkghefuhefku865766"],
+    },
+    nfsdgsagahgerf: {
+      name: "Green House",
+      id: "nfsdgsagahgerf",
+      beds: [],
     },
   },
   beds: {

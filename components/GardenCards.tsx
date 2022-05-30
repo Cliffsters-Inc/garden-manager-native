@@ -10,7 +10,7 @@ import { View } from "./Themed";
 export const GardenCards = ({
   navigation,
 }: GardenTabScreenProps<"GardenTabScreen">) => {
-  const gardens = useAppSelector(gardenSelectors.selectGardens);
+  const gardens = useAppSelector(gardenSelectors.selectAll);
   const route = useRoute();
   const routeName = route.name;
 

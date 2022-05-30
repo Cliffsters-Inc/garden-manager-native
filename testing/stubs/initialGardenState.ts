@@ -67,4 +67,9 @@ export const initialGardenState: Garden[] = [
       },
     ],
   },
+  {
+    name: "Green House",
+    id: "nfsdgsagahgerf",
+    beds: [],
+  },
 ];

@@ -12,26 +12,14 @@ type Months =
   | "NOV"
   | "DEC";
 
-type NormalizedObjects<T> = {
-  byId: { [id: string]: T };
-  allIds: string[];
-};
-
-export type GardenNormalisedState = {
-  gardens?: NormalizedObjects<GardenNormalised>;
-  beds?: NormalizedObjects<BedNormalised>;
-  veggies?: NormalizedObjects<VeggieNormalised>;
-  veggieLogs?: NormalizedObjects<VeggieLogNormalised>;
-};
-
 export type Garden = {
-  name: string | undefined;
+  name: string;
   id: string;
   beds?: Bed[];
 };
 
 export type GardenNormalised = {
-  name: string | undefined;
+  name: string;
   id: string;
   beds?: string[];
 };
@@ -41,18 +29,18 @@ export type NewCardForm = {
 };
 
 export type RenameCardForm = {
-  newCardName: string | undefined;
-  id?: string | undefined;
+  newCardName: string;
+  id?: string;
 };
 
 export type Bed = {
-  name: string | undefined;
+  name: string;
   id: string;
   veggies?: Veggie[];
 };
 
 export type BedNormalised = {
-  name: string | undefined;
+  name: string;
   id: string;
   veggies?: string[];
   garden: string;

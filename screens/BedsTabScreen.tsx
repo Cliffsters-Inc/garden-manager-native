@@ -10,7 +10,6 @@ export const BedsTabScreen = ({
   route,
 }: GardenTabScreenProps<"BedsTabScreen">) => {
   const { selectedGardenId } = route.params;
-  const areaTitle = "bed";
   const routeName = route.name;
 
   return (
