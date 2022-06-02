@@ -2,7 +2,6 @@ import { useAppDispatch } from "../store";
 import { RootStackScreenProps } from "../types";
 import { Text, View } from "../components/Themed";
 import { Button, Divider } from "react-native-elements";
-import { gardenActions } from "../services/garden/gardenSlice";
 import { GestureResponderEvent, StyleSheet } from "react-native";
 
 export const DeleteConfirmationModalScreen = ({

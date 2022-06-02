@@ -1,6 +1,5 @@
 import { Controller, useForm } from "react-hook-form";
 import { Button, StyleSheet, TextInput } from "react-native";
-import { gardenActions } from "../services/garden/gardenSlice";
 import { NewCardForm } from "../services/types";
 import { useAppDispatch } from "../store";
 import { Text, View } from "../components/Themed";

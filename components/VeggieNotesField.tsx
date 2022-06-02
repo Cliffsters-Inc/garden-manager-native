@@ -1,6 +1,5 @@
 import { useLayoutEffect, useState } from "react";
 import { Button, ScrollView, StyleSheet, TextInput } from "react-native";
-import { gardenActions } from "../services/garden/gardenSlice";
 import { useAppDispatch } from "../store";
 import { GardenTabScreenProps } from "../types";
 import { Text, View } from "./Themed";

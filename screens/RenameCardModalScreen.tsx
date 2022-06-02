@@ -2,8 +2,6 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, StyleSheet, TextInput } from "react-native";
 import { Text, View } from "../components/Themed";
-import { gardenActions } from "../services/garden/gardenSlice";
-import { gardenSelectors } from "../services/garden/garden.selectors";
 import { RenameCardForm } from "../services/types";
 import { useAppDispatch, useAppSelector } from "../store";
 import { RootStackScreenProps } from "../types";
