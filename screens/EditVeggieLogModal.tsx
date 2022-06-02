@@ -8,21 +8,14 @@ import { gardenActions } from "../services/garden/gardenSlice";
 import { gardenSelectors } from "../services/garden/garden.selectors";
 import { Calendar } from "../components/shared/Calendar";
 import { CrossBtn } from "../components/shared/CrossBtn";
+import { logSelectors } from "../services/log/log.slice";
 
 export const EditVeggieLogModal = ({
   navigation,
   route,
 }: RootStackScreenProps<"EditVeggieLogModal">) => {
   const { selectedGardenId, selectedBedId, veggieId, logId } = route.params;
-  const log = useAppSelector((state) =>
-    gardenSelectors.selectVeggieLog(
-      state,
-      selectedGardenId,
-      selectedBedId,
-      veggieId,
-      logId
-    )
-  );
+  const log = useAppSelector((state) => logSelectors.selectById(state, logId));
   const [date, setDate] = useState(log?.date ?? Date.now());
   const [notes, setNotes] = useState(log?.notes ?? "");
 

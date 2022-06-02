@@ -3,13 +3,13 @@ import { View, Text } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 import { format } from "date-fns";
 import { useAppSelector } from "../store";
-import { gardenSelectors } from "../services/garden/garden.selectors";
 import { VeggieNotesField } from "../components/VeggieNotesField";
 import { ActionButton } from "../components/shared/ActionButton";
 import { useState } from "react";
 import { SortBtn } from "../components/shared/SortBtn";
-import { Button } from "react-native-elements";
 import { MaterialIcons } from "@expo/vector-icons";
+import { veggieSelectors } from "../services/veggie/veggie.slice";
+import { logSelectors } from "../services/log/log.slice";
 
 export const VeggieScreen = ({
   navigation,
@@ -18,16 +18,12 @@ export const VeggieScreen = ({
   const { selectedGardenId, selectedBedId, veggieId } = route.params;
   const [logsDescending, setLogsDescending] = useState(true);
   const veggie = useAppSelector((state) =>
-    gardenSelectors.selectVeggieWithSortedLogs(
-      state,
-      selectedGardenId,
-      selectedBedId,
-      veggieId,
-      logsDescending
-    )
+    veggieSelectors.selectById(state, veggieId)
   );
 
-  const veggieLogs = veggie.logs;
+  const logs = useAppSelector((state) =>
+    logSelectors.selectByIds(state, veggie?.logs ?? [])
+  );
 
   return veggie ? (
     <View style={styles.container}>
@@ -80,7 +76,7 @@ export const VeggieScreen = ({
           <Pressable
             onPress={() =>
               navigation.navigate("TimelineScreen", {
-                veggieLogs,
+                veggieLogs: logs,
               })
             }
           >
@@ -88,7 +84,7 @@ export const VeggieScreen = ({
           </Pressable>
         </View>
         <FlatList
-          data={veggie.logs}
+          data={logs}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <Pressable

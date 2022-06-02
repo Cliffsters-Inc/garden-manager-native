@@ -3,7 +3,9 @@ import { StyleSheet } from "react-native";
 import { ActionButton } from "../components/shared/ActionButton";
 import { View, Text } from "../components/Themed";
 import { VeggieList } from "../components/VeggieList";
+import { bedSelectors } from "../services/bed/bed.slice";
 import { gardenSelectors } from "../services/garden/garden.selectors";
+import { veggieSelectors } from "../services/veggie/veggie.slice";
 import { useAppSelector } from "../store";
 import { GardenTabScreenProps } from "../types";
 
@@ -13,18 +15,20 @@ export const BedScreen = ({
 }: GardenTabScreenProps<"BedScreen">) => {
   const { selectedBedId, selectedGardenId } = route.params;
   const bed = useAppSelector((state) =>
-    gardenSelectors.selectBedWithVeggieInfo(
-      state,
-      selectedGardenId,
-      selectedBedId
-    )
+    bedSelectors.selectById(state, selectedBedId)
   );
+  const veggies = useAppSelector((state) =>
+    veggieSelectors.selectByIds(state, bed?.veggies ?? [])
+  );
+
+  console.log({ veggies });
+
   return bed ? (
     <View style={styles.container}>
       <Text>Bed Name: {bed.name}</Text>
       {bed.veggies && (
         <VeggieList
-          veggies={bed.veggies}
+          veggies={veggies}
           navigationHandler={(veggie) =>
             navigation.navigate("VeggieScreen", {
               selectedGardenId,

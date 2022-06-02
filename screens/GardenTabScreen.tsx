@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
 import { View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
-import { useState } from "react";
 import { GardenCards } from "../components/GardenCards";
 import { AddCardButton } from "../components/shared/AddCardButton";
 

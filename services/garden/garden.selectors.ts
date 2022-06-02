@@ -2,6 +2,7 @@ import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import { VeggieLog } from "../types";
 import { veggieInfoSelectors } from "../veggieInfo/veggieInfoSlice";
+import { gardenSelectors as N } from "./garden.slice";
 
 const selectGardens = (state: RootState) => state.gardens;
 
@@ -99,12 +100,13 @@ const selectVeggieLog = createSelector(
   (veggie, logId) => veggie?.logs.find((log) => log.id === logId)
 );
 
-export const gardenSelectors = {
-  selectGardens,
-  selectGarden,
-  selectBed,
-  selectBedWithVeggieInfo,
-  selectVeggie,
-  selectVeggieWithSortedLogs,
-  selectVeggieLog,
-};
+export const gardenSelectors = N;
+// export const gardenSelectors = {
+//   selectGardens,
+//   selectGarden,
+//   selectBed,
+//   selectBedWithVeggieInfo,
+//   selectVeggie,
+//   selectVeggieWithSortedLogs,
+//   selectVeggieLog,
+// };
