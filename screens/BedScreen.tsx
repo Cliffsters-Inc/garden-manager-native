@@ -4,7 +4,6 @@ import { ActionButton } from "../components/shared/ActionButton";
 import { View, Text } from "../components/Themed";
 import { VeggieList } from "../components/VeggieList";
 import { bedSelectors } from "../services/bed/bed.slice";
-import { gardenSelectors } from "../services/garden/garden.selectors";
 import { veggieSelectors } from "../services/veggie/veggie.slice";
 import { useAppSelector } from "../store";
 import { GardenTabScreenProps } from "../types";
@@ -13,15 +12,13 @@ export const BedScreen = ({
   navigation,
   route,
 }: GardenTabScreenProps<"BedScreen">) => {
-  const { selectedBedId, selectedGardenId } = route.params;
+  const { selectedBedId } = route.params;
   const bed = useAppSelector((state) =>
     bedSelectors.selectById(state, selectedBedId)
   );
   const veggies = useAppSelector((state) =>
     veggieSelectors.selectByIds(state, bed?.veggies ?? [])
   );
-
-  console.log({ veggies });
 
   return bed ? (
     <View style={styles.container}>
@@ -30,22 +27,13 @@ export const BedScreen = ({
         <VeggieList
           veggies={veggies}
           navigationHandler={(veggie) =>
-            navigation.navigate("VeggieScreen", {
-              selectedGardenId,
-              selectedBedId,
-              veggieId: veggie.id,
-            })
+            navigation.navigate("VeggieScreen", { veggieId: veggie.id })
           }
         />
       )}
       <ActionButton
         text="Add Veggie"
-        onPress={() =>
-          navigation.navigate("AddVeggieModal", {
-            selectedGardenId,
-            selectedBedId,
-          })
-        }
+        onPress={() => navigation.navigate("AddVeggieModal", { selectedBedId })}
       />
     </View>
   ) : null;

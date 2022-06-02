@@ -1,9 +1,8 @@
 import { StyleSheet } from "react-native";
 
-import { Text, View } from "../components/Themed";
+import { View } from "../components/Themed";
 import { useAppDispatch, useAppSelector } from "../store";
 import { RootStackScreenProps } from "../types";
-import { gardenActions } from "../services/garden/gardenSlice";
 import { veggieInfoSelectors } from "../services/veggieInfo/veggieInfoSlice";
 import { VeggieInfoList } from "../components/VeggieInfoList";
 
@@ -12,7 +11,7 @@ export const AddVeggieModalScreen = ({
   route,
 }: RootStackScreenProps<"AddVeggieModal">) => {
   const appDispatch = useAppDispatch();
-  const { selectedGardenId, selectedBedId } = route.params;
+  const { selectedBedId } = route.params;
   const veggieInfos = useAppSelector(veggieInfoSelectors.selectVeggieInfos);
 
   return (

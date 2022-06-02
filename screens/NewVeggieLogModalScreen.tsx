@@ -4,7 +4,6 @@ import { Text, View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 import { format } from "date-fns";
 import { useAppDispatch } from "../store";
-import { gardenActions } from "../services/garden/gardenSlice";
 import { Calendar } from "../components/shared/Calendar";
 import { CrossBtn } from "../components/shared/CrossBtn";
 
@@ -15,7 +14,7 @@ export const NewVeggieLogModalScreen = ({
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [date, setDate] = useState(Date.now());
   const [notes, setNotes] = useState("");
-  const { selectedGardenId, selectedBedId, veggieId } = route.params;
+  const { veggieId } = route.params;
 
   const dispatch = useAppDispatch();
 

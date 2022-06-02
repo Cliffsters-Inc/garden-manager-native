@@ -15,7 +15,7 @@ export const VeggieScreen = ({
   navigation,
   route,
 }: GardenTabScreenProps<"VeggieScreen">) => {
-  const { selectedGardenId, selectedBedId, veggieId } = route.params;
+  const { veggieId } = route.params;
   const [logsDescending, setLogsDescending] = useState(true);
   const veggie = useAppSelector((state) =>
     veggieSelectors.selectById(state, veggieId)
@@ -89,12 +89,7 @@ export const VeggieScreen = ({
           renderItem={({ item }) => (
             <Pressable
               onPress={() =>
-                navigation.navigate("EditVeggieLogModal", {
-                  selectedGardenId,
-                  selectedBedId,
-                  veggieId,
-                  logId: item.id,
-                })
+                navigation.navigate("EditVeggieLogModal", { logId: item.id })
               }
               style={{
                 borderColor: "#d5d5d5",
@@ -114,13 +109,7 @@ export const VeggieScreen = ({
       </View>
       <ActionButton
         text="Add Log"
-        onPress={() =>
-          navigation.navigate("NewVeggieLogModal", {
-            selectedGardenId,
-            selectedBedId,
-            veggieId,
-          })
-        }
+        onPress={() => navigation.navigate("NewVeggieLogModal", { veggieId })}
       />
     </View>
   ) : null;

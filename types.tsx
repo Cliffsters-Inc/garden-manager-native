@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
-import { Bed, Veggie, VeggieLog } from "./services/types";
+import { VeggieLog } from "./services/types";
 
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
@@ -24,17 +24,12 @@ declare global {
  */
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
-  AddVeggieModal: { selectedGardenId: string; selectedBedId: string };
+  AddVeggieModal: { selectedBedId: string };
   NotFound: undefined;
   NewVeggieLogModal: {
-    selectedGardenId: string;
-    selectedBedId: string;
     veggieId: string;
   };
   EditVeggieLogModal: {
-    selectedGardenId: string;
-    selectedBedId: string;
-    veggieId: string;
     logId: string;
   };
   CreateCardModal: {
@@ -83,15 +78,10 @@ export type GardenTabParamList = {
   GardenCards: undefined;
   CustomCard: { selectedGardenId: string; title: string };
   CardOptionsModalScreen: { gardenId: string; bedId?: string };
-  BedsTabScreen: { selectedGardenId: string; selectedBedId?: string };
-  BedScreen: { selectedGardenId: string; selectedBedId: string };
-  VeggieScreen: {
-    selectedGardenId: string;
-    selectedBedId: string;
-    veggieId: string;
-  };
-  //fix type below
-  TimelineScreen: { veggieLogs: VeggieLog[] | undefined };
+  BedsTabScreen: { selectedBedId: string };
+  BedScreen: { selectedBedId: string };
+  VeggieScreen: { veggieId: string };
+  TimelineScreen: { veggieLogs: VeggieLog[] | undefined }; //TODO: fix typing
 };
 
 export type GardenTabScreenProps<Screen extends keyof GardenTabParamList> =
