@@ -21,8 +21,8 @@ export const BedCards: FunctionComponent<props> = ({
   const garden = useAppSelector((state) =>
     gardenSelectors.selectById(state, selectedGardenId)
   );
-  const beds = useAppSelector((state) =>
-    bedSelectors.selectByIds(state, garden?.beds ?? [])
+  const beds = useAppSelector(
+    (state) => garden && bedSelectors.selectByIds(state, garden.beds)
   );
 
   const route = useRoute();

@@ -15,13 +15,13 @@ type Months =
 export type Garden = {
   name: string;
   id: string;
-  beds?: Bed[];
+  beds: Bed[];
 };
 
 export type GardenNormalised = {
   name: string;
   id: string;
-  beds?: string[];
+  beds: string[];
 };
 
 export type NewCardForm = {
@@ -30,19 +30,19 @@ export type NewCardForm = {
 
 export type RenameCardForm = {
   newCardName: string;
-  id?: string;
+  id: string;
 };
 
 export type Bed = {
   name: string;
   id: string;
-  veggies?: Veggie[];
+  veggies: Veggie[];
 };
 
 export type BedNormalised = {
   name: string;
   id: string;
-  veggies?: string[];
+  veggies: string[];
   garden: string;
 };
 
