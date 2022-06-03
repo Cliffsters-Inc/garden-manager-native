@@ -7,7 +7,7 @@ const logAdaptor = createEntityAdapter<VeggieLogNormalised>();
 
 // initializing createEntityAdapter state https://github.com/reduxjs/redux-toolkit/issues/493#issuecomment-612471868
 const preInitialisedState = logAdaptor.getInitialState();
-const normalisedLogData = getInitialNormalisedGardenData().logs ?? {};
+const normalisedLogData = getInitialNormalisedGardenData().logs;
 const initialisedState = logAdaptor.upsertMany(
   preInitialisedState,
   normalisedLogData

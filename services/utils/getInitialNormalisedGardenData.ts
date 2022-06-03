@@ -11,10 +11,10 @@ import {
 type NormalizedData<T> = { [key: string]: T };
 
 export type GardenNormalisedState = {
-  gardens?: NormalizedData<GardenNormalised>;
-  beds?: NormalizedData<BedNormalised>;
-  veggies?: NormalizedData<VeggieNormalised>;
-  logs?: NormalizedData<VeggieLogNormalised>;
+  gardens: NormalizedData<GardenNormalised>;
+  beds: NormalizedData<BedNormalised>;
+  veggies: NormalizedData<VeggieNormalised>;
+  logs: NormalizedData<VeggieLogNormalised>;
 };
 
 export const getInitialNormalisedGardenData = () => {

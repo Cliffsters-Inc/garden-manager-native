@@ -7,7 +7,7 @@ const veggieAdaptor = createEntityAdapter<VeggieNormalised>();
 
 // initializing createEntityAdapter state https://github.com/reduxjs/redux-toolkit/issues/493#issuecomment-612471868
 const preInitialisedState = veggieAdaptor.getInitialState();
-const normalisedVeggieData = getInitialNormalisedGardenData().veggies ?? {};
+const normalisedVeggieData = getInitialNormalisedGardenData().veggies;
 const initialisedState = veggieAdaptor.upsertMany(
   preInitialisedState,
   normalisedVeggieData

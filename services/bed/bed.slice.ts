@@ -7,7 +7,7 @@ const bedAdaptor = createEntityAdapter<BedNormalised>();
 
 // initializing createEntityAdapter state https://github.com/reduxjs/redux-toolkit/issues/493#issuecomment-612471868
 const preInitialisedState = bedAdaptor.getInitialState();
-const normalisedBedData = getInitialNormalisedGardenData().beds ?? {};
+const normalisedBedData = getInitialNormalisedGardenData().beds;
 const initialisedState = bedAdaptor.upsertMany(
   preInitialisedState,
   normalisedBedData

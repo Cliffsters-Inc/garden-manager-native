@@ -6,7 +6,7 @@ const gardenAdaptor = createEntityAdapter<GardenNormalised>();
 
 // initializing createEntityAdapter state https://github.com/reduxjs/redux-toolkit/issues/493#issuecomment-612471868
 const preInitialisedState = gardenAdaptor.getInitialState();
-const normalisedGardenData = getInitialNormalisedGardenData().gardens ?? {};
+const normalisedGardenData = getInitialNormalisedGardenData().gardens;
 const initialisedState = gardenAdaptor.upsertMany(
   preInitialisedState,
   normalisedGardenData
