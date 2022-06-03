@@ -16,16 +16,20 @@ const initialisedState = logAdaptor.upsertMany(
 export const logSlice = createSlice({
   name: "logs",
   initialState: initialisedState,
-  reducers: {},
+  reducers: {
+    add: logAdaptor.addOne,
+    remove: logAdaptor.removeOne,
+    update: logAdaptor.updateOne,
+  },
 });
 
-export const gardenActions = logSlice.actions;
+export const logActions = logSlice.actions;
 
 export type LogSlice = {
   [logSlice.name]: ReturnType<typeof logSlice["reducer"]>;
 };
 
-export const selectors = logAdaptor.getSelectors<LogSlice>(
+const genericSelectors = logAdaptor.getSelectors<LogSlice>(
   (state) => state[logSlice.name]
 );
 
@@ -35,6 +39,6 @@ const customSelectors = {
 };
 
 export const logSelectors = {
-  ...selectors,
+  ...genericSelectors,
   ...customSelectors,
 };

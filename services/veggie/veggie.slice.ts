@@ -16,16 +16,20 @@ const initialisedState = veggieAdaptor.upsertMany(
 export const veggieSlice = createSlice({
   name: "veggies",
   initialState: initialisedState,
-  reducers: {},
+  reducers: {
+    add: veggieAdaptor.addOne,
+    remove: veggieAdaptor.removeOne,
+    update: veggieAdaptor.updateOne,
+  },
 });
 
-export const gardenActions = veggieSlice.actions;
+export const veggieActions = veggieSlice.actions;
 
 export type VeggieSlice = {
   [veggieSlice.name]: ReturnType<typeof veggieSlice["reducer"]>;
 };
 
-export const selectors = veggieAdaptor.getSelectors<VeggieSlice>(
+const genericSelectors = veggieAdaptor.getSelectors<VeggieSlice>(
   (state) => state[veggieSlice.name]
 );
 
@@ -35,6 +39,6 @@ const customSelectors = {
 };
 
 export const veggieSelectors = {
-  ...selectors,
+  ...genericSelectors,
   ...customSelectors,
 };

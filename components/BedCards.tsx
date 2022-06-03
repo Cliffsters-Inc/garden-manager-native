@@ -1,5 +1,3 @@
-import { useRoute } from "@react-navigation/native";
-import { FunctionComponent } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { Text } from "react-native-elements";
 import { bedSelectors } from "../services/bed/bed.slice";
@@ -9,24 +7,19 @@ import { GardenTabScreenProps } from "../types";
 import { CustomCard } from "./shared/CustomCard";
 import { View } from "./Themed";
 
-type props = {
+type Props = {
   selectedGardenId: string;
-  navigation: GardenTabScreenProps<"GardenTabScreen">["navigation"];
+  navigation: GardenTabScreenProps<"BedsTabScreen">["navigation"];
+  route: GardenTabScreenProps<"BedsTabScreen">["route"];
 };
 
-export const BedCards: FunctionComponent<props> = ({
-  selectedGardenId,
-  navigation,
-}) => {
+export const BedCards = ({ selectedGardenId, navigation, route }: Props) => {
   const garden = useAppSelector((state) =>
     gardenSelectors.selectById(state, selectedGardenId)
   );
-  const beds = useAppSelector(
-    (state) => garden && bedSelectors.selectByIds(state, garden.beds)
+  const beds = useAppSelector((state) =>
+    bedSelectors.selectByGarden(state, selectedGardenId)
   );
-
-  const route = useRoute();
-  const routeName = route.name;
 
   return (
     <View style={styles.container}>
@@ -43,7 +36,7 @@ export const BedCards: FunctionComponent<props> = ({
             selectedGardenId={selectedGardenId}
             selectedBedId={item.id}
             navigation={navigation}
-            routeName={routeName}
+            routeName={route.name}
           />
         )}
       />

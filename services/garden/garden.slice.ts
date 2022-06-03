@@ -1,4 +1,9 @@
-import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
+import {
+  createEntityAdapter,
+  createSlice,
+  nanoid,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import { GardenNormalised } from "../types";
 import { getInitialNormalisedGardenData } from "../utils/getInitialNormalisedGardenData";
 
@@ -15,7 +20,12 @@ const initialisedState = gardenAdaptor.upsertMany(
 export const gardenSlice = createSlice({
   name: "gardens",
   initialState: initialisedState,
-  reducers: {},
+  reducers: {
+    add: (state, { payload }: PayloadAction<Omit<GardenNormalised, "id">>) =>
+      gardenAdaptor.addOne(state, { ...payload, id: nanoid() }),
+    remove: gardenAdaptor.removeOne,
+    update: gardenAdaptor.updateOne,
+  },
 });
 
 export const gardenActions = gardenSlice.actions;

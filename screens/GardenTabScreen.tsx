@@ -8,15 +8,13 @@ export const GardenTabScreen = ({
   navigation,
   route,
 }: GardenTabScreenProps<"GardenTabScreen">) => {
-  const routeName = route.name;
-
   return (
     <View style={styles.container}>
       <View style={styles.cards}>
         <GardenCards navigation={navigation} route={route} />
       </View>
       <View style={styles.button}>
-        <AddCardButton routeName={routeName} />
+        <AddCardButton routeName={route.name} />
       </View>
     </View>
   );

@@ -25,10 +25,7 @@ export const CustomCard: FunctionComponent<props> = ({
       onPress={() =>
         navigation.navigate(
           routeName === "GardenTabScreen" ? "BedsTabScreen" : "BedScreen",
-          {
-            selectedGardenId,
-            selectedBedId,
-          }
+          selectedBedId ? { selectedBedId } : { selectedGardenId }
         )
       }
     >

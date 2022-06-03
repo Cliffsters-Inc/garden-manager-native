@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { BedCards } from "../components/BedCards";
 import { AddCardButton } from "../components/shared/AddCardButton";
@@ -10,16 +9,19 @@ export const BedsTabScreen = ({
   route,
 }: GardenTabScreenProps<"BedsTabScreen">) => {
   const { selectedGardenId } = route.params;
-  const routeName = route.name;
 
   return (
     <View style={styles.container}>
       <View style={styles.cards}>
-        <BedCards selectedGardenId={selectedGardenId} navigation={navigation} />
+        <BedCards
+          selectedGardenId={selectedGardenId}
+          navigation={navigation}
+          route={route}
+        />
       </View>
       <View style={styles.button}>
         <AddCardButton
-          routeName={routeName}
+          routeName={route.name}
           selectedGardenId={selectedGardenId}
         />
       </View>

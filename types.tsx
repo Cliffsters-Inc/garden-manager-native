@@ -33,7 +33,7 @@ export type RootStackParamList = {
     logId: string;
   };
   CreateCardModal: {
-    selectedGardenId?: String;
+    selectedGardenId: string;
     areaTitle: string;
     routeName: string;
   };
@@ -78,7 +78,7 @@ export type GardenTabParamList = {
   GardenCards: undefined;
   CustomCard: { selectedGardenId: string; title: string };
   CardOptionsModalScreen: { gardenId: string; bedId?: string };
-  BedsTabScreen: { selectedBedId: string };
+  BedsTabScreen: { selectedGardenId: string };
   BedScreen: { selectedBedId: string };
   VeggieScreen: { veggieId: string };
   TimelineScreen: { veggieLogs: VeggieLog[] | undefined }; //TODO: fix typing

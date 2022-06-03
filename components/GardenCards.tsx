@@ -1,4 +1,3 @@
-import { useRoute } from "@react-navigation/native";
 import React from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { gardenSelectors } from "../services/garden/garden.slice";
@@ -9,10 +8,12 @@ import { View } from "./Themed";
 
 export const GardenCards = ({
   navigation,
-}: GardenTabScreenProps<"GardenTabScreen">) => {
+  route,
+}: {
+  navigation: GardenTabScreenProps<"GardenTabScreen">["navigation"];
+  route: GardenTabScreenProps<"GardenTabScreen">["route"];
+}) => {
   const gardens = useAppSelector(gardenSelectors.selectAll);
-  const route = useRoute();
-  const routeName = route.name;
 
   return (
     <View style={styles.container}>
@@ -25,7 +26,7 @@ export const GardenCards = ({
             title={item.name}
             selectedGardenId={item.id}
             navigation={navigation}
-            routeName={routeName}
+            routeName={route.name}
           />
         )}
       />

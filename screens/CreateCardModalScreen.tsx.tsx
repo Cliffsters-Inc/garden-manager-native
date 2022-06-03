@@ -1,10 +1,12 @@
+import { useLayoutEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, StyleSheet, TextInput } from "react-native";
 import { NewCardForm } from "../services/types";
 import { useAppDispatch } from "../store";
 import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
-import React from "react";
+import { gardenActions } from "../services/garden/garden.slice";
+import { bedActions } from "../services/bed/bed.slice";
 
 export const CreateCardModalScreen = ({
   navigation,
@@ -17,7 +19,6 @@ export const CreateCardModalScreen = ({
   const {
     control,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -27,15 +28,18 @@ export const CreateCardModalScreen = ({
 
   const submitName = (data: NewCardForm) => {
     routeName === "GardenTabScreen"
-      ? appDispatch(gardenActions.addGarden({ name: data.newCardName }))
+      ? appDispatch(gardenActions.add({ name: data.newCardName, beds: [] }))
       : appDispatch(
-          gardenActions.addBed({ name: data.newCardName, id: selectedGardenId })
+          bedActions.add({
+            name: data.newCardName,
+            garden: selectedGardenId,
+            veggies: [],
+          })
         );
     navigation.goBack();
-    reset({ ...data, newCardName: "" });
   };
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <Button title="Done" onPress={handleSubmit(submitName)} />

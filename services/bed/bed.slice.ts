@@ -1,4 +1,9 @@
-import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
+import {
+  createEntityAdapter,
+  createSlice,
+  nanoid,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import { BedNormalised } from "../types";
 import { getInitialNormalisedGardenData } from "../utils/getInitialNormalisedGardenData";
@@ -16,25 +21,33 @@ const initialisedState = bedAdaptor.upsertMany(
 export const bedSlice = createSlice({
   name: "beds",
   initialState: initialisedState,
-  reducers: {},
+  reducers: {
+    add: (state, { payload }: PayloadAction<Omit<BedNormalised, "id">>) =>
+      bedAdaptor.addOne(state, { ...payload, id: nanoid() }),
+
+    remove: bedAdaptor.removeOne,
+    update: bedAdaptor.updateOne,
+  },
 });
 
-export const gardenActions = bedSlice.actions;
+export const bedActions = bedSlice.actions;
 
 export type BedSlice = {
   [bedSlice.name]: ReturnType<typeof bedSlice["reducer"]>;
 };
 
-export const selectors = bedAdaptor.getSelectors<BedSlice>(
+const genericSelectors = bedAdaptor.getSelectors<BedSlice>(
   (state) => state[bedSlice.name]
 );
 
 const customSelectors = {
   selectByIds: (state: RootState, ids: string[]) =>
     ids.map((id) => state[bedSlice.name].entities[id]!),
+  selectByGarden: (state: RootState, gardenId: string) =>
+    genericSelectors.selectAll(state).filter((bed) => bed.garden === gardenId),
 };
 
 export const bedSelectors = {
-  ...selectors,
+  ...genericSelectors,
   ...customSelectors,
 };
