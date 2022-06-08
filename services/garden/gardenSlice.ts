@@ -122,7 +122,7 @@ export const gardenSlice = createSlice({
         selectedGardenId: string;
         selectedBedId: string;
         veggieId: string;
-        newLog: Pick<VeggieLog, "date" | "notes">;
+        newLog: Pick<VeggieLog, "date" | "notes" | "payloadTags">;
       }>
     ) => {
       const { selectedGardenId, selectedBedId, veggieId, newLog } =
@@ -139,7 +139,7 @@ export const gardenSlice = createSlice({
         selectedGardenId: string;
         selectedBedId: string;
         veggieId: string;
-        updatedLog: Pick<VeggieLog, "id" | "date" | "notes">;
+        updatedLog: Pick<VeggieLog, "id" | "date" | "notes" | "payloadTags">;
       }>
     ) => {
       const { selectedGardenId, selectedBedId, veggieId, updatedLog } =

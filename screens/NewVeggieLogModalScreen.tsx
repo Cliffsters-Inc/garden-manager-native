@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { Button, StyleSheet, TextInput } from "react-native";
 import { Text, View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
@@ -7,6 +7,8 @@ import { useAppDispatch } from "../store";
 import { gardenActions } from "../services/garden/gardenSlice";
 import { Calendar } from "../components/shared/Calendar";
 import { CrossBtn } from "../components/shared/CrossBtn";
+import { pressedTagsContext } from "../services/context";
+import { TagProps } from "../services/types";
 
 export const NewVeggieLogModalScreen = ({
   navigation,
@@ -16,8 +18,14 @@ export const NewVeggieLogModalScreen = ({
   const [date, setDate] = useState(Date.now());
   const [notes, setNotes] = useState("");
   const { selectedGardenId, selectedBedId, veggieId } = route.params;
+  const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
+  const [payloadTags, setPayloadTags] = useState<TagProps[]>([]);
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setPayloadTags(pressedTags?.map((pressedTag: string) => pressedTag));
+  }, [pressedTags]);
 
   const handleSubmit = () => {
     dispatch(
@@ -25,7 +33,7 @@ export const NewVeggieLogModalScreen = ({
         selectedGardenId,
         selectedBedId,
         veggieId,
-        newLog: { date, notes },
+        newLog: { date, notes, payloadTags },
       })
     );
     navigation.goBack();
@@ -35,7 +43,7 @@ export const NewVeggieLogModalScreen = ({
     navigation.setOptions({
       headerRight: () => <Button title="Add" onPress={handleSubmit} />,
     });
-  }, [navigation, date, notes]);
+  }, [navigation, date, notes, payloadTags]);
 
   const dateCalFormatted = format(new Date(date), "yyyy-MM-dd");
 
