@@ -3,6 +3,7 @@ import { FlatList, Pressable } from "react-native";
 import { Divider } from "react-native-elements";
 import { pressedTagsContext } from "../../../services/context";
 import { Text, View } from "../../Themed";
+import { AddTagToList, convertToTag, defaultTagsList } from "./Tag.utils";
 
 export const AddTags = () => {
   const [selectableTags, setSelectableTags] = useState([]);
@@ -11,7 +12,7 @@ export const AddTags = () => {
   const [pressedTagObjectState, setPressedTagObjectState] = useState([]);
 
   useEffect(() => {
-    const combinedTags: any = defaultTags.map((tag) => convertToTag(tag));
+    const combinedTags: any = defaultTagsList.map((tag) => convertToTag(tag));
     setCombinedTagsList(combinedTags);
   }, []);
 
@@ -28,7 +29,7 @@ export const AddTags = () => {
     // setPressedTags: Dispatch<typeof tag[]>
   ) => {
     console.log("selectableOnPress");
-    const pressedTagObject = AddTagToList(pressedTags, tag);
+    const pressedTagObject: any = AddTagToList(pressedTags, tag);
     setPressedTagObjectState(pressedTagObject);
     setPressedTags(pressedTagObject);
     // setPressedTags(AddTagToList(pressedTags, tag));
