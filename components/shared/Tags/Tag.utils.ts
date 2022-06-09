@@ -40,3 +40,16 @@ export const AddTagToList = (arrayName: string[], tagToAdd: string) => {
   // const arrayToSend = [...arrayName, tagToAdd];
   return arrayToSend;
 };
+
+export const RemoveTagFromList = (array: string[], tagToRemove: string) => {
+  let index = 0;
+  const toRemove: any = array.find((tag, i) => {
+    index = i;
+    return tag.tagLabel === tagToRemove;
+  });
+
+  if (index > -1) {
+    array.splice(index, 1);
+  }
+  return array;
+};

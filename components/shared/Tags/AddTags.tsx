@@ -5,7 +5,12 @@ import { Divider } from "react-native-elements";
 import { pressedTagsContext } from "../../../services/context";
 import { TagObject } from "../../../services/types";
 import { Text, View } from "../../Themed";
-import { AddTagToList, convertToTag, defaultTagsList } from "./Tag.utils";
+import {
+  AddTagToList,
+  convertToTag,
+  defaultTagsList,
+  RemoveTagFromList,
+} from "./Tag.utils";
 import { Tag } from "./TagElement";
 
 export const AddTags = () => {
@@ -64,11 +69,11 @@ export const AddTags = () => {
   const renderSelectableItem = ({ item }: any) => {
     return (
       <Pressable onPress={() => selectableOnPress(item.tagLabel)}>
-        {/* <Tag
+        <Tag
           tagLabel={item.tagLabel}
           tagColor={item.tagColor}
           extraStyleProps={{ label: { paddingRight: 15 } }}
-        /> */}
+        />
       </Pressable>
     );
   };

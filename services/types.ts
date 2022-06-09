@@ -57,7 +57,11 @@ export type TagProps = {
   tagIcon?: string | undefined;
   isRemovable?: boolean;
   pressedTags?: string[];
-  // extraStyleProps?: TagStyleProps;
+  extraStyleProps?: TagStyleProps;
+};
+
+type TagStyleProps = {
+  label?: object;
 };
 
 export type TagObject = {
