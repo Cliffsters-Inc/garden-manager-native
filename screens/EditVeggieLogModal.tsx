@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { Button, Pressable, StyleSheet, TextInput } from "react-native";
 import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
@@ -8,12 +8,16 @@ import { gardenActions } from "../services/garden/gardenSlice";
 import { gardenSelectors } from "../services/garden/garden.selectors";
 import { Calendar } from "../components/shared/Calendar";
 import { CrossBtn } from "../components/shared/CrossBtn";
+import { AddTags } from "../components/shared/Tags/AddTags";
+import { pressedTagsContext } from "../services/context";
 
 export const EditVeggieLogModal = ({
   navigation,
   route,
 }: RootStackScreenProps<"EditVeggieLogModal">) => {
   const { selectedGardenId, selectedBedId, veggieId, logId } = route.params;
+  const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
+  const [payloadTags, setPayloadTags] = useState([]);
   const log = useAppSelector((state) =>
     gardenSelectors.selectVeggieLog(
       state,
@@ -32,6 +36,11 @@ export const EditVeggieLogModal = ({
 
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    const logTags = log?.payloadTags;
+    setPressedTags(logTags);
+  }, []);
+
   const handleUpdate = () => {
     if (log)
       dispatch(
@@ -39,9 +48,10 @@ export const EditVeggieLogModal = ({
           selectedGardenId,
           selectedBedId,
           veggieId,
-          updatedLog: { id: log.id, date, notes },
+          updatedLog: { id: log.id, date, notes, payloadTags },
         })
       );
+    setPressedTags([]);
     navigation.goBack();
   };
 
@@ -71,6 +81,8 @@ export const EditVeggieLogModal = ({
 
   return (
     <View style={styles.container}>
+      <AddTags />
+
       <View>
         {calendarVisible ? (
           <View style={styles.calendar}>
@@ -102,6 +114,7 @@ export const EditVeggieLogModal = ({
           style={styles.notesContainer}
         />
       </View>
+      {/* <AddTags /> */}
       {deleteConfirmationVisible ? (
         <View>
           <Text style={{ textAlign: "center", fontWeight: "bold", margin: 5 }}>

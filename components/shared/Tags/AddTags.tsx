@@ -1,7 +1,7 @@
 import { nanoid } from "@reduxjs/toolkit";
 import { useContext, useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
-import { Divider } from "react-native-elements";
+import { Button, Divider } from "react-native-elements";
 import { pressedTagsContext } from "../../../services/context";
 import { TagObject } from "../../../services/types";
 import { Text, View } from "../../Themed";
@@ -19,10 +19,14 @@ export const AddTags = () => {
   const [pressedTagObjectState, setPressedTagObjectState] = useState([]);
   const [selectableTags, setSelectableTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
-
+  console.log("**AddTag Render**");
   useEffect(() => {
+    console.log("onMount effects");
     const combinedTags: any = defaultTagsList.map((tag) => convertToTag(tag));
     setCombinedTagsList(combinedTags);
+    console.log("effect pressed", pressedTags);
+    setPressedTagObjectState(pressedTags);
+    // filterList(pressedTags);
   }, []);
 
   useEffect(() => {
@@ -35,12 +39,15 @@ export const AddTags = () => {
 
   const filterList = (tagObject: any) => {
     if (tagObject.length > 0) {
+      console.log("**tagObject**", tagObject);
       setSelectedTags(pressedTags);
     }
   };
 
   useEffect(() => {
+    console.log("**pressed effect**");
     filterList(pressedTagObjectState);
+    filterList(pressedTags);
   }, [pressedTags]);
 
   const selectableOnPress = (
@@ -92,9 +99,17 @@ export const AddTags = () => {
     );
   };
 
+  const con = () => {
+    console.log("AddTags: Pressed", pressedTags);
+    console.log("AddTags: PressedObject", pressedTagObjectState);
+    console.log("AddTags: Selected", selectedTags);
+  };
+
   return (
     <View style={styles.container}>
+      <Button title={"AddCon"} onPress={con} />
       <FlatList
+        style={{ height: 100, backgroundColor: "orange" }}
         data={selectedTags}
         keyExtractor={() => nanoid()}
         extraData={pressedTags}
@@ -111,6 +126,18 @@ export const AddTags = () => {
         />
 
         <Divider style={{ paddingTop: 30 }} />
+        {/* <Text
+          style={styles.createButton}
+          onPress={() =>
+            navigation.navigate("CreateTagModal", {
+              // selectedGardenId,
+              selectedBedId,
+              veggieId,
+            })
+          }
+        >
+          Create New Tag
+        </Text> */}
       </View>
     </View>
   );

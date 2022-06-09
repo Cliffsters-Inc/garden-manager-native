@@ -9,6 +9,7 @@ import { Calendar } from "../components/shared/Calendar";
 import { CrossBtn } from "../components/shared/CrossBtn";
 import { pressedTagsContext } from "../services/context";
 import { TagProps } from "../services/types";
+import { AddTags } from "../components/shared/Tags/AddTags";
 
 export const NewVeggieLogModalScreen = ({
   navigation,
@@ -36,6 +37,7 @@ export const NewVeggieLogModalScreen = ({
         newLog: { date, notes, payloadTags },
       })
     );
+    setPressedTags([]);
     navigation.goBack();
   };
 
@@ -79,6 +81,7 @@ export const NewVeggieLogModalScreen = ({
         multiline
         style={styles.notesContainer}
       />
+      <AddTags />
     </View>
   );
 };

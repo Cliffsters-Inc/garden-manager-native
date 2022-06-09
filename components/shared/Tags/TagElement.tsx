@@ -8,8 +8,8 @@ export const Tag = ({
   tagColor,
   tagIcon,
   isRemovable,
-}: //   extraStyleProps,
-TagProps) => {
+  extraStyleProps,
+}: TagProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.icon}>
