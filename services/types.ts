@@ -60,6 +60,10 @@ export type TagProps = {
   // extraStyleProps?: TagStyleProps;
 };
 
+export type TagObject = {
+  item: TagProps;
+};
+
 export type VeggieInfo = {
   id: string;
   name: string;
