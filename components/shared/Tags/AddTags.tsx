@@ -96,7 +96,6 @@ export const AddTags = () => {
     <View style={styles.container}>
       <Button title={"AddCon"} onPress={con} />
       <FlatList
-        style={{ minHeight: 50, backgroundColor: "orange", marginTop: 50 }}
         data={selectedTags}
         keyExtractor={() => nanoid()}
         extraData={pressedTags}

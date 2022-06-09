@@ -98,7 +98,6 @@ export const EditVeggieLogModal = ({
   return (
     <View style={styles.container}>
       <Button title="logTagCon" onPress={logTagCon} />
-      <AddTags />
       <View>
         {calendarVisible ? (
           <View style={styles.calendar}>
@@ -130,7 +129,7 @@ export const EditVeggieLogModal = ({
           style={styles.notesContainer}
         />
       </View>
-      {/* <AddTags /> */}
+      <AddTags />
       {deleteConfirmationVisible ? (
         <View>
           <Text style={{ textAlign: "center", fontWeight: "bold", margin: 5 }}>
