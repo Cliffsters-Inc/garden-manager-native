@@ -1,6 +1,6 @@
 import { nanoid } from "@reduxjs/toolkit";
 import { useContext, useEffect, useState } from "react";
-import { FlatList, Pressable } from "react-native";
+import { FlatList, Pressable, StyleSheet } from "react-native";
 import { Divider } from "react-native-elements";
 import { pressedTagsContext } from "../../../services/context";
 import { TagObject } from "../../../services/types";
@@ -110,3 +110,28 @@ export const AddTags = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 0.5,
+    // backgroundColor: "grey",
+  },
+  addContainer: {
+    // justifyContent: "flex-end",
+    // alignContent: "flex-end",
+    backgroundColor: "rgba(236, 236, 236, 0.8)",
+  },
+  title: {
+    marginTop: 20,
+    textAlign: "center",
+    // height: 100,
+  },
+  createButton: {
+    textAlign: "center",
+    color: "rgb(52, 170,	220)",
+    fontWeight: "bold",
+    // marginTop: 40,
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+});
