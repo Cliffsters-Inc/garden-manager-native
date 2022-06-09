@@ -31,20 +31,17 @@ export const Tag = ({
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     flexDirection: "row",
     paddingLeft: 10,
-    // justifyContent: "center",
-    // alignContent: "center",
   },
   icon: {
     justifyContent: "flex-end",
   },
   textContainer: {
     flexDirection: "row",
-    // justifyContent: "center",
     borderBottomLeftRadius: 0,
     borderTopLeftRadius: 0,
     paddingTop: 3,
@@ -55,7 +52,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   label: {
-    // paddingRight: 15,
     textTransform: "capitalize",
   },
 });

@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
 import { Button, Divider } from "react-native-elements";
 import { pressedTagsContext } from "../../../services/context";
-import { TagObject } from "../../../services/types";
+import { TagObject, TagProps } from "../../../services/types";
 import { Text, View } from "../../Themed";
 import {
   AddTagToList,
@@ -14,26 +14,28 @@ import {
 import { Tag } from "./TagElement";
 
 export const AddTags = () => {
+  // ***type error*** I set type in index.tsx L-70, why is it any below?
   const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
-  const [combinedTagsList, setCombinedTagsList] = useState([]);
+  const [combinedTagsList, setCombinedTagsList] = useState<TagProps[]>([]);
   //   const [pressedTagObjectState, setPressedTagObjectState] = useState([]);
-  const [selectableTags, setSelectableTags] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectableTags, setSelectableTags] = useState<TagProps[]>([]);
+  const [selectedTags, setSelectedTags] = useState<TagProps[]>([]);
 
   useEffect(() => {
+    // ***type error***
     const combinedTags: any = defaultTagsList.map((tag) => convertToTag(tag));
     setCombinedTagsList(combinedTags);
   }, []);
 
   useEffect(() => {
-    const filteredList = combinedTagsList.filter((tag: any) => {
-      return !pressedTags.some((t: any) => t.tagLabel === tag?.tagLabel);
+    const filteredList = combinedTagsList.filter((tag: TagProps) => {
+      return !pressedTags.some((t: TagProps) => t.tagLabel === tag?.tagLabel);
     });
     console.log("filteredList: ", filteredList);
     setSelectableTags(filteredList);
   }, [pressedTags, combinedTagsList]);
 
-  const filterList = (tagObject: any) => {
+  const filterList = (tagObject: TagProps[]) => {
     if (tagObject.length > 0) {
       setSelectedTags(pressedTags);
     }
@@ -45,7 +47,7 @@ export const AddTags = () => {
   }, [pressedTags]);
 
   const selectableOnPress = (tag: string) => {
-    console.log("selectableOnPress");
+    // ***type error***
     const pressedTagObject: any = AddTagToList(pressedTags, tag);
     setPressedTags(pressedTagObject);
     // setPressedTagObjectState(pressedTagObject);
@@ -60,7 +62,6 @@ export const AddTags = () => {
   };
 
   // combine next two functions ans pass onPress prop
-  // ***type error***
   const renderSelectableItem = ({ item }: TagObject) => {
     return (
       <Pressable onPress={() => selectableOnPress(item.tagLabel)}>
@@ -132,23 +133,18 @@ export const AddTags = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 0.5,
-    // backgroundColor: "grey",
   },
   addContainer: {
-    // justifyContent: "flex-end",
-    // alignContent: "flex-end",
     backgroundColor: "rgba(236, 236, 236, 0.8)",
   },
   title: {
     marginTop: 20,
     textAlign: "center",
-    // height: 100,
   },
   createButton: {
     textAlign: "center",
     color: "rgb(52, 170,	220)",
     fontWeight: "bold",
-    // marginTop: 40,
     paddingTop: 20,
     paddingBottom: 20,
   },

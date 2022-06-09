@@ -10,6 +10,7 @@ import { Calendar } from "../components/shared/Calendar";
 import { CrossBtn } from "../components/shared/CrossBtn";
 import { AddTags } from "../components/shared/Tags/AddTags";
 import { pressedTagsContext } from "../services/context";
+import { TagProps } from "../services/types";
 
 export const EditVeggieLogModal = ({
   navigation,
@@ -17,7 +18,7 @@ export const EditVeggieLogModal = ({
 }: RootStackScreenProps<"EditVeggieLogModal">) => {
   const { selectedGardenId, selectedBedId, veggieId, logId } = route.params;
   const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
-  const [payloadTags, setPayloadTags] = useState([]);
+  const [payloadTags, setPayloadTags] = useState<TagProps[]>([]);
   const log = useAppSelector((state) =>
     gardenSelectors.selectVeggieLog(
       state,
@@ -30,7 +31,7 @@ export const EditVeggieLogModal = ({
 
   const [date, setDate] = useState(log?.date ?? Date.now());
   const [notes, setNotes] = useState(log?.notes ?? "");
-  const [logTags, setLogTags] = useState<any>(log?.payloadTags);
+  const [logTags, setLogTags] = useState(log?.payloadTags);
 
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
@@ -42,7 +43,7 @@ export const EditVeggieLogModal = ({
     const selectorLogs = logTags;
     // setPressedTags(selectorLogs);
 
-    const tempLogsList = selectorLogs?.map((tag: any) => tag);
+    const tempLogsList = selectorLogs?.map((tag) => tag);
     setPressedTags(tempLogsList);
   }, []);
 
@@ -82,7 +83,7 @@ export const EditVeggieLogModal = ({
 
     navigation.setOptions({
       headerRight: () =>
-        //logChanged will nedd to be converted to recognise tagg changes
+        //logChanged will nedd to be converted to recognise tag changes
         logChanged ? <Button title="Done" onPress={handleUpdate} /> : null,
       headerLeft: () => <Button title="Cancel" onPress={goBackAndClear} />,
     });

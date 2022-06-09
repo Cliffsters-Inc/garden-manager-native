@@ -1,3 +1,4 @@
+import { TagProps } from "./../../../services/types";
 export const defaultTagsList: string[] = [
   "pests",
   "disease",
@@ -34,16 +35,15 @@ export const convertToTag = (tag: string) => {
   }
 };
 
-export const AddTagToList = (arrayName: string[], tagToAdd: string) => {
+export const AddTagToList = (array: TagProps[], tagToAdd: string) => {
   const convertedTag = convertToTag(tagToAdd);
-  const arrayToSend = [...arrayName, convertedTag];
-  // const arrayToSend = [...arrayName, tagToAdd];
+  const arrayToSend = [...array, convertedTag];
   return arrayToSend;
 };
 
-export const RemoveTagFromList = (array: string[], tagToRemove: string) => {
+export const RemoveTagFromList = (array: TagProps[], tagToRemove: string) => {
   let index = 0;
-  const toRemove: any = array.find((tag, i) => {
+  const toRemove = array.find((tag, i) => {
     index = i;
     return tag.tagLabel === tagToRemove;
   });

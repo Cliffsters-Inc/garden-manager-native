@@ -43,6 +43,7 @@ import { RenameCardModalScreen } from "../screens/RenameCardModalScreen";
 import { EditVeggieLogModal } from "../screens/EditVeggieLogModal";
 import { TimelineScreen } from "../screens/TimelineScreen";
 import { pressedTagsContext } from "../services/context";
+import { TagProps } from "../services/types";
 
 export default function Navigation({
   colorScheme,
@@ -66,7 +67,7 @@ export default function Navigation({
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const [pressedTags, setPressedTags] = React.useState([]);
+  const [pressedTags, setPressedTags] = React.useState<TagProps[]>([]);
   const tagsValue = React.useMemo(
     () => ({
       pressedTags: pressedTags,
