@@ -42,8 +42,14 @@ export const NewVeggieLogModalScreen = ({
   };
 
   useLayoutEffect(() => {
+    const goBackAndClear = () => {
+      setPressedTags([]);
+      navigation.goBack();
+    };
+
     navigation.setOptions({
       headerRight: () => <Button title="Add" onPress={handleSubmit} />,
+      headerLeft: () => <Button title="Cancel" onPress={goBackAndClear} />,
     });
   }, [navigation, date, notes, payloadTags]);
 

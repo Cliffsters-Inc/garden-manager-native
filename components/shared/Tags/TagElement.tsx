@@ -2,6 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 import { TagProps } from "../../../services/types";
 import { Text, View } from "../../Themed";
+import { TagIcon } from "./TagIcon";
 
 export const Tag = ({
   tagLabel,
@@ -13,7 +14,7 @@ export const Tag = ({
   return (
     <View style={styles.container}>
       <View style={styles.icon}>
-        {/* <TagIcon iconColor={tagColor} selectedIcon={tagIcon} /> */}
+        <TagIcon iconColor={tagColor} selectedIcon={tagIcon} />
       </View>
       <View style={[styles.textContainer, { backgroundColor: tagColor }]}>
         <Text style={[styles.label, extraStyleProps?.label]}>{tagLabel}</Text>

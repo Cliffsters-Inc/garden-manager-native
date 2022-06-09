@@ -98,6 +98,19 @@ const selectVeggieLog = createSelector(
   ],
   (veggie, logId) => veggie?.logs.find((log) => log.id === logId)
 );
+const selectLogTags = createSelector(
+  [
+    selectVeggie,
+    (
+      _state: RootState,
+      _selectedGardenId: string,
+      _selectedBedId: string,
+      _veggieId: string,
+      logId: string
+    ) => logId,
+  ],
+  (veggie, logId) => veggie?.logs.find((log) => log.id === logId)?.payloadTags
+);
 
 export const gardenSelectors = {
   selectGardens,
@@ -107,4 +120,5 @@ export const gardenSelectors = {
   selectVeggie,
   selectVeggieWithSortedLogs,
   selectVeggieLog,
+  selectLogTags,
 };

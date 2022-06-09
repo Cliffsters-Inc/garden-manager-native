@@ -16,17 +16,13 @@ import { Tag } from "./TagElement";
 export const AddTags = () => {
   const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
   const [combinedTagsList, setCombinedTagsList] = useState([]);
-  const [pressedTagObjectState, setPressedTagObjectState] = useState([]);
+  //   const [pressedTagObjectState, setPressedTagObjectState] = useState([]);
   const [selectableTags, setSelectableTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
-  console.log("**AddTag Render**");
+
   useEffect(() => {
-    console.log("onMount effects");
     const combinedTags: any = defaultTagsList.map((tag) => convertToTag(tag));
     setCombinedTagsList(combinedTags);
-    console.log("effect pressed", pressedTags);
-    setPressedTagObjectState(pressedTags);
-    // filterList(pressedTags);
   }, []);
 
   useEffect(() => {
@@ -39,32 +35,24 @@ export const AddTags = () => {
 
   const filterList = (tagObject: any) => {
     if (tagObject.length > 0) {
-      console.log("**tagObject**", tagObject);
       setSelectedTags(pressedTags);
     }
   };
 
   useEffect(() => {
     console.log("**pressed effect**");
-    filterList(pressedTagObjectState);
     filterList(pressedTags);
   }, [pressedTags]);
 
-  const selectableOnPress = (
-    tag: string
-    // setPressedTags: Dispatch<typeof tag[]>
-  ) => {
+  const selectableOnPress = (tag: string) => {
     console.log("selectableOnPress");
     const pressedTagObject: any = AddTagToList(pressedTags, tag);
-    setPressedTagObjectState(pressedTagObject);
     setPressedTags(pressedTagObject);
+    // setPressedTagObjectState(pressedTagObject);
     // setPressedTags(AddTagToList(pressedTags, tag));
   };
 
-  const selectedOnPress = (
-    tag: string
-    // setPressedTags: Dispatch<typeof tag[]>
-  ) => {
+  const selectedOnPress = (tag: string) => {
     console.log("selectedOnPress");
     // setPressedTags(RemoveTagFromList(pressedTags, tag));
     const removeTag = RemoveTagFromList(pressedTags, tag);
@@ -73,7 +61,7 @@ export const AddTags = () => {
 
   // combine next two functions ans pass onPress prop
   // ***type error***
-  const renderSelectableItem = ({ item }: any) => {
+  const renderSelectableItem = ({ item }: TagObject) => {
     return (
       <Pressable onPress={() => selectableOnPress(item.tagLabel)}>
         <Tag
@@ -85,7 +73,6 @@ export const AddTags = () => {
     );
   };
 
-  // ***type error***
   const renderSelectedItem = ({ item }: TagObject) => {
     return (
       <Pressable onPress={() => selectedOnPress(item.tagLabel)}>
@@ -101,7 +88,6 @@ export const AddTags = () => {
 
   const con = () => {
     console.log("AddTags: Pressed", pressedTags);
-    console.log("AddTags: PressedObject", pressedTagObjectState);
     console.log("AddTags: Selected", selectedTags);
   };
 
@@ -109,7 +95,7 @@ export const AddTags = () => {
     <View style={styles.container}>
       <Button title={"AddCon"} onPress={con} />
       <FlatList
-        style={{ height: 100, backgroundColor: "orange" }}
+        style={{ minHeight: 50, backgroundColor: "orange", marginTop: 50 }}
         data={selectedTags}
         keyExtractor={() => nanoid()}
         extraData={pressedTags}

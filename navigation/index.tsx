@@ -102,21 +102,13 @@ function RootNavigator() {
             name="NewVeggieLogModal"
             component={NewVeggieLogModalScreen}
             options={({ navigation }) => ({
-              headerLeft: () => (
-                <Button title="Cancel" onPress={navigation.goBack} />
-              ),
               title: "New Log",
             })}
           />
           <Stack.Screen
             name="EditVeggieLogModal"
             component={EditVeggieLogModal}
-            options={({ navigation }) => ({
-              headerLeft: () => (
-                <Button title="Cancel" onPress={navigation.goBack} />
-              ),
-              title: "Log",
-            })}
+            options={{ title: "Log" }}
           />
           <Stack.Screen
             name="CreateCardModal"
