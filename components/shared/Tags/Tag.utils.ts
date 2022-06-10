@@ -45,7 +45,7 @@ export const RemoveTagFromList = (array: TagProps[], tagToRemove: string) => {
   let index = 0;
   const toRemove = array.find((tag, i) => {
     index = i;
-    return tag.tagLabel === tagToRemove;
+    tag.tagLabel === tagToRemove;
   });
 
   if (index > -1) {

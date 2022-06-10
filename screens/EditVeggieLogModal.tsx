@@ -17,8 +17,7 @@ export const EditVeggieLogModal = ({
   route,
 }: RootStackScreenProps<"EditVeggieLogModal">) => {
   const { selectedGardenId, selectedBedId, veggieId, logId } = route.params;
-  const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
-  const [payloadTags, setPayloadTags] = useState<TagProps[]>([]);
+
   const log = useAppSelector((state) =>
     gardenSelectors.selectVeggieLog(
       state,
@@ -28,11 +27,13 @@ export const EditVeggieLogModal = ({
       logId
     )
   );
+  const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
+  const [payloadTags, setPayloadTags] = useState<TagProps[]>([]);
+  const [logTags, setLogTags] = useState([...(log?.payloadTags || [])]);
+  const [tagChange, setTagChange] = useState(false);
 
   const [date, setDate] = useState(log?.date ?? Date.now());
   const [notes, setNotes] = useState(log?.notes ?? "");
-  const [logTags, setLogTags] = useState<TagProps[]>([...log?.payloadTags]);
-
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
@@ -41,9 +42,6 @@ export const EditVeggieLogModal = ({
 
   useEffect(() => {
     const selectorLogs = [...logTags];
-    // setPressedTags(selectorLogs);
-
-    // const tempLogsList = selectorLogs?.map((tag) => tag);
     setPressedTags(selectorLogs);
   }, []);
 
@@ -78,9 +76,20 @@ export const EditVeggieLogModal = ({
     navigation.goBack();
   };
 
+  // useEffect(() => {
+  //   if (logTags !== pressedTags || null) {
+  //     console.log("**Tag Change**");
+  //     setTagChange(true);
+  //   } else {
+  //     setTagChange(false);
+  //   }
+  // }, [pressedTags]);
+
   useLayoutEffect(() => {
     const logChanged =
-      notes !== log?.notes || date !== log?.date || payloadTags !== logTags;
+      notes !== log?.notes ||
+      date !== log?.date ||
+      payloadTags !== log?.payloadTags;
     const goBackAndClear = () => {
       setPressedTags([]);
       navigation.goBack();
@@ -97,8 +106,10 @@ export const EditVeggieLogModal = ({
   const dateCalFormatted = format(new Date(date), "yyyy-MM-dd");
 
   const logTagCon = () => {
-    console.log("logTags: ", logTags);
     console.log("payloadTags: ", payloadTags);
+    console.log("loggy: ", log?.payloadTags);
+    console.log("log Tags: ", logTags);
+    console.log("change: ", tagChange);
   };
 
   return (
