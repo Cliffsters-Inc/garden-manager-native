@@ -1,4 +1,5 @@
 import { Feather } from "@expo/vector-icons";
+import { Children } from "react";
 import { StyleSheet } from "react-native";
 import { TagProps } from "../../../services/types";
 import { Text, View } from "../../Themed";
@@ -8,7 +9,6 @@ export const Tag = ({
   tagLabel,
   tagColor,
   tagIcon,
-  isRemovable,
   extraStyleProps,
 }: TagProps) => {
   return (
@@ -18,15 +18,6 @@ export const Tag = ({
       </View>
       <View style={[styles.textContainer, { backgroundColor: tagColor }]}>
         <Text style={[styles.label, extraStyleProps?.label]}>{tagLabel}</Text>
-        {/* //remove this and use composition instead */}
-        {isRemovable && (
-          <Feather
-            name="x-square"
-            size={12}
-            color="black"
-            style={{ paddingTop: 2, paddingLeft: 2, paddingRight: 5 }}
-          />
-        )}
       </View>
     </View>
   );

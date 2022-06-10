@@ -1,3 +1,4 @@
+import { Feather } from "@expo/vector-icons";
 import { nanoid } from "@reduxjs/toolkit";
 import { useContext, useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
@@ -61,7 +62,6 @@ export const AddTags = () => {
     setPressedTags([...removeTag]);
   };
 
-  // combine next two functions ans pass onPress prop
   const renderSelectableItem = ({ item }: TagObject) => {
     return (
       <Pressable onPress={() => selectableOnPress(item.tagLabel)}>
@@ -81,8 +81,14 @@ export const AddTags = () => {
           tagLabel={item.tagLabel}
           tagColor={item.tagColor}
           tagIcon={item.tagIcon}
-          isRemovable={true}
-        />
+        >
+          <Feather
+            name="x-square"
+            size={12}
+            color="black"
+            style={{ paddingTop: 2, paddingLeft: 2, paddingRight: 5 }}
+          />
+        </Tag>
       </Pressable>
     );
   };

@@ -55,9 +55,9 @@ export type TagProps = {
   tagLabel: any;
   tagColor: string | undefined;
   tagIcon?: string | undefined;
-  isRemovable?: boolean;
   pressedTags?: string[];
   extraStyleProps?: TagStyleProps;
+  children?: any;
 };
 
 type TagStyleProps = {
