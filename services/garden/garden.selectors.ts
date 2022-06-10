@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
-import { VeggieLog } from "../types";
+import { Bed, Garden, Veggie, VeggieLog } from "../types";
 import { veggieInfoSelectors } from "../veggieInfo/veggieInfoSlice";
 
 const selectGardens = (state: RootState) => state.gardens;
@@ -30,11 +30,11 @@ const selectGlobalLogs = createSelector(
   (gardensList) => {
     const gardens = gardensList;
 
-    const logs: any[] = [];
-    gardens.map((gardens: any) =>
-      gardens.beds?.map((bed: any) =>
-        bed.veggies?.map((veg: any) =>
-          veg.logs.forEach((e: any) => logs.push(e))
+    const logs: VeggieLog[] = [];
+    gardens.map((gardens: Garden) =>
+      gardens.beds?.map((bed: Bed) =>
+        bed.veggies?.map((veg: Veggie) =>
+          veg.logs.forEach((e: VeggieLog) => logs.push(e))
         )
       )
     );
