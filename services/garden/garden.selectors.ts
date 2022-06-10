@@ -19,6 +19,29 @@ const selectBed = createSelector(
   (garden, bedId) => garden?.beds?.find((bed) => bed.id === bedId)
 );
 
+const selectGlobalLogs = createSelector(
+  [
+    // Usual first input - extract value from `state`
+    (state) => state.gardens,
+    // Take the second arg, `category`, and forward to the output selector
+    (gardens) => gardens,
+  ],
+  // Output selector gets (`items, category)` as args
+  (gardensList) => {
+    const gardens = gardensList;
+
+    const logs: any[] = [];
+    gardens.map((gardens: any) =>
+      gardens.beds?.map((bed: any) =>
+        bed.veggies?.map((veg: any) =>
+          veg.logs.forEach((e: any) => logs.push(e))
+        )
+      )
+    );
+    return logs;
+  }
+);
+
 const selectBedWithVeggieInfo = createSelector(
   [
     veggieInfoSelectors.selectVeggieInfos,
@@ -105,6 +128,7 @@ export const gardenSelectors = {
   selectBed,
   selectBedWithVeggieInfo,
   selectVeggie,
+  selectGlobalLogs,
   selectVeggieWithSortedLogs,
   selectVeggieLog,
 };

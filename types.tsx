@@ -65,6 +65,7 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 export type RootTabParamList = {
   GardenTab: NavigatorScreenParams<GardenTabParamList>;
   VeggiesTab: NavigatorScreenParams<VeggiesTabParamList>;
+  TimelineTab: NavigatorScreenParams<TimelineTabParamList>;
   CalendarTab: NavigatorScreenParams<CalendarTabParamList>;
   SettingsTab: NavigatorScreenParams<SettingsTabParamList>;
 };
@@ -91,7 +92,7 @@ export type GardenTabParamList = {
     veggieId: string;
   };
   //fix type below
-  TimelineScreen: { veggieLogs: VeggieLog[] | undefined };
+  VeggieTimelineScreen: { veggieLogs: VeggieLog[] | undefined };
 };
 
 export type GardenTabScreenProps<Screen extends keyof GardenTabParamList> =
@@ -111,6 +112,20 @@ export type VeggiesTabParamList = {
 export type VeggiesTabScreenProps<Screen extends keyof VeggiesTabParamList> =
   CompositeScreenProps<
     BottomTabScreenProps<VeggiesTabParamList, Screen>,
+    RootStackScreenProps<keyof RootStackParamList>
+  >;
+
+/**
+ * Timeline Tab
+ */
+
+export type TimelineTabParamList = {
+  TimelineTabScreen: { screen: undefined };
+};
+
+export type TimelineTabScreenProps<Screen extends keyof TimelineTabParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<TimelineTabParamList, Screen>,
     RootStackScreenProps<keyof RootStackParamList>
   >;
 

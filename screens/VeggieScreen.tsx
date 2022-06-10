@@ -89,7 +89,7 @@ export const VeggieScreen = ({
           />
           <Pressable
             onPress={() =>
-              navigation.navigate("TimelineScreen", {
+              navigation.navigate("VeggieTimelineScreen", {
                 veggieLogs,
               })
             }

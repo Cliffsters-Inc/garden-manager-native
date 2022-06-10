@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   NavigationContainer,
@@ -28,6 +28,7 @@ import {
   RootStackParamList,
   RootTabParamList,
   SettingsTabParamList,
+  TimelineTabParamList,
   VeggiesTabParamList,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
@@ -44,6 +45,8 @@ import { EditVeggieLogModal } from "../screens/EditVeggieLogModal";
 import { TimelineScreen } from "../screens/TimelineScreen";
 import { pressedTagsContext } from "../services/context";
 import { TagProps } from "../services/types";
+import { TimelineTabScreen } from "../screens/TimelineTabScreen";
+import { VeggieTimelineScreen } from "../screens/VeggieTimelineScreen";
 
 export default function Navigation({
   colorScheme,
@@ -187,6 +190,21 @@ function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
+        name="TimelineTab"
+        component={TimelineTabNavigator}
+        options={() => ({
+          title: "Timeline",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name="timeline-clock-outline"
+              size={29}
+              color={color}
+              style={{ marginBottom: -3 }}
+            />
+          ),
+        })}
+      />
+      <BottomTab.Screen
         name="CalendarTab"
         component={CalendarTabNavigator}
         options={() => ({
@@ -234,8 +252,8 @@ function GardenTabNavigator() {
         options={{ title: "Veggie" }}
       />
       <GardenStack.Screen
-        name="TimelineScreen"
-        component={TimelineScreen}
+        name="VeggieTimelineScreen"
+        component={VeggieTimelineScreen}
         options={{ title: "Timeline" }}
       />
     </GardenStack.Navigator>
@@ -261,6 +279,20 @@ function VeggiesTabNavigator() {
         })}
       />
     </VeggiesStack.Navigator>
+  );
+}
+
+const TimelineStack = createNativeStackNavigator<TimelineTabParamList>();
+
+function TimelineTabNavigator() {
+  return (
+    <TimelineStack.Navigator>
+      <TimelineStack.Screen
+        name="TimelineTabScreen"
+        component={TimelineTabScreen}
+        options={{ title: "Timeline" }}
+      />
+    </TimelineStack.Navigator>
   );
 }
 
