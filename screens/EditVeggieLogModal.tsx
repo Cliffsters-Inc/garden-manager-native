@@ -105,16 +105,8 @@ export const EditVeggieLogModal = ({
 
   const dateCalFormatted = format(new Date(date), "yyyy-MM-dd");
 
-  const logTagCon = () => {
-    console.log("payloadTags: ", payloadTags);
-    console.log("loggy: ", log?.payloadTags);
-    console.log("log Tags: ", logTags);
-    console.log("change: ", tagChange);
-  };
-
   return (
     <View style={styles.container}>
-      <Button title="logTagCon" onPress={logTagCon} />
       <View>
         {calendarVisible ? (
           <View style={styles.calendar}>

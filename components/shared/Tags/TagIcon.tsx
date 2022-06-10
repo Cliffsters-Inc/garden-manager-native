@@ -46,10 +46,7 @@ export const TagIcon = ({ iconColor, selectedIcon }: Props) => {
     },
   ];
 
-  // const selectedIconName = "seed";
   const Icon = iconList.find((icon) => icon.name === selectedIcon);
-  // const selectedIconName = "seed";
-  // const Icon = iconList.find((icon) => icon.name === selectedIconName);
 
   return <View>{Icon?.icon}</View>;
 };

@@ -2,7 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { nanoid } from "@reduxjs/toolkit";
 import { useContext, useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
-import { Button, Divider } from "react-native-elements";
+import { Divider } from "react-native-elements";
 import { pressedTagsContext } from "../../../services/context";
 import { TagObject, TagProps } from "../../../services/types";
 import { Text, View } from "../../Themed";
@@ -18,7 +18,6 @@ export const AddTags = () => {
   // ***type error*** I set type in index.tsx L-70, why is it any below?
   const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
   const [combinedTagsList, setCombinedTagsList] = useState<TagProps[]>([]);
-  //   const [pressedTagObjectState, setPressedTagObjectState] = useState([]);
   const [selectableTags, setSelectableTags] = useState<TagProps[]>([]);
   const [selectedTags, setSelectedTags] = useState<TagProps[]>([]);
 
@@ -32,7 +31,6 @@ export const AddTags = () => {
     const filteredList = combinedTagsList.filter((tag: TagProps) => {
       return !pressedTags.some((t: TagProps) => t.tagLabel === tag?.tagLabel);
     });
-    console.log("filteredList: ", filteredList);
     setSelectableTags(filteredList);
   }, [pressedTags, combinedTagsList]);
 
@@ -51,13 +49,10 @@ export const AddTags = () => {
     // ***type error***
     const pressedTagObject: any = AddTagToList(pressedTags, tag);
     setPressedTags(pressedTagObject);
-    // setPressedTagObjectState(pressedTagObject);
-    // setPressedTags(AddTagToList(pressedTags, tag));
   };
 
   const selectedOnPress = (tag: string) => {
     console.log("selectedOnPress");
-    // setPressedTags(RemoveTagFromList(pressedTags, tag));
     const removeTag = RemoveTagFromList(pressedTags, tag);
     setPressedTags([...removeTag]);
   };
@@ -93,14 +88,8 @@ export const AddTags = () => {
     );
   };
 
-  const con = () => {
-    console.log("AddTags: Pressed", pressedTags);
-    console.log("AddTags: Selected", selectedTags);
-  };
-
   return (
     <View style={styles.container}>
-      <Button title={"AddCon"} onPress={con} />
       <FlatList
         data={selectedTags}
         keyExtractor={() => nanoid()}
@@ -116,20 +105,7 @@ export const AddTags = () => {
           horizontal={true}
           renderItem={renderSelectableItem}
         />
-
         <Divider style={{ paddingTop: 30 }} />
-        {/* <Text
-          style={styles.createButton}
-          onPress={() =>
-            navigation.navigate("CreateTagModal", {
-              // selectedGardenId,
-              selectedBedId,
-              veggieId,
-            })
-          }
-        >
-          Create New Tag
-        </Text> */}
       </View>
     </View>
   );

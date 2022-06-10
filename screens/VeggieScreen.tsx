@@ -8,7 +8,6 @@ import { VeggieNotesField } from "../components/VeggieNotesField";
 import { ActionButton } from "../components/shared/ActionButton";
 import { useState } from "react";
 import { SortBtn } from "../components/shared/SortBtn";
-import { Button } from "react-native-elements";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TagObject } from "../services/types";
 import { Tag } from "../components/shared/Tags/TagElement";

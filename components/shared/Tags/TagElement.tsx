@@ -1,5 +1,3 @@
-import { Feather } from "@expo/vector-icons";
-import { Children } from "react";
 import { StyleSheet } from "react-native";
 import { TagProps } from "../../../services/types";
 import { Text, View } from "../../Themed";
