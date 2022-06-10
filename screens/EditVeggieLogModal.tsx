@@ -31,7 +31,7 @@ export const EditVeggieLogModal = ({
 
   const [date, setDate] = useState(log?.date ?? Date.now());
   const [notes, setNotes] = useState(log?.notes ?? "");
-  const [logTags, setLogTags] = useState(log?.payloadTags);
+  const [logTags, setLogTags] = useState<TagProps[]>([...log?.payloadTags]);
 
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
@@ -40,12 +40,16 @@ export const EditVeggieLogModal = ({
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const selectorLogs = logTags;
+    const selectorLogs = [...logTags];
     // setPressedTags(selectorLogs);
 
-    const tempLogsList = selectorLogs?.map((tag) => tag);
-    setPressedTags(tempLogsList);
+    // const tempLogsList = selectorLogs?.map((tag) => tag);
+    setPressedTags(selectorLogs);
   }, []);
+
+  useEffect(() => {
+    setPayloadTags([...pressedTags]);
+  }, [pressedTags]);
 
   const handleUpdate = () => {
     if (log)
@@ -75,7 +79,8 @@ export const EditVeggieLogModal = ({
   };
 
   useLayoutEffect(() => {
-    const logChanged = notes !== log?.notes || date !== log?.date;
+    const logChanged =
+      notes !== log?.notes || date !== log?.date || payloadTags !== logTags;
     const goBackAndClear = () => {
       setPressedTags([]);
       navigation.goBack();
@@ -87,12 +92,13 @@ export const EditVeggieLogModal = ({
         logChanged ? <Button title="Done" onPress={handleUpdate} /> : null,
       headerLeft: () => <Button title="Cancel" onPress={goBackAndClear} />,
     });
-  }, [navigation, date, notes]);
+  }, [navigation, date, notes, payloadTags]);
 
   const dateCalFormatted = format(new Date(date), "yyyy-MM-dd");
 
   const logTagCon = () => {
     console.log("logTags: ", logTags);
+    console.log("payloadTags: ", payloadTags);
   };
 
   return (

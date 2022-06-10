@@ -25,7 +25,8 @@ export const NewVeggieLogModalScreen = ({
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    setPayloadTags(pressedTags?.map((pressedTag: string) => pressedTag));
+    setPayloadTags([...pressedTags]);
+    console.log("addPayload");
   }, [pressedTags]);
 
   const handleSubmit = () => {
