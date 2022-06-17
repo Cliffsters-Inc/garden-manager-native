@@ -17,7 +17,7 @@ export const convertToTag = (tag: string) => {
     case "disease":
       return {
         tagLabel: tag,
-        tagColor: "#FFEC5C",
+        tagColor: "#633c15",
         tagIcon: "disease",
       };
     case "sowed":

@@ -22,21 +22,47 @@ export const testGardenState: Garden[] = [
                 id: nanoid(),
                 date: 1654910862301,
                 notes:
-                  "Pariatur mollit voluptate deserunt nisi reprehenderit consectetur anim laboris elit fugiat veniam proident aliqua esse. Sunt nisi dolore ex quis consectetur ullamco culpa excepteur ea officia laborum esse laborum labore.",
+                  "Sunt nisi dolore ex quis consectetur ullamco culpa excepteur ea officia laborum esse laborum labore.",
                 payloadTags: [
-                  { tagLabel: "pests", tagColor: "#FF5A33", tagIcon: "pests" },
+                  { tagLabel: "pests", tagColor: "#FF5A33", tagIcon: "pest" },
                 ],
               },
               {
                 id: nanoid(),
-                date: 1654910862301,
+                date: 1654910000000,
                 notes:
-                  "Pariatur mollit voluptate deserunt nisi reprehenderit consectetur anim laboris elit fugiat veniam proident aliqua esse. Sunt nisi dolore ex quis consectetur ullamco culpa excepteur ea officia laborum esse laborum labore. Pariatur fugiat tempor anim sunt pariatur. Ea ea labore in reprehenderit et amet. Id nulla voluptate in incididunt voluptate ut aliqua ex ut mollit reprehenderit magna. Magna consectetur irure laborum id qui aute ullamco incididunt. Elit officia ut pariatur minim.",
+                  "Reprehenderit consectetur anim laboris elit fugiat veniam proident aliqua esse. Sunt nisi dolore ex quis consectetur ullamco culpa excepteur ea officia laborum esse laborum labore. Pariatur fugiat tempor anim sunt pariatur. Ea ea labore in reprehenderit et amet. Id nulla voluptate in incididunt voluptate ut aliqua ex ut mollit reprehenderit magna. Magna consectetur irure laborum id qui aute ullamco incididunt. Elit officia ut pariatur minim.",
                 payloadTags: [
                   {
                     tagLabel: "disease",
-                    tagColor: "#FF5A33",
+                    tagColor: "#633c15",
                     tagIcon: "disease",
+                  },
+                ],
+              },
+              {
+                id: nanoid(),
+                date: 1655010000000,
+                notes:
+                  "Pariatur mollit voluptate deserunt nisi reprehenderit consectetur anim laboris elit fugiat veniam proident aliqua esse.",
+                payloadTags: [
+                  {
+                    tagLabel: "sowed",
+                    tagColor: "#B4CF66",
+                    tagIcon: "seed",
+                  },
+                ],
+              },
+              {
+                id: nanoid(),
+                date: 165310000000,
+                notes:
+                  "Pariatur mollit voluptate deserunt nisi reprehenderit consectetur anim laboris elit fugiat veniam proident aliqua esse.",
+                payloadTags: [
+                  {
+                    tagLabel: "seedling",
+                    tagColor: "#44803F",
+                    tagIcon: "seedling",
                   },
                 ],
               },
