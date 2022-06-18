@@ -1,20 +1,15 @@
 import { StyleSheet } from "react-native";
 import { TimelineTabScreenProps } from "../types";
-import { View } from "../components/Themed";
-import { TimelineScreen } from "./TimelineScreen";
+import { useAppSelector } from "../store";
+import { gardenSelectors } from "../services/garden/garden.selectors";
+import { TimelineElement } from "../components/shared/TimelineElement";
 
 export const TimelineTabScreen = ({
   navigation,
 }: TimelineTabScreenProps<"TimelineTabScreen">) => {
-  return (
-    <View style={styles.container}>
-      <TimelineScreen />
-    </View>
+  const globalLogs = useAppSelector((state) =>
+    gardenSelectors.selectGlobalLogs(state)
   );
-};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+  return <TimelineElement dataToMap={globalLogs} />;
+};

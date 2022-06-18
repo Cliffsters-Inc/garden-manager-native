@@ -47,7 +47,7 @@ export type VeggieLog = {
   date: number;
   notes?: string;
   photos?: string[];
-  payloadTags: TagProps[];
+  payloadTags?: TagProps[];
 };
 
 export type TagProps = {

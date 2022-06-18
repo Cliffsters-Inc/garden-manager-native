@@ -1,4 +1,5 @@
 import {
+  FontAwesome,
   FontAwesome5,
   Ionicons,
   MaterialCommunityIcons,
@@ -7,12 +8,16 @@ import { format } from "date-fns";
 import { useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
 import Timeline from "react-native-timeline-flatlist";
-import { Text, View } from "../components/Themed";
-import { gardenSelectors } from "../services/garden/garden.selectors";
-import { VeggieLog } from "../services/types";
-import { useAppSelector } from "../store";
+import { VeggieLog } from "../../services/types";
+import { Text, View } from "../Themed";
 
-export const TimelineScreen = () => {
+type Props = {
+  //Fix type any below****************************
+  dataToMap: any[];
+  // dataToMap: VeggieLog[]
+};
+
+export const TimelineElement = ({ dataToMap }: Props) => {
   const [showAllText, setShowAllText] = useState<{ [key: string]: boolean }>(
     {}
   );
@@ -33,6 +38,8 @@ export const TimelineScreen = () => {
         );
       case "seedling":
         return <FontAwesome5 name="seedling" size={20} color="#44803F" />;
+      case "none":
+        return <FontAwesome name="circle-o" size={20} color="black" />;
     }
   };
 
@@ -56,19 +63,20 @@ export const TimelineScreen = () => {
     );
   };
 
-  const logs = useAppSelector((state) =>
-    gardenSelectors.selectGlobalLogs(state)
-  );
-
-  const timelineData = logs?.map((value, i: number) => ({
+  //Fix type any below****************************
+  const timelineData = dataToMap?.map((value, i: number) => ({
     time: format(new Date(value.date), "d MMM yy"),
     // title: i,
     description: descriptionElement(value, i.toString()),
-    icon: assignTag(value.payloadTags[0].tagLabel),
+
+    icon:
+      value.payloadTags.length > 0
+        ? assignTag(value.payloadTags[0].tagLabel)
+        : assignTag("none"),
     // lineColor: value.payloadTags[0].tagColor,
   }));
-
-  return (
+  console.log("data", dataToMap);
+  return dataToMap.length > 0 ? (
     <View style={styles.container}>
       <Timeline
         data={timelineData}
@@ -83,6 +91,10 @@ export const TimelineScreen = () => {
         // separator={true}
         // columnFormat="two-column"
       />
+    </View>
+  ) : (
+    <View>
+      <Text>No Logs have been created yet</Text>
     </View>
   );
 };

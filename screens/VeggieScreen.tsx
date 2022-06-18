@@ -29,7 +29,7 @@ export const VeggieScreen = ({
     )
   );
 
-  const veggieLogs = veggie.logs;
+  const veggieLogs = veggie?.logs;
 
   const renderDisplayTag = ({ item }: TagObject) => (
     <Tag
