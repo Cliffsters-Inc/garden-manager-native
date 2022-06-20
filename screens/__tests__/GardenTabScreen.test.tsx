@@ -1,9 +1,8 @@
-import { renderApp, fireEvent, waitFor } from "../../testing/test-utils";
+import { renderApp, fireEvent } from "../../testing/test-utils";
 
 describe("<GardenTabScreen />", () => {
   it("can add a new garden", async () => {
-    const { findByText, getByText, getAllByText, getByPlaceholderText } =
-      renderApp();
+    const { findByText, getAllByText, getByPlaceholderText } = renderApp();
 
     const addGardenBtn = await findByText(/add garden/i);
     fireEvent.press(addGardenBtn);
@@ -14,7 +13,7 @@ describe("<GardenTabScreen />", () => {
     const doneBtn = getAllByText(/done/i)[0];
     fireEvent.press(doneBtn);
 
-    const newGarden = await waitFor(() => getByText("TestGarden123"));
+    const newGarden = await findByText("TestGarden123");
 
     expect(newGarden).toBeDefined();
   });
@@ -22,11 +21,11 @@ describe("<GardenTabScreen />", () => {
   it("can rename a garden", async () => {
     const {
       getByText,
-      findByTestId,
       getByDisplayValue,
       getAllByText,
       findByText,
       getByPlaceholderText,
+      getByTestId,
     } = renderApp();
 
     // creates new garden
@@ -36,11 +35,9 @@ describe("<GardenTabScreen />", () => {
     fireEvent.changeText(gardenNameField, "TestGarden123");
     const createGardenDoneBtn = getAllByText(/done/i)[0];
     fireEvent.press(createGardenDoneBtn);
-    await waitFor(() => getByText("TestGarden123"));
+    await findByText("TestGarden123");
 
-    const cardEditBtn = await findByTestId(
-      "custom-card-edit-btn-TestGarden123"
-    );
+    const cardEditBtn = getByTestId("custom-card-edit-btn-TestGarden123");
     fireEvent.press(cardEditBtn);
 
     const renameBtn = getByText(/rename/i);
@@ -52,7 +49,7 @@ describe("<GardenTabScreen />", () => {
     const doneBtn = getAllByText(/done/i)[0];
     fireEvent.press(doneBtn);
 
-    const updatedGarden = await waitFor(() => getByText(/UpdatedGarden123/i));
+    const updatedGarden = await findByText(/UpdatedGarden123/i);
     expect(updatedGarden).toBeDefined();
   });
 
@@ -64,7 +61,6 @@ describe("<GardenTabScreen />", () => {
       queryByText,
       getByPlaceholderText,
       getByTestId,
-      findByTestId,
     } = renderApp();
 
     // creates new garden
@@ -74,11 +70,9 @@ describe("<GardenTabScreen />", () => {
     fireEvent.changeText(gardenNameField, "TestGarden123");
     const createGardenDoneBtn = getAllByText(/done/i)[0];
     fireEvent.press(createGardenDoneBtn);
-    await waitFor(() => getByText("TestGarden123"));
+    await findByText("TestGarden123");
 
-    const cardEditBtn = await findByTestId(
-      "custom-card-edit-btn-TestGarden123"
-    );
+    const cardEditBtn = getByTestId("custom-card-edit-btn-TestGarden123");
     fireEvent.press(cardEditBtn);
 
     const deleteBtn = getByText(/delete/i);
