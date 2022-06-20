@@ -29,7 +29,7 @@ export const VeggieScreen = ({
     )
   );
 
-  const veggieLogs = veggie.logs;
+  const veggieLogs = veggie?.logs;
 
   const renderDisplayTag = ({ item }: TagObject) => (
     <Tag
@@ -89,7 +89,7 @@ export const VeggieScreen = ({
           />
           <Pressable
             onPress={() =>
-              navigation.navigate("TimelineScreen", {
+              navigation.navigate("VeggieTimelineScreen", {
                 veggieLogs,
               })
             }

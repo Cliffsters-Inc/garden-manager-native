@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
-import { VeggieLog } from "../types";
+import { Bed, Garden, Veggie, VeggieLog } from "../types";
 import { veggieInfoSelectors } from "../veggieInfo/veggieInfoSlice";
 
 const selectGardens = (state: RootState) => state.gardens;
@@ -17,6 +17,29 @@ const selectBed = createSelector(
     (_state: RootState, _gardenId: string, bedId: string) => bedId,
   ],
   (garden, bedId) => garden?.beds?.find((bed) => bed.id === bedId)
+);
+
+const selectGlobalLogs = createSelector(
+  [
+    // Usual first input - extract value from `state`
+    (state) => state.gardens,
+    // Take the second arg, `category`, and forward to the output selector
+    (gardens) => gardens,
+  ],
+  // Output selector gets (`items, category)` as args
+  (gardensList) => {
+    const gardens = gardensList;
+
+    const logs: VeggieLog[] = [];
+    gardens.map((gardens: Garden) =>
+      gardens.beds?.map((bed: Bed) =>
+        bed.veggies?.map((veg: Veggie) =>
+          veg.logs.forEach((e: VeggieLog) => logs.push(e))
+        )
+      )
+    );
+    return logs;
+  }
 );
 
 const selectBedWithVeggieInfo = createSelector(
@@ -105,6 +128,7 @@ export const gardenSelectors = {
   selectBed,
   selectBedWithVeggieInfo,
   selectVeggie,
+  selectGlobalLogs,
   selectVeggieWithSortedLogs,
   selectVeggieLog,
 };

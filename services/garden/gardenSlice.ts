@@ -1,10 +1,12 @@
+import { testGardenState } from "./../../TESTDATA_deleteBeforeProduction/testData";
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
 import { initialGardenState } from "./initialGardenState";
 import { VeggieInfo, VeggieLog } from "../types";
 
 export const gardenSlice = createSlice({
   name: "gardens",
-  initialState: initialGardenState,
+  initialState: testGardenState,
+  // initialState: initialGardenState,
   reducers: {
     addGarden: (gardens, action: PayloadAction<{ name: string }>) => {
       const { payload } = action;
