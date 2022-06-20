@@ -47,8 +47,25 @@ export type VeggieLog = {
   date: number;
   notes?: string;
   photos?: string[];
-  soilDescription?: string;
-  phLevel?: number;
+  payloadTags: TagProps[];
+};
+
+export type TagProps = {
+  //***type error***
+  tagLabel: any;
+  tagColor: string | undefined;
+  tagIcon?: string | undefined;
+  pressedTags?: string[];
+  extraStyleProps?: TagStyleProps;
+  children?: any;
+};
+
+type TagStyleProps = {
+  label?: object;
+};
+
+export type TagObject = {
+  item: TagProps;
 };
 
 export type VeggieInfo = {

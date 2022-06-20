@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { Button, Pressable, StyleSheet, TextInput } from "react-native";
 import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
@@ -8,12 +8,16 @@ import { gardenActions } from "../services/garden/gardenSlice";
 import { gardenSelectors } from "../services/garden/garden.selectors";
 import { Calendar } from "../components/shared/Calendar";
 import { CrossBtn } from "../components/shared/CrossBtn";
+import { AddTags } from "../components/shared/Tags/AddTags";
+import { pressedTagsContext } from "../services/context";
+import { TagProps } from "../services/types";
 
 export const EditVeggieLogModal = ({
   navigation,
   route,
 }: RootStackScreenProps<"EditVeggieLogModal">) => {
   const { selectedGardenId, selectedBedId, veggieId, logId } = route.params;
+
   const log = useAppSelector((state) =>
     gardenSelectors.selectVeggieLog(
       state,
@@ -23,14 +27,27 @@ export const EditVeggieLogModal = ({
       logId
     )
   );
+  const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
+  const [payloadTags, setPayloadTags] = useState<TagProps[]>([]);
+  const [logTags, setLogTags] = useState([...(log?.payloadTags || [])]);
+  const [tagChange, setTagChange] = useState(false);
+
   const [date, setDate] = useState(log?.date ?? Date.now());
   const [notes, setNotes] = useState(log?.notes ?? "");
-
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const selectorLogs = [...logTags];
+    setPressedTags(selectorLogs);
+  }, []);
+
+  useEffect(() => {
+    setPayloadTags([...pressedTags]);
+  }, [pressedTags]);
 
   const handleUpdate = () => {
     if (log)
@@ -39,9 +56,10 @@ export const EditVeggieLogModal = ({
           selectedGardenId,
           selectedBedId,
           veggieId,
-          updatedLog: { id: log.id, date, notes },
+          updatedLog: { id: log.id, date, notes, payloadTags },
         })
       );
+    setPressedTags([]);
     navigation.goBack();
   };
 
@@ -58,14 +76,32 @@ export const EditVeggieLogModal = ({
     navigation.goBack();
   };
 
+  // useEffect(() => {
+  //   if (logTags !== pressedTags || null) {
+  //     console.log("**Tag Change**");
+  //     setTagChange(true);
+  //   } else {
+  //     setTagChange(false);
+  //   }
+  // }, [pressedTags]);
+
   useLayoutEffect(() => {
-    const logChanged = notes !== log?.notes || date !== log?.date;
+    const logChanged =
+      notes !== log?.notes ||
+      date !== log?.date ||
+      payloadTags !== log?.payloadTags;
+    const goBackAndClear = () => {
+      setPressedTags([]);
+      navigation.goBack();
+    };
 
     navigation.setOptions({
       headerRight: () =>
+        //logChanged will nedd to be converted to recognise tag changes
         logChanged ? <Button title="Done" onPress={handleUpdate} /> : null,
+      headerLeft: () => <Button title="Cancel" onPress={goBackAndClear} />,
     });
-  }, [navigation, date, notes]);
+  }, [navigation, date, notes, payloadTags]);
 
   const dateCalFormatted = format(new Date(date), "yyyy-MM-dd");
 
@@ -102,6 +138,7 @@ export const EditVeggieLogModal = ({
           style={styles.notesContainer}
         />
       </View>
+      <AddTags />
       {deleteConfirmationVisible ? (
         <View>
           <Text style={{ textAlign: "center", fontWeight: "bold", margin: 5 }}>
