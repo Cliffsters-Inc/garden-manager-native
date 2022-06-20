@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 import { TimelineTabScreenProps } from "../types";
 import { useAppSelector } from "../store";
 import { gardenSelectors } from "../services/garden/garden.selectors";

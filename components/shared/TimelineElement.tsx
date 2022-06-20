@@ -22,8 +22,8 @@ export const TimelineElement = ({ dataToMap }: Props) => {
     {}
   );
 
-  const assignTag = (tagName: string) => {
-    switch (tagName) {
+  const assignIcon = (iconName: string) => {
+    switch (iconName) {
       case "pests":
         return <Ionicons name="ios-bug-outline" size={20} color={"#FF5A33"} />;
       case "disease":
@@ -38,7 +38,7 @@ export const TimelineElement = ({ dataToMap }: Props) => {
         );
       case "seedling":
         return <FontAwesome5 name="seedling" size={20} color="#44803F" />;
-      case "none":
+      case "generic":
         return <FontAwesome name="circle-o" size={20} color="black" />;
     }
   };
@@ -71,11 +71,10 @@ export const TimelineElement = ({ dataToMap }: Props) => {
 
     icon:
       value.payloadTags.length > 0
-        ? assignTag(value.payloadTags[0].tagLabel)
-        : assignTag("none"),
-    // lineColor: value.payloadTags[0].tagColor,
+        ? assignIcon(value.payloadTags[0].tagLabel)
+        : assignIcon("generic"),
   }));
-  console.log("data", dataToMap);
+
   return dataToMap.length > 0 ? (
     <View style={styles.container}>
       <Timeline
@@ -88,8 +87,6 @@ export const TimelineElement = ({ dataToMap }: Props) => {
         timeContainerStyle={styles.timeContainer}
         descriptionStyle={styles.description}
         detailContainerStyle={styles.detailContainer}
-        // separator={true}
-        // columnFormat="two-column"
       />
     </View>
   ) : (
@@ -104,7 +101,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     width: "100%",
-    marginLeft: 30,
   },
   list: {
     flex: 1,
