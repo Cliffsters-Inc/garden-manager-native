@@ -8,6 +8,7 @@ export const Tag = ({
   tagColor,
   tagIcon,
   extraStyleProps,
+  children,
 }: TagProps) => {
   return (
     <View style={styles.container}>
@@ -16,6 +17,7 @@ export const Tag = ({
       </View>
       <View style={[styles.textContainer, { backgroundColor: tagColor }]}>
         <Text style={[styles.label, extraStyleProps?.label]}>{tagLabel}</Text>
+        {children}
       </View>
     </View>
   );

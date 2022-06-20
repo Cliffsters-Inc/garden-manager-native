@@ -1,3 +1,6 @@
+import { ReactElement } from "react";
+import { Icon } from "react-native-vector-icons/Icon";
+
 type Months =
   | "JAN"
   | "FEB"
@@ -57,7 +60,7 @@ export type TagProps = {
   tagIcon?: string | undefined;
   pressedTags?: string[];
   extraStyleProps?: TagStyleProps;
-  children?: any;
+  children?: ReactElement<Icon>;
 };
 
 type TagStyleProps = {
