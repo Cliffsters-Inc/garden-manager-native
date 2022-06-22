@@ -10,6 +10,7 @@ import { CrossBtn } from "../components/shared/CrossBtn";
 import { pressedTagsContext } from "../services/context";
 import { TagProps } from "../services/types";
 import { AddTags } from "../components/shared/Tags/AddTags";
+import { CameraModal } from "./CameraModal";
 
 export const NewVeggieLogModalScreen = ({
   navigation,
@@ -88,6 +89,16 @@ export const NewVeggieLogModalScreen = ({
         style={styles.notesContainer}
       />
       <AddTags />
+      <Button
+        title="Add Picture"
+        onPress={() =>
+          navigation.navigate("CameraModal", {
+            selectedGardenId,
+            selectedBedId,
+            veggieId,
+          })
+        }
+      />
     </View>
   );
 };

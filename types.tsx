@@ -54,6 +54,12 @@ export type RootStackParamList = {
     title?: string;
   };
   DeleteConfirmationModal: { selectedGardenId: string; selectedBedId?: string };
+  CameraModal: {
+    selectedGardenId: string;
+    selectedBedId: string;
+    veggieId: string;
+    logId?: string;
+  };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

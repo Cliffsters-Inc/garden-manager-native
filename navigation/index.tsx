@@ -42,11 +42,11 @@ import { DeleteConfirmationModalScreen } from "../screens/DeleteConfirmationModa
 import { CreateCardModalScreen } from "../screens/CreateCardModalScreen.tsx";
 import { RenameCardModalScreen } from "../screens/RenameCardModalScreen";
 import { EditVeggieLogModal } from "../screens/EditVeggieLogModal";
-import { TimelineScreen } from "../screens/TimelineScreen";
 import { pressedTagsContext } from "../services/context";
 import { TagProps } from "../services/types";
 import { TimelineTabScreen } from "../screens/TimelineTabScreen";
 import { VeggieTimelineScreen } from "../screens/VeggieTimelineScreen";
+import { CameraModal } from "../screens/CameraModal";
 
 export default function Navigation({
   colorScheme,
@@ -147,6 +147,15 @@ function RootNavigator() {
               headerShown: false,
               presentation: "transparentModal",
             }}
+          />
+          <Stack.Screen
+            name="CameraModal"
+            component={CameraModal}
+            options={({ navigation }) => ({
+              headerLeft: () => (
+                <Button title="Cancel" onPress={navigation.goBack} />
+              ),
+            })}
           />
         </Stack.Group>
       </Stack.Navigator>
