@@ -1,18 +1,27 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  MutableRefObject,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
-import { Camera } from "expo-camera";
+import { Camera, CameraCapturedPicture } from "expo-camera";
 import { Button } from "react-native-elements";
 
 export const CameraModal = ({
   navigation,
   route,
 }: RootStackScreenProps<"CameraModal">) => {
+  let camera: Camera | null;
   const { selectedGardenId, selectedBedId, veggieId } = route.params;
   const [hasCameraPermission, setHasCameraPermission] = useState<
     null | boolean
   >(null);
+  const [photo, setPhoto] = useState<string>();
+  const [photoTaken, setPhotoTaken] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -28,15 +37,43 @@ export const CameraModal = ({
     return <Text>No access to camera. Please check settings.</Text>;
   }
 
+  let takePic = async () => {
+    let options = {
+      quality: 1,
+      base64: true,
+      exif: false,
+    };
+
+    const newPhoto: CameraCapturedPicture = await camera!.takePictureAsync(
+      options
+    );
+    setPhoto(newPhoto.uri);
+    if (photo !== "" || undefined) {
+      setPhotoTaken((prev) => !prev);
+    }
+  };
+
+  const con = () => {
+    console.log("photo ", photo);
+    console.log("photoTaken ", photoTaken);
+  };
+
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera}>
+      <Camera
+        style={styles.camera}
+        ref={(r) => {
+          camera = r;
+        }}
+      >
         <Button
           // size="lg"
           buttonStyle={styles.buttonStyle}
           containerStyle={styles.buttonContainer}
+          onPress={takePic}
         />
       </Camera>
+      <Button title={"con"} onPress={con} />
     </View>
   );
 };
