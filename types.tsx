@@ -60,6 +60,10 @@ export type RootStackParamList = {
     veggieId: string;
     logId?: string;
   };
+  PicturePreview: {
+    photo: string;
+    resumePreview: any;
+  };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

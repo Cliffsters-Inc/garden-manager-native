@@ -47,6 +47,7 @@ import { TagProps } from "../services/types";
 import { TimelineTabScreen } from "../screens/TimelineTabScreen";
 import { VeggieTimelineScreen } from "../screens/VeggieTimelineScreen";
 import { CameraModal } from "../screens/CameraModal";
+import { PicturePreview } from "../components/PicturePreview";
 
 export default function Navigation({
   colorScheme,
@@ -148,16 +149,23 @@ function RootNavigator() {
               presentation: "transparentModal",
             }}
           />
-          <Stack.Screen
-            name="CameraModal"
-            component={CameraModal}
-            options={({ navigation }) => ({
-              headerLeft: () => (
-                <Button title="Cancel" onPress={navigation.goBack} />
-              ),
-            })}
-          />
         </Stack.Group>
+        <Stack.Screen
+          name="CameraModal"
+          component={CameraModal}
+          // options={({ navigation }) => ({
+          //   headerLeft: () => (
+          //     <Button title="Cancel" onPress={navigation.goBack} />
+          //   ),
+          // })}
+        />
+        <Stack.Screen
+          name="PicturePreview"
+          component={PicturePreview}
+          options={({ navigation, route }) => ({
+            headerShown: false,
+          })}
+        />
       </Stack.Navigator>
     </pressedTagsContext.Provider>
   );

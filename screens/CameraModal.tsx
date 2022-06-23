@@ -20,8 +20,8 @@ export const CameraModal = ({
   const [hasCameraPermission, setHasCameraPermission] = useState<
     null | boolean
   >(null);
-  const [photo, setPhoto] = useState<string>();
-  const [photoTaken, setPhotoTaken] = useState(false);
+  const [photo, setPhoto] = useState<string>("");
+  const [pausePreview, setPausePreview] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -29,36 +29,59 @@ export const CameraModal = ({
       setHasCameraPermission(status === "granted");
     })();
   }, []);
-
-  if (hasCameraPermission === null) {
-    return <View />;
-  }
-  if (hasCameraPermission === false) {
-    return <Text>No access to camera. Please check settings.</Text>;
-  }
+  console.log("***camerModal Render***");
 
   let takePic = async () => {
+    camera?.pausePreview();
+
     let options = {
       quality: 1,
       base64: true,
       exif: false,
     };
 
+    console.log("beforePhoto");
     const newPhoto: CameraCapturedPicture = await camera!.takePictureAsync(
       options
     );
     setPhoto(newPhoto.uri);
-    if (photo !== "" || undefined) {
-      setPhotoTaken((prev) => !prev);
-    }
+    setPausePreview(true);
+    console.log("afterPhoto");
   };
+
+  const navigateToPreview = () => {
+    console.log("navrun");
+    navigation.navigate("PicturePreview", {
+      photo,
+      resumePreview,
+    });
+  };
+
+  const resumePreview = () => {
+    setPausePreview(false);
+  };
+
+  useEffect(() => {
+    if (pausePreview === false) {
+      camera?.resumePreview();
+    }
+  }, [pausePreview]);
+
+  useEffect(() => {
+    console.log("photo ", photo);
+    console.log("effect");
+    if (photo !== "") {
+      console.log("navrun");
+      navigateToPreview();
+      // camera?.resumePreview();
+    }
+  }, [photo]);
 
   const con = () => {
     console.log("photo ", photo);
-    console.log("photoTaken ", photoTaken);
   };
 
-  return (
+  return hasCameraPermission ? (
     <View style={styles.container}>
       <Camera
         style={styles.camera}
@@ -75,6 +98,8 @@ export const CameraModal = ({
       </Camera>
       <Button title={"con"} onPress={con} />
     </View>
+  ) : (
+    <Text>No access to camera. Please check settings.</Text>
   );
 };
 

@@ -54,6 +54,15 @@ export const NewVeggieLogModalScreen = ({
     });
   }, [navigation, date, notes, payloadTags]);
 
+  const dismissAndNavigate = () => {
+    navigation.goBack();
+    navigation.navigate("CameraModal", {
+      selectedGardenId,
+      selectedBedId,
+      veggieId,
+    });
+  };
+
   const dateCalFormatted = format(new Date(date), "yyyy-MM-dd");
 
   return (
@@ -89,16 +98,7 @@ export const NewVeggieLogModalScreen = ({
         style={styles.notesContainer}
       />
       <AddTags />
-      <Button
-        title="Add Picture"
-        onPress={() =>
-          navigation.navigate("CameraModal", {
-            selectedGardenId,
-            selectedBedId,
-            veggieId,
-          })
-        }
-      />
+      <Button title="Add Picture" onPress={dismissAndNavigate} />
     </View>
   );
 };
