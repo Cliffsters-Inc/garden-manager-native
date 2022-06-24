@@ -1,14 +1,17 @@
 import { Feather } from "@expo/vector-icons";
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useState } from "react";
 import { Image, ImageBackground, StyleSheet } from "react-native";
 import { RootStackScreenProps } from "../types";
-import { Text, View } from "./Themed";
+import { View } from "./Themed";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Button } from "react-native-elements";
 
 export const PicturePreview = ({
   navigation,
   route,
 }: RootStackScreenProps<"PicturePreview">) => {
-  const { photo, resumePreview } = route.params;
+  const { photo, veggieId, resumePreview } = route.params;
+  const [picKey, setPicKey] = useState<string>("test");
   console.log("picPreview", photo);
 
   const navigateBack = () => {
@@ -18,6 +21,21 @@ export const PicturePreview = ({
   const backToCamera = () => {
     resumePreview();
     navigateBack();
+  };
+
+  const storePic = async () => {
+    const picToSave = photo;
+    await AsyncStorage.setItem(`@pic${veggieId}`, picToSave);
+    setPicKey(`@pic${veggieId}`);
+    //below causes us to to make these props conditional, better way?
+    // navigation.navigate("NewVeggieLogModal", {
+    //   picKey,
+    // });
+    navigation.navigate({
+      name: "NewVeggieLogModal",
+      params: { picKey: picKey },
+      merge: true,
+    });
   };
 
   return (
@@ -30,6 +48,7 @@ export const PicturePreview = ({
           onPress={backToCamera}
           style={styles.xIcon}
         />
+        <Button title={"Save to log"} onPress={storePic} />
       </ImageBackground>
     </View>
   );

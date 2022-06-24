@@ -10,6 +10,7 @@ import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
 import { Camera, CameraCapturedPicture } from "expo-camera";
 import { Button } from "react-native-elements";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const CameraModal = ({
   navigation,
@@ -53,6 +54,7 @@ export const CameraModal = ({
     console.log("navrun");
     navigation.navigate("PicturePreview", {
       photo,
+      veggieId,
       resumePreview,
     });
   };
@@ -73,12 +75,16 @@ export const CameraModal = ({
     if (photo !== "") {
       console.log("navrun");
       navigateToPreview();
-      // camera?.resumePreview();
     }
   }, [photo]);
 
+  const checkStorage = () => {
+    AsyncStorage.getItem("@pic").then((res) => console.log("preview", res));
+  };
+
   const con = () => {
     console.log("photo ", photo);
+    checkStorage();
   };
 
   return hasCameraPermission ? (

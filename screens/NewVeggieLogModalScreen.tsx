@@ -10,7 +10,6 @@ import { CrossBtn } from "../components/shared/CrossBtn";
 import { pressedTagsContext } from "../services/context";
 import { TagProps } from "../services/types";
 import { AddTags } from "../components/shared/Tags/AddTags";
-import { CameraModal } from "./CameraModal";
 
 export const NewVeggieLogModalScreen = ({
   navigation,
@@ -19,11 +18,18 @@ export const NewVeggieLogModalScreen = ({
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [date, setDate] = useState(Date.now());
   const [notes, setNotes] = useState("");
-  const { selectedGardenId, selectedBedId, veggieId } = route.params;
+  const { selectedGardenId, selectedBedId, veggieId, picKey } = route.params;
   const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
   const [payloadTags, setPayloadTags] = useState<TagProps[]>([]);
+  const [payloadPics, setPayloadPics] = useState<string>();
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    // const pic = route.params.
+    // setPayloadPics()
+    console.log("payloadPics: ", payloadPics);
+  });
 
   useEffect(() => {
     setPayloadTags([...pressedTags]);

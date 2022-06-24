@@ -6,12 +6,14 @@ import { useAppSelector } from "../store";
 import { gardenSelectors } from "../services/garden/garden.selectors";
 import { VeggieNotesField } from "../components/VeggieNotesField";
 import { ActionButton } from "../components/shared/ActionButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SortBtn } from "../components/shared/SortBtn";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TagObject } from "../services/types";
 import { Tag } from "../components/shared/Tags/TagElement";
 import { nanoid } from "@reduxjs/toolkit";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Button } from "react-native-elements";
 
 export const VeggieScreen = ({
   navigation,
@@ -19,6 +21,8 @@ export const VeggieScreen = ({
 }: GardenTabScreenProps<"VeggieScreen">) => {
   const { selectedGardenId, selectedBedId, veggieId } = route.params;
   const [logsDescending, setLogsDescending] = useState(true);
+
+  const [pics, setPics] = useState<string | undefined>("");
   const veggie = useAppSelector((state) =>
     gardenSelectors.selectVeggieWithSortedLogs(
       state,
@@ -38,6 +42,21 @@ export const VeggieScreen = ({
       tagIcon={item.tagIcon}
     />
   );
+
+  useEffect(() => {
+    AsyncStorage.getItem("@pic").then((res) => setPics(res));
+  }, []);
+
+  console.log("***picTest***", pics);
+
+  const checkStorage = () => {
+    AsyncStorage.getItem("@pic").then((res) => console.log("preview", res));
+  };
+
+  const con = () => {
+    console.log("veggiePics", pics);
+    // checkStorage();
+  };
 
   return veggie ? (
     <View style={styles.container}>
@@ -72,6 +91,7 @@ export const VeggieScreen = ({
         navigation={navigation}
         route={route}
       />
+      <Button title={"con"} onPress={con} />
       <View>
         <View
           style={{
@@ -119,6 +139,10 @@ export const VeggieScreen = ({
               }}
             >
               <View style={{ flexDirection: "row" }}>
+                <Image
+                  source={{ uri: pics }}
+                  style={{ width: 50, height: 50 }}
+                />
                 <Text style={{ fontSize: 20, fontWeight: "bold" }}>
                   {format(new Date(item.date), "d MMM yy")}
                 </Text>

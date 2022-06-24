@@ -27,9 +27,10 @@ export type RootStackParamList = {
   AddVeggieModal: { selectedGardenId: string; selectedBedId: string };
   NotFound: undefined;
   NewVeggieLogModal: {
-    selectedGardenId: string;
-    selectedBedId: string;
-    veggieId: string;
+    selectedGardenId?: string;
+    selectedBedId?: string;
+    veggieId?: string;
+    picKey?: string;
   };
   EditVeggieLogModal: {
     selectedGardenId: string;
@@ -62,6 +63,7 @@ export type RootStackParamList = {
   };
   PicturePreview: {
     photo: string;
+    veggieId: string;
     resumePreview: any;
   };
 };
