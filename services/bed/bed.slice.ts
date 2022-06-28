@@ -7,6 +7,7 @@ import {
 import { RootState } from "../../store";
 import { BedNormalised } from "../types";
 import { getInitialNormalisedGardenData } from "../utils/getInitialNormalisedGardenData";
+import { veggieSliceActions } from "../veggie/veggie.slice";
 
 const bedAdaptor = createEntityAdapter<BedNormalised>();
 
@@ -22,15 +23,47 @@ export const bedSlice = createSlice({
   name: "beds",
   initialState: initialisedState,
   reducers: {
-    add: (state, { payload }: PayloadAction<Omit<BedNormalised, "id">>) =>
-      bedAdaptor.addOne(state, { ...payload, id: nanoid() }),
-
-    remove: bedAdaptor.removeOne,
+    add: {
+      prepare: (payload: Omit<BedNormalised, "id">) => ({
+        payload: { ...payload, id: nanoid() },
+      }),
+      reducer: bedAdaptor.addOne,
+    },
     update: bedAdaptor.updateOne,
+    remove: bedAdaptor.removeOne,
+    removeMany: bedAdaptor.removeMany,
+    linkVeggie: (
+      state,
+      action: PayloadAction<{ bedId: string; veggieId: string }>
+    ) => {
+      const { bedId, veggieId } = action.payload;
+      state.entities[bedId]?.veggies.push(veggieId);
+    },
+    unlinkVeggie: (
+      state,
+      action: PayloadAction<{ bedId: string; veggieId: string }>
+    ) => {
+      const { bedId, veggieId } = action.payload;
+      const bed = state.entities[bedId];
+
+      if (bed) {
+        const updatedVeggies = bed.veggies.filter(
+          (bedsVeggieId) => bedsVeggieId !== veggieId
+        );
+        bed.veggies = updatedVeggies;
+      }
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(veggieSliceActions.add, (state, action) => {
+      const newVeggie = action.payload;
+      const veggiesBed = state.entities[newVeggie.bed];
+      veggiesBed?.veggies.push(newVeggie.id);
+    });
   },
 });
 
-export const bedActions = bedSlice.actions;
+export const bedSliceActions = bedSlice.actions;
 
 export type BedSlice = {
   [bedSlice.name]: ReturnType<typeof bedSlice["reducer"]>;

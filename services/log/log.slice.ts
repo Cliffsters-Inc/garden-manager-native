@@ -1,4 +1,4 @@
-import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
+import { createEntityAdapter, createSlice, nanoid } from "@reduxjs/toolkit";
 import { VeggieLogNormalised } from "../types";
 import { getInitialNormalisedGardenData } from "../utils/getInitialNormalisedGardenData";
 import { RootState } from "../../store";
@@ -17,13 +17,18 @@ export const logSlice = createSlice({
   name: "logs",
   initialState: initialisedState,
   reducers: {
-    add: logAdaptor.addOne,
+    add: {
+      prepare: (payload: Omit<VeggieLogNormalised, "id">) => ({
+        payload: { ...payload, id: nanoid() },
+      }),
+      reducer: logAdaptor.addOne,
+    },
     remove: logAdaptor.removeOne,
     update: logAdaptor.updateOne,
   },
 });
 
-export const logActions = logSlice.actions;
+export const logSliceActions = logSlice.actions;
 
 export type LogSlice = {
   [logSlice.name]: ReturnType<typeof logSlice["reducer"]>;
