@@ -1,12 +1,10 @@
 import { useLayoutEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, StyleSheet, TextInput } from "react-native";
-import { NewCardForm } from "../services/types";
 import { useAppDispatch } from "../store";
 import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
-import { gardenActions } from "../services/garden/garden.slice";
-import { bedActions } from "../services/bed/bed.slice";
+import { bedActions, gardenActions } from "../services/actions";
 
 export const CreateCardModalScreen = ({
   navigation,
@@ -26,7 +24,7 @@ export const CreateCardModalScreen = ({
     },
   });
 
-  const submitName = (data: NewCardForm) => {
+  const submitName = (data: { newCardName: string }) => {
     routeName === "GardenTabScreen"
       ? appDispatch(gardenActions.add({ name: data.newCardName, beds: [] }))
       : appDispatch(

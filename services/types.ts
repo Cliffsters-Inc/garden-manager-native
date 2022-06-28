@@ -12,14 +12,6 @@ type Months =
   | "NOV"
   | "DEC";
 
-export type NewCardForm = {
-  newCardName: string;
-};
-export type RenameCardForm = {
-  newCardName: string;
-  id: string;
-};
-
 export type Garden = {
   name: string;
   id: string;

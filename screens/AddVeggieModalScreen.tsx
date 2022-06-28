@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../store";
 import { RootStackScreenProps } from "../types";
 import { veggieInfoSelectors } from "../services/veggieInfo/veggieInfoSlice";
 import { VeggieInfoList } from "../components/VeggieInfoList";
+import { veggieActions } from "../services/actions";
 
 export const AddVeggieModalScreen = ({
   navigation,
@@ -20,10 +21,10 @@ export const AddVeggieModalScreen = ({
         veggieInfos={veggieInfos}
         addHandler={(veggieInfo) => {
           appDispatch(
-            gardenActions.addVeggie({
-              selectedGardenId,
-              selectedBedId,
+            veggieActions.add({
+              bed: selectedBedId,
               veggieInfo,
+              logs: [],
             })
           );
           navigation.goBack();

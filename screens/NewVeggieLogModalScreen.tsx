@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { useAppDispatch } from "../store";
 import { Calendar } from "../components/shared/Calendar";
 import { CrossBtn } from "../components/shared/CrossBtn";
+import { logActions } from "../services/actions";
 
 export const NewVeggieLogModalScreen = ({
   navigation,
@@ -20,11 +21,11 @@ export const NewVeggieLogModalScreen = ({
 
   const handleSubmit = () => {
     dispatch(
-      gardenActions.addVeggieLog({
-        selectedGardenId,
-        selectedBedId,
-        veggieId,
-        newLog: { date, notes },
+      logActions.add({
+        veggie: veggieId,
+        date,
+        notes,
+        photos: [],
       })
     );
     navigation.goBack();

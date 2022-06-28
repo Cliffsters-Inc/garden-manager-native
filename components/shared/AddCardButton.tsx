@@ -5,7 +5,7 @@ import { ActionButton } from "./ActionButton";
 
 type props = {
   routeName: string;
-  selectedGardenId?: string;
+  selectedGardenId: string;
 };
 
 export const AddCardButton: FC<props> = ({ routeName, selectedGardenId }) => {

@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "../store";
 import { Calendar } from "../components/shared/Calendar";
 import { CrossBtn } from "../components/shared/CrossBtn";
 import { logSelectors } from "../services/log/log.slice";
+import { logActions } from "../services/actions";
 
 export const EditVeggieLogModal = ({
   navigation,
@@ -26,26 +27,16 @@ export const EditVeggieLogModal = ({
   const handleUpdate = () => {
     if (log)
       dispatch(
-        gardenActions.updateVeggieLog({
-          selectedGardenId,
-          selectedBedId,
-          veggieId,
-          updatedLog: { id: log.id, date, notes },
+        logActions.update({
+          id: log.id,
+          changes: { date, notes },
         })
       );
     navigation.goBack();
   };
 
   const handleDelete = () => {
-    if (log)
-      dispatch(
-        gardenActions.deleteVeggieLog({
-          selectedGardenId,
-          selectedBedId,
-          veggieId,
-          logId: log.id,
-        })
-      );
+    if (log) dispatch(logActions.remove(log.id));
     navigation.goBack();
   };
 

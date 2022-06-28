@@ -3,6 +3,7 @@ import { RootStackScreenProps } from "../types";
 import { Text, View } from "../components/Themed";
 import { Button, Divider } from "react-native-elements";
 import { GestureResponderEvent, StyleSheet } from "react-native";
+import { bedActions, gardenActions } from "../services/actions";
 
 export const DeleteConfirmationModalScreen = ({
   navigation,
@@ -12,17 +13,12 @@ export const DeleteConfirmationModalScreen = ({
   const { selectedGardenId, selectedBedId } = route.params;
 
   const deleteGardenCard = () => {
-    appDispatch(gardenActions.removeGarden(selectedGardenId));
+    appDispatch(gardenActions.remove(selectedGardenId));
     navigation.popToTop();
   };
 
   const deleteBedCard = () => {
-    appDispatch(
-      gardenActions.removeBed({
-        gardenId: selectedGardenId,
-        bedId: selectedBedId,
-      })
-    );
+    if (selectedBedId) appDispatch(bedActions.remove(selectedBedId));
     navigation.popToTop();
   };
 

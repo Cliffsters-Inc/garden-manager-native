@@ -1,5 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 import { Button, ScrollView, StyleSheet, TextInput } from "react-native";
+import { veggieActions } from "../services/actions";
 import { useAppDispatch } from "../store";
 import { GardenTabScreenProps } from "../types";
 import { Text, View } from "./Themed";
@@ -18,12 +19,9 @@ export const VeggieNotesField = ({ notes, navigation, route }: Props) => {
 
   const handleSubmit = (text: string) => {
     dispatch(
-      gardenActions.updateVeggieField({
-        selectedGardenId,
-        selectedBedId,
-        veggieId,
-        field: "notes",
-        update: text,
+      veggieActions.update({
+        id: veggieId,
+        changes: { notes: text },
       })
     );
   };
