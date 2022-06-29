@@ -1,45 +1,58 @@
 import React from "react";
 import { FlatList, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { gardenSelectors } from "../services/garden/garden.slice";
 import { useAppSelector } from "../store";
 import { GardenTabScreenProps } from "../types";
 import { CustomCard } from "./shared/CustomCard";
-import { View } from "./Themed";
 
 export const GardenCards = ({
   navigation,
-  route,
 }: {
   navigation: GardenTabScreenProps<"GardenTabScreen">["navigation"];
-  route: GardenTabScreenProps<"GardenTabScreen">["route"];
 }) => {
   const gardens = useAppSelector(gardenSelectors.selectAll);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <FlatList
+        style={styles.list}
+        contentContainerStyle={{ alignItems: "stretch" }}
         numColumns={2}
         keyExtractor={(item) => item.id}
         data={gardens}
         renderItem={({ item }) => (
           <CustomCard
             title={item.name}
-            selectedGardenId={item.id}
-            navigation={navigation}
-            routeName={route.name}
+            onCardPress={() =>
+              navigation.navigate("BedsTabScreen", {
+                selectedGardenId: item.id,
+              })
+            }
+            onOptionsPress={() =>
+              navigation.navigate("CardOptionsModal", {
+                onRenamePress: () =>
+                  navigation.navigate("RenameCardModal", {
+                    selectedGardenId: item.id,
+                  }),
+                onDeletePress: () =>
+                  navigation.navigate("DeleteConfirmationModal", {
+                    selectedGardenId: item.id,
+                  }),
+              })
+            }
           />
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    flexDirection: "row",
     justifyContent: "center",
-    padding: 15,
-    marginTop: 50,
   },
+  list: { maxWidth: 400 },
 });

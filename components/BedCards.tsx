@@ -10,10 +10,9 @@ import { View } from "./Themed";
 type Props = {
   selectedGardenId: string;
   navigation: GardenTabScreenProps<"BedsTabScreen">["navigation"];
-  route: GardenTabScreenProps<"BedsTabScreen">["route"];
 };
 
-export const BedCards = ({ selectedGardenId, navigation, route }: Props) => {
+export const BedCards = ({ selectedGardenId, navigation }: Props) => {
   const garden = useAppSelector((state) =>
     gardenSelectors.selectById(state, selectedGardenId)
   );
@@ -22,37 +21,55 @@ export const BedCards = ({ selectedGardenId, navigation, route }: Props) => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={styles.screenContainer}>
       <Text h1 style={styles.title}>
         {garden?.name}
       </Text>
-      <FlatList
-        numColumns={2}
-        data={beds}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <CustomCard
-            title={item.name}
-            selectedGardenId={selectedGardenId}
-            selectedBedId={item.id}
-            navigation={navigation}
-            routeName={route.name}
-          />
-        )}
-      />
+      <View style={styles.container}>
+        <FlatList
+          style={styles.list}
+          numColumns={2}
+          data={beds}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <CustomCard
+              title={item.name}
+              onCardPress={() =>
+                navigation.navigate("BedScreen", {
+                  selectedBedId: item.id,
+                })
+              }
+              onOptionsPress={() =>
+                navigation.navigate("CardOptionsModal", {
+                  onRenamePress: () =>
+                    navigation.navigate("RenameCardModal", {
+                      selectedBedId: item.id,
+                    }),
+                  onDeletePress: () =>
+                    navigation.navigate("DeleteConfirmationModal", {
+                      selectedBedId: item.id,
+                    }),
+                })
+              }
+            />
+          )}
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  screenContainer: { flex: 1 },
   container: {
-    flex: 5,
-    alignItems: "center",
+    flex: 1,
+    flexDirection: "row",
     justifyContent: "center",
-    padding: 15,
-    marginTop: 50,
   },
+  list: { maxWidth: 400 },
+
   title: {
     textTransform: "uppercase",
+    textAlign: "center",
   },
 });
