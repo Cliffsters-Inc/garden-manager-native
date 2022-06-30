@@ -10,6 +10,8 @@ import { SortBtn } from "../components/shared/SortBtn";
 import { MaterialIcons } from "@expo/vector-icons";
 import { veggieSelectors } from "../services/veggie/veggie.slice";
 import { logSelectors } from "../services/log/log.slice";
+import { TagObject } from "../services/types";
+import { Tag } from "../components/shared/Tags/TagElement";
 
 export const VeggieScreen = ({
   navigation,
@@ -23,6 +25,14 @@ export const VeggieScreen = ({
 
   const logs = useAppSelector((state) =>
     logSelectors.selectByIds(state, veggie?.logs ?? [])
+  );
+
+  const renderDisplayTag = ({ item }: TagObject) => (
+    <Tag
+      tagLabel={item.tagLabel}
+      tagColor={item.tagColor}
+      tagIcon={item.tagIcon}
+    />
   );
 
   return veggie ? (
@@ -75,7 +85,7 @@ export const VeggieScreen = ({
           />
           <Pressable
             onPress={() =>
-              navigation.navigate("TimelineScreen", {
+              navigation.navigate("VeggieTimelineScreen", {
                 veggieLogs: logs,
               })
             }
@@ -99,9 +109,19 @@ export const VeggieScreen = ({
                 marginVertical: 5,
               }}
             >
-              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                {format(new Date(item.date), "d MMM yy")}
-              </Text>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                  {format(new Date(item.date), "d MMM yy")}
+                </Text>
+                {item.payloadTags && (
+                  <FlatList
+                    data={item.payloadTags}
+                    keyExtractor={(item) => item.tagLabel}
+                    horizontal={true}
+                    renderItem={renderDisplayTag}
+                  />
+                )}
+              </View>
               <Text>Notes: {item.notes}</Text>
             </Pressable>
           )}

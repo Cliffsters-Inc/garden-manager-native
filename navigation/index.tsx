@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   NavigationContainer,
@@ -28,6 +28,7 @@ import {
   RootStackParamList,
   RootTabParamList,
   SettingsTabParamList,
+  TimelineTabParamList,
   VeggiesTabParamList,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
@@ -41,7 +42,10 @@ import { DeleteConfirmationModalScreen } from "../screens/DeleteConfirmationModa
 import { CreateCardModalScreen } from "../screens/CreateCardModalScreen.tsx";
 import { RenameCardModalScreen } from "../screens/RenameCardModalScreen";
 import { EditVeggieLogModal } from "../screens/EditVeggieLogModal";
-import { TimelineScreen } from "../screens/TimelineScreen";
+import { pressedTagsContext } from "../services/context";
+import { TagProps } from "../services/types";
+import { TimelineTabScreen } from "../screens/TimelineTabScreen";
+import { VeggieTimelineScreen } from "../screens/VeggieTimelineScreen";
 
 export default function Navigation({
   colorScheme,
@@ -65,85 +69,95 @@ export default function Navigation({
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  const [pressedTags, setPressedTags] = React.useState<TagProps[]>([]);
+  const tagsValue = React.useMemo(
+    () => ({
+      pressedTags: pressedTags,
+      setPressedTags: setPressedTags,
+    }),
+    [pressedTags, setPressedTags]
+  );
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Root"
-        component={BottomTabNavigator}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Oops!" }}
-      />
-      <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen
-          name="AddVeggieModal"
-          component={AddVeggieModalScreen}
-          options={({ navigation }) => ({
-            headerRight: () => (
-              <Button title="Cancel" onPress={navigation.goBack} />
-            ),
-            title: "Add a Veggie",
-          })}
-        />
-        <Stack.Screen
-          name="NewVeggieLogModal"
-          component={NewVeggieLogModalScreen}
-          options={({ navigation }) => ({
-            headerLeft: () => (
-              <Button title="Cancel" onPress={navigation.goBack} />
-            ),
-            title: "New Log",
-          })}
-        />
-        <Stack.Screen
-          name="EditVeggieLogModal"
-          component={EditVeggieLogModal}
-          options={({ navigation }) => ({
-            headerLeft: () => (
-              <Button title="Cancel" onPress={navigation.goBack} />
-            ),
-            title: "Log",
-          })}
-        />
-        <Stack.Screen
-          name="CreateCardModal"
-          component={CreateCardModalScreen}
-          options={({ navigation }) => ({
-            headerLeft: () => (
-              <Button title="Cancel" onPress={navigation.goBack} />
-            ),
-          })}
-        />
-        <Stack.Screen
-          name="RenameCardModal"
-          component={RenameCardModalScreen}
-          options={({ navigation }) => ({
-            headerLeft: () => (
-              <Button title="Cancel" onPress={navigation.goBack} />
-            ),
-          })}
-        />
-        <Stack.Screen
-          name="CardOptionsModal"
-          component={CardOptionsModal}
-          options={{
-            headerShown: false,
-            presentation: "transparentModal",
-          }}
-        />
-        <Stack.Screen
-          name="DeleteConfirmationModal"
-          component={DeleteConfirmationModalScreen}
-          options={{
-            headerShown: false,
-            presentation: "transparentModal",
-          }}
-        />
-      </Stack.Group>
-    </Stack.Navigator>
+    <pressedTagsContext.Provider value={tagsValue}>
+      <Stack.Navigator>
+        <Stack.Group screenOptions={{ presentation: "modal" }}>
+          <Stack.Screen
+            name="Root"
+            component={BottomTabNavigator}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="NotFound"
+            component={NotFoundScreen}
+            options={{ title: "Oops!" }}
+          />
+          <Stack.Screen
+            name="EditVeggieLogModal"
+            component={EditVeggieLogModal}
+            options={({ navigation }) => ({
+              headerLeft: () => (
+                <Button title="Cancel" onPress={navigation.goBack} />
+              ),
+              title: "Log",
+            })}
+          />
+          <Stack.Screen
+            name="CreateCardModal"
+            component={CreateCardModalScreen}
+            options={({ navigation }) => ({
+              headerLeft: () => (
+                <Button title="Cancel" onPress={navigation.goBack} />
+              ),
+            })}
+          />
+          <Stack.Screen
+            name="RenameCardModal"
+            component={RenameCardModalScreen}
+            options={({ navigation }) => ({
+              headerLeft: () => (
+                <Button title="Cancel" onPress={navigation.goBack} />
+              ),
+            })}
+          />
+          <Stack.Screen
+            name="CardOptionsModal"
+            component={CardOptionsModal}
+            options={{
+              headerShown: false,
+              presentation: "transparentModal",
+            }}
+          />
+          <Stack.Screen
+            name="DeleteConfirmationModal"
+            component={DeleteConfirmationModalScreen}
+            options={{
+              headerShown: false,
+              presentation: "transparentModal",
+            }}
+          />
+          <Stack.Screen
+            name="AddVeggieModal"
+            component={AddVeggieModalScreen}
+            options={({ navigation }) => ({
+              headerRight: () => (
+                <Button title="Cancel" onPress={navigation.goBack} />
+              ),
+              title: "Add a Veggie",
+            })}
+          />
+          <Stack.Screen
+            name="NewVeggieLogModal"
+            component={NewVeggieLogModalScreen}
+            options={({ navigation }) => ({
+              headerLeft: () => (
+                <Button title="Cancel" onPress={navigation.goBack} />
+              ),
+              title: "New Log",
+            })}
+          />
+        </Stack.Group>
+      </Stack.Navigator>
+    </pressedTagsContext.Provider>
   );
 }
 
@@ -179,6 +193,21 @@ function BottomTabNavigator() {
           title: "Veggies",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="seedling" color={color} />
+          ),
+        })}
+      />
+      <BottomTab.Screen
+        name="TimelineTab"
+        component={TimelineTabNavigator}
+        options={() => ({
+          title: "Timeline",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name="timeline-clock-outline"
+              size={29}
+              color={color}
+              style={{ marginBottom: -3 }}
+            />
           ),
         })}
       />
@@ -230,8 +259,8 @@ function GardenTabNavigator() {
         options={{ title: "Veggie" }}
       />
       <GardenStack.Screen
-        name="TimelineScreen"
-        component={TimelineScreen}
+        name="VeggieTimelineScreen"
+        component={VeggieTimelineScreen}
         options={{ title: "Timeline" }}
       />
     </GardenStack.Navigator>
@@ -257,6 +286,20 @@ function VeggiesTabNavigator() {
         })}
       />
     </VeggiesStack.Navigator>
+  );
+}
+
+const TimelineStack = createNativeStackNavigator<TimelineTabParamList>();
+
+function TimelineTabNavigator() {
+  return (
+    <TimelineStack.Navigator>
+      <TimelineStack.Screen
+        name="TimelineTabScreen"
+        component={TimelineTabScreen}
+        options={{ title: "Timeline" }}
+      />
+    </TimelineStack.Navigator>
   );
 }
 

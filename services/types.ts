@@ -1,3 +1,6 @@
+import { ReactElement } from "react";
+import { Icon } from "react-native-vector-icons/Icon";
+
 type Months =
   | "JAN"
   | "FEB"
@@ -82,7 +85,19 @@ export type VeggieLogNormalised = {
   phLevel?: number;
   photos: string[];
   veggie: string;
+  payloadTags?: TagProps[];
 };
+
+export type TagProps = {
+  // TODO: ***type error***
+  tagLabel: any;
+  tagColor: string | undefined;
+  tagIcon?: string | undefined;
+  pressedTags?: string[];
+  extraStyleProps?: { label?: object };
+  children?: ReactElement<Icon>;
+};
+export type TagObject = { item: TagProps };
 
 export type VeggieInfo = {
   id: string;
