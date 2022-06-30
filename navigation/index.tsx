@@ -37,12 +37,11 @@ import { BedScreen } from "../screens/BedScreen";
 import { VeggieScreen } from "../screens/VeggieScreen";
 import { AddVeggieModalScreen } from "../screens/AddVeggieModalScreen";
 import { NewVeggieLogModalScreen } from "../screens/NewVeggieLogModalScreen";
-import { CardOptionsModalScreen } from "../screens/CardOptionsModalScreen";
+import { CardOptionsModal } from "../screens/CardOptionsModal";
 import { DeleteConfirmationModalScreen } from "../screens/DeleteConfirmationModalScreen";
 import { CreateCardModalScreen } from "../screens/CreateCardModalScreen.tsx";
 import { RenameCardModalScreen } from "../screens/RenameCardModalScreen";
 import { EditVeggieLogModal } from "../screens/EditVeggieLogModal";
-import { TimelineScreen } from "../screens/TimelineScreen";
 import { pressedTagsContext } from "../services/context";
 import { TagProps } from "../services/types";
 import { TimelineTabScreen } from "../screens/TimelineTabScreen";
@@ -81,38 +80,26 @@ function RootNavigator() {
   return (
     <pressedTagsContext.Provider value={tagsValue}>
       <Stack.Navigator>
-        <Stack.Screen
-          name="Root"
-          component={BottomTabNavigator}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="NotFound"
-          component={NotFoundScreen}
-          options={{ title: "Oops!" }}
-        />
         <Stack.Group screenOptions={{ presentation: "modal" }}>
           <Stack.Screen
-            name="AddVeggieModal"
-            component={AddVeggieModalScreen}
-            options={({ navigation }) => ({
-              headerRight: () => (
-                <Button title="Cancel" onPress={navigation.goBack} />
-              ),
-              title: "Add a Veggie",
-            })}
+            name="Root"
+            component={BottomTabNavigator}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="NewVeggieLogModal"
-            component={NewVeggieLogModalScreen}
-            options={({ navigation }) => ({
-              title: "New Log",
-            })}
+            name="NotFound"
+            component={NotFoundScreen}
+            options={{ title: "Oops!" }}
           />
           <Stack.Screen
             name="EditVeggieLogModal"
             component={EditVeggieLogModal}
-            options={{ title: "Log" }}
+            options={({ navigation }) => ({
+              headerLeft: () => (
+                <Button title="Cancel" onPress={navigation.goBack} />
+              ),
+              title: "Log",
+            })}
           />
           <Stack.Screen
             name="CreateCardModal"
@@ -134,7 +121,7 @@ function RootNavigator() {
           />
           <Stack.Screen
             name="CardOptionsModal"
-            component={CardOptionsModalScreen}
+            component={CardOptionsModal}
             options={{
               headerShown: false,
               presentation: "transparentModal",
@@ -147,6 +134,26 @@ function RootNavigator() {
               headerShown: false,
               presentation: "transparentModal",
             }}
+          />
+          <Stack.Screen
+            name="AddVeggieModal"
+            component={AddVeggieModalScreen}
+            options={({ navigation }) => ({
+              headerRight: () => (
+                <Button title="Cancel" onPress={navigation.goBack} />
+              ),
+              title: "Add a Veggie",
+            })}
+          />
+          <Stack.Screen
+            name="NewVeggieLogModal"
+            component={NewVeggieLogModalScreen}
+            options={({ navigation }) => ({
+              headerLeft: () => (
+                <Button title="Cancel" onPress={navigation.goBack} />
+              ),
+              title: "New Log",
+            })}
           />
         </Stack.Group>
       </Stack.Navigator>

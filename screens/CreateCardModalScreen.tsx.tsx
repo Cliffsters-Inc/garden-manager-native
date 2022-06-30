@@ -1,11 +1,10 @@
+import { useLayoutEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, StyleSheet, TextInput } from "react-native";
-import { gardenActions } from "../services/garden/gardenSlice";
-import { NewCardForm } from "../services/types";
 import { useAppDispatch } from "../store";
 import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
-import React from "react";
+import { bedActions, gardenActions } from "../services/actions";
 
 export const CreateCardModalScreen = ({
   navigation,
@@ -13,12 +12,11 @@ export const CreateCardModalScreen = ({
 }: RootStackScreenProps<"CreateCardModal">) => {
   const appDispatch = useAppDispatch();
 
-  const { selectedGardenId, areaTitle, routeName } = route.params;
+  const selectedGardenId = route.params?.selectedGardenId;
 
   const {
     control,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -26,22 +24,26 @@ export const CreateCardModalScreen = ({
     },
   });
 
-  const submitName = (data: NewCardForm) => {
-    routeName === "GardenTabScreen"
-      ? appDispatch(gardenActions.addGarden({ name: data.newCardName }))
-      : appDispatch(
-          gardenActions.addBed({ name: data.newCardName, id: selectedGardenId })
-        );
+  const submitName = (data: { newCardName: string }) => {
+    appDispatch(
+      selectedGardenId
+        ? bedActions.add({
+            name: data.newCardName,
+            garden: route.params.selectedGardenId,
+            veggies: [],
+          })
+        : gardenActions.add({ name: data.newCardName, beds: [] })
+    );
+
     navigation.goBack();
-    reset({ ...data, newCardName: "" });
   };
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <Button title="Done" onPress={handleSubmit(submitName)} />
       ),
-      title: `Name new ${areaTitle}`,
+      title: `Name new ${selectedGardenId ? "bed" : "garden"}`,
     });
   }, [navigation]);
 
@@ -59,7 +61,7 @@ export const CreateCardModalScreen = ({
         render={({ field: { onChange, onBlur, value } }) => (
           <View style={styles.inputContainer}>
             <TextInput
-              placeholder={`New ${areaTitle} name`}
+              placeholder={`New ${selectedGardenId ? "bed" : "garden"} name`}
               style={styles.input}
               onBlur={onBlur}
               value={value}

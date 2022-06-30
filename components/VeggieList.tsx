@@ -2,12 +2,12 @@ import React from "react";
 import { Text, View } from "./Themed";
 import { FlatList, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { Veggie } from "../services/types";
+import { VeggieNormalised } from "../services/types";
 import { format } from "date-fns";
 
 type Props = {
-  veggies: Veggie[];
-  navigationHandler: (veggie: Veggie) => void;
+  veggies: VeggieNormalised[];
+  navigationHandler: (veggie: VeggieNormalised) => void;
 };
 
 export const VeggieList = ({ veggies, navigationHandler }: Props) => {

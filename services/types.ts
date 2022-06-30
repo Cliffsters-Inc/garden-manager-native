@@ -16,9 +16,15 @@ type Months =
   | "DEC";
 
 export type Garden = {
-  name: string | undefined;
+  name: string;
   id: string;
-  beds?: Bed[];
+  beds: Bed[];
+};
+
+export type GardenNormalised = {
+  name: string;
+  id: string;
+  beds: string[];
 };
 
 export type NewCardForm = {
@@ -26,14 +32,21 @@ export type NewCardForm = {
 };
 
 export type RenameCardForm = {
-  newCardName: string | undefined;
-  id?: string | undefined;
+  newCardName: string;
+  id: string;
 };
 
 export type Bed = {
-  name: string | undefined;
+  name: string;
   id: string;
-  veggies?: Veggie[];
+  veggies: Veggie[];
+};
+
+export type BedNormalised = {
+  name: string;
+  id: string;
+  veggies: string[];
+  garden: string;
 };
 
 export type Veggie = {
@@ -45,31 +58,46 @@ export type Veggie = {
   logs: VeggieLog[];
 };
 
+export type VeggieNormalised = {
+  id: string;
+  veggieInfo: { id: string; name?: string; image?: string }; // name & image should be generated with id from veggieInfo to allow changes to veggieInfo apply to all veggies
+  notes?: string;
+  sowDate?: string;
+  harvestDate?: string;
+  logs: string[];
+  bed: string;
+};
+
 export type VeggieLog = {
   id: string;
   date: number;
   notes?: string;
-  photos?: string[];
+  soilDescription?: string;
+  phLevel?: number;
+  photos: string[];
+};
+
+export type VeggieLogNormalised = {
+  id: string;
+  date: number;
+  notes?: string;
+  soilDescription?: string;
+  phLevel?: number;
+  photos: string[];
+  veggie: string;
   payloadTags?: TagProps[];
 };
 
 export type TagProps = {
-  //***type error***
+  // TODO: ***type error***
   tagLabel: any;
   tagColor: string | undefined;
   tagIcon?: string | undefined;
   pressedTags?: string[];
-  extraStyleProps?: TagStyleProps;
+  extraStyleProps?: { label?: object };
   children?: ReactElement<Icon>;
 };
-
-type TagStyleProps = {
-  label?: object;
-};
-
-export type TagObject = {
-  item: TagProps;
-};
+export type TagObject = { item: TagProps };
 
 export type VeggieInfo = {
   id: string;

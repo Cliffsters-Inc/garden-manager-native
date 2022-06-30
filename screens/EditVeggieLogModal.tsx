@@ -4,10 +4,10 @@ import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
 import { format } from "date-fns";
 import { useAppDispatch, useAppSelector } from "../store";
-import { gardenActions } from "../services/garden/gardenSlice";
-import { gardenSelectors } from "../services/garden/garden.selectors";
 import { Calendar } from "../components/shared/Calendar";
 import { CrossBtn } from "../components/shared/CrossBtn";
+import { logSelectors } from "../services/log/log.slice";
+import { logActions } from "../services/actions";
 import { AddTags } from "../components/shared/Tags/AddTags";
 import { pressedTagsContext } from "../services/context";
 import { TagProps } from "../services/types";
@@ -16,17 +16,9 @@ export const EditVeggieLogModal = ({
   navigation,
   route,
 }: RootStackScreenProps<"EditVeggieLogModal">) => {
-  const { selectedGardenId, selectedBedId, veggieId, logId } = route.params;
+  const { logId } = route.params;
+  const log = useAppSelector((state) => logSelectors.selectById(state, logId));
 
-  const log = useAppSelector((state) =>
-    gardenSelectors.selectVeggieLog(
-      state,
-      selectedGardenId,
-      selectedBedId,
-      veggieId,
-      logId
-    )
-  );
   const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
   const [payloadTags, setPayloadTags] = useState<TagProps[]>([]);
   const [logTags, setLogTags] = useState([...(log?.payloadTags || [])]);
@@ -52,11 +44,9 @@ export const EditVeggieLogModal = ({
   const handleUpdate = () => {
     if (log)
       dispatch(
-        gardenActions.updateVeggieLog({
-          selectedGardenId,
-          selectedBedId,
-          veggieId,
-          updatedLog: { id: log.id, date, notes, payloadTags },
+        logActions.update({
+          id: log.id,
+          changes: { date, notes, payloadTags },
         })
       );
     setPressedTags([]);
@@ -64,26 +54,9 @@ export const EditVeggieLogModal = ({
   };
 
   const handleDelete = () => {
-    if (log)
-      dispatch(
-        gardenActions.deleteVeggieLog({
-          selectedGardenId,
-          selectedBedId,
-          veggieId,
-          logId: log.id,
-        })
-      );
+    if (log) dispatch(logActions.remove(log.id));
     navigation.goBack();
   };
-
-  // useEffect(() => {
-  //   if (logTags !== pressedTags || null) {
-  //     console.log("**Tag Change**");
-  //     setTagChange(true);
-  //   } else {
-  //     setTagChange(false);
-  //   }
-  // }, [pressedTags]);
 
   useLayoutEffect(() => {
     const logChanged =

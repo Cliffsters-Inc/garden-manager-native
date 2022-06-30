@@ -1,18 +1,18 @@
 import { StyleSheet } from "react-native";
 
-import { Text, View } from "../components/Themed";
+import { View } from "../components/Themed";
 import { useAppDispatch, useAppSelector } from "../store";
 import { RootStackScreenProps } from "../types";
-import { gardenActions } from "../services/garden/gardenSlice";
 import { veggieInfoSelectors } from "../services/veggieInfo/veggieInfoSlice";
 import { VeggieInfoList } from "../components/VeggieInfoList";
+import { veggieActions } from "../services/actions";
 
 export const AddVeggieModalScreen = ({
   navigation,
   route,
 }: RootStackScreenProps<"AddVeggieModal">) => {
   const appDispatch = useAppDispatch();
-  const { selectedGardenId, selectedBedId } = route.params;
+  const { selectedBedId } = route.params;
   const veggieInfos = useAppSelector(veggieInfoSelectors.selectVeggieInfos);
 
   return (
@@ -21,10 +21,10 @@ export const AddVeggieModalScreen = ({
         veggieInfos={veggieInfos}
         addHandler={(veggieInfo) => {
           appDispatch(
-            gardenActions.addVeggie({
-              selectedGardenId,
-              selectedBedId,
+            veggieActions.add({
+              bed: selectedBedId,
               veggieInfo,
+              logs: [],
             })
           );
           navigation.goBack();

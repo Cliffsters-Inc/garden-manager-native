@@ -1,48 +1,53 @@
 import { Entypo } from "@expo/vector-icons";
-import { FunctionComponent } from "react";
 import { Pressable, StyleSheet } from "react-native";
 import { Card, Divider } from "react-native-elements";
 import { GardenTabScreenProps } from "../../types";
 import { View } from "../Themed";
 
-type props = {
-  title?: string;
-  selectedGardenId: string;
-  selectedBedId?: string;
-  navigation: GardenTabScreenProps<"GardenTabScreen">["navigation"];
-  routeName: string;
-};
+type Props = {
+  title: string;
+  navigation:
+    | GardenTabScreenProps<"GardenTabScreen">["navigation"]
+    | GardenTabScreenProps<"BedsTabScreen">["navigation"];
+} & (
+  | {
+      selectedGardenId: string;
+      selectedBedId?: never;
+    }
+  | {
+      selectedGardenId?: never;
+      selectedBedId: string;
+    }
+);
 
-export const CustomCard: FunctionComponent<props> = ({
-  navigation,
+export const CustomCard = ({
   title,
   selectedGardenId,
   selectedBedId,
-  routeName,
-}) => {
+  navigation,
+}: Props) => {
   return (
     <Pressable
-      onPress={() =>
-        navigation.navigate(
-          routeName === "GardenTabScreen" ? "BedsTabScreen" : "BedScreen",
-          {
-            selectedGardenId,
-            selectedBedId,
-          }
-        )
-      }
+      onPress={() => {
+        selectedGardenId
+          ? navigation.navigate("BedsTabScreen", { selectedGardenId })
+          : selectedBedId &&
+            navigation.navigate("BedScreen", { selectedBedId });
+      }}
+      style={styles.container}
     >
-      <Card wrapperStyle={styles.container} containerStyle={styles.outer}>
+      <Card
+        containerStyle={styles.cardContainer}
+        wrapperStyle={styles.cardWrapper}
+      >
         <Card.Title style={styles.title}>{title}</Card.Title>
-        <Divider style={{ marginTop: 5 }} />
+        <Divider />
         <Pressable
           onPress={() =>
-            navigation.navigate("CardOptionsModal", {
-              selectedGardenId,
-              selectedBedId,
-              routeName,
-              title,
-            })
+            selectedGardenId
+              ? navigation.navigate("CardOptionsModal", { selectedGardenId })
+              : selectedBedId &&
+                navigation.navigate("CardOptionsModal", { selectedBedId })
           }
         >
           <View style={styles.options}>
@@ -60,23 +65,24 @@ export const CustomCard: FunctionComponent<props> = ({
 };
 
 const styles = StyleSheet.create({
-  outer: {
-    borderWidth: 1,
+  container: { flex: 1 / 2 },
+  cardContainer: {
     padding: 0,
-  },
-  container: {
     flex: 1,
-    minHeight: 100,
-    minWidth: 150,
+    borderRadius: 5,
+  },
+  cardWrapper: {
+    height: 100,
+    flex: 1,
+    paddingVertical: 5,
   },
   title: {
     flex: 4,
-    paddingTop: 10,
+    marginVertical: 20,
     textTransform: "capitalize",
   },
   options: {
-    flex: 1,
-    justifyContent: "flex-end",
+    marginVertical: 1,
     alignItems: "flex-end",
     paddingRight: 10,
   },

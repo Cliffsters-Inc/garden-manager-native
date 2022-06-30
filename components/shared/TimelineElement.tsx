@@ -70,7 +70,7 @@ export const TimelineElement = ({ dataToMap }: Props) => {
     description: descriptionElement(value, i.toString()),
 
     icon:
-      value.payloadTags.length > 0
+      value.payloadTags?.length > 0
         ? assignIcon(value.payloadTags[0].tagLabel)
         : assignIcon("generic"),
   }));

@@ -20,8 +20,11 @@ import {
 } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { gardenSlice } from "./services/garden/gardenSlice";
+import { gardenSlice } from "./services/garden/garden.slice";
+import { bedSlice } from "./services/bed/bed.slice";
 import { veggieInfoSlice } from "./services/veggieInfo/veggieInfoSlice";
+import { veggieSlice } from "./services/veggie/veggie.slice";
+import { logSlice } from "./services/log/log.slice";
 
 const persistConfig = {
   key: "root",
@@ -31,6 +34,9 @@ const persistConfig = {
 
 const appReducer = combineReducers({
   [gardenSlice.name]: gardenSlice.reducer,
+  [bedSlice.name]: bedSlice.reducer,
+  [veggieSlice.name]: veggieSlice.reducer,
+  [logSlice.name]: logSlice.reducer,
   [veggieInfoSlice.name]: veggieInfoSlice.reducer,
 });
 

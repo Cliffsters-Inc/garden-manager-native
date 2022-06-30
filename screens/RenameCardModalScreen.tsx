@@ -2,60 +2,50 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, StyleSheet, TextInput } from "react-native";
 import { Text, View } from "../components/Themed";
-import { gardenActions } from "../services/garden/gardenSlice";
-import { gardenSelectors } from "../services/garden/garden.selectors";
-import { RenameCardForm } from "../services/types";
+import { bedActions, gardenActions } from "../services/actions";
+import { bedSelectors } from "../services/bed/bed.slice";
+import { gardenSelectors } from "../services/garden/garden.slice";
 import { useAppDispatch, useAppSelector } from "../store";
 import { RootStackScreenProps } from "../types";
 
 export const RenameCardModalScreen = ({
-  route,
   navigation,
+  route,
 }: RootStackScreenProps<"RenameCardModal">) => {
   const appDispatch = useAppDispatch();
 
-  const { selectedGardenId, routeName, selectedBedId } = route.params;
+  const { selectedGardenId, selectedBedId } = route.params;
 
-  const selectedGardenName = useAppSelector((state) =>
-    gardenSelectors.selectGarden(state, selectedGardenId)
-  )?.name;
-
-  const selectedBedName =
-    selectedBedId &&
-    useAppSelector((state) =>
-      gardenSelectors.selectBedWithVeggieInfo(
-        state,
-        selectedGardenId,
-        selectedBedId
-      )
-    )?.name;
+  const renamingItemName = selectedBedId
+    ? useAppSelector((state) => bedSelectors.selectById(state, selectedBedId))
+        ?.name
+    : selectedGardenId &&
+      useAppSelector((state) =>
+        gardenSelectors.selectById(state, selectedGardenId)
+      )?.name;
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      newCardName:
-        routeName === "GardenTabScreen" ? selectedGardenName : selectedBedName,
-    },
-  });
+  } = useForm({ defaultValues: { newCardName: renamingItemName } });
 
-  const submitNewName = (data: RenameCardForm) => {
-    routeName === "GardenTabScreen"
-      ? appDispatch(
-          gardenActions.renameGarden({
-            id: selectedGardenId,
-            newName: data.newCardName,
-          })
-        )
-      : appDispatch(
-          gardenActions.renameBed({
-            selectedGardenId: selectedGardenId,
-            newName: data.newCardName,
-            selectedBedId: selectedBedId,
-          })
-        );
+  const submitNewName = (data: { newCardName: string | undefined }) => {
+    if (selectedBedId && data.newCardName) {
+      appDispatch(
+        bedActions.update({
+          id: selectedBedId,
+          changes: { name: data.newCardName },
+        })
+      );
+    } else if (selectedGardenId && data.newCardName) {
+      appDispatch(
+        gardenActions.update({
+          id: selectedGardenId,
+          changes: { name: data.newCardName },
+        })
+      );
+    }
     navigation.popToTop();
   };
 
@@ -64,10 +54,7 @@ export const RenameCardModalScreen = ({
       headerRight: () => (
         <Button title="Done" onPress={handleSubmit(submitNewName)} />
       ),
-      title:
-        routeName === "GardenTabScreen"
-          ? `Rename ${selectedGardenName}`
-          : `Rename ${selectedBedName}`,
+      title: `Rename ${renamingItemName}`,
     });
   }, [navigation]);
 

@@ -2,8 +2,8 @@ import { useAppDispatch } from "../store";
 import { RootStackScreenProps } from "../types";
 import { Text, View } from "../components/Themed";
 import { Button, Divider } from "react-native-elements";
-import { gardenActions } from "../services/garden/gardenSlice";
-import { GestureResponderEvent, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
+import { bedActions, gardenActions } from "../services/actions";
 
 export const DeleteConfirmationModalScreen = ({
   navigation,
@@ -12,34 +12,11 @@ export const DeleteConfirmationModalScreen = ({
   const appDispatch = useAppDispatch();
   const { selectedGardenId, selectedBedId } = route.params;
 
-  const deleteGardenCard = () => {
-    appDispatch(gardenActions.removeGarden(selectedGardenId));
-    navigation.popToTop();
-  };
+  const handleDelete = () => {
+    if (selectedGardenId) appDispatch(gardenActions.remove(selectedGardenId));
+    else if (selectedBedId) appDispatch(bedActions.remove(selectedBedId));
 
-  const deleteBedCard = () => {
-    appDispatch(
-      gardenActions.removeBed({
-        gardenId: selectedGardenId,
-        bedId: selectedBedId,
-      })
-    );
     navigation.popToTop();
-  };
-
-  const deleteButton = (
-    onPressFunc: ((event: GestureResponderEvent) => void) | undefined
-  ) => {
-    return (
-      <Button
-        buttonStyle={styles.button}
-        type="clear"
-        title="Delete"
-        testID="delete-confirmation-btn"
-        titleStyle={{ color: "#FF0000", fontWeight: "bold" }}
-        onPress={onPressFunc}
-      />
-    );
   };
 
   return (
@@ -61,11 +38,17 @@ export const DeleteConfirmationModalScreen = ({
             Are you sure you want to delete this item?
           </Text>
           <Divider />
-          {!selectedBedId
-            ? deleteButton(deleteGardenCard)
-            : deleteButton(deleteBedCard)}
+          <Button
+            onPress={handleDelete}
+            buttonStyle={styles.button}
+            type="clear"
+            title="Delete"
+            testID="delete-confirmation-btn"
+            titleStyle={{ color: "#FF0000", fontWeight: "bold" }}
+          />
         </View>
         <Button
+          onPress={() => navigation.goBack()}
           style={styles.button}
           buttonStyle={{
             backgroundColor: "#ffffff",
@@ -75,7 +58,6 @@ export const DeleteConfirmationModalScreen = ({
           type="clear"
           title={"Cancel"}
           titleStyle={{ color: "#0000cd", fontWeight: "bold" }}
-          onPress={() => navigation.goBack()}
         />
       </View>
     </View>

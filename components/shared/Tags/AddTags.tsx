@@ -1,5 +1,4 @@
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
-import { nanoid } from "@reduxjs/toolkit";
 import { useContext, useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
 import { Divider } from "react-native-elements";
@@ -92,7 +91,7 @@ export const AddTags = () => {
     <View style={styles.container}>
       <FlatList
         data={selectedTags}
-        keyExtractor={() => nanoid()}
+        keyExtractor={(item) => item.tagLabel}
         extraData={pressedTags}
         horizontal={true}
         renderItem={renderSelectedItem}
@@ -101,7 +100,7 @@ export const AddTags = () => {
         <Text style={styles.title}>Add Tag</Text>
         <FlatList
           data={selectableTags}
-          keyExtractor={() => nanoid()}
+          keyExtractor={(item) => item.tagLabel}
           horizontal={true}
           renderItem={renderSelectableItem}
         />

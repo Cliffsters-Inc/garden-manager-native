@@ -1,22 +1,23 @@
-import { useRoute } from "@react-navigation/native";
 import React from "react";
 import { FlatList, StyleSheet } from "react-native";
-import { gardenSelectors } from "../services/garden/garden.selectors";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { gardenSelectors } from "../services/garden/garden.slice";
 import { useAppSelector } from "../store";
 import { GardenTabScreenProps } from "../types";
 import { CustomCard } from "./shared/CustomCard";
-import { View } from "./Themed";
 
 export const GardenCards = ({
   navigation,
-}: GardenTabScreenProps<"GardenTabScreen">) => {
-  const gardens = useAppSelector(gardenSelectors.selectGardens);
-  const route = useRoute();
-  const routeName = route.name;
+}: {
+  navigation: GardenTabScreenProps<"GardenTabScreen">["navigation"];
+}) => {
+  const gardens = useAppSelector(gardenSelectors.selectAll);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <FlatList
+        style={styles.list}
+        contentContainerStyle={{ alignItems: "stretch" }}
         numColumns={2}
         keyExtractor={(item) => item.id}
         data={gardens}
@@ -25,20 +26,18 @@ export const GardenCards = ({
             title={item.name}
             selectedGardenId={item.id}
             navigation={navigation}
-            routeName={routeName}
           />
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    flexDirection: "row",
     justifyContent: "center",
-    padding: 15,
-    marginTop: 50,
   },
+  list: { maxWidth: 400 },
 });

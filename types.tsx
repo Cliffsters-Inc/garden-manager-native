@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
-import { Bed, Veggie, VeggieLog } from "./services/types";
+import { VeggieLog } from "./services/types";
 
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
@@ -24,36 +24,20 @@ declare global {
  */
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
-  AddVeggieModal: { selectedGardenId: string; selectedBedId: string };
+  AddVeggieModal: { selectedBedId: string };
   NotFound: undefined;
-  NewVeggieLogModal: {
-    selectedGardenId: string;
-    selectedBedId: string;
-    veggieId: string;
-  };
-  EditVeggieLogModal: {
-    selectedGardenId: string;
-    selectedBedId: string;
-    veggieId: string;
-    logId: string;
-  };
-  CreateCardModal: {
-    selectedGardenId?: String;
-    areaTitle: string;
-    routeName: string;
-  };
-  RenameCardModal: {
-    selectedGardenId: string;
-    selectedBedId: string | undefined;
-    routeName: string;
-  };
-  CardOptionsModal: {
-    selectedGardenId: string;
-    selectedBedId?: string;
-    routeName: string;
-    title?: string;
-  };
-  DeleteConfirmationModal: { selectedGardenId: string; selectedBedId?: string };
+  NewVeggieLogModal: { veggieId: string };
+  EditVeggieLogModal: { logId: string };
+  CreateCardModal: { selectedGardenId?: string } | undefined;
+  CardOptionsModal:
+    | { selectedGardenId?: never; selectedBedId: string }
+    | { selectedGardenId: string; selectedBedId?: never };
+  RenameCardModal:
+    | { selectedGardenId?: never; selectedBedId: string }
+    | { selectedGardenId: string; selectedBedId?: never };
+  DeleteConfirmationModal:
+    | { selectedGardenId?: never; selectedBedId: string }
+    | { selectedGardenId: string; selectedBedId?: never };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -82,17 +66,10 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
 export type GardenTabParamList = {
   GardenTabScreen: undefined;
   GardenCards: undefined;
-  CustomCard: { selectedGardenId: string; title: string };
-  CardOptionsModalScreen: { gardenId: string; bedId?: string };
-  BedsTabScreen: { selectedGardenId: string; selectedBedId?: string };
-  BedScreen: { selectedGardenId: string; selectedBedId: string };
-  VeggieScreen: {
-    selectedGardenId: string;
-    selectedBedId: string;
-    veggieId: string;
-  };
-  //fix type below
-  VeggieTimelineScreen: { veggieLogs: VeggieLog[] | undefined };
+  BedsTabScreen: { selectedGardenId: string };
+  BedScreen: { selectedBedId: string };
+  VeggieScreen: { veggieId: string };
+  VeggieTimelineScreen: { veggieLogs: VeggieLog[] | undefined }; // TODO: fix type
 };
 
 export type GardenTabScreenProps<Screen extends keyof GardenTabParamList> =
