@@ -36,7 +36,7 @@ import { BedScreen } from "../screens/BedScreen";
 import { VeggieScreen } from "../screens/VeggieScreen";
 import { AddVeggieModalScreen } from "../screens/AddVeggieModalScreen";
 import { NewVeggieLogModalScreen } from "../screens/NewVeggieLogModalScreen";
-import { CardOptionsModalScreen } from "../screens/CardOptionsModalScreen";
+import { CardOptionsModal } from "../screens/CardOptionsModal";
 import { DeleteConfirmationModalScreen } from "../screens/DeleteConfirmationModalScreen";
 import { CreateCardModalScreen } from "../screens/CreateCardModalScreen.tsx";
 import { RenameCardModalScreen } from "../screens/RenameCardModalScreen";
@@ -128,7 +128,7 @@ function RootNavigator() {
         />
         <Stack.Screen
           name="CardOptionsModal"
-          component={CardOptionsModalScreen}
+          component={CardOptionsModal}
           options={{
             headerShown: false,
             presentation: "transparentModal",
@@ -158,7 +158,7 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="GardenTab"
+      initialRouteName="SettingsTab"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
         headerShown: false,

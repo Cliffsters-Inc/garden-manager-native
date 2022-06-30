@@ -34,23 +34,8 @@ export const BedCards = ({ selectedGardenId, navigation }: Props) => {
           renderItem={({ item }) => (
             <CustomCard
               title={item.name}
-              onCardPress={() =>
-                navigation.navigate("BedScreen", {
-                  selectedBedId: item.id,
-                })
-              }
-              onOptionsPress={() =>
-                navigation.navigate("CardOptionsModal", {
-                  onRenamePress: () =>
-                    navigation.navigate("RenameCardModal", {
-                      selectedBedId: item.id,
-                    }),
-                  onDeletePress: () =>
-                    navigation.navigate("DeleteConfirmationModal", {
-                      selectedBedId: item.id,
-                    }),
-                })
-              }
+              selectedBedId={item.id}
+              navigation={navigation}
             />
           )}
         />

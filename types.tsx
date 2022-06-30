@@ -26,29 +26,18 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   AddVeggieModal: { selectedBedId: string };
   NotFound: undefined;
-  NewVeggieLogModal: {
-    veggieId: string;
-  };
-  EditVeggieLogModal: {
-    logId: string;
-  };
-  CreateCardModal: {
-    selectedGardenId: string;
-    areaTitle: string;
-    routeName: string;
-  };
-  RenameCardModal: {
-    selectedGardenId: string;
-    selectedBedId: string | undefined;
-    routeName: string;
-  };
-  CardOptionsModal: {
-    selectedGardenId: string;
-    selectedBedId?: string;
-    routeName: string;
-    title?: string;
-  };
-  DeleteConfirmationModal: { selectedGardenId: string; selectedBedId?: string };
+  NewVeggieLogModal: { veggieId: string };
+  EditVeggieLogModal: { logId: string };
+  CreateCardModal: { selectedGardenId?: string } | undefined;
+  CardOptionsModal:
+    | { selectedGardenId?: never; selectedBedId: string }
+    | { selectedGardenId: string; selectedBedId?: never };
+  RenameCardModal:
+    | { selectedGardenId?: never; selectedBedId: string }
+    | { selectedGardenId: string; selectedBedId?: never };
+  DeleteConfirmationModal:
+    | { selectedGardenId?: never; selectedBedId: string }
+    | { selectedGardenId: string; selectedBedId?: never };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -76,8 +65,6 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
 export type GardenTabParamList = {
   GardenTabScreen: undefined;
   GardenCards: undefined;
-  CustomCard: { selectedGardenId: string; title: string };
-  CardOptionsModalScreen: { gardenId: string; bedId?: string };
   BedsTabScreen: { selectedGardenId: string };
   BedScreen: { selectedBedId: string };
   VeggieScreen: { veggieId: string };

@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import { View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 import { GardenCards } from "../components/GardenCards";
-import { AddCardButton } from "../components/shared/AddCardButton";
+import { ActionButton } from "../components/shared/ActionButton";
 
 export const GardenTabScreen = ({
   navigation,
@@ -10,12 +10,12 @@ export const GardenTabScreen = ({
 }: GardenTabScreenProps<"GardenTabScreen">) => {
   return (
     <View style={styles.container}>
-      <View style={styles.cards}>
-        <GardenCards navigation={navigation} route={route} />
-      </View>
-      <View style={styles.button}>
-        <AddCardButton routeName={route.name} />
-      </View>
+      <GardenCards navigation={navigation} />
+
+      <ActionButton
+        onPress={() => navigation.navigate("CreateCardModal")}
+        text="Add garden"
+      />
     </View>
   );
 };
@@ -23,13 +23,5 @@ export const GardenTabScreen = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  cards: {
-    flex: 5,
-  },
-  button: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
   },
 });

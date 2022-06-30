@@ -24,23 +24,8 @@ export const GardenCards = ({
         renderItem={({ item }) => (
           <CustomCard
             title={item.name}
-            onCardPress={() =>
-              navigation.navigate("BedsTabScreen", {
-                selectedGardenId: item.id,
-              })
-            }
-            onOptionsPress={() =>
-              navigation.navigate("CardOptionsModal", {
-                onRenamePress: () =>
-                  navigation.navigate("RenameCardModal", {
-                    selectedGardenId: item.id,
-                  }),
-                onDeletePress: () =>
-                  navigation.navigate("DeleteConfirmationModal", {
-                    selectedGardenId: item.id,
-                  }),
-              })
-            }
+            selectedGardenId={item.id}
+            navigation={navigation}
           />
         )}
       />

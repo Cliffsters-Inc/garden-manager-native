@@ -12,7 +12,7 @@ export const CreateCardModalScreen = ({
 }: RootStackScreenProps<"CreateCardModal">) => {
   const appDispatch = useAppDispatch();
 
-  const { selectedGardenId, areaTitle, routeName } = route.params;
+  const selectedGardenId = route.params?.selectedGardenId;
 
   const {
     control,
@@ -25,15 +25,16 @@ export const CreateCardModalScreen = ({
   });
 
   const submitName = (data: { newCardName: string }) => {
-    routeName === "GardenTabScreen"
-      ? appDispatch(gardenActions.add({ name: data.newCardName, beds: [] }))
-      : appDispatch(
-          bedActions.add({
+    appDispatch(
+      selectedGardenId
+        ? bedActions.add({
             name: data.newCardName,
-            garden: selectedGardenId,
+            garden: route.params.selectedGardenId,
             veggies: [],
           })
-        );
+        : gardenActions.add({ name: data.newCardName, beds: [] })
+    );
+
     navigation.goBack();
   };
 
@@ -42,7 +43,7 @@ export const CreateCardModalScreen = ({
       headerRight: () => (
         <Button title="Done" onPress={handleSubmit(submitName)} />
       ),
-      title: `Name new ${areaTitle}`,
+      title: `Name new ${selectedGardenId ? "bed" : "garden"}`,
     });
   }, [navigation]);
 
@@ -60,7 +61,7 @@ export const CreateCardModalScreen = ({
         render={({ field: { onChange, onBlur, value } }) => (
           <View style={styles.inputContainer}>
             <TextInput
-              placeholder={`New ${areaTitle} name`}
+              placeholder={`New ${selectedGardenId ? "bed" : "garden"} name`}
               style={styles.input}
               onBlur={onBlur}
               value={value}

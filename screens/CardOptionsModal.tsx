@@ -4,32 +4,23 @@ import { RootStackScreenProps } from "../types";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Pressable, StyleSheet } from "react-native";
 
-export const CardOptionsModalScreen = ({
+export const CardOptionsModal = ({
   navigation,
   route,
 }: RootStackScreenProps<"CardOptionsModal">) => {
-  const { selectedGardenId, selectedBedId, routeName } = route.params;
-
-  const popThenNavigate = () => {
-    navigation.pop(),
-      navigation.navigate("DeleteConfirmationModal", {
-        selectedGardenId,
-        selectedBedId,
-      });
-  };
+  const { selectedGardenId, selectedBedId } = route.params;
 
   return (
     <View style={styles.container}>
       <View style={styles.optionContainer}>
         <Pressable
           style={styles.button}
-          onPress={() =>
-            navigation.navigate("RenameCardModal", {
-              selectedGardenId,
-              selectedBedId,
-              routeName,
-            })
-          }
+          onPress={() => {
+            selectedGardenId
+              ? navigation.navigate("RenameCardModal", { selectedGardenId })
+              : selectedBedId &&
+                navigation.navigate("RenameCardModal", { selectedBedId });
+          }}
         >
           <MaterialIcons
             name="drive-file-rename-outline"
@@ -39,7 +30,20 @@ export const CardOptionsModalScreen = ({
           <Text style={styles.optionText}>Rename</Text>
         </Pressable>
         <Divider />
-        <Pressable style={styles.button} onPress={popThenNavigate}>
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            navigation.goBack();
+            selectedGardenId
+              ? navigation.navigate("DeleteConfirmationModal", {
+                  selectedGardenId,
+                })
+              : selectedBedId &&
+                navigation.navigate("DeleteConfirmationModal", {
+                  selectedBedId,
+                });
+          }}
+        >
           <MaterialCommunityIcons
             name="delete-alert-outline"
             size={36}

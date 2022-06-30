@@ -17,14 +17,34 @@ export type Garden = {
   id: string;
   beds: Bed[];
 };
-export type GardenNormalised = Garden;
+
+export type GardenNormalised = {
+  name: string;
+  id: string;
+  beds: string[];
+};
+
+export type NewCardForm = {
+  newCardName: string;
+};
+
+export type RenameCardForm = {
+  newCardName: string;
+  id: string;
+};
 
 export type Bed = {
   name: string;
   id: string;
   veggies: Veggie[];
 };
-export type BedNormalised = Bed & { garden: string };
+
+export type BedNormalised = {
+  name: string;
+  id: string;
+  veggies: string[];
+  garden: string;
+};
 
 export type Veggie = {
   id: string;
@@ -34,7 +54,16 @@ export type Veggie = {
   harvestDate?: string;
   logs: VeggieLog[];
 };
-export type VeggieNormalised = Veggie & { bed: string };
+
+export type VeggieNormalised = {
+  id: string;
+  veggieInfo: { id: string; name?: string; image?: string }; // name & image should be generated with id from veggieInfo to allow changes to veggieInfo apply to all veggies
+  notes?: string;
+  sowDate?: string;
+  harvestDate?: string;
+  logs: string[];
+  bed: string;
+};
 
 export type VeggieLog = {
   id: string;
@@ -44,7 +73,16 @@ export type VeggieLog = {
   phLevel?: number;
   photos: string[];
 };
-export type VeggieLogNormalised = VeggieLog & { veggie: string };
+
+export type VeggieLogNormalised = {
+  id: string;
+  date: number;
+  notes?: string;
+  soilDescription?: string;
+  phLevel?: number;
+  photos: string[];
+  veggie: string;
+};
 
 export type VeggieInfo = {
   id: string;

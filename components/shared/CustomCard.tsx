@@ -1,35 +1,70 @@
 import { Entypo } from "@expo/vector-icons";
 import { Pressable, StyleSheet } from "react-native";
 import { Card, Divider } from "react-native-elements";
+import { GardenTabScreenProps } from "../../types";
 import { View } from "../Themed";
 
 type Props = {
   title: string;
-  onCardPress: () => void;
-  onOptionsPress: () => void;
-};
-
-export const CustomCard = ({ title, onCardPress, onOptionsPress }: Props) => (
-  <Pressable onPress={onCardPress} style={styles.container}>
-    <Card
-      containerStyle={styles.cardContainer}
-      wrapperStyle={styles.cardWrapper}
-    >
-      <Card.Title style={styles.title}>{title}</Card.Title>
-      <Divider />
-      <Pressable onPress={onOptionsPress}>
-        <View style={styles.options}>
-          <Entypo
-            testID={`custom-card-edit-btn-${title}`}
-            name="dots-three-horizontal"
-            size={24}
-            color="black"
-          />
-        </View>
-      </Pressable>
-    </Card>
-  </Pressable>
+  navigation:
+    | GardenTabScreenProps<"GardenTabScreen">["navigation"]
+    | GardenTabScreenProps<"BedsTabScreen">["navigation"];
+} & (
+  | {
+      selectedGardenId: string;
+      selectedBedId?: never;
+    }
+  | {
+      selectedGardenId?: never;
+      selectedBedId: string;
+    }
 );
+
+export const CustomCard = ({
+  title,
+  selectedGardenId,
+  selectedBedId,
+  navigation,
+}: Props) => {
+  return (
+    <Pressable
+      onPress={() => {
+        selectedGardenId
+          ? navigation.navigate("BedsTabScreen", { selectedGardenId })
+          : selectedBedId &&
+            navigation.navigate("BedScreen", { selectedBedId });
+      }}
+      style={styles.container}
+    >
+      <Card
+        containerStyle={styles.cardContainer}
+        wrapperStyle={styles.cardWrapper}
+      >
+        <Card.Title style={styles.title}>{title}</Card.Title>
+        <Divider />
+        <Pressable
+          onPress={() =>
+            selectedGardenId
+              ? navigation.navigate("DeleteConfirmationModal", {
+                  selectedGardenId,
+                })
+              : selectedBedId &&
+                navigation.navigate("CardOptionsModal", { selectedBedId })
+          }
+        >
+          <View style={styles.options}>
+            <Entypo
+              testID={`custom-card-edit-btn-${title}`}
+              name="dots-three-horizontal"
+              size={24}
+              color="black"
+            />
+          </View>
+        </Pressable>
+      </Card>
+    </Pressable>
+  );
+};
 
 const styles = StyleSheet.create({
   container: { flex: 1 / 2 },

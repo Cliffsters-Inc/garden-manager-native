@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { BedCards } from "../components/BedCards";
-import { AddCardButton } from "../components/shared/AddCardButton";
+import { ActionButton } from "../components/shared/ActionButton";
 import { View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 
@@ -13,18 +13,15 @@ export const BedsTabScreen = ({
   return (
     <View style={styles.container}>
       <View style={styles.cards}>
-        <BedCards
-          selectedGardenId={selectedGardenId}
-          navigation={navigation}
-          route={route}
-        />
+        <BedCards selectedGardenId={selectedGardenId} navigation={navigation} />
       </View>
-      <View style={styles.button}>
-        <AddCardButton
-          routeName={route.name}
-          selectedGardenId={selectedGardenId}
-        />
-      </View>
+
+      <ActionButton
+        onPress={() =>
+          navigation.navigate("CreateCardModal", { selectedGardenId })
+        }
+        text="Add bed"
+      />
     </View>
   );
 };
@@ -35,10 +32,5 @@ const styles = StyleSheet.create({
   },
   cards: {
     flex: 5,
-  },
-  button: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
   },
 });
