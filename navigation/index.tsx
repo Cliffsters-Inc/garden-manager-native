@@ -158,7 +158,7 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="SettingsTab"
+      initialRouteName="GardenTab"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
         headerShown: false,

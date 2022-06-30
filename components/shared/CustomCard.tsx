@@ -45,9 +45,7 @@ export const CustomCard = ({
         <Pressable
           onPress={() =>
             selectedGardenId
-              ? navigation.navigate("DeleteConfirmationModal", {
-                  selectedGardenId,
-                })
+              ? navigation.navigate("CardOptionsModal", { selectedGardenId })
               : selectedBedId &&
                 navigation.navigate("CardOptionsModal", { selectedBedId })
           }
