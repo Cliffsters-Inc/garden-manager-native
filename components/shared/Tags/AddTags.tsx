@@ -40,7 +40,6 @@ export const AddTags = () => {
   };
 
   useEffect(() => {
-    console.log("**pressed effect**");
     filterList(pressedTags);
   }, [pressedTags]);
 
@@ -51,7 +50,6 @@ export const AddTags = () => {
   };
 
   const selectedOnPress = (tag: string) => {
-    console.log("selectedOnPress");
     const removeTag = RemoveTagFromList(pressedTags, tag);
     setPressedTags([...removeTag]);
   };
