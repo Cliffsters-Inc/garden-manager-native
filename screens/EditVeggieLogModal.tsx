@@ -111,6 +111,10 @@ export const EditVeggieLogModal = ({
           style={styles.notesContainer}
         />
       </View>
+      <Button
+        title="Add photo"
+        onPress={() => navigation.navigate("CameraModal")}
+      />
       <AddTags />
       {deleteConfirmationVisible ? (
         <View>
