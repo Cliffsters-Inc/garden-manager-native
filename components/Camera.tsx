@@ -1,30 +1,94 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Button } from "react-native";
-import { Camera } from "expo-camera";
-import { RootStackScreenProps } from "../types";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Button,
+  Image,
+} from "react-native";
+import { Camera as ExpoCamera, CameraCapturedPicture } from "expo-camera";
+import { FS } from "../utils/fileSystem";
+import { useNavigation } from "@react-navigation/native";
 
-export const CameraModal = ({
-  navigation,
-}: RootStackScreenProps<"CameraModal">) => {
+type Props = {
+  onPhotoConfirmedHandler: (cachedPhotoUri: string) => void;
+  onHideCameraHandler: () => void;
+};
+export const Camera = ({
+  onPhotoConfirmedHandler,
+  onHideCameraHandler,
+}: Props) => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [type, setType] = useState(ExpoCamera.Constants.Type.back);
+  const cameraRef = useRef<ExpoCamera>(null);
+  const [photoTaken, setPhotoTaken] = useState<CameraCapturedPicture | null>(
+    null
+  );
+  const navigation = useNavigation();
+
+  const handleTakePicture = async () => {
+    const photo = await cameraRef.current?.takePictureAsync();
+    if (photo) setPhotoTaken(photo);
+  };
+
+  const handleCancel = () => {
+    photoTaken &&
+      FS.deleteItem.byUri(photoTaken.uri).then(() => setPhotoTaken(null));
+  };
+
+  const handleDone = () => {
+    photoTaken && onPhotoConfirmedHandler(photoTaken?.uri);
+  };
 
   useEffect(() => {
     (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
+      const { status } = await ExpoCamera.requestCameraPermissionsAsync();
       setHasPermission(status === "granted");
     })();
   }, []);
 
   useEffect(() => {
     // Required within useEffect and not useLayoutEffect or within initial navigation opts as react navigation state can not be set while component is mounting which needs to wait for camera to initialise
-    if (hasPermission)
-      navigation.setOptions({
+    if (hasPermission) {
+      const takingPhotoHeader = {
+        headerLeft: () => null,
         headerRight: () => (
-          <Button title="Done" color="#ffaa00" onPress={navigation.goBack} />
+          <Button title="Done" color="#ffaa00" onPress={handleDone} />
         ),
-      });
-  }, [hasPermission]);
+      };
+      const photoPreviewHeader = {
+        headerLeft: () => (
+          <Button title="Cancel" color="#ffaa00" onPress={handleCancel} />
+        ),
+        headerRight: () => (
+          <Button
+            title="Save"
+            color="#ffaa00"
+            onPress={() => {
+              photoTaken && onPhotoConfirmedHandler(photoTaken.uri);
+              onHideCameraHandler();
+            }}
+          />
+        ),
+      };
+
+      navigation.setOptions(
+        photoTaken ? photoPreviewHeader : takingPhotoHeader
+      );
+    }
+  }, [hasPermission, photoTaken]);
+
+  if (photoTaken) {
+    return (
+      <View>
+        <Image
+          style={{ width: "100%", height: "100%" }}
+          source={{ uri: photoTaken.uri }}
+        />
+      </View>
+    );
+  }
 
   if (hasPermission === null) {
     return <View />;
@@ -34,17 +98,11 @@ export const CameraModal = ({
   }
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} type={type}>
+      <ExpoCamera ref={cameraRef} style={styles.camera} type={type}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.captureButton}
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}
+            onPress={handleTakePicture}
           >
             <View style={styles.buttonInner} />
           </TouchableOpacity>
@@ -52,16 +110,16 @@ export const CameraModal = ({
             style={styles.flipButton}
             onPress={() => {
               setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
+                type === ExpoCamera.Constants.Type.back
+                  ? ExpoCamera.Constants.Type.front
+                  : ExpoCamera.Constants.Type.back
               );
             }}
           >
             <Text style={styles.text}> Flip </Text>
           </TouchableOpacity>
         </View>
-      </Camera>
+      </ExpoCamera>
     </View>
   );
 };
