@@ -46,7 +46,7 @@ import { pressedTagsContext } from "../services/context";
 import { TagProps } from "../services/types";
 import { TimelineTabScreen } from "../screens/TimelineTabScreen";
 import { VeggieTimelineScreen } from "../screens/VeggieTimelineScreen";
-import { CameraModal } from "../components/Camera";
+import { CameraModal } from "../screens/CameraModal";
 
 export default function Navigation({
   colorScheme,
@@ -161,8 +161,8 @@ function RootNavigator() {
             component={CameraModal}
             options={{
               presentation: "fullScreenModal",
-              headerTitle: "",
               headerTransparent: true,
+              headerTitle: "",
             }}
           />
         </Stack.Group>

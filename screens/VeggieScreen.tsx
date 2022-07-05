@@ -122,6 +122,13 @@ export const VeggieScreen = ({
                   />
                 )}
               </View>
+              {item.photos &&
+                item.photos.entities.map((photoUri) => (
+                  <Image
+                    key={photoUri}
+                    source={{ uri: photoUri, width: 50, height: 50 }}
+                  />
+                ))}
               <Text>Notes: {item.notes}</Text>
             </Pressable>
           )}

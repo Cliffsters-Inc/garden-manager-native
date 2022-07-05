@@ -7,38 +7,33 @@ import {
   Button,
   Image,
 } from "react-native";
-import { Camera as ExpoCamera, CameraCapturedPicture } from "expo-camera";
-import { FS } from "../utils/fileSystem";
-import { useNavigation } from "@react-navigation/native";
+import { Camera as ExpoCamera } from "expo-camera";
+import { RootStackScreenProps } from "../types";
+import { useAppDispatch, useAppSelector } from "../store";
+import { photoActions, photoSelectors } from "../services/photos/photos.slice";
 
-type Props = {
-  onPhotoConfirmedHandler: (cachedPhotoUri: string) => void;
-  onHideCameraHandler: () => void;
-};
-export const Camera = ({
-  onPhotoConfirmedHandler,
-  onHideCameraHandler,
-}: Props) => {
+export const CameraModal = ({
+  navigation,
+}: RootStackScreenProps<"CameraModal">) => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [type, setType] = useState(ExpoCamera.Constants.Type.back);
   const cameraRef = useRef<ExpoCamera>(null);
-  const [photoTaken, setPhotoTaken] = useState<CameraCapturedPicture | null>(
-    null
-  );
-  const navigation = useNavigation();
+
+  const dispatch = useAppDispatch();
+  const previewPhoto = useAppSelector(photoSelectors.selectPreviewPhoto);
 
   const handleTakePicture = async () => {
     const photo = await cameraRef.current?.takePictureAsync();
-    if (photo) setPhotoTaken(photo);
+    if (photo) dispatch(photoActions.setPhotoPreview(photo.uri));
   };
 
   const handleCancel = () => {
-    photoTaken &&
-      FS.deleteItem.byUri(photoTaken.uri).then(() => setPhotoTaken(null));
+    dispatch(photoActions.cancelPhotoPreview());
   };
 
-  const handleDone = () => {
-    photoTaken && onPhotoConfirmedHandler(photoTaken?.uri);
+  const handleKeep = () => {
+    dispatch(photoActions.confirmPhotoPreview());
+    navigation.goBack();
   };
 
   useEffect(() => {
@@ -54,7 +49,11 @@ export const Camera = ({
       const takingPhotoHeader = {
         headerLeft: () => null,
         headerRight: () => (
-          <Button title="Done" color="#ffaa00" onPress={handleDone} />
+          <Button
+            title="Done"
+            color="#ffaa00"
+            onPress={() => navigation.goBack()}
+          />
         ),
       };
       const photoPreviewHeader = {
@@ -62,29 +61,22 @@ export const Camera = ({
           <Button title="Cancel" color="#ffaa00" onPress={handleCancel} />
         ),
         headerRight: () => (
-          <Button
-            title="Save"
-            color="#ffaa00"
-            onPress={() => {
-              photoTaken && onPhotoConfirmedHandler(photoTaken.uri);
-              onHideCameraHandler();
-            }}
-          />
+          <Button title="Keep" color="#ffaa00" onPress={handleKeep} />
         ),
       };
 
       navigation.setOptions(
-        photoTaken ? photoPreviewHeader : takingPhotoHeader
+        previewPhoto ? photoPreviewHeader : takingPhotoHeader
       );
     }
-  }, [hasPermission, photoTaken]);
+  }, [hasPermission, previewPhoto]);
 
-  if (photoTaken) {
+  if (previewPhoto) {
     return (
       <View>
         <Image
           style={{ width: "100%", height: "100%" }}
-          source={{ uri: photoTaken.uri }}
+          source={{ uri: previewPhoto }}
         />
       </View>
     );

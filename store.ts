@@ -1,4 +1,4 @@
-import { AnyAction, combineReducers } from "@reduxjs/toolkit";
+import { AnyAction, combineReducers, ThunkAction } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import {
   configureStore,
@@ -25,6 +25,7 @@ import { bedSlice } from "./services/bed/bed.slice";
 import { veggieInfoSlice } from "./services/veggieInfo/veggieInfoSlice";
 import { veggieSlice } from "./services/veggie/veggie.slice";
 import { logSlice } from "./services/log/log.slice";
+import { photoSlice } from "./services/photos/photos.slice";
 
 const persistConfig = {
   key: "root",
@@ -38,6 +39,7 @@ const appReducer = combineReducers({
   [veggieSlice.name]: veggieSlice.reducer,
   [logSlice.name]: logSlice.reducer,
   [veggieInfoSlice.name]: veggieInfoSlice.reducer,
+  [photoSlice.name]: photoSlice.reducer,
 });
 
 const rootReducer = (
@@ -74,6 +76,13 @@ export { store, persistor };
 export type RootState = ReturnType<typeof store.getState>;
 // @see https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type
 export type AppDispatch = typeof store.dispatch;
+
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  AnyAction
+>;
 
 export type AppListenerEffectAPI = ListenerEffectAPI<RootState, AppDispatch>;
 
