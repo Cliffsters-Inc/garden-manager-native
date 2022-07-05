@@ -4,8 +4,9 @@ import {
   nanoid,
   PayloadAction,
 } from "@reduxjs/toolkit";
-import { RootState } from "../../store";
-import { logSliceActions } from "../log/log.slice";
+import { AppThunk, RootState } from "../../store";
+import { bedActions } from "../bed/bed.slice";
+import { logActions } from "../log/log.slice";
 import { VeggieNormalised } from "../types";
 import { getInitialNormalisedGardenData } from "../utils/getInitialNormalisedGardenData";
 
@@ -54,7 +55,7 @@ export const veggieSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(logSliceActions.add, (state, action) => {
+    builder.addCase(logActions.add, (state, action) => {
       const newLog = action.payload;
       const logsVeggie = state.entities[newLog.veggie];
       logsVeggie?.logs.push(newLog.id);
@@ -62,7 +63,29 @@ export const veggieSlice = createSlice({
   },
 });
 
+export const customVeggieActions = {
+  remove:
+    (veggieId: string): AppThunk =>
+    (dispatch, getState) => {
+      const state = getState();
+      const veggie = state.veggies.entities[veggieId];
+      dispatch(veggieSliceActions.remove(veggieId));
+
+      if (veggie?.logs) {
+        veggie.logs.forEach((logId) => dispatch(logActions.remove(logId)));
+      }
+
+      const bed = veggie && state.beds.entities[veggie.bed];
+      if (bed) {
+        dispatch(
+          bedActions.unlinkVeggie({ bedId: bed.id, veggieId: veggie.id })
+        );
+      }
+    },
+};
+
 export const veggieSliceActions = veggieSlice.actions;
+export const veggieActions = { ...veggieSliceActions, ...customVeggieActions };
 
 export type VeggieSlice = {
   [veggieSlice.name]: ReturnType<typeof veggieSlice["reducer"]>;

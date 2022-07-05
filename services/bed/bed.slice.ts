@@ -4,10 +4,11 @@ import {
   nanoid,
   PayloadAction,
 } from "@reduxjs/toolkit";
-import { RootState } from "../../store";
+import { AppThunk, RootState } from "../../store";
+import { gardenActions } from "../garden/garden.slice";
 import { BedNormalised } from "../types";
 import { getInitialNormalisedGardenData } from "../utils/getInitialNormalisedGardenData";
-import { veggieSliceActions } from "../veggie/veggie.slice";
+import { veggieActions, veggieSliceActions } from "../veggie/veggie.slice";
 
 const bedAdaptor = createEntityAdapter<BedNormalised>();
 
@@ -63,7 +64,28 @@ export const bedSlice = createSlice({
   },
 });
 
-export const bedSliceActions = bedSlice.actions;
+const bedThunks = {
+  remove:
+    (bedId: string): AppThunk =>
+    (dispatch, getState) => {
+      const state = getState();
+      const bed = state.beds.entities[bedId];
+      dispatch(bedSliceActions.remove(bedId));
+
+      if (bed?.veggies) {
+        bed.veggies.forEach((veggieId) =>
+          dispatch(veggieActions.remove(veggieId))
+        );
+      }
+
+      const garden = bed && state.gardens.entities[bed.garden];
+      if (garden) {
+        dispatch(gardenActions.unlinkBed({ gardenId: garden.id, bedId }));
+      }
+    },
+};
+const bedSliceActions = bedSlice.actions;
+export const bedActions = { ...bedSliceActions, ...bedThunks };
 
 export type BedSlice = {
   [bedSlice.name]: ReturnType<typeof bedSlice["reducer"]>;

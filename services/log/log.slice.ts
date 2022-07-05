@@ -1,7 +1,14 @@
-import { createEntityAdapter, createSlice, nanoid } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createEntityAdapter,
+  createSlice,
+  nanoid,
+} from "@reduxjs/toolkit";
 import { VeggieLogNormalised } from "../types";
 import { getInitialNormalisedGardenData } from "../utils/getInitialNormalisedGardenData";
-import { RootState } from "../../store";
+import { AppThunk, RootState } from "../../store";
+import { FS } from "../../utils/fileSystem";
+import { veggieActions } from "../veggie/veggie.slice";
 
 const logAdaptor = createEntityAdapter<VeggieLogNormalised>();
 
@@ -26,9 +33,67 @@ export const logSlice = createSlice({
     remove: logAdaptor.removeOne,
     update: logAdaptor.updateOne,
   },
+  extraReducers: (builder) => {
+    builder.addCase(logThunks.fetchPhotos.fulfilled, (state, action) => {
+      const photos = action.payload;
+      const logId = action.meta.arg;
+      const log = state.entities[logId];
+
+      if (log && photos)
+        log.photos = { entities: photos, loading: "succeeded" };
+    });
+  },
 });
 
-export const logSliceActions = logSlice.actions;
+const addPhoto =
+  (payload: { logId: string; photoUri: string }): AppThunk =>
+  async (dispatch) => {
+    const { logId, photoUri } = payload;
+    const cachedPhotoLocation = photoUri;
+    const photoDirName = `photos/logs/${logId}`;
+
+    try {
+      await FS.createDirectory(photoDirName);
+      await FS.moveCacheItemToDocDirectory({
+        fromCacheUri: cachedPhotoLocation,
+        toDocName: photoDirName,
+      });
+      dispatch(fetchPhotos(logId));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+const fetchPhotos = createAsyncThunk(
+  "logs/fetchPhotos",
+  async (logId: string, thunkApi) => {
+    const photoDirName = `photos/logs/${logId}`;
+
+    try {
+      const logsPhotoUris = await FS.getDirectoryContents(photoDirName);
+      return logsPhotoUris;
+    } catch (error) {
+      thunkApi.rejectWithValue(error);
+    }
+  }
+);
+
+const remove =
+  (logId: string): AppThunk =>
+  (dispatch, getState) => {
+    const state = getState();
+    const log = state.logs.entities[logId];
+    dispatch(logSliceActions.remove(logId));
+
+    const veggie = log && state.veggies.entities[log.veggie];
+    if (veggie) {
+      dispatch(veggieActions.unlinkLog({ veggieId: veggie.id, logId: log.id }));
+    }
+  };
+
+const logThunks = { addPhoto, fetchPhotos, remove };
+const logSliceActions = logSlice.actions;
+export const logActions = { ...logSliceActions, ...logThunks };
 
 export type LogSlice = {
   [logSlice.name]: ReturnType<typeof logSlice["reducer"]>;

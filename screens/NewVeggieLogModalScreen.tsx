@@ -6,10 +6,10 @@ import { format } from "date-fns";
 import { useAppDispatch } from "../store";
 import { Calendar } from "../components/shared/Calendar";
 import { CrossBtn } from "../components/shared/CrossBtn";
-import { logActions } from "../services/actions";
 import { pressedTagsContext } from "../services/context";
 import { TagProps } from "../services/types";
 import { AddTags } from "../components/shared/Tags/AddTags";
+import { logActions } from "../services/log/log.slice";
 
 export const NewVeggieLogModalScreen = ({
   navigation,
@@ -35,7 +35,7 @@ export const NewVeggieLogModalScreen = ({
         veggie: veggieId,
         date,
         notes,
-        photos: [],
+        photos: { entities: [], loading: "succeeded" },
         payloadTags,
       })
     );
