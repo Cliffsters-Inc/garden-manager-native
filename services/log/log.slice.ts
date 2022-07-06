@@ -2,13 +2,16 @@ import {
   createAsyncThunk,
   createEntityAdapter,
   createSlice,
+  EntityId,
   nanoid,
+  Update,
 } from "@reduxjs/toolkit";
 import { VeggieLogNormalised } from "../types";
 import { getInitialNormalisedGardenData } from "../utils/getInitialNormalisedGardenData";
 import { AppThunk, RootState } from "../../store";
 import { FS } from "../../utils/fileSystem";
 import { veggieActions } from "../veggie/veggie.slice";
+import { photoActions } from "../photos/photos.slice";
 
 const logAdaptor = createEntityAdapter<VeggieLogNormalised>();
 
@@ -45,20 +48,37 @@ export const logSlice = createSlice({
   },
 });
 
-const addPhoto =
-  (payload: { logId: string; photoUri: string }): AppThunk =>
+const update =
+  (payload: Update<VeggieLogNormalised>): AppThunk =>
   async (dispatch) => {
-    const { logId, photoUri } = payload;
-    const cachedPhotoLocation = photoUri;
+    try {
+      dispatch(addPhotosFromCache({ logId: payload.id }));
+      dispatch(logSliceActions.update(payload));
+    } catch (error) {
+      throw error;
+    }
+  };
+
+const addPhotosFromCache =
+  (payload: { logId: EntityId }): AppThunk =>
+  async (dispatch, getState) => {
+    const { logId } = payload;
+    const state = getState();
+    const { cachedPhotos } = state.photos;
     const photoDirName = `photos/logs/${logId}`;
 
     try {
       await FS.createDirectory(photoDirName);
-      await FS.moveCacheItemToDocDirectory({
-        fromCacheUri: cachedPhotoLocation,
-        toDocName: photoDirName,
-      });
-      dispatch(fetchPhotos(logId));
+      const movePromises = cachedPhotos.map((uri) =>
+        FS.moveCacheItemToDocDirectory({
+          fromCacheUri: uri,
+          toDocName: photoDirName,
+        })
+      );
+      await Promise.all(movePromises);
+      dispatch(photoActions.removeAllCachedPhotos());
+      dispatch(photoActions.clearCachedPhotosState());
+      return await dispatch(fetchPhotos(logId));
     } catch (error) {
       console.error(error);
     }
@@ -66,7 +86,7 @@ const addPhoto =
 
 const fetchPhotos = createAsyncThunk(
   "logs/fetchPhotos",
-  async (logId: string, thunkApi) => {
+  async (logId: EntityId, thunkApi) => {
     const photoDirName = `photos/logs/${logId}`;
 
     try {
@@ -79,7 +99,7 @@ const fetchPhotos = createAsyncThunk(
 );
 
 const remove =
-  (logId: string): AppThunk =>
+  (logId: EntityId): AppThunk =>
   (dispatch, getState) => {
     const state = getState();
     const log = state.logs.entities[logId];
@@ -91,7 +111,7 @@ const remove =
     }
   };
 
-const logThunks = { addPhoto, fetchPhotos, remove };
+const logThunks = { update, addPhotosFromCache, fetchPhotos, remove };
 const logSliceActions = logSlice.actions;
 export const logActions = { ...logSliceActions, ...logThunks };
 

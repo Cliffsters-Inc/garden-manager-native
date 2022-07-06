@@ -122,7 +122,7 @@ export const VeggieScreen = ({
                   />
                 )}
               </View>
-              {item.photos &&
+              {item.photos.entities &&
                 item.photos.entities.map((photoUri) => (
                   <Image
                     key={photoUri}
