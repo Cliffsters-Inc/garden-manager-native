@@ -6,6 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../../store";
 import { FS } from "../../utils/fileSystem";
+import { logActions } from "../log/log.slice";
 import { LoadingStates } from "../types";
 
 type SliceState = {
@@ -40,6 +41,9 @@ export const photoSlice = createSlice({
     },
     addCachedPhoto: (state, action: PayloadAction<CachedUri>) => {
       state.cachedPhotos.push(action.payload);
+    },
+    clearCachedPhotosState: (state) => {
+      state.cachedPhotos = [];
     },
   },
   extraReducers: (builder) => {
@@ -88,10 +92,13 @@ const removeCachedPhoto = createAsyncThunk(
   }
 );
 
-const removeAllCachedPhotos = (): AppThunk => (dispatch, getState) => {
+const removeAllCachedPhotos = (): AppThunk => async (dispatch, getState) => {
   const state = getState();
   const cachedPhotos = state.photos.cachedPhotos;
-  cachedPhotos.forEach((cachedUri) => dispatch(removeCachedPhoto(cachedUri)));
+  const removeCachedPhotosPromises = cachedPhotos.map((cachedUri) =>
+    dispatch(removeCachedPhoto(cachedUri))
+  );
+  await Promise.all(removeCachedPhotosPromises);
 };
 
 const photoThunks = {
