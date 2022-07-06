@@ -17,8 +17,8 @@ type DirName = string;
  */
 type ItemUri = string;
 
-const rootDocumentLocation = () => FileSystem.documentDirectory;
-const rootCacheLocation = () => FileSystem.cacheDirectory;
+const rootDocumentLocation = FileSystem.documentDirectory;
+const rootCacheLocation = FileSystem.cacheDirectory;
 
 const _checkItemExist = async (itemUri: ItemUri) => {
   const { exists } = await FileSystem.getInfoAsync(itemUri);
