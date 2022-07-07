@@ -37,66 +37,19 @@ export const logSlice = createSlice({
     update: logAdaptor.updateOne,
   },
   extraReducers: (builder) => {
-    builder.addCase(logThunks.fetchPhotos.fulfilled, (state, action) => {
-      const photos = action.payload;
-      const logId = action.meta.arg;
-      const log = state.entities[logId];
+    builder.addCase(
+      photoActions.fetchPhotoDocDirectory.fulfilled,
+      (state, action) => {
+        const dirName = action.meta.arg.split("/").at(-1);
 
-      if (log && photos)
-        log.photos = { entities: photos, loading: "succeeded" };
-    });
+        if (dirName) {
+          const matchingLogDir = state.entities[dirName];
+          if (matchingLogDir) matchingLogDir.photos.entities = action.payload;
+        }
+      }
+    );
   },
 });
-
-const update =
-  (payload: Update<VeggieLogNormalised>): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(addPhotosFromCache({ logId: payload.id }));
-      dispatch(logSliceActions.update(payload));
-    } catch (error) {
-      throw error;
-    }
-  };
-
-const addPhotosFromCache =
-  (payload: { logId: EntityId }): AppThunk =>
-  async (dispatch, getState) => {
-    const { logId } = payload;
-    const state = getState();
-    const { cachedPhotos } = state.photos;
-    const photoDirName = `photos/logs/${logId}`;
-
-    try {
-      await FS.createDirectory(photoDirName);
-      const movePromises = cachedPhotos.map((uri) =>
-        FS.moveCacheItemToDocDirectory({
-          fromCacheUri: uri,
-          toDocName: photoDirName,
-        })
-      );
-      await Promise.all(movePromises);
-      dispatch(photoActions.removeAllCachedPhotos());
-      dispatch(photoActions.clearCachedPhotosState());
-      return await dispatch(fetchPhotos(logId));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-const fetchPhotos = createAsyncThunk(
-  "logs/fetchPhotos",
-  async (logId: EntityId, thunkApi) => {
-    const photoDirName = `photos/logs/${logId}`;
-
-    try {
-      const logsPhotoUris = await FS.getDirectoryContents(photoDirName);
-      return logsPhotoUris;
-    } catch (error) {
-      thunkApi.rejectWithValue(error);
-    }
-  }
-);
 
 const remove =
   (logId: EntityId): AppThunk =>
@@ -111,7 +64,7 @@ const remove =
     }
   };
 
-const logThunks = { update, addPhotosFromCache, fetchPhotos, remove };
+const logThunks = { remove };
 const logSliceActions = logSlice.actions;
 export const logActions = { ...logSliceActions, ...logThunks };
 

@@ -27,12 +27,18 @@ export const CameraModal = ({
     if (photo) dispatch(photoActions.setPhotoPreview(photo.uri));
   };
 
+  const handleDone = () => {
+    dispatch(photoActions.fetchCachedPhotos());
+    navigation.goBack();
+  };
+
   const handleCancel = () => {
-    dispatch(photoActions.cancelPhotoPreview());
+    dispatch(photoActions.deletePreviewPhoto());
   };
 
   const handleKeep = () => {
-    dispatch(photoActions.confirmPhotoPreview());
+    dispatch(photoActions.clearPhotoPreview());
+    dispatch(photoActions.fetchCachedPhotos());
     navigation.goBack();
   };
 
@@ -49,11 +55,7 @@ export const CameraModal = ({
       const takingPhotoHeader = {
         headerLeft: () => null,
         headerRight: () => (
-          <Button
-            title="Done"
-            color="#ffaa00"
-            onPress={() => navigation.goBack()}
-          />
+          <Button title="Done" color="#ffaa00" onPress={handleDone} />
         ),
       };
       const photoPreviewHeader = {

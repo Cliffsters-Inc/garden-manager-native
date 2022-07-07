@@ -17,6 +17,11 @@ type DirName = string;
  */
 type ItemUri = string;
 
+/**
+ * @param DirUri - directory URI
+ */
+type DirUri = string;
+
 const rootDocumentLocation = FileSystem.documentDirectory;
 const rootCacheLocation = FileSystem.cacheDirectory;
 
@@ -38,36 +43,30 @@ const createDirectory = async (dirName: DirName) => {
     });
 };
 
-const getDirectoryContents = (dirName: DirName) => {
-  return FileSystem.readDirectoryAsync(rootDocumentLocation + dirName);
+const _getDirectoryContents = (dirUri: DirUri) =>
+  FileSystem.readDirectoryAsync(dirUri);
+const getDirectoryContents = {
+  byUri: _getDirectoryContents,
+  inDocs: (dirName?: DirName) => {
+    if (!dirName) dirName = "";
+    return _getDirectoryContents(rootDocumentLocation + dirName);
+  },
+  inCache: (dirName?: DirName) => {
+    if (!dirName) dirName = "";
+    return _getDirectoryContents(rootCacheLocation + dirName);
+  },
 };
 
 const _delete = (itemUri: ItemUri) => FileSystem.deleteAsync(itemUri);
 const deleteItem = {
-  inDocs: (itemName: ItemName) => {
-    return _delete(rootDocumentLocation + itemName);
-  },
-  byUri: (itemUri: ItemUri) => {
-    return _delete(itemUri);
-  },
+  byUri: _delete,
+  inDocs: (itemName: ItemName) => _delete(rootDocumentLocation + itemName),
+  inCache: (itemName: ItemName) => _delete(rootCacheLocation + itemName),
 };
 
-type MoveFileArgs = { fromUri: ItemUri; toUri: ItemUri };
-const moveFile = ({ fromUri, toUri }: MoveFileArgs) => {
+type MoveItemArgs = { fromUri: ItemUri; toUri: ItemUri };
+const moveItem = ({ fromUri, toUri }: MoveItemArgs) => {
   return FileSystem.moveAsync({ from: fromUri, to: toUri });
-};
-
-const moveCacheItemToDocDirectory = ({
-  fromCacheUri,
-  toDocName,
-}: {
-  fromCacheUri: ItemUri;
-  toDocName: ItemName;
-}) => {
-  return moveFile({
-    fromUri: fromCacheUri,
-    toUri: rootDocumentLocation + toDocName,
-  });
 };
 
 export const FS = {
@@ -77,6 +76,5 @@ export const FS = {
   createDirectory,
   getDirectoryContents,
   deleteItem,
-  moveFile,
-  moveCacheItemToDocDirectory,
+  moveItem,
 };

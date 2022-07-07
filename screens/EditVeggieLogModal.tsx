@@ -11,6 +11,7 @@ import { AddTags } from "../components/shared/Tags/AddTags";
 import { pressedTagsContext } from "../services/context";
 import { TagProps } from "../services/types";
 import { photoActions, photoSelectors } from "../services/photos/photos.slice";
+import { FS } from "../utils/fileSystem";
 
 export const EditVeggieLogModal = ({
   navigation,
@@ -33,7 +34,11 @@ export const EditVeggieLogModal = ({
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
 
+  // onMount effect
   useEffect(() => {
+    if (log) photoActions.fetchPhotoDocDirectory("logs/" + log.id);
+    photoActions.fetchCachedPhotos();
+
     const selectorLogs = [...logTags];
     setPressedTags(selectorLogs);
   }, []);
@@ -43,13 +48,15 @@ export const EditVeggieLogModal = ({
   }, [pressedTags]);
 
   const handleUpdate = () => {
-    if (log)
+    if (log) {
+      dispatch(photoActions.moveCachePhotosToDocDirectory("logs/" + log.id));
       dispatch(
         logActions.update({
           id: log.id,
           changes: { date, notes, payloadTags },
         })
       );
+    }
     setPressedTags([]);
     navigation.goBack();
   };
@@ -65,7 +72,7 @@ export const EditVeggieLogModal = ({
       date !== log?.date ||
       payloadTags !== log?.payloadTags;
     const goBackAndClear = () => {
-      dispatch(photoActions.removeAllCachedPhotos());
+      dispatch(photoActions.deleteAllCachePhotos());
       setPressedTags([]);
       navigation.goBack();
     };
@@ -118,7 +125,7 @@ export const EditVeggieLogModal = ({
         onPress={() => navigation.navigate("CameraModal")}
       />
       <View style={{ flexDirection: "row" }}>
-        {log?.photos &&
+        {log?.photos.entities &&
           log.photos.entities.map((photoUri) => (
             <Image
               key={photoUri}

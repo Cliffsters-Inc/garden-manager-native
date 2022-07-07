@@ -6,9 +6,12 @@ import {
 } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../../store";
 import { FS } from "../../utils/fileSystem";
-import { logActions } from "../log/log.slice";
+import { logActions, logSlice } from "../log/log.slice";
 import { LoadingStates } from "../types";
 
+/** @params DocPhotosDirLocation - include directory name and parent folders eg. "logs/logID123", do not include photos eg. "photos/logs/logId123" */
+type DocPhotosDirLocation = string;
+type CachedUri = string;
 type SliceState = {
   previewingPhoto: string | null;
   cachedPhotos: string[];
@@ -22,7 +25,97 @@ const initialState: SliceState = {
   loading: "idle",
 };
 
-type CachedUri = string;
+const fetchPhotoDocDirectory = createAsyncThunk(
+  "photos/fetchPhotoDocDirectory",
+  async (dirName: DocPhotosDirLocation) => {
+    try {
+      return await FS.getDirectoryContents.inDocs("photos/" + dirName);
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+const fetchCachedPhotos = createAsyncThunk(
+  "photos/fetchCachedPhotos",
+  async () => {
+    try {
+      return await FS.getDirectoryContents.inCache("Camera");
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+const deleteDocPhotoDirectory = createAsyncThunk(
+  "photos/deleteDocPhotoDirectory",
+  async (dirLocation: DocPhotosDirLocation) => {
+    try {
+      await FS.deleteItem.inDocs("photos/" + dirLocation);
+    } catch (error) {
+      fetchPhotoDocDirectory(dirLocation);
+      throw error;
+    }
+  }
+);
+const deleteDocPhoto = createAsyncThunk(
+  "photos/deleteDocPhoto",
+  async (docUri: string) => {
+    try {
+      const dirName = docUri.split("/").at(-2);
+      await FS.deleteItem.byUri(docUri);
+      const updatedDirPhotos = await FS.getDirectoryContents.inDocs(
+        "photos/" + dirName
+      );
+      return updatedDirPhotos;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+const deleteAllCachePhotos = createAsyncThunk(
+  "photos/deleteAllCachePhotos",
+  async () => {
+    try {
+      await FS.deleteItem.inCache("Camera");
+    } catch (error) {
+      fetchCachedPhotos();
+      throw error;
+    }
+  }
+);
+const deleteCachedPhoto = createAsyncThunk(
+  "photos/deleteCachedPhoto",
+  async (cachedUri: CachedUri) => {
+    try {
+      await FS.deleteItem.byUri(cachedUri);
+      const updatedCachePhotos = await FS.getDirectoryContents.inCache(
+        "Camera"
+      );
+      return updatedCachePhotos;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+const deletePreviewPhoto = (): AppThunk => async (dispatch, getState) => {
+  const state = getState();
+  const previewPhoto = selectPreviewPhoto(state);
+  if (previewPhoto) {
+    await dispatch(deleteCachedPhoto(previewPhoto));
+    dispatch(photoSliceActions.clearPhotoPreview);
+  }
+};
+
+const moveCachePhotosToDocDirectory = createAsyncThunk(
+  "photos/moveCachePhotosToDocDirectory",
+  async (dirName: DocPhotosDirLocation) => {
+    await FS.moveItem({
+      fromUri: FS.rootCacheLocation + "Camera",
+      toUri: FS.rootDocumentLocation + dirName,
+    });
+  }
+);
 
 export const photoSlice = createSlice({
   name: "photos",
@@ -30,84 +123,41 @@ export const photoSlice = createSlice({
   reducers: {
     setPhotoPreview: (state, action: PayloadAction<CachedUri>) => {
       state.previewingPhoto = action.payload;
-    },
-    confirmPhotoPreview: (state) => {
-      const { previewingPhoto } = state;
-      if (previewingPhoto) state.cachedPhotos.push(previewingPhoto);
-      state.previewingPhoto = null;
-    },
-    cancelPhotoPreview: (state) => {
-      state.previewingPhoto = null;
-    },
-    addCachedPhoto: (state, action: PayloadAction<CachedUri>) => {
       state.cachedPhotos.push(action.payload);
     },
-    clearCachedPhotosState: (state) => {
-      state.cachedPhotos = [];
+    clearPhotoPreview: (state) => {
+      state.previewingPhoto = null;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(removeCachedPhoto.fulfilled, (state, action) => {
-        const cachedUri = action.payload;
-        state.cachedPhotos = state.cachedPhotos.filter(
-          (uri) => uri !== cachedUri
-        );
+      .addCase(deleteCachedPhoto.fulfilled, (state, action) => {
+        const updatedCachePhotos = action.payload;
+        state.cachedPhotos = updatedCachePhotos;
         state.errorMsg = null;
         state.loading = "succeeded";
       })
-      .addCase(removeCachedPhoto.rejected, (state, action) => {
-        console.error(action.error);
+      .addCase(deleteCachedPhoto.rejected, (state) => {
         state.errorMsg = "Cached photo could not be deleted";
         state.loading = "failed";
       })
-      .addCase(removeCachedPhoto.pending, (state) => {
+      .addCase(deleteCachedPhoto.pending, (state) => {
         state.loading = "pending";
       });
   },
 });
 
-const cancelPhotoPreview = (): AppThunk => async (dispatch, getState) => {
-  try {
-    const state = getState();
-    const previewingPhoto = selectPreviewPhoto(state);
-    if (previewingPhoto) {
-      dispatch(removeCachedPhoto(previewingPhoto));
-      dispatch(photoSliceActions.cancelPhotoPreview());
-    }
-  } catch (error) {
-    throw error;
-  }
-};
-
-const removeCachedPhoto = createAsyncThunk(
-  "photos/removeCachedPhoto",
-  async (cachedUri: CachedUri) => {
-    try {
-      await FS.deleteItem.byUri(cachedUri);
-      return cachedUri;
-    } catch (error) {
-      throw error;
-    }
-  }
-);
-
-const removeAllCachedPhotos = (): AppThunk => async (dispatch, getState) => {
-  const state = getState();
-  const cachedPhotos = state.photos.cachedPhotos;
-  const removeCachedPhotosPromises = cachedPhotos.map((cachedUri) =>
-    dispatch(removeCachedPhoto(cachedUri))
-  );
-  await Promise.all(removeCachedPhotosPromises);
-};
-
 const photoThunks = {
-  removeCachedPhoto,
-  removeAllCachedPhotos,
-  cancelPhotoPreview,
+  fetchPhotoDocDirectory,
+  fetchCachedPhotos,
+  deleteDocPhoto,
+  deleteDocPhotoDirectory,
+  deleteAllCachePhotos,
+  deleteCachedPhoto,
+  deletePreviewPhoto,
+  moveCachePhotosToDocDirectory,
 };
 const photoSliceActions = photoSlice.actions;
-
 export const photoActions = { ...photoSliceActions, ...photoThunks };
 
 export type PhotoSlice = {
