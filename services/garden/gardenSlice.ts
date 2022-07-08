@@ -124,7 +124,10 @@ export const gardenSlice = createSlice({
         selectedGardenId: string;
         selectedBedId: string;
         veggieId: string;
-        newLog: Pick<VeggieLog, "date" | "notes" | "payloadTags">;
+        newLog: Pick<
+          VeggieLog,
+          "date" | "notes" | "payloadTags" | "payloadPics"
+        >;
       }>
     ) => {
       const { selectedGardenId, selectedBedId, veggieId, newLog } =

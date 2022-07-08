@@ -26,6 +26,7 @@ export const testGardenState: Garden[] = [
                 payloadTags: [
                   { tagLabel: "pests", tagColor: "#FF5A33", tagIcon: "pest" },
                 ],
+                payloadPics: [],
               },
               {
                 id: nanoid(),
@@ -39,6 +40,7 @@ export const testGardenState: Garden[] = [
                     tagIcon: "disease",
                   },
                 ],
+                payloadPics: [],
               },
               {
                 id: nanoid(),
@@ -52,6 +54,7 @@ export const testGardenState: Garden[] = [
                     tagIcon: "seed",
                   },
                 ],
+                payloadPics: [],
               },
               {
                 id: nanoid(),
@@ -65,45 +68,46 @@ export const testGardenState: Garden[] = [
                     tagIcon: "seedling",
                   },
                 ],
+                payloadPics: [],
               },
             ],
           },
         ],
       },
-      {
-        name: "2",
-        id: "2hjk3afv89",
-        veggies: [
-          {
-            veggieInfo: { id: "32089ghv2ags90aosjdsalkb21309" },
-            id: "hi34fp78934ch21398op",
-            sowDate: "2022-03-16T07:59:10.647Z",
-            harvestDate: "2023-01-14T13:00:00.000Z",
-            notes: "Feed these within a week.",
-            logs: [],
-          },
-        ],
-      },
+      // {
+      //   name: "2",
+      //   id: "2hjk3afv89",
+      //   veggies: [
+      //     {
+      //       veggieInfo: { id: "32089ghv2ags90aosjdsalkb21309" },
+      //       id: "hi34fp78934ch21398op",
+      //       sowDate: "2022-03-16T07:59:10.647Z",
+      //       harvestDate: "2023-01-14T13:00:00.000Z",
+      //       notes: "Feed these within a week.",
+      //       logs: [],
+      //     },
+      //   ],
+      // },
     ],
   },
-  {
-    name: "backyard",
-    id: "213nkjun4safgkkhg1",
-    beds: [
-      {
-        name: "1",
-        id: "bkghefuhefku865766",
-        veggies: [
-          {
-            veggieInfo: { id: "89ghvsg2ags90aosjdsalkb21309" },
-            id: "paosgypaosighpaiosghjk3n3u9i23",
-            sowDate: "2022-03-16T07:59:10.647Z",
-            harvestDate: "2023-01-14T13:00:00.000Z",
-            notes: "Set up shadecloth for extra protection.",
-            logs: [],
-          },
-        ],
-      },
-    ],
-  },
+  // {
+  //   name: "backyard",
+  //   id: "213nkjun4safgkkhg1",
+  //   beds: [
+  //     {
+  //       name: "1",
+  //       id: "bkghefuhefku865766",
+  //       veggies: [
+  //         {
+  //           veggieInfo: { id: "89ghvsg2ags90aosjdsalkb21309" },
+  //           id: "paosgypaosighpaiosghjk3n3u9i23",
+  //           sowDate: "2022-03-16T07:59:10.647Z",
+  //           harvestDate: "2023-01-14T13:00:00.000Z",
+  //           notes: "Set up shadecloth for extra protection.",
+  //           logs: [],
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
 ];

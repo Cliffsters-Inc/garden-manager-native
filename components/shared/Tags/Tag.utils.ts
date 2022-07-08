@@ -32,6 +32,12 @@ export const convertToTag = (tag: string) => {
         tagColor: "#44803F",
         tagIcon: "seedling",
       };
+    default:
+      return {
+        tagLabel: tag,
+        tagColor: "#FF5A33",
+        tagIcon: "pest",
+      };
   }
 };
 

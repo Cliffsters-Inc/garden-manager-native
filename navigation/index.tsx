@@ -42,7 +42,7 @@ import { DeleteConfirmationModalScreen } from "../screens/DeleteConfirmationModa
 import { CreateCardModalScreen } from "../screens/CreateCardModalScreen.tsx";
 import { RenameCardModalScreen } from "../screens/RenameCardModalScreen";
 import { EditVeggieLogModal } from "../screens/EditVeggieLogModal";
-import { pressedTagsContext } from "../services/context";
+import { pressedTagsContext, picIdContext } from "../services/context";
 import { TagProps } from "../services/types";
 import { TimelineTabScreen } from "../screens/TimelineTabScreen";
 import { VeggieTimelineScreen } from "../screens/VeggieTimelineScreen";
@@ -79,94 +79,106 @@ function RootNavigator() {
     }),
     [pressedTags, setPressedTags]
   );
+
+  const [picId, setPicId] = React.useState<string | null>(null);
+  const picIdValue = React.useMemo(
+    () => ({
+      picId: picId,
+      setPicId: setPicId,
+    }),
+    [picId, setPicId]
+  );
+
   return (
     <pressedTagsContext.Provider value={tagsValue}>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Root"
-          component={BottomTabNavigator}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="NotFound"
-          component={NotFoundScreen}
-          options={{ title: "Oops!" }}
-        />
-        <Stack.Group screenOptions={{ presentation: "modal" }}>
+      <picIdContext.Provider value={picIdValue}>
+        <Stack.Navigator>
           <Stack.Screen
-            name="AddVeggieModal"
-            component={AddVeggieModalScreen}
-            options={({ navigation }) => ({
-              headerRight: () => (
-                <Button title="Cancel" onPress={navigation.goBack} />
-              ),
-              title: "Add a Veggie",
-            })}
+            name="Root"
+            component={BottomTabNavigator}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="NewVeggieLogModal"
-            component={NewVeggieLogModalScreen}
-            options={({ navigation }) => ({
-              title: "New Log",
-            })}
+            name="NotFound"
+            component={NotFoundScreen}
+            options={{ title: "Oops!" }}
           />
-          <Stack.Screen
-            name="EditVeggieLogModal"
-            component={EditVeggieLogModal}
-            options={{ title: "Log" }}
-          />
-          <Stack.Screen
-            name="CreateCardModal"
-            component={CreateCardModalScreen}
-            options={({ navigation }) => ({
-              headerLeft: () => (
-                <Button title="Cancel" onPress={navigation.goBack} />
-              ),
-            })}
-          />
-          <Stack.Screen
-            name="RenameCardModal"
-            component={RenameCardModalScreen}
-            options={({ navigation }) => ({
-              headerLeft: () => (
-                <Button title="Cancel" onPress={navigation.goBack} />
-              ),
-            })}
-          />
-          <Stack.Screen
-            name="CardOptionsModal"
-            component={CardOptionsModalScreen}
-            options={{
-              headerShown: false,
-              presentation: "transparentModal",
-            }}
-          />
-          <Stack.Screen
-            name="DeleteConfirmationModal"
-            component={DeleteConfirmationModalScreen}
-            options={{
-              headerShown: false,
-              presentation: "transparentModal",
-            }}
-          />
-        </Stack.Group>
-        <Stack.Screen
-          name="CameraModal"
-          component={CameraModal}
-          // options={({ navigation }) => ({
-          //   headerLeft: () => (
-          //     <Button title="Cancel" onPress={navigation.goBack} />
-          //   ),
-          // })}
-        />
-        <Stack.Screen
-          name="PicturePreview"
-          component={PicturePreview}
-          options={({ navigation, route }) => ({
-            headerShown: false,
-          })}
-        />
-      </Stack.Navigator>
+          <Stack.Group screenOptions={{ presentation: "modal" }}>
+            <Stack.Screen
+              name="AddVeggieModal"
+              component={AddVeggieModalScreen}
+              options={({ navigation }) => ({
+                headerRight: () => (
+                  <Button title="Cancel" onPress={navigation.goBack} />
+                ),
+                title: "Add a Veggie",
+              })}
+            />
+            <Stack.Screen
+              name="NewVeggieLogModal"
+              component={NewVeggieLogModalScreen}
+              options={({ navigation }) => ({
+                title: "New Log",
+              })}
+            />
+            <Stack.Screen
+              name="EditVeggieLogModal"
+              component={EditVeggieLogModal}
+              options={{ title: "Log" }}
+            />
+            <Stack.Screen
+              name="CreateCardModal"
+              component={CreateCardModalScreen}
+              options={({ navigation }) => ({
+                headerLeft: () => (
+                  <Button title="Cancel" onPress={navigation.goBack} />
+                ),
+              })}
+            />
+            <Stack.Screen
+              name="RenameCardModal"
+              component={RenameCardModalScreen}
+              options={({ navigation }) => ({
+                headerLeft: () => (
+                  <Button title="Cancel" onPress={navigation.goBack} />
+                ),
+              })}
+            />
+            <Stack.Screen
+              name="CardOptionsModal"
+              component={CardOptionsModalScreen}
+              options={{
+                headerShown: false,
+                presentation: "transparentModal",
+              }}
+            />
+            <Stack.Screen
+              name="DeleteConfirmationModal"
+              component={DeleteConfirmationModalScreen}
+              options={{
+                headerShown: false,
+                presentation: "transparentModal",
+              }}
+            />
+            <Stack.Screen
+              name="CameraModal"
+              component={CameraModal}
+              // options={({ navigation }) => ({
+              //   headerLeft: () => (
+              //     <Button title="Cancel" onPress={navigation.goBack} />
+              //   ),
+              // })}
+            />
+            <Stack.Screen
+              name="PicturePreview"
+              component={PicturePreview}
+              options={({ navigation, route }) => ({
+                headerShown: false,
+              })}
+            />
+          </Stack.Group>
+        </Stack.Navigator>
+      </picIdContext.Provider>
     </pressedTagsContext.Provider>
   );
 }

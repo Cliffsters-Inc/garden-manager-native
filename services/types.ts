@@ -51,6 +51,7 @@ export type VeggieLog = {
   notes?: string;
   photos?: string[];
   payloadTags?: TagProps[];
+  payloadPics?: string[];
 };
 
 export type TagProps = {

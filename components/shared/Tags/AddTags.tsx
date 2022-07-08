@@ -23,7 +23,7 @@ export const AddTags = () => {
 
   useEffect(() => {
     // ***type error***
-    const combinedTags: any = defaultTagsList.map((tag) => convertToTag(tag));
+    const combinedTags = defaultTagsList.map((tag) => convertToTag(tag));
     setCombinedTagsList(combinedTags);
   }, []);
 
@@ -47,7 +47,7 @@ export const AddTags = () => {
 
   const selectableOnPress = (tag: string) => {
     // ***type error***
-    const pressedTagObject: any = AddTagToList(pressedTags, tag);
+    const pressedTagObject = AddTagToList(pressedTags, tag);
     setPressedTags(pressedTagObject);
   };
 
@@ -57,6 +57,7 @@ export const AddTags = () => {
     setPressedTags([...removeTag]);
   };
 
+  //consider replacing square brackets below to curly as it only needs to render.
   const renderSelectableItem = ({ item }: TagObject) => {
     return (
       <Pressable onPress={() => selectableOnPress(item.tagLabel)}>

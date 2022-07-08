@@ -30,7 +30,7 @@ export type RootStackParamList = {
     selectedGardenId?: string;
     selectedBedId?: string;
     veggieId?: string;
-    picKey?: string;
+    test?: string;
   };
   EditVeggieLogModal: {
     selectedGardenId: string;

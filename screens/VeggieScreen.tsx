@@ -9,7 +9,7 @@ import { ActionButton } from "../components/shared/ActionButton";
 import { useEffect, useState } from "react";
 import { SortBtn } from "../components/shared/SortBtn";
 import { MaterialIcons } from "@expo/vector-icons";
-import { TagObject } from "../services/types";
+import { TagObject, VeggieLog } from "../services/types";
 import { Tag } from "../components/shared/Tags/TagElement";
 import { nanoid } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -22,7 +22,9 @@ export const VeggieScreen = ({
   const { selectedGardenId, selectedBedId, veggieId } = route.params;
   const [logsDescending, setLogsDescending] = useState(true);
 
-  const [pics, setPics] = useState<string | undefined>("");
+  const [logsWithPic, setLogsWithPic] = useState<VeggieLog[] | undefined>([]);
+  const [logPics, setlogPics] = useState<string[]>([]);
+
   const veggie = useAppSelector((state) =>
     gardenSelectors.selectVeggieWithSortedLogs(
       state,
@@ -43,19 +45,56 @@ export const VeggieScreen = ({
     />
   );
 
+  //Telmo: check that using tempArr first is better?? TS line 60
   useEffect(() => {
-    AsyncStorage.getItem("@pic").then((res) => setPics(res));
+    const tempArr: VeggieLog[] = [];
+    veggieLogs?.map((log) => {
+      if (log.payloadPics!.length > 0) {
+        tempArr.push(log);
+      }
+      setLogsWithPic(tempArr);
+    });
   }, []);
 
-  console.log("***picTest***", pics);
-
-  const checkStorage = () => {
-    AsyncStorage.getItem("@pic").then((res) => console.log("preview", res));
+  const convertToUri = async (key: string) => {
+    try {
+      const uri = await AsyncStorage.getItem(key);
+      console.log("converted uri ", uri);
+      return uri;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
+  //***Telmo: Ts problem on line 83 if I take away the bang operator
+  const createUriList = () => {
+    const pictureList:
+      | Promise<{ logId: string; uri: string | null }>[]
+      | undefined = logsWithPic?.map((log: VeggieLog, index: number) => {
+      return new Promise<{ logId: string; uri: string | null }>(
+        async (resolve, reject) => {
+          const logPic = await convertToUri(log.payloadPics![0]);
+          resolve({ logId: log.id, uri: logPic });
+        }
+      );
+    });
+    return Promise.all(pictureList);
+  };
+
+  useEffect(() => {
+    const displayLogPics = () => {
+      createUriList().then((newPicArray) => {
+        console.log("***promise results: ", newPicArray);
+        setlogPics(newPicArray);
+      });
+    };
+    displayLogPics();
+  }, [logsWithPic]);
+
   const con = () => {
-    console.log("veggiePics", pics);
-    // checkStorage();
+    console.log("********************");
+    console.log("logsWithPic ", logsWithPic);
+    console.log("pics", logPics);
   };
 
   return veggie ? (
@@ -118,7 +157,7 @@ export const VeggieScreen = ({
           </Pressable>
         </View>
         <FlatList
-          data={veggie.logs}
+          data={veggieLogs}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <Pressable
@@ -139,10 +178,10 @@ export const VeggieScreen = ({
               }}
             >
               <View style={{ flexDirection: "row" }}>
-                <Image
-                  source={{ uri: pics }}
+                {/* <Image
+                  source={{ uri: logPics[0] }}
                   style={{ width: 50, height: 50 }}
-                />
+                /> */}
                 <Text style={{ fontSize: 20, fontWeight: "bold" }}>
                   {format(new Date(item.date), "d MMM yy")}
                 </Text>

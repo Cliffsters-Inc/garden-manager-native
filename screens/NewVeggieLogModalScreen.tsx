@@ -1,5 +1,5 @@
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
-import { Button, StyleSheet, TextInput } from "react-native";
+import { Button, FlatList, StyleSheet, TextInput } from "react-native";
 import { Text, View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 import { format } from "date-fns";
@@ -7,9 +7,12 @@ import { useAppDispatch } from "../store";
 import { gardenActions } from "../services/garden/gardenSlice";
 import { Calendar } from "../components/shared/Calendar";
 import { CrossBtn } from "../components/shared/CrossBtn";
-import { pressedTagsContext } from "../services/context";
+import { picIdContext, pressedTagsContext } from "../services/context";
 import { TagProps } from "../services/types";
 import { AddTags } from "../components/shared/Tags/AddTags";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { nanoid } from "@reduxjs/toolkit";
+import { Image } from "react-native";
 
 export const NewVeggieLogModalScreen = ({
   navigation,
@@ -18,22 +21,44 @@ export const NewVeggieLogModalScreen = ({
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [date, setDate] = useState(Date.now());
   const [notes, setNotes] = useState("");
-  const { selectedGardenId, selectedBedId, veggieId, picKey } = route.params;
+  const { selectedGardenId, selectedBedId, veggieId } = route.params;
   const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
+  const { picId, setPicId } = useContext(picIdContext);
   const [payloadTags, setPayloadTags] = useState<TagProps[]>([]);
-  const [payloadPics, setPayloadPics] = useState<string>();
+  const [payloadPics, setPayloadPics] = useState<string[]>([]);
+  const [previewPics, setPreviewPics] = useState<string[]>([]);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    // const pic = route.params.
-    // setPayloadPics()
-    console.log("payloadPics: ", payloadPics);
-  });
-
-  useEffect(() => {
     setPayloadTags([...pressedTags]);
   }, [pressedTags]);
+
+  useEffect(() => {
+    if (picId) {
+      setPayloadPics([...payloadPics, picId]);
+    }
+  }, [picId]);
+
+  const createPreviewPics = () => {
+    const takenPics = payloadPics.map((pic) => {
+      return new Promise(async (resolve, reject) => {
+        const convertedPic = await AsyncStorage.getItem(pic);
+        resolve(convertedPic);
+      });
+    });
+    return Promise.all(takenPics);
+  };
+
+  //***Telmo: Is it better how I have setup useEffect with function or better with just logic? TS problem line 148
+  useEffect(() => {
+    const displayPreviewPics = () => {
+      createPreviewPics().then((convertedPicArray) => {
+        setPreviewPics(convertedPicArray);
+      });
+    };
+    displayPreviewPics();
+  }, [payloadPics]);
 
   const handleSubmit = () => {
     dispatch(
@@ -41,7 +66,7 @@ export const NewVeggieLogModalScreen = ({
         selectedGardenId,
         selectedBedId,
         veggieId,
-        newLog: { date, notes, payloadTags },
+        newLog: { date, notes, payloadTags, payloadPics },
       })
     );
     setPressedTags([]);
@@ -58,10 +83,10 @@ export const NewVeggieLogModalScreen = ({
       headerRight: () => <Button title="Add" onPress={handleSubmit} />,
       headerLeft: () => <Button title="Cancel" onPress={goBackAndClear} />,
     });
-  }, [navigation, date, notes, payloadTags]);
+  }, [navigation, date, notes, payloadTags, payloadPics]);
 
   const dismissAndNavigate = () => {
-    navigation.goBack();
+    // navigation.goBack();
     navigation.navigate("CameraModal", {
       selectedGardenId,
       selectedBedId,
@@ -70,6 +95,11 @@ export const NewVeggieLogModalScreen = ({
   };
 
   const dateCalFormatted = format(new Date(date), "yyyy-MM-dd");
+
+  const con = () => {
+    console.log("payloadPics", payloadPics);
+    console.log("previewPics", previewPics);
+  };
 
   return (
     <View style={styles.container}>
@@ -103,8 +133,21 @@ export const NewVeggieLogModalScreen = ({
         multiline
         style={styles.notesContainer}
       />
+      <Button title="con" onPress={con} />
       <AddTags />
-      <Button title="Add Picture" onPress={dismissAndNavigate} />
+      <View style={{ height: 100, backgroundColor: "grey" }}>
+        <Button title="Add Picture" onPress={dismissAndNavigate} />
+        {previewPics.length > 0 && (
+          <FlatList
+            data={previewPics}
+            keyExtractor={() => nanoid()}
+            renderItem={({ item }) => (
+              <Image source={{ uri: item }} style={{ width: 50, height: 50 }} />
+            )}
+            horizontal={true}
+          />
+        )}
+      </View>
     </View>
   );
 };

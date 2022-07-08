@@ -1,18 +1,20 @@
 import { Feather } from "@expo/vector-icons";
-import { useLayoutEffect, useState } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { Image, ImageBackground, StyleSheet } from "react-native";
 import { RootStackScreenProps } from "../types";
 import { View } from "./Themed";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "react-native-elements";
+import { picIdContext } from "../services/context";
+import { nanoid } from "@reduxjs/toolkit";
 
 export const PicturePreview = ({
   navigation,
   route,
 }: RootStackScreenProps<"PicturePreview">) => {
   const { photo, veggieId, resumePreview } = route.params;
-  const [picKey, setPicKey] = useState<string>("test");
-  console.log("picPreview", photo);
+  const { picId, setPicId } = useContext(picIdContext);
+  const [test, setTest] = useState("testState");
 
   const navigateBack = () => {
     navigation.goBack();
@@ -25,18 +27,13 @@ export const PicturePreview = ({
 
   const storePic = async () => {
     const picToSave = photo;
-    await AsyncStorage.setItem(`@pic${veggieId}`, picToSave);
-    setPicKey(`@pic${veggieId}`);
-    //below causes us to to make these props conditional, better way?
-    // navigation.navigate("NewVeggieLogModal", {
-    //   picKey,
-    // });
-    navigation.navigate({
-      name: "NewVeggieLogModal",
-      params: { picKey: picKey },
-      merge: true,
-    });
+    const newId = nanoid();
+    setPicId(`@pic#${newId}`);
+    await AsyncStorage.setItem(`@pic#${newId}`, picToSave);
+    navigation.pop(2);
   };
+
+  console.log("Preview picId", picId);
 
   return (
     <View style={styles.container}>
