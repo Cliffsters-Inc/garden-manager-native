@@ -15,6 +15,11 @@ import { nanoid } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "react-native-elements";
 
+type LogPic = {
+  logId: string;
+  uri: string;
+};
+
 export const VeggieScreen = ({
   navigation,
   route,
@@ -23,8 +28,7 @@ export const VeggieScreen = ({
   const [logsDescending, setLogsDescending] = useState(true);
 
   const [logsWithPic, setLogsWithPic] = useState<VeggieLog[] | undefined>([]);
-  const [logPics, setlogPics] = useState<string[]>([]);
-
+  const [logPics, setlogPics] = useState<LogPic[]>([]);
   const veggie = useAppSelector((state) =>
     gardenSelectors.selectVeggieWithSortedLogs(
       state,
@@ -91,6 +95,14 @@ export const VeggieScreen = ({
     displayLogPics();
   }, [logsWithPic]);
 
+  const findPicForLog = (id: string) => {
+    const result = logPics.find((log) => log.logId === id);
+    console.log("**result: log ", result);
+    const pic = result?.uri;
+    console.log("**result: pic ", pic);
+    return pic;
+  };
+
   const con = () => {
     console.log("********************");
     console.log("logsWithPic ", logsWithPic);
@@ -131,6 +143,10 @@ export const VeggieScreen = ({
         route={route}
       />
       <Button title={"con"} onPress={con} />
+      <Button
+        title={"test"}
+        onPress={() => findPicForLog("zaOZnzNK0Vt7vy9idCI48")}
+      />
       <View>
         <View
           style={{
@@ -178,10 +194,13 @@ export const VeggieScreen = ({
               }}
             >
               <View style={{ flexDirection: "row" }}>
-                {/* <Image
-                  source={{ uri: logPics[0] }}
-                  style={{ width: 50, height: 50 }}
-                /> */}
+                {item.payloadPics!.length > 0 && (
+                  // <Text>contains Pics</Text>
+                  <Image
+                    source={{ uri: findPicForLog(item.id) }}
+                    style={{ width: 50, height: 50 }}
+                  />
+                )}
                 <Text style={{ fontSize: 20, fontWeight: "bold" }}>
                   {format(new Date(item.date), "d MMM yy")}
                 </Text>

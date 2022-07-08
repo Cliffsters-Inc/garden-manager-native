@@ -70,12 +70,14 @@ export const NewVeggieLogModalScreen = ({
       })
     );
     setPressedTags([]);
+    setPreviewPics([]);
     navigation.goBack();
   };
 
   useLayoutEffect(() => {
     const goBackAndClear = () => {
       setPressedTags([]);
+      setPreviewPics([]);
       navigation.goBack();
     };
 
