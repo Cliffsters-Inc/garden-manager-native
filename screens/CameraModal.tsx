@@ -37,8 +37,8 @@ export const CameraModal = ({
   };
 
   const handleKeep = () => {
-    dispatch(photoActions.clearPhotoPreview());
     dispatch(photoActions.fetchCachedPhotos());
+    dispatch(photoActions.clearPhotoPreview());
     navigation.goBack();
   };
 

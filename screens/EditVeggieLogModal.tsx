@@ -1,4 +1,4 @@
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { Button, Image, Pressable, StyleSheet, TextInput } from "react-native";
 import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
@@ -11,7 +11,6 @@ import { AddTags } from "../components/shared/Tags/AddTags";
 import { pressedTagsContext } from "../services/context";
 import { TagProps } from "../services/types";
 import { photoActions, photoSelectors } from "../services/photos/photos.slice";
-import { FS } from "../utils/fileSystem";
 
 export const EditVeggieLogModal = ({
   navigation,
@@ -126,19 +125,26 @@ export const EditVeggieLogModal = ({
       />
       <View style={{ flexDirection: "row" }}>
         {log?.photos.entities &&
-          log.photos.entities.map((photoUri) => (
-            <Image
-              key={photoUri}
-              source={{ uri: photoUri, width: 50, height: 50 }}
-            />
-          ))}
+          log.photos.entities.map((photoUri) => {
+            console.log({ photoUri });
+            return (
+              <Image
+                key={photoUri}
+                source={{ uri: photoUri, width: 50, height: 50 }}
+              />
+            );
+          })}
         {cachedPhotos &&
-          cachedPhotos.map((photoUri) => (
-            <Image
-              key={photoUri}
-              source={{ uri: photoUri, width: 50, height: 50 }}
-            />
-          ))}
+          cachedPhotos.map((photoUri) => {
+            console.log("cache", { photoUri });
+
+            return (
+              <Image
+                key={photoUri}
+                source={{ uri: photoUri, width: 50, height: 50 }}
+              />
+            );
+          })}
       </View>
       <AddTags />
       {deleteConfirmationVisible ? (

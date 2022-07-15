@@ -6,7 +6,6 @@ import {
 } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../../store";
 import { FS } from "../../utils/fileSystem";
-import { logActions, logSlice } from "../log/log.slice";
 import { LoadingStates } from "../types";
 
 /** @params DocPhotosDirLocation - include directory name and parent folders eg. "logs/logID123", do not include photos eg. "photos/logs/logId123" */
@@ -88,7 +87,7 @@ const deleteCachedPhoto = createAsyncThunk(
   "photos/deleteCachedPhoto",
   async (cachedUri: CachedUri) => {
     try {
-      await FS.deleteItem.byUri(cachedUri);
+      await FS.deleteItem.inCache("Camera");
       const updatedCachePhotos = await FS.getDirectoryContents.inCache(
         "Camera"
       );
@@ -131,6 +130,12 @@ export const photoSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchCachedPhotos.fulfilled, (state, action) => {
+        state.cachedPhotos = action.payload;
+      })
+      .addCase(deleteAllCachePhotos.fulfilled, (state, _action) => {
+        state.cachedPhotos = [];
+      })
       .addCase(deleteCachedPhoto.fulfilled, (state, action) => {
         const updatedCachePhotos = action.payload;
         state.cachedPhotos = updatedCachePhotos;

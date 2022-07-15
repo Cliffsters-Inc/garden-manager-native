@@ -1,26 +1,13 @@
 import * as FileSystem from "expo-file-system";
 
-/**
- * @param itemName - can be a directory or file name and should not begin with "/",
- * eg. "myDir" | "parentDir/myDir" and not "/myDir" | "/parentDIr/myDir"
- */
+/** can be a directory or file name and should not begin with "/", eg. "myDir" | "parentDir/myDir" and not "/myDir" | "/parentDIr/myDir" */
 type ItemName = string;
-
-/**
- * @param dirName - should not begin with "/",
- * eg. "myDir" | "parentDir/myDir" and not "/myDir" | "/parentDIr/myDir"
- */
+/** should not begin with "/", eg. "myDir" | "parentDir/myDir" and not "/myDir" | "/parentDIr/myDir" */
 type DirName = string;
-
-/**
- * @param itemUri - can be a directory or file URI
- */
+/** can be a directory or file URI */
 type ItemUri = string;
-
-/**
- * @param DirUri - directory URI
- */
 type DirUri = string;
+type FileUri = string;
 
 const rootDocumentLocation = FileSystem.documentDirectory;
 const rootCacheLocation = FileSystem.cacheDirectory;
@@ -43,8 +30,15 @@ const createDirectory = async (dirName: DirName) => {
     });
 };
 
-const _getDirectoryContents = (dirUri: DirUri) =>
-  FileSystem.readDirectoryAsync(dirUri);
+const _getDirectoryContents = async (dirUri: DirUri): Promise<FileUri[]> => {
+  const files = await FileSystem.readDirectoryAsync(dirUri);
+  if (files) {
+    const fileUris = files.map((file) => `${dirUri}/${file}`);
+    return fileUris;
+  } else {
+    return [];
+  }
+};
 const getDirectoryContents = {
   byUri: _getDirectoryContents,
   inDocs: (dirName?: DirName) => {
@@ -57,7 +51,8 @@ const getDirectoryContents = {
   },
 };
 
-const _delete = (itemUri: ItemUri) => FileSystem.deleteAsync(itemUri);
+const _delete = (itemUri: ItemUri) =>
+  FileSystem.deleteAsync(itemUri, { idempotent: true });
 const deleteItem = {
   byUri: _delete,
   inDocs: (itemName: ItemName) => _delete(rootDocumentLocation + itemName),
