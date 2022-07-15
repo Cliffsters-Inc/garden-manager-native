@@ -94,9 +94,10 @@ const deleteCachedPhoto = createAsyncThunk(
   "photos/deleteCachedPhoto",
   async (cachedUri: CachedUri) => {
     try {
-      await FS.deleteItem.inCache("Camera");
+      await FS.deleteItem.byUri(cachedUri);
       const updatedCachePhotos = await FS.getDirectoryContents.inCache(
-        cachedUri
+        "Camera",
+        { appendUri: true }
       );
       return updatedCachePhotos;
     } catch (error) {
@@ -108,8 +109,8 @@ const deletePreviewPhoto = (): AppThunk => async (dispatch, getState) => {
   const state = getState();
   const previewPhoto = selectPreviewPhoto(state);
   if (previewPhoto) {
-    await dispatch(deleteCachedPhoto(previewPhoto));
-    dispatch(photoSliceActions.clearPhotoPreview);
+    dispatch(deleteCachedPhoto(previewPhoto));
+    dispatch(photoSliceActions.clearPhotoPreview());
   }
 };
 
