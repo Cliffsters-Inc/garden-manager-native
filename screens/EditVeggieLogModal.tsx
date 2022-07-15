@@ -19,6 +19,10 @@ export const EditVeggieLogModal = ({
   const { logId } = route.params;
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    dispatch(logActions.fetchLogPhotos(logId));
+  }, []);
+
   const log = useAppSelector((state) => logSelectors.selectById(state, logId));
   const cachedPhotos = useAppSelector(photoSelectors.selectAllCachedPhotos);
 

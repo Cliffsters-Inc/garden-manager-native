@@ -17,47 +17,49 @@ const _checkItemExists = async (
   itemUri: ItemUri,
   options?: CheckItemExistsOptions
 ) => {
-  const { exists, isDirectory } = await FileSystem.getInfoAsync(itemUri);
-  if (options?.createIfNonExistent && isDirectory && !exists) {
-    await FileSystem.makeDirectoryAsync(itemUri, { intermediates: true });
+  const { exists } = await FileSystem.getInfoAsync(itemUri);
+
+  if (options?.createIfNonExistent && !exists) {
+    await FileSystem.makeDirectoryAsync(itemUri, {
+      intermediates: true,
+    });
     return true;
   }
   return exists;
 };
 
 const checkItemExists = {
-  byUri: (itemUri: ItemUri, options?: CheckItemExistsOptions) =>
-    _checkItemExists(itemUri, options),
+  byUri: _checkItemExists,
   inDocs: (itemName: ItemName, options?: CheckItemExistsOptions) =>
     _checkItemExists(rootDocumentLocation + itemName, options),
 };
 
-const createDirectory = async (dirName: DirName) => {
-  const dirAlreadyExists = await checkItemExists.inDocs(dirName);
-  if (!dirAlreadyExists)
-    return FileSystem.makeDirectoryAsync(rootDocumentLocation + dirName, {
-      intermediates: true,
-    });
-};
+/** appendUri - defaults to false if not supplied */
+type GetDirectoryContentOptions = { appendUri?: boolean };
+const _getDirectoryContents = async (
+  dirUri: DirUri,
+  options?: GetDirectoryContentOptions
+) => {
+  await checkItemExists.byUri(dirUri, { createIfNonExistent: true });
 
-const _getDirectoryContents = async (dirUri: DirUri): Promise<ItemUri[]> => {
   const contents = await FileSystem.readDirectoryAsync(dirUri);
   if (contents) {
-    const itemUris = contents.map((item) => `${dirUri}/${item}`);
-    return itemUris;
+    return options?.appendUri
+      ? contents.map((item) => `${dirUri}/${item}/`)
+      : contents;
   } else {
     return [];
   }
 };
 const getDirectoryContents = {
   byUri: _getDirectoryContents,
-  inDocs: (dirName?: DirName) => {
+  inDocs: (dirName?: DirName, options?: GetDirectoryContentOptions) => {
     if (!dirName) dirName = "";
-    return _getDirectoryContents(rootDocumentLocation + dirName);
+    return _getDirectoryContents(`${rootDocumentLocation}${dirName}/`, options);
   },
-  inCache: (dirName?: DirName) => {
+  inCache: (dirName?: DirName, options?: GetDirectoryContentOptions) => {
     if (!dirName) dirName = "";
-    return _getDirectoryContents(rootCacheLocation + dirName);
+    return _getDirectoryContents(`${rootCacheLocation}${dirName}/`, options);
   },
 };
 
@@ -90,7 +92,11 @@ const moveDirContents = async (
     await checkItemExists.byUri(toUri, { createIfNonExistent: true });
 
     const movePromises = contents.map(
-      async (itemUri) => await moveItem({ fromUri: itemUri, toUri: toUri })
+      async (itemName) =>
+        await moveItem({
+          fromUri: `${fromUri}/${itemName}`,
+          toUri: `${toUri}/${itemName}`,
+        })
     );
     await Promise.all(movePromises);
   }
@@ -100,7 +106,6 @@ export const FS = {
   rootDocumentLocation,
   rootCacheLocation,
   checkItemExists,
-  createDirectory,
   getDirectoryContents,
   deleteItem,
   moveItem,

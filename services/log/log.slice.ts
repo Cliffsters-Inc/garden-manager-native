@@ -1,4 +1,5 @@
 import {
+  createAsyncThunk,
   createEntityAdapter,
   createSlice,
   EntityId,
@@ -34,17 +35,14 @@ export const logSlice = createSlice({
     update: logAdaptor.updateOne,
   },
   extraReducers: (builder) => {
-    builder.addCase(
-      photoActions.fetchPhotoDocDirectory.fulfilled,
-      (state, action) => {
-        const dirName = action.meta.arg.split("/").at(-1);
-
-        if (dirName) {
-          const matchingLogDir = state.entities[dirName];
-          if (matchingLogDir) matchingLogDir.photos.entities = action.payload;
-        }
+    builder.addCase(fetchLogPhotos.fulfilled, (state, action) => {
+      const logId = action.meta.arg;
+      const log = state.entities[logId];
+      if (log) {
+        log.photos.entities = action.payload;
+        log.photos.loading = "succeeded";
       }
-    );
+    });
   },
 });
 
@@ -61,7 +59,22 @@ const remove =
     }
   };
 
-const logThunks = { remove };
+const fetchLogPhotos = createAsyncThunk(
+  "logs/fetchLogPhotos",
+  async (logId: EntityId, { dispatch }) => {
+    try {
+      const photos = await dispatch(
+        photoActions.fetchPhotoDocDirectory("logs/" + logId)
+      ).unwrap();
+
+      return photos;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+const logThunks = { remove, fetchLogPhotos };
 const logSliceActions = logSlice.actions;
 export const logActions = { ...logSliceActions, ...logThunks };
 

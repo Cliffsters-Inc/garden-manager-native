@@ -5,4 +5,4 @@
 - [ ] Open debugger - $ yarn run debug
 - [ ] Run app - $ yarn ios
 - [ ] In app terminal - › Press m │ toggle menu
-- [ ] On simulator - Click "Start Remote Debugging"
+- [ ] On simulator - Click "Debug Remote JS"

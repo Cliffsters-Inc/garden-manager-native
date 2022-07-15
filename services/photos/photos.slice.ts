@@ -28,7 +28,12 @@ const fetchPhotoDocDirectory = createAsyncThunk(
   "photos/fetchPhotoDocDirectory",
   async (dirName: DocPhotosDirLocation) => {
     try {
-      return await FS.getDirectoryContents.inDocs("photos/" + dirName);
+      const contents = await FS.getDirectoryContents.inDocs(
+        "photos/" + dirName,
+        { appendUri: true }
+      );
+
+      return contents;
     } catch (error) {
       throw error;
     }
@@ -38,7 +43,9 @@ const fetchCachedPhotos = createAsyncThunk(
   "photos/fetchCachedPhotos",
   async () => {
     try {
-      return await FS.getDirectoryContents.inCache("Camera");
+      return await FS.getDirectoryContents.inCache("Camera", {
+        appendUri: true,
+      });
     } catch (error) {
       throw error;
     }
@@ -89,7 +96,7 @@ const deleteCachedPhoto = createAsyncThunk(
     try {
       await FS.deleteItem.inCache("Camera");
       const updatedCachePhotos = await FS.getDirectoryContents.inCache(
-        "Camera"
+        cachedUri
       );
       return updatedCachePhotos;
     } catch (error) {
@@ -112,7 +119,7 @@ const moveCachePhotosToDocDirectory = createAsyncThunk(
     try {
       await FS.moveDirContents({
         fromUri: FS.rootCacheLocation + "Camera",
-        toUri: FS.rootDocumentLocation + "photos/" + dirName,
+        toUri: `${FS.rootDocumentLocation}photos/${dirName}`,
       });
     } catch (error) {
       throw error;
