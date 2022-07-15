@@ -74,7 +74,15 @@ const fetchLogPhotos = createAsyncThunk(
   }
 );
 
-const logThunks = { remove, fetchLogPhotos };
+const moveCachePhotosToLogDir = createAsyncThunk(
+  "logs/moveCachePhotosToLogDir",
+  async (logId: EntityId, { dispatch }) => {
+    await dispatch(photoActions.moveCachePhotosToDocDirectory("logs/" + logId));
+    await dispatch(fetchLogPhotos(logId));
+  }
+);
+
+const logThunks = { remove, fetchLogPhotos, moveCachePhotosToLogDir };
 const logSliceActions = logSlice.actions;
 export const logActions = { ...logSliceActions, ...logThunks };
 

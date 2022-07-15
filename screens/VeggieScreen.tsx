@@ -2,16 +2,17 @@ import { StyleSheet, Image, FlatList, Pressable } from "react-native";
 import { View, Text } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 import { format } from "date-fns";
-import { useAppSelector } from "../store";
+import { useAppDispatch, useAppSelector } from "../store";
 import { VeggieNotesField } from "../components/VeggieNotesField";
 import { ActionButton } from "../components/shared/ActionButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SortBtn } from "../components/shared/SortBtn";
 import { MaterialIcons } from "@expo/vector-icons";
 import { veggieSelectors } from "../services/veggie/veggie.slice";
-import { logSelectors } from "../services/log/log.slice";
+import { logActions, logSelectors } from "../services/log/log.slice";
 import { TagObject } from "../services/types";
 import { Tag } from "../components/shared/Tags/TagElement";
+import { photoActions } from "../services/photos/photos.slice";
 
 export const VeggieScreen = ({
   navigation,
@@ -19,13 +20,20 @@ export const VeggieScreen = ({
 }: GardenTabScreenProps<"VeggieScreen">) => {
   const { veggieId } = route.params;
   const [logsDescending, setLogsDescending] = useState(true);
+
+  const dispatch = useAppDispatch();
   const veggie = useAppSelector((state) =>
     veggieSelectors.selectById(state, veggieId)
   );
-
   const logs = useAppSelector((state) =>
     logSelectors.selectByIds(state, veggie?.logs ?? [])
   );
+
+  useEffect(() => {
+    if (logs) {
+      logs.forEach((log) => dispatch(logActions.fetchLogPhotos(log.id)));
+    }
+  }, []);
 
   const renderDisplayTag = ({ item }: TagObject) => (
     <Tag
@@ -98,9 +106,10 @@ export const VeggieScreen = ({
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <Pressable
-              onPress={() =>
-                navigation.navigate("EditVeggieLogModal", { logId: item.id })
-              }
+              onPress={() => {
+                dispatch(photoActions.fetchCachedPhotos());
+                navigation.navigate("EditVeggieLogModal", { logId: item.id });
+              }}
               style={{
                 borderColor: "#d5d5d5",
                 borderWidth: 2,
@@ -122,13 +131,15 @@ export const VeggieScreen = ({
                   />
                 )}
               </View>
-              {item.photos.entities &&
-                item.photos.entities.map((photoUri) => (
-                  <Image
-                    key={photoUri}
-                    source={{ uri: photoUri, width: 50, height: 50 }}
-                  />
-                ))}
+              <View style={{ flexDirection: "row" }}>
+                {item.photos.entities &&
+                  item.photos.entities.map((photoUri) => (
+                    <Image
+                      key={photoUri}
+                      source={{ uri: photoUri, width: 50, height: 50 }}
+                    />
+                  ))}
+              </View>
               <Text>Notes: {item.notes}</Text>
             </Pressable>
           )}

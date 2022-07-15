@@ -19,10 +19,6 @@ export const EditVeggieLogModal = ({
   const { logId } = route.params;
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(logActions.fetchLogPhotos(logId));
-  }, []);
-
   const log = useAppSelector((state) => logSelectors.selectById(state, logId));
   const cachedPhotos = useAppSelector(photoSelectors.selectAllCachedPhotos);
 
@@ -39,9 +35,6 @@ export const EditVeggieLogModal = ({
 
   // onMount effect
   useEffect(() => {
-    if (log) photoActions.fetchPhotoDocDirectory("logs/" + log.id);
-    photoActions.fetchCachedPhotos();
-
     const selectorLogs = [...logTags];
     setPressedTags(selectorLogs);
   }, []);
@@ -52,7 +45,7 @@ export const EditVeggieLogModal = ({
 
   const handleUpdate = () => {
     if (log) {
-      dispatch(photoActions.moveCachePhotosToDocDirectory("logs/" + log.id));
+      if (cachedPhotos) dispatch(logActions.moveCachePhotosToLogDir(log.id));
       dispatch(
         logActions.update({
           id: log.id,
