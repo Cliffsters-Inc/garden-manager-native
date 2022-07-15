@@ -7,19 +7,29 @@ type DirName = string;
 /** can be a directory or file URI */
 type ItemUri = string;
 type DirUri = string;
-type FileUri = string;
 
 const rootDocumentLocation = FileSystem.documentDirectory;
 const rootCacheLocation = FileSystem.cacheDirectory;
 
-const _checkItemExist = async (itemUri: ItemUri) => {
-  const { exists } = await FileSystem.getInfoAsync(itemUri);
+/** createIfNonExistent - defaults to false if not provided */
+type CheckItemExistsOptions = { createIfNonExistent?: boolean };
+const _checkItemExists = async (
+  itemUri: ItemUri,
+  options?: CheckItemExistsOptions
+) => {
+  const { exists, isDirectory } = await FileSystem.getInfoAsync(itemUri);
+  if (options?.createIfNonExistent && isDirectory && !exists) {
+    await FileSystem.makeDirectoryAsync(itemUri, { intermediates: true });
+    return true;
+  }
   return exists;
 };
+
 const checkItemExists = {
-  inDocs: (itemName: ItemName) =>
-    _checkItemExist(rootDocumentLocation + itemName),
-  byUri: (itemUri: ItemUri) => _checkItemExist(itemUri),
+  byUri: (itemUri: ItemUri, options?: CheckItemExistsOptions) =>
+    _checkItemExists(itemUri, options),
+  inDocs: (itemName: ItemName, options?: CheckItemExistsOptions) =>
+    _checkItemExists(rootDocumentLocation + itemName, options),
 };
 
 const createDirectory = async (dirName: DirName) => {
@@ -30,11 +40,11 @@ const createDirectory = async (dirName: DirName) => {
     });
 };
 
-const _getDirectoryContents = async (dirUri: DirUri): Promise<FileUri[]> => {
-  const files = await FileSystem.readDirectoryAsync(dirUri);
-  if (files) {
-    const fileUris = files.map((file) => `${dirUri}/${file}`);
-    return fileUris;
+const _getDirectoryContents = async (dirUri: DirUri): Promise<ItemUri[]> => {
+  const contents = await FileSystem.readDirectoryAsync(dirUri);
+  if (contents) {
+    const itemUris = contents.map((item) => `${dirUri}/${item}`);
+    return itemUris;
   } else {
     return [];
   }
@@ -59,9 +69,31 @@ const deleteItem = {
   inCache: (itemName: ItemName) => _delete(rootCacheLocation + itemName),
 };
 
-type MoveItemArgs = { fromUri: ItemUri; toUri: ItemUri };
-const moveItem = ({ fromUri, toUri }: MoveItemArgs) => {
-  return FileSystem.moveAsync({ from: fromUri, to: toUri });
+type MoveItemArgs = { fromUri: ItemUri; toUri: DirUri };
+const moveItem = ({ fromUri, toUri }: MoveItemArgs) =>
+  FileSystem.moveAsync({ from: fromUri, to: toUri });
+
+type MoveDirContentsArgs = { fromUri: DirUri; toUri: DirUri };
+/** throwOnFromUriNotFound - defaults to false if not supplied */
+type MoveDirContentsOptions = { throwOnFromUriNotFound?: boolean };
+const moveDirContents = async (
+  { fromUri, toUri }: MoveDirContentsArgs,
+  options?: MoveDirContentsOptions
+) => {
+  const fromDirExists = await checkItemExists.byUri(fromUri);
+  const resolveOnFromUriNotFound =
+    !fromDirExists && !options?.throwOnFromUriNotFound;
+  if (resolveOnFromUriNotFound) return;
+
+  const contents = await getDirectoryContents.byUri(fromUri);
+  if (contents) {
+    await checkItemExists.byUri(toUri, { createIfNonExistent: true });
+
+    const movePromises = contents.map(
+      async (itemUri) => await moveItem({ fromUri: itemUri, toUri: toUri })
+    );
+    await Promise.all(movePromises);
+  }
 };
 
 export const FS = {
@@ -72,4 +104,5 @@ export const FS = {
   getDirectoryContents,
   deleteItem,
   moveItem,
+  moveDirContents,
 };

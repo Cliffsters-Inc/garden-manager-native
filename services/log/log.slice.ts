@@ -1,15 +1,12 @@
 import {
-  createAsyncThunk,
   createEntityAdapter,
   createSlice,
   EntityId,
   nanoid,
-  Update,
 } from "@reduxjs/toolkit";
 import { VeggieLogNormalised } from "../types";
 import { getInitialNormalisedGardenData } from "../utils/getInitialNormalisedGardenData";
 import { AppThunk, RootState } from "../../store";
-import { FS } from "../../utils/fileSystem";
 import { veggieActions } from "../veggie/veggie.slice";
 import { photoActions } from "../photos/photos.slice";
 

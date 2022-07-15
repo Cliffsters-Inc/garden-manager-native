@@ -109,10 +109,14 @@ const deletePreviewPhoto = (): AppThunk => async (dispatch, getState) => {
 const moveCachePhotosToDocDirectory = createAsyncThunk(
   "photos/moveCachePhotosToDocDirectory",
   async (dirName: DocPhotosDirLocation) => {
-    await FS.moveItem({
-      fromUri: FS.rootCacheLocation + "Camera",
-      toUri: FS.rootDocumentLocation + dirName,
-    });
+    try {
+      await FS.moveDirContents({
+        fromUri: FS.rootCacheLocation + "Camera",
+        toUri: FS.rootDocumentLocation + "photos/" + dirName,
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 );
 

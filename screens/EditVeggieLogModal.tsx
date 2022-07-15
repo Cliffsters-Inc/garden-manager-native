@@ -125,26 +125,19 @@ export const EditVeggieLogModal = ({
       />
       <View style={{ flexDirection: "row" }}>
         {log?.photos.entities &&
-          log.photos.entities.map((photoUri) => {
-            console.log({ photoUri });
-            return (
-              <Image
-                key={photoUri}
-                source={{ uri: photoUri, width: 50, height: 50 }}
-              />
-            );
-          })}
+          log.photos.entities.map((photoUri) => (
+            <Image
+              key={photoUri}
+              source={{ uri: photoUri, width: 50, height: 50 }}
+            />
+          ))}
         {cachedPhotos &&
-          cachedPhotos.map((photoUri) => {
-            console.log("cache", { photoUri });
-
-            return (
-              <Image
-                key={photoUri}
-                source={{ uri: photoUri, width: 50, height: 50 }}
-              />
-            );
-          })}
+          cachedPhotos.map((photoUri) => (
+            <Image
+              key={photoUri}
+              source={{ uri: photoUri, width: 50, height: 50 }}
+            />
+          ))}
       </View>
       <AddTags />
       {deleteConfirmationVisible ? (
