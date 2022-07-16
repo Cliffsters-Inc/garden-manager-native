@@ -5,12 +5,9 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../../store";
-import { FS } from "../../utils/fileSystem";
+import { FS, DirName, FileUri } from "../../utils/fileSystem";
 import { LoadingStates } from "../types";
 
-/** @params DocPhotosDirLocation - include directory name and parent folders eg. "logs/logID123", do not include photos eg. "photos/logs/logId123" */
-type DocPhotosDirLocation = string;
-type CachedUri = string;
 type SliceState = {
   previewingPhoto: string | null;
   cachedPhotos: string[];
@@ -24,9 +21,45 @@ const initialState: SliceState = {
   loading: "idle",
 };
 
+export const photoSlice = createSlice({
+  name: "photos",
+  initialState,
+  reducers: {
+    setPhotoPreview: (state, action: PayloadAction<FileUri>) => {
+      state.previewingPhoto = action.payload;
+      state.cachedPhotos.push(action.payload);
+    },
+    clearPhotoPreview: (state) => {
+      state.previewingPhoto = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCachedPhotos.fulfilled, (state, action) => {
+        state.cachedPhotos = action.payload;
+      })
+      .addCase(deleteAllCachePhotos.fulfilled, (state, _action) => {
+        state.cachedPhotos = [];
+      })
+      .addCase(deleteCachedPhoto.fulfilled, (state, action) => {
+        const updatedCachePhotos = action.payload;
+        state.cachedPhotos = updatedCachePhotos;
+        state.errorMsg = null;
+        state.loading = "succeeded";
+      })
+      .addCase(deleteCachedPhoto.rejected, (state) => {
+        state.errorMsg = "Cached photo could not be deleted";
+        state.loading = "failed";
+      })
+      .addCase(deleteCachedPhoto.pending, (state) => {
+        state.loading = "pending";
+      });
+  },
+});
+
 const fetchPhotoDocDirectory = createAsyncThunk(
   "photos/fetchPhotoDocDirectory",
-  async (dirName: DocPhotosDirLocation) => {
+  async (dirName: DirName) => {
     try {
       const contents = await FS.getDirectoryContents.inDocs(
         "photos/" + dirName,
@@ -54,11 +87,11 @@ const fetchCachedPhotos = createAsyncThunk(
 
 const deleteDocPhotoDirectory = createAsyncThunk(
   "photos/deleteDocPhotoDirectory",
-  async (dirLocation: DocPhotosDirLocation) => {
+  async (dirName: DirName) => {
     try {
-      await FS.deleteItem.inDocs("photos/" + dirLocation);
+      await FS.deleteItem.inDocs("photos/" + dirName);
     } catch (error) {
-      fetchPhotoDocDirectory(dirLocation);
+      fetchPhotoDocDirectory(dirName);
       throw error;
     }
   }
@@ -92,7 +125,7 @@ const deleteAllCachePhotos = createAsyncThunk(
 );
 const deleteCachedPhoto = createAsyncThunk(
   "photos/deleteCachedPhoto",
-  async (cachedUri: CachedUri) => {
+  async (cachedUri: FileUri) => {
     try {
       await FS.deleteItem.byUri(cachedUri);
       const updatedCachePhotos = await FS.getDirectoryContents.inCache(
@@ -116,7 +149,7 @@ const deletePreviewPhoto = (): AppThunk => async (dispatch, getState) => {
 
 const moveCachePhotosToDocDirectory = createAsyncThunk(
   "photos/moveCachePhotosToDocDirectory",
-  async (dirName: DocPhotosDirLocation) => {
+  async (dirName: DirName) => {
     try {
       await FS.moveDirContents({
         fromUri: FS.rootCacheLocation + "Camera",
@@ -127,42 +160,6 @@ const moveCachePhotosToDocDirectory = createAsyncThunk(
     }
   }
 );
-
-export const photoSlice = createSlice({
-  name: "photos",
-  initialState,
-  reducers: {
-    setPhotoPreview: (state, action: PayloadAction<CachedUri>) => {
-      state.previewingPhoto = action.payload;
-      state.cachedPhotos.push(action.payload);
-    },
-    clearPhotoPreview: (state) => {
-      state.previewingPhoto = null;
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchCachedPhotos.fulfilled, (state, action) => {
-        state.cachedPhotos = action.payload;
-      })
-      .addCase(deleteAllCachePhotos.fulfilled, (state, _action) => {
-        state.cachedPhotos = [];
-      })
-      .addCase(deleteCachedPhoto.fulfilled, (state, action) => {
-        const updatedCachePhotos = action.payload;
-        state.cachedPhotos = updatedCachePhotos;
-        state.errorMsg = null;
-        state.loading = "succeeded";
-      })
-      .addCase(deleteCachedPhoto.rejected, (state) => {
-        state.errorMsg = "Cached photo could not be deleted";
-        state.loading = "failed";
-      })
-      .addCase(deleteCachedPhoto.pending, (state) => {
-        state.loading = "pending";
-      });
-  },
-});
 
 const photoThunks = {
   fetchPhotoDocDirectory,

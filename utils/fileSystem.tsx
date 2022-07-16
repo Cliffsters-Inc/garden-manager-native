@@ -11,12 +11,13 @@
 import * as FileSystem from "expo-file-system";
 
 /** can be a directory or file name and should not begin with "/", eg. "myDir" | "parentDir/myDir" and not "/myDir" | "/parentDIr/myDir" */
-type ItemName = string;
+export type ItemName = string;
 /** should not begin with "/", eg. "myDir" | "parentDir/myDir" and not "/myDir" | "/parentDIr/myDir" */
-type DirName = string;
+export type DirName = string;
 /** can be a directory or file URI */
-type ItemUri = string;
-type DirUri = string;
+export type ItemUri = string;
+export type DirUri = string;
+export type FileUri = string;
 
 const rootDocumentLocation = FileSystem.documentDirectory;
 const rootCacheLocation = FileSystem.cacheDirectory;
