@@ -1,3 +1,13 @@
+/**
+ * This is a facade for the "expo-file-system" module, to simplify and improve it's api and documentation.
+ *
+ * @example usage
+ * import { FS } from "../../utils/fileSystem";
+ *
+ * const deleteItem = async () => await FS.deleteItem.byUri(cachedUri);
+ * deleteItem("file://......")
+ */
+
 import * as FileSystem from "expo-file-system";
 
 /** can be a directory or file name and should not begin with "/", eg. "myDir" | "parentDir/myDir" and not "/myDir" | "/parentDIr/myDir" */
@@ -72,6 +82,11 @@ const deleteItem = {
 };
 
 type MoveItemArgs = { fromUri: ItemUri; toUri: DirUri };
+/**
+ * Caveats
+ * - Moving a file to a file overrides the destination file
+ * - Moving a file to a folder replaces the folder with the file, instead move file to another file of the same name eg. {from: “old/thing.png”, to: “new/thing.png”}
+ */
 const moveItem = ({ fromUri, toUri }: MoveItemArgs) =>
   FileSystem.moveAsync({ from: fromUri, to: toUri });
 
