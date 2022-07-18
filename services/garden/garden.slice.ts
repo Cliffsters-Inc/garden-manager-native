@@ -62,7 +62,7 @@ export const gardenSlice = createSlice({
   },
 });
 
-const gardenThunks = {
+const gardenThunkActions = {
   remove:
     (gardenId: string): AppThunk =>
     (dispatch, getState) => {
@@ -76,7 +76,7 @@ const gardenThunks = {
     },
 };
 const gardenSliceActions = gardenSlice.actions;
-export const gardenActions = { ...gardenSliceActions, ...gardenThunks };
+export const gardenActions = { ...gardenSliceActions, ...gardenThunkActions };
 
 export type GardenSlice = {
   [gardenSlice.name]: ReturnType<typeof gardenSlice["reducer"]>;

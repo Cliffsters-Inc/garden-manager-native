@@ -8,7 +8,7 @@ import { AppThunk, RootState } from "../../store";
 import { gardenActions } from "../garden/garden.slice";
 import { BedNormalised } from "../types";
 import { getInitialNormalisedGardenData } from "../utils/getInitialNormalisedGardenData";
-import { veggieActions, veggieSliceActions } from "../veggie/veggie.slice";
+import { veggieActions } from "../veggie/veggie.slice";
 
 const bedAdaptor = createEntityAdapter<BedNormalised>();
 
@@ -56,7 +56,7 @@ export const bedSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(veggieSliceActions.add, (state, action) => {
+    builder.addCase(veggieActions.add, (state, action) => {
       const newVeggie = action.payload;
       const veggiesBed = state.entities[newVeggie.bed];
       veggiesBed?.veggies.push(newVeggie.id);
@@ -64,7 +64,7 @@ export const bedSlice = createSlice({
   },
 });
 
-const bedThunks = {
+const bedThunkActions = {
   remove:
     (bedId: string): AppThunk =>
     (dispatch, getState) => {
@@ -85,7 +85,7 @@ const bedThunks = {
     },
 };
 const bedSliceActions = bedSlice.actions;
-export const bedActions = { ...bedSliceActions, ...bedThunks };
+export const bedActions = { ...bedSliceActions, ...bedThunkActions };
 
 export type BedSlice = {
   [bedSlice.name]: ReturnType<typeof bedSlice["reducer"]>;

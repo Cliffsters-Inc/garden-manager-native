@@ -161,7 +161,7 @@ const moveCachePhotosToDocDirectory = createAsyncThunk(
   }
 );
 
-const photoThunks = {
+const photoThunkActions = {
   fetchPhotoDocDirectory,
   fetchCachedPhotos,
   deleteDocPhoto,
@@ -172,7 +172,7 @@ const photoThunks = {
   moveCachePhotosToDocDirectory,
 };
 const photoSliceActions = photoSlice.actions;
-export const photoActions = { ...photoSliceActions, ...photoThunks };
+export const photoActions = { ...photoSliceActions, ...photoThunkActions };
 
 export type PhotoSlice = {
   [photoSlice.name]: ReturnType<typeof photoSlice["reducer"]>;

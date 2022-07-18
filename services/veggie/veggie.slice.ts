@@ -63,7 +63,7 @@ export const veggieSlice = createSlice({
   },
 });
 
-export const customVeggieActions = {
+export const veggieThunkActions = {
   remove:
     (veggieId: string): AppThunk =>
     (dispatch, getState) => {
@@ -85,7 +85,7 @@ export const customVeggieActions = {
 };
 
 export const veggieSliceActions = veggieSlice.actions;
-export const veggieActions = { ...veggieSliceActions, ...customVeggieActions };
+export const veggieActions = { ...veggieSliceActions, ...veggieThunkActions };
 
 export type VeggieSlice = {
   [veggieSlice.name]: ReturnType<typeof veggieSlice["reducer"]>;

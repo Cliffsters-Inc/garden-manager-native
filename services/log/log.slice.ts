@@ -82,9 +82,9 @@ const moveCachePhotosToLogDir = createAsyncThunk(
   }
 );
 
-const logThunks = { remove, fetchLogPhotos, moveCachePhotosToLogDir };
+const logThunkActions = { remove, fetchLogPhotos, moveCachePhotosToLogDir };
 const logSliceActions = logSlice.actions;
-export const logActions = { ...logSliceActions, ...logThunks };
+export const logActions = { ...logSliceActions, ...logThunkActions };
 
 export type LogSlice = {
   [logSlice.name]: ReturnType<typeof logSlice["reducer"]>;
