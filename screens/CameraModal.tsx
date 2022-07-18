@@ -24,7 +24,7 @@ export const CameraModal = ({
 
   const handleTakePicture = async () => {
     const photo = await cameraRef.current?.takePictureAsync();
-    if (photo) dispatch(photoActions.setPhotoPreview(photo.uri));
+    if (photo) dispatch(photoActions.photoTaken(photo.uri));
   };
 
   const handleDone = () => {
@@ -33,7 +33,7 @@ export const CameraModal = ({
   };
 
   const handleCancel = () => {
-    dispatch(photoActions.deletePreviewPhoto());
+    dispatch(photoActions.cancelPhotoTaken());
   };
 
   const handleKeep = () => {

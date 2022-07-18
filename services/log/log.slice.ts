@@ -51,6 +51,7 @@ const remove =
   (dispatch, getState) => {
     const state = getState();
     const log = state.logs.entities[logId];
+    dispatch(photoActions.deletePhotosDirectory("logs/" + logId));
     dispatch(logSliceActions.remove(logId));
 
     const veggie = log && state.veggies.entities[log.veggie];
@@ -77,7 +78,7 @@ const fetchLogPhotos = createAsyncThunk(
 const moveCachePhotosToLogDir = createAsyncThunk(
   "logs/moveCachePhotosToLogDir",
   async (logId: EntityId, { dispatch }) => {
-    await dispatch(photoActions.moveCachePhotosToDocDirectory("logs/" + logId));
+    await dispatch(photoActions.moveCachePhotosToStorage("logs/" + logId));
     await dispatch(fetchLogPhotos(logId));
   }
 );

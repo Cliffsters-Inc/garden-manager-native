@@ -25,7 +25,7 @@ export const photoSlice = createSlice({
   name: "photos",
   initialState,
   reducers: {
-    setPhotoPreview: (state, action: PayloadAction<FileUri>) => {
+    photoTaken: (state, action: PayloadAction<FileUri>) => {
       state.previewingPhoto = action.payload;
       state.cachedPhotos.push(action.payload);
     },
@@ -85,28 +85,13 @@ const fetchCachedPhotos = createAsyncThunk(
   }
 );
 
-const deleteDocPhotoDirectory = createAsyncThunk(
-  "photos/deleteDocPhotoDirectory",
+const deletePhotosDirectory = createAsyncThunk(
+  "photos/deletePhotosDirectory",
   async (dirName: DirName) => {
     try {
       await FS.deleteItem.inDocs("photos/" + dirName);
     } catch (error) {
       fetchPhotoDocDirectory(dirName);
-      throw error;
-    }
-  }
-);
-const deleteDocPhoto = createAsyncThunk(
-  "photos/deleteDocPhoto",
-  async (docUri: string) => {
-    try {
-      const dirName = docUri.split("/").at(-2);
-      await FS.deleteItem.byUri(docUri);
-      const updatedDirPhotos = await FS.getDirectoryContents.inDocs(
-        "photos/" + dirName
-      );
-      return updatedDirPhotos;
-    } catch (error) {
       throw error;
     }
   }
@@ -138,7 +123,7 @@ const deleteCachedPhoto = createAsyncThunk(
     }
   }
 );
-const deletePreviewPhoto = (): AppThunk => async (dispatch, getState) => {
+const cancelPhotoTaken = (): AppThunk => async (dispatch, getState) => {
   const state = getState();
   const previewPhoto = selectPreviewPhoto(state);
   if (previewPhoto) {
@@ -147,8 +132,8 @@ const deletePreviewPhoto = (): AppThunk => async (dispatch, getState) => {
   }
 };
 
-const moveCachePhotosToDocDirectory = createAsyncThunk(
-  "photos/moveCachePhotosToDocDirectory",
+const moveCachePhotosToStorage = createAsyncThunk(
+  "photos/moveCachePhotosToStorage",
   async (dirName: DirName) => {
     try {
       await FS.moveDirContents({
@@ -164,12 +149,11 @@ const moveCachePhotosToDocDirectory = createAsyncThunk(
 const photoThunkActions = {
   fetchPhotoDocDirectory,
   fetchCachedPhotos,
-  deleteDocPhoto,
-  deleteDocPhotoDirectory,
+  deletePhotosDirectory,
   deleteAllCachePhotos,
   deleteCachedPhoto,
-  deletePreviewPhoto,
-  moveCachePhotosToDocDirectory,
+  cancelPhotoTaken,
+  moveCachePhotosToStorage,
 };
 const photoSliceActions = photoSlice.actions;
 export const photoActions = { ...photoSliceActions, ...photoThunkActions };
