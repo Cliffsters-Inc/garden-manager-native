@@ -1,10 +1,12 @@
-import { renderApp, fireEvent } from "../../testing/test-utils";
+import { renderApp, fireEvent, waitFor } from "../../testing/test-utils";
 
 describe("<GardenTabScreen />", () => {
   it("can add a new garden", async () => {
-    const { findByText, getAllByText, getByPlaceholderText } = renderApp();
+    const { findByText, getAllByText, getByPlaceholderText, getByText } =
+      renderApp();
 
-    const addGardenBtn = await findByText(/add garden/i);
+    await waitFor(() => expect(getByText(/add garden/i)));
+    const addGardenBtn = getByText(/add garden/i);
     fireEvent.press(addGardenBtn);
 
     const gardenNameField = getByPlaceholderText(/new garden name/i);

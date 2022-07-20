@@ -1,4 +1,4 @@
-import { renderApp, fireEvent } from "../../testing/test-utils";
+import { renderApp, fireEvent, waitFor } from "../../testing/test-utils";
 
 describe("<BedsTabScreen />", () => {
   it("can add, rename & delete a bed", async () => {
@@ -13,7 +13,8 @@ describe("<BedsTabScreen />", () => {
     } = renderApp();
 
     // creates new garden
-    const addGardenBtn = await findByText(/add garden/i);
+    await waitFor(() => expect(getByText(/add garden/i)));
+    const addGardenBtn = getByText(/add garden/i);
     fireEvent.press(addGardenBtn);
     const gardenNameField = getByPlaceholderText(/new garden name/i);
     fireEvent.changeText(gardenNameField, "TestGarden123");
