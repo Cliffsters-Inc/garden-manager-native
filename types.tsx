@@ -38,6 +38,7 @@ export type RootStackParamList = {
   DeleteConfirmationModal:
     | { selectedGardenId?: never; selectedBedId: string }
     | { selectedGardenId: string; selectedBedId?: never };
+  CameraModal: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

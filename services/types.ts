@@ -15,6 +15,8 @@ type Months =
   | "NOV"
   | "DEC";
 
+export type LoadingStates = "idle" | "pending" | "succeeded" | "failed";
+
 export type Garden = {
   name: string;
   id: string;
@@ -74,7 +76,6 @@ export type VeggieLog = {
   notes?: string;
   soilDescription?: string;
   phLevel?: number;
-  photos: string[];
 };
 
 export type VeggieLogNormalised = {
@@ -83,7 +84,10 @@ export type VeggieLogNormalised = {
   notes?: string;
   soilDescription?: string;
   phLevel?: number;
-  photos: string[];
+  photos: {
+    entities: string[];
+    loading: LoadingStates;
+  };
   veggie: string;
   payloadTags?: TagProps[];
 };

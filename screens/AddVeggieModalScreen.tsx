@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../store";
 import { RootStackScreenProps } from "../types";
 import { veggieInfoSelectors } from "../services/veggieInfo/veggieInfoSlice";
 import { VeggieInfoList } from "../components/VeggieInfoList";
-import { veggieActions } from "../services/actions";
+import { veggieActions } from "../services/veggie/veggie.slice";
 
 export const AddVeggieModalScreen = ({
   navigation,

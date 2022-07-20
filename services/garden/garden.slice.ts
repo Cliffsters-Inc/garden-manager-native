@@ -4,7 +4,8 @@ import {
   nanoid,
   PayloadAction,
 } from "@reduxjs/toolkit";
-import { bedSliceActions } from "../bed/bed.slice";
+import { AppThunk } from "../../store";
+import { bedActions } from "../bed/bed.slice";
 import { GardenNormalised } from "../types";
 import { getInitialNormalisedGardenData } from "../utils/getInitialNormalisedGardenData";
 
@@ -53,7 +54,7 @@ export const gardenSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(bedSliceActions.add, (state, action) => {
+    builder.addCase(bedActions.add, (state, action) => {
       const newBed = action.payload;
       const bedsGarden = state.entities[newBed.garden];
       bedsGarden?.beds.push(newBed.id);
@@ -61,7 +62,21 @@ export const gardenSlice = createSlice({
   },
 });
 
-export const gardenSliceActions = gardenSlice.actions;
+const gardenThunkActions = {
+  remove:
+    (gardenId: string): AppThunk =>
+    (dispatch, getState) => {
+      const state = getState();
+      const garden = state.gardens.entities[gardenId];
+      dispatch(gardenSliceActions.remove(gardenId));
+
+      if (garden?.beds) {
+        garden.beds.forEach((bedId) => dispatch(bedActions.remove(bedId)));
+      }
+    },
+};
+const gardenSliceActions = gardenSlice.actions;
+export const gardenActions = { ...gardenSliceActions, ...gardenThunkActions };
 
 export type GardenSlice = {
   [gardenSlice.name]: ReturnType<typeof gardenSlice["reducer"]>;
