@@ -89,10 +89,9 @@ export type VeggieLogNormalised = {
 };
 
 export type TagProps = {
-  // TODO: ***type error***
-  tagLabel: any;
-  tagColor: string | undefined;
-  tagIcon?: string | undefined;
+  tagLabel: string;
+  tagColor: string;
+  tagIcon?: string;
   pressedTags?: string[];
   extraStyleProps?: { label?: object };
   children?: ReactElement<Icon>;

@@ -21,8 +21,9 @@ export const AddTags = () => {
   const [selectedTags, setSelectedTags] = useState<TagProps[]>([]);
 
   useEffect(() => {
-    // ***type error***
-    const combinedTags: any = defaultTagsList.map((tag) => convertToTag(tag));
+    const combinedTags: TagProps[] = defaultTagsList.map((tag) =>
+      convertToTag(tag)
+    );
     setCombinedTagsList(combinedTags);
   }, []);
 
@@ -40,13 +41,11 @@ export const AddTags = () => {
   };
 
   useEffect(() => {
-    console.log("**pressed effect**");
     filterList(pressedTags);
   }, [pressedTags]);
 
   const selectableOnPress = (tag: string) => {
-    // ***type error***
-    const pressedTagObject: any = AddTagToList(pressedTags, tag);
+    const pressedTagObject = AddTagToList(pressedTags, tag);
     setPressedTags(pressedTagObject);
   };
 
