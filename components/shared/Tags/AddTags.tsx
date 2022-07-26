@@ -1,4 +1,4 @@
-import { Feather, FontAwesome5 } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
 import { Divider } from "react-native-elements";

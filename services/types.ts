@@ -75,6 +75,7 @@ export type VeggieLog = {
   soilDescription?: string;
   phLevel?: number;
   photos: string[];
+  payloadTags?: TagProps[];
 };
 
 export type VeggieLogNormalised = {
@@ -92,7 +93,6 @@ export type TagProps = {
   tagLabel: string;
   tagColor: string;
   tagIcon?: string;
-  pressedTags?: string[];
   extraStyleProps?: { label?: object };
   children?: ReactElement<Icon>;
 };

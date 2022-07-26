@@ -22,7 +22,6 @@ export const EditVeggieLogModal = ({
   const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
   const [payloadTags, setPayloadTags] = useState<TagProps[]>([]);
   const [logTags, setLogTags] = useState([...(log?.payloadTags || [])]);
-  const [tagChange, setTagChange] = useState(false);
 
   const [date, setDate] = useState(log?.date ?? Date.now());
   const [notes, setNotes] = useState(log?.notes ?? "");
