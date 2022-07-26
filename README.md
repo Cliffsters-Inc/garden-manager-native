@@ -1,5 +1,7 @@
 # garden-manager-native
 
+![Demo](demo/demo.gif)
+
 ## Running React/Redux devtools on mobile
 - [ ] Install debugger - $ brew install --cask react-native-debugger
 - [ ] Open debugger - $ yarn run debug
