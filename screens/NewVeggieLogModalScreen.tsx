@@ -1,15 +1,16 @@
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
-import { Button, StyleSheet, TextInput } from "react-native";
+import { Button, Image, StyleSheet, TextInput } from "react-native";
 import { Text, View } from "../components/Themed";
 import { GardenTabScreenProps } from "../types";
 import { format } from "date-fns";
-import { useAppDispatch } from "../store";
+import { useAppDispatch, useAppSelector } from "../store";
 import { Calendar } from "../components/shared/Calendar";
 import { CrossBtn } from "../components/shared/CrossBtn";
-import { logActions } from "../services/actions";
 import { pressedTagsContext } from "../services/context";
 import { TagProps } from "../services/types";
 import { AddTags } from "../components/shared/Tags/AddTags";
+import { logActions } from "../services/log/log.slice";
+import { photoSelectors } from "../services/photos/photos.slice";
 
 export const NewVeggieLogModalScreen = ({
   navigation,
@@ -24,21 +25,24 @@ export const NewVeggieLogModalScreen = ({
   const [payloadTags, setPayloadTags] = useState<TagProps[]>([]);
 
   const dispatch = useAppDispatch();
+  const cachedPhotos = useAppSelector(photoSelectors.selectAllCachedPhotos);
 
   useEffect(() => {
     setPayloadTags([...pressedTags]);
   }, [pressedTags]);
 
   const handleSubmit = () => {
-    dispatch(
+    const { payload } = dispatch(
       logActions.add({
         veggie: veggieId,
         date,
         notes,
-        photos: [],
+        photos: { entities: [], loading: "succeeded" },
         payloadTags,
       })
     );
+    if (cachedPhotos) dispatch(logActions.moveCachePhotosToLogDir(payload.id));
+
     setPressedTags([]);
     navigation.goBack();
   };
@@ -89,6 +93,19 @@ export const NewVeggieLogModalScreen = ({
         multiline
         style={styles.notesContainer}
       />
+      <Button
+        title="Add photo"
+        onPress={() => navigation.navigate("CameraModal")}
+      />
+      <View style={{ flexDirection: "row" }}>
+        {cachedPhotos &&
+          cachedPhotos.map((photoUri) => (
+            <Image
+              key={photoUri}
+              source={{ uri: photoUri, width: 50, height: 50 }}
+            />
+          ))}
+      </View>
       <AddTags />
     </View>
   );

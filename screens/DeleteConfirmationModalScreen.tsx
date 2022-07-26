@@ -3,7 +3,8 @@ import { RootStackScreenProps } from "../types";
 import { Text, View } from "../components/Themed";
 import { Button, Divider } from "react-native-elements";
 import { StyleSheet } from "react-native";
-import { bedActions, gardenActions } from "../services/actions";
+import { bedActions } from "../services/bed/bed.slice";
+import { gardenActions } from "../services/garden/garden.slice";
 
 export const DeleteConfirmationModalScreen = ({
   navigation,
