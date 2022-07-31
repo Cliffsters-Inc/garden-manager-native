@@ -1,13 +1,12 @@
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
-import { Button, Pressable, StyleSheet, TextInput } from "react-native";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { Button, Image, Pressable, StyleSheet, TextInput } from "react-native";
 import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
 import { format } from "date-fns";
 import { useAppDispatch, useAppSelector } from "../store";
 import { Calendar } from "../components/shared/Calendar";
 import { CrossBtn } from "../components/shared/CrossBtn";
-import { logSelectors } from "../services/log/log.slice";
-import { logActions } from "../services/actions";
+import { logActions, logSelectors } from "../services/log/log.slice";
 import { AddTags } from "../components/shared/Tags/AddTags";
 import { pressedTagsContext } from "../services/context";
 import { Tag } from "../services/types";
@@ -17,7 +16,10 @@ export const EditVeggieLogModal = ({
   route,
 }: RootStackScreenProps<"EditVeggieLogModal">) => {
   const { logId } = route.params;
+  const dispatch = useAppDispatch();
+
   const log = useAppSelector((state) => logSelectors.selectById(state, logId));
+  const cachedPhotos = useAppSelector(photoSelectors.selectAllCachedPhotos);
 
   const appContext = useContext(pressedTagsContext);
   const pressedTags = appContext?.pressedTags;
@@ -31,8 +33,7 @@ export const EditVeggieLogModal = ({
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
 
-  const dispatch = useAppDispatch();
-
+  // onMount effect
   useEffect(() => {
     const selectorLogs = [...logTags];
     setPressedTags!(selectorLogs);
@@ -43,7 +44,8 @@ export const EditVeggieLogModal = ({
   }, [pressedTags]);
 
   const handleUpdate = () => {
-    if (log)
+    if (log) {
+      if (cachedPhotos) dispatch(logActions.moveCachePhotosToLogDir(log.id));
       dispatch(
         logActions.update({
           id: log.id,
@@ -65,15 +67,16 @@ export const EditVeggieLogModal = ({
       date !== log?.date ||
       payloadTags !== log?.payloadTags;
     const goBackAndClear = () => {
+      dispatch(photoActions.deleteAllCachePhotos());
       setPressedTags!([]);
       navigation.goBack();
     };
 
     navigation.setOptions({
+      headerLeft: () => <Button title="Cancel" onPress={goBackAndClear} />,
       headerRight: () =>
         //logChanged will nedd to be converted to recognise tag changes
         logChanged ? <Button title="Done" onPress={handleUpdate} /> : null,
-      headerLeft: () => <Button title="Cancel" onPress={goBackAndClear} />,
     });
   }, [navigation, date, notes, payloadTags]);
 
@@ -111,6 +114,26 @@ export const EditVeggieLogModal = ({
           multiline
           style={styles.notesContainer}
         />
+      </View>
+      <Button
+        title="Add photo"
+        onPress={() => navigation.navigate("CameraModal")}
+      />
+      <View style={{ flexDirection: "row" }}>
+        {log?.photos.entities &&
+          log.photos.entities.map((photoUri) => (
+            <Image
+              key={photoUri}
+              source={{ uri: photoUri, width: 50, height: 50 }}
+            />
+          ))}
+        {cachedPhotos &&
+          cachedPhotos.map((photoUri) => (
+            <Image
+              key={photoUri}
+              source={{ uri: photoUri, width: 50, height: 50 }}
+            />
+          ))}
       </View>
       <AddTags />
       {deleteConfirmationVisible ? (

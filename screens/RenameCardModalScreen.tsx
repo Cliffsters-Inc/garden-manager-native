@@ -2,9 +2,11 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, StyleSheet, TextInput } from "react-native";
 import { Text, View } from "../components/Themed";
-import { bedActions, gardenActions } from "../services/actions";
-import { bedSelectors } from "../services/bed/bed.slice";
-import { gardenSelectors } from "../services/garden/garden.slice";
+import { bedActions, bedSelectors } from "../services/bed/bed.slice";
+import {
+  gardenActions,
+  gardenSelectors,
+} from "../services/garden/garden.slice";
 import { useAppDispatch, useAppSelector } from "../store";
 import { RootStackScreenProps } from "../types";
 

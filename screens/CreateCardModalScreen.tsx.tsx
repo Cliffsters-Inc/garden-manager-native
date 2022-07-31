@@ -4,7 +4,8 @@ import { Button, StyleSheet, TextInput } from "react-native";
 import { useAppDispatch } from "../store";
 import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
-import { bedActions, gardenActions } from "../services/actions";
+import { bedActions } from "../services/bed/bed.slice";
+import { gardenActions } from "../services/garden/garden.slice";
 
 export const CreateCardModalScreen = ({
   navigation,

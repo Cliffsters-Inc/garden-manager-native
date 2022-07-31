@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 import { Button, ScrollView, StyleSheet, TextInput } from "react-native";
-import { veggieActions } from "../services/actions";
+import { veggieActions } from "../services/veggie/veggie.slice";
 import { useAppDispatch } from "../store";
 import { GardenTabScreenProps } from "../types";
 import { Text, View } from "./Themed";
