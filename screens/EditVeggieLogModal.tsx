@@ -9,8 +9,7 @@ import { CrossBtn } from "../components/shared/CrossBtn";
 import { logActions, logSelectors } from "../services/log/log.slice";
 import { AddTags } from "../components/shared/Tags/AddTags";
 import { pressedTagsContext } from "../services/context";
-import { TagProps } from "../services/types";
-import { photoActions, photoSelectors } from "../services/photos/photos.slice";
+import { Tag } from "../services/types";
 
 export const EditVeggieLogModal = ({
   navigation,
@@ -22,10 +21,11 @@ export const EditVeggieLogModal = ({
   const log = useAppSelector((state) => logSelectors.selectById(state, logId));
   const cachedPhotos = useAppSelector(photoSelectors.selectAllCachedPhotos);
 
-  const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
-  const [payloadTags, setPayloadTags] = useState<TagProps[]>([]);
+  const appContext = useContext(pressedTagsContext);
+  const pressedTags = appContext?.pressedTags;
+  const setPressedTags = appContext?.setPressedTags;
+  const [payloadTags, setPayloadTags] = useState<Tag[]>([]);
   const [logTags, setLogTags] = useState([...(log?.payloadTags || [])]);
-  const [tagChange, setTagChange] = useState(false);
 
   const [date, setDate] = useState(log?.date ?? Date.now());
   const [notes, setNotes] = useState(log?.notes ?? "");
@@ -36,11 +36,11 @@ export const EditVeggieLogModal = ({
   // onMount effect
   useEffect(() => {
     const selectorLogs = [...logTags];
-    setPressedTags(selectorLogs);
+    setPressedTags!(selectorLogs);
   }, []);
 
   useEffect(() => {
-    setPayloadTags([...pressedTags]);
+    setPayloadTags([...pressedTags!]);
   }, [pressedTags]);
 
   const handleUpdate = () => {
@@ -52,8 +52,7 @@ export const EditVeggieLogModal = ({
           changes: { date, notes, payloadTags },
         })
       );
-    }
-    setPressedTags([]);
+    setPressedTags!([]);
     navigation.goBack();
   };
 
@@ -69,7 +68,7 @@ export const EditVeggieLogModal = ({
       payloadTags !== log?.payloadTags;
     const goBackAndClear = () => {
       dispatch(photoActions.deleteAllCachePhotos());
-      setPressedTags([]);
+      setPressedTags!([]);
       navigation.goBack();
     };
 

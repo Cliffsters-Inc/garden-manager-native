@@ -8,13 +8,11 @@ import { format } from "date-fns";
 import { useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
 import Timeline from "react-native-timeline-flatlist";
-import { VeggieLog } from "../../services/types";
+import { VeggieLog, VeggieLogNormalised } from "../../services/types";
 import { Text, View } from "../Themed";
 
 type Props = {
-  //Fix type any below****************************
-  dataToMap: any[];
-  // dataToMap: VeggieLog[]
+  dataToMap: VeggieLogNormalised[];
 };
 
 export const TimelineElement = ({ dataToMap }: Props) => {
@@ -63,14 +61,11 @@ export const TimelineElement = ({ dataToMap }: Props) => {
     );
   };
 
-  //Fix type any below****************************
   const timelineData = dataToMap?.map((value, i: number) => ({
     time: format(new Date(value.date), "d MMM yy"),
-    // title: i,
     description: descriptionElement(value, i.toString()),
-
     icon:
-      value.payloadTags?.length > 0
+      value.payloadTags.length > 0
         ? assignIcon(value.payloadTags[0].tagLabel)
         : assignIcon("generic"),
   }));
