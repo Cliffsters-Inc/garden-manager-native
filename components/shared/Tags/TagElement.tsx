@@ -7,6 +7,7 @@ import { Tag } from "../../../services/types";
 
 type TagProps = {
   tag: Tag;
+  //should label below be icon?
   extraStyleProps?: { label?: object };
   children?: ReactElement<Icon>;
 };

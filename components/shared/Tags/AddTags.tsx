@@ -42,6 +42,7 @@ export const AddTags = () => {
 
   useEffect(() => {
     filterList(pressedTags!);
+  }, [pressedTags]);
 
   const selectableOnPress = (tag: string) => {
     const pressedTagObject = AddTagToList(pressedTags!, tag);
@@ -49,6 +50,7 @@ export const AddTags = () => {
   };
 
   const selectedOnPress = (tag: string) => {
+    const removeTag = RemoveTagFromList(pressedTags!, tag);
     setPressedTags!([...removeTag]);
   };
 
