@@ -11,7 +11,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { veggieSelectors } from "../services/veggie/veggie.slice";
 import { logActions, logSelectors } from "../services/log/log.slice";
 import { Tag } from "../services/types";
-import { Tag } from "../components/shared/Tags/TagElement";
+import { TagElement } from "../components/shared/Tags/TagElement";
 import { photoActions } from "../services/photos/photos.slice";
 
 export const VeggieScreen = ({
@@ -29,14 +29,14 @@ export const VeggieScreen = ({
     logSelectors.selectByIds(state, veggie?.logs ?? [])
   );
 
-  const renderDisplayTag = ({ item }: { item: Tag[] }) => (
-    <TagElement tag={item} />
-
   useEffect(() => {
     if (logs) {
       logs.forEach((log) => dispatch(logActions.fetchLogPhotos(log.id)));
     }
   }, []);
+
+  const renderDisplayTag = ({ item }: { item: Tag }) => (
+    <TagElement tag={item} />
   );
 
   return veggie ? (
@@ -51,17 +51,6 @@ export const VeggieScreen = ({
         {veggie.veggieInfo?.image && (
           <Image style={styles.img} source={{ uri: veggie.veggieInfo.image }} />
         )}
-        <View style={{ alignItems: "flex-end" }}>
-          <Text>
-            Sowed:{" "}
-            {veggie.sowDate && format(new Date(veggie.sowDate), "dd/MM/yy")}
-          </Text>
-          <Text>
-            Harvest:{" "}
-            {veggie.harvestDate &&
-              format(new Date(veggie.harvestDate), "dd/MM/yy")}
-          </Text>
-        </View>
       </View>
       {veggie.veggieInfo?.name && (
         <Text style={styles.title}>{veggie.veggieInfo.name}</Text>
@@ -127,7 +116,7 @@ export const VeggieScreen = ({
                   />
                 )}
               </View>
-              <View style={{ flexDirection: "row" }}>
+              {/* <View style={{ flexDirection: "row" }}>
                 {item.photos.entities &&
                   item.photos.entities.map((photoUri) => (
                     <Image
@@ -135,7 +124,7 @@ export const VeggieScreen = ({
                       source={{ uri: photoUri, width: 50, height: 50 }}
                     />
                   ))}
-              </View>
+              </View> */}
               <Text>Notes: {item.notes}</Text>
             </Pressable>
           )}
