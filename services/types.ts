@@ -1,5 +1,5 @@
+import { Icon } from "./../components/shared/Tags/TagIcon";
 import { ReactElement } from "react";
-import { Icon } from "react-native-vector-icons/Icon";
 
 type Months =
   | "JAN"
@@ -53,8 +53,6 @@ export type Veggie = {
   id: string;
   veggieInfo: { id: string; name?: string; image?: string }; // name & image should be generated with id from veggieInfo to allow changes to veggieInfo apply to all veggies
   notes?: string;
-  sowDate?: string;
-  harvestDate?: string;
   logs: VeggieLog[];
 };
 
@@ -62,8 +60,6 @@ export type VeggieNormalised = {
   id: string;
   veggieInfo: { id: string; name?: string; image?: string }; // name & image should be generated with id from veggieInfo to allow changes to veggieInfo apply to all veggies
   notes?: string;
-  sowDate?: string;
-  harvestDate?: string;
   logs: string[];
   bed: string;
 };
@@ -72,31 +68,24 @@ export type VeggieLog = {
   id: string;
   date: number;
   notes?: string;
-  soilDescription?: string;
-  phLevel?: number;
   photos: string[];
-  payloadTags?: TagProps[];
+  payloadTags: Tag[];
 };
 
 export type VeggieLogNormalised = {
   id: string;
   date: number;
   notes?: string;
-  soilDescription?: string;
-  phLevel?: number;
   photos: string[];
   veggie: string;
-  payloadTags?: TagProps[];
+  payloadTags: Tag[];
 };
 
-export type TagProps = {
+export type Tag = {
   tagLabel: string;
   tagColor: string;
   tagIcon?: string;
-  extraStyleProps?: { label?: object };
-  children?: ReactElement<Icon>;
 };
-export type TagObject = { item: TagProps };
 
 export type VeggieInfo = {
   id: string;

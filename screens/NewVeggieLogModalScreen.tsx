@@ -8,7 +8,7 @@ import { Calendar } from "../components/shared/Calendar";
 import { CrossBtn } from "../components/shared/CrossBtn";
 import { logActions } from "../services/actions";
 import { pressedTagsContext } from "../services/context";
-import { TagProps } from "../services/types";
+import { Tag } from "../services/types";
 import { AddTags } from "../components/shared/Tags/AddTags";
 
 export const NewVeggieLogModalScreen = ({
@@ -18,15 +18,17 @@ export const NewVeggieLogModalScreen = ({
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [date, setDate] = useState(Date.now());
   const [notes, setNotes] = useState("");
-
   const { veggieId } = route.params;
-  const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
-  const [payloadTags, setPayloadTags] = useState<TagProps[]>([]);
+  const [payloadTags, setPayloadTags] = useState<Tag[]>([]);
+
+  const appContext = useContext(pressedTagsContext);
+  const pressedTags = appContext?.pressedTags;
+  const setPressedTags = appContext?.setPressedTags;
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    setPayloadTags([...pressedTags]);
+    setPayloadTags([...pressedTags!]);
   }, [pressedTags]);
 
   const handleSubmit = () => {
@@ -39,13 +41,13 @@ export const NewVeggieLogModalScreen = ({
         payloadTags,
       })
     );
-    setPressedTags([]);
+    setPressedTags!([]);
     navigation.goBack();
   };
 
   useLayoutEffect(() => {
     const goBackAndClear = () => {
-      setPressedTags([]);
+      setPressedTags!([]);
       navigation.goBack();
     };
 

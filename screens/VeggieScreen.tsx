@@ -10,8 +10,8 @@ import { SortBtn } from "../components/shared/SortBtn";
 import { MaterialIcons } from "@expo/vector-icons";
 import { veggieSelectors } from "../services/veggie/veggie.slice";
 import { logSelectors } from "../services/log/log.slice";
-import { TagObject } from "../services/types";
-import { Tag } from "../components/shared/Tags/TagElement";
+import { Tag } from "../services/types";
+import { TagElement } from "../components/shared/Tags/TagElement";
 
 export const VeggieScreen = ({
   navigation,
@@ -27,12 +27,8 @@ export const VeggieScreen = ({
     logSelectors.selectByIds(state, veggie?.logs ?? [])
   );
 
-  const renderDisplayTag = ({ item }: TagObject) => (
-    <Tag
-      tagLabel={item.tagLabel}
-      tagColor={item.tagColor}
-      tagIcon={item.tagIcon}
-    />
+  const renderDisplayTag = ({ item }: { item: Tag[] }) => (
+    <TagElement tag={item} />
   );
 
   return veggie ? (

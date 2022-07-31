@@ -1,15 +1,18 @@
 import { StyleSheet } from "react-native";
-import { TagProps } from "../../../services/types";
 import { Text, View } from "../../Themed";
 import { TagIcon } from "./TagIcon";
+import { ReactElement } from "react";
+import { Icon } from "react-native-vector-icons/Icon";
+import { Tag } from "../../../services/types";
 
-export const Tag = ({
-  tagLabel,
-  tagColor,
-  tagIcon,
-  extraStyleProps,
-  children,
-}: TagProps) => {
+type TagProps = {
+  tag: Tag;
+  extraStyleProps?: { label?: object };
+  children?: ReactElement<Icon>;
+};
+
+export const TagElement = ({ tag, extraStyleProps, children }: TagProps) => {
+  const { tagLabel, tagColor, tagIcon } = tag;
   return (
     <View style={styles.container}>
       <View style={styles.icon}>

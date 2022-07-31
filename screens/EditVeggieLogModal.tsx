@@ -10,7 +10,7 @@ import { logSelectors } from "../services/log/log.slice";
 import { logActions } from "../services/actions";
 import { AddTags } from "../components/shared/Tags/AddTags";
 import { pressedTagsContext } from "../services/context";
-import { TagProps } from "../services/types";
+import { Tag } from "../services/types";
 
 export const EditVeggieLogModal = ({
   navigation,
@@ -19,8 +19,10 @@ export const EditVeggieLogModal = ({
   const { logId } = route.params;
   const log = useAppSelector((state) => logSelectors.selectById(state, logId));
 
-  const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
-  const [payloadTags, setPayloadTags] = useState<TagProps[]>([]);
+  const appContext = useContext(pressedTagsContext);
+  const pressedTags = appContext?.pressedTags;
+  const setPressedTags = appContext?.setPressedTags;
+  const [payloadTags, setPayloadTags] = useState<Tag[]>([]);
   const [logTags, setLogTags] = useState([...(log?.payloadTags || [])]);
 
   const [date, setDate] = useState(log?.date ?? Date.now());
@@ -33,11 +35,11 @@ export const EditVeggieLogModal = ({
 
   useEffect(() => {
     const selectorLogs = [...logTags];
-    setPressedTags(selectorLogs);
+    setPressedTags!(selectorLogs);
   }, []);
 
   useEffect(() => {
-    setPayloadTags([...pressedTags]);
+    setPayloadTags([...pressedTags!]);
   }, [pressedTags]);
 
   const handleUpdate = () => {
@@ -48,7 +50,7 @@ export const EditVeggieLogModal = ({
           changes: { date, notes, payloadTags },
         })
       );
-    setPressedTags([]);
+    setPressedTags!([]);
     navigation.goBack();
   };
 
@@ -63,7 +65,7 @@ export const EditVeggieLogModal = ({
       date !== log?.date ||
       payloadTags !== log?.payloadTags;
     const goBackAndClear = () => {
-      setPressedTags([]);
+      setPressedTags!([]);
       navigation.goBack();
     };
 

@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
 import { Divider } from "react-native-elements";
 import { pressedTagsContext } from "../../../services/context";
-import { TagObject, TagProps } from "../../../services/types";
+import { Tag } from "../../../services/types";
 import { Text, View } from "../../Themed";
 import {
   AddTagToList,
@@ -11,77 +11,72 @@ import {
   defaultTagsList,
   RemoveTagFromList,
 } from "./Tag.utils";
-import { Tag } from "./TagElement";
+import { TagElement } from "./TagElement";
 
 export const AddTags = () => {
-  // ***type error*** I set type in index.tsx L-70, why is it any below?
-  const { pressedTags, setPressedTags } = useContext(pressedTagsContext);
-  const [combinedTagsList, setCombinedTagsList] = useState<TagProps[]>([]);
-  const [selectableTags, setSelectableTags] = useState<TagProps[]>([]);
-  const [selectedTags, setSelectedTags] = useState<TagProps[]>([]);
+  const appContext = useContext(pressedTagsContext);
+  const pressedTags = appContext?.pressedTags;
+  const setPressedTags = appContext?.setPressedTags;
+
+  const [combinedTagsList, setCombinedTagsList] = useState<Tag[]>([]);
+  const [selectableTags, setSelectableTags] = useState<Tag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
   useEffect(() => {
-    const combinedTags: TagProps[] = defaultTagsList.map((tag) =>
-      convertToTag(tag)
-    );
+    const combinedTags: Tag[] = defaultTagsList.map((tag) => convertToTag(tag));
     setCombinedTagsList(combinedTags);
   }, []);
 
   useEffect(() => {
-    const filteredList = combinedTagsList.filter((tag: TagProps) => {
-      return !pressedTags.some((t: TagProps) => t.tagLabel === tag?.tagLabel);
+    const filteredList = combinedTagsList.filter((tag: Tag) => {
+      return !pressedTags!.some((t: Tag) => t.tagLabel === tag?.tagLabel);
     });
     setSelectableTags(filteredList);
   }, [pressedTags, combinedTagsList]);
 
-  const filterList = (tagObject: TagProps[]) => {
+  const filterList = (tagObject: Tag[]) => {
     if (tagObject.length > 0) {
-      setSelectedTags(pressedTags);
+      setSelectedTags(pressedTags!);
     }
   };
 
   useEffect(() => {
-    filterList(pressedTags);
+    filterList(pressedTags!);
   }, [pressedTags]);
 
   const selectableOnPress = (tag: string) => {
-    const pressedTagObject = AddTagToList(pressedTags, tag);
-    setPressedTags(pressedTagObject);
+    const pressedTagObject = AddTagToList(pressedTags!, tag);
+    setPressedTags!(pressedTagObject);
   };
 
   const selectedOnPress = (tag: string) => {
     console.log("selectedOnPress");
-    const removeTag = RemoveTagFromList(pressedTags, tag);
-    setPressedTags([...removeTag]);
+    const removeTag = RemoveTagFromList(pressedTags!, tag);
+    setPressedTags!([...removeTag]);
   };
 
-  const renderSelectableItem = ({ item }: TagObject) => {
+  const renderSelectableItem = ({ item }: { item: Tag }) => {
     return (
       <Pressable onPress={() => selectableOnPress(item.tagLabel)}>
-        <Tag
-          tagLabel={item.tagLabel}
-          tagColor={item.tagColor}
+        <TagElement
+          tag={item}
           extraStyleProps={{ label: { paddingRight: 15 } }}
         />
       </Pressable>
     );
   };
 
-  const renderSelectedItem = ({ item }: TagObject) => {
+  const renderSelectedItem = ({ item }: { item: Tag }) => {
     return (
       <Pressable onPress={() => selectedOnPress(item.tagLabel)}>
-        <Tag
-          tagLabel={item.tagLabel}
-          tagColor={item.tagColor}
-          tagIcon={item.tagIcon}
-        >
+        <TagElement tag={item}>
           <Feather
             name="x-square"
             size={12}
             color="black"
             style={{ paddingTop: 2, paddingLeft: 2, paddingRight: 5 }}
           />
-        </Tag>
+        </TagElement>
       </Pressable>
     );
   };

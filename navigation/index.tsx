@@ -43,7 +43,7 @@ import { CreateCardModalScreen } from "../screens/CreateCardModalScreen.tsx";
 import { RenameCardModalScreen } from "../screens/RenameCardModalScreen";
 import { EditVeggieLogModal } from "../screens/EditVeggieLogModal";
 import { pressedTagsContext } from "../services/context";
-import { TagProps } from "../services/types";
+import { Tag } from "../services/types";
 import { TimelineTabScreen } from "../screens/TimelineTabScreen";
 import { VeggieTimelineScreen } from "../screens/VeggieTimelineScreen";
 
@@ -69,7 +69,7 @@ export default function Navigation({
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const [pressedTags, setPressedTags] = React.useState<TagProps[]>([]);
+  const [pressedTags, setPressedTags] = React.useState<Tag[]>([]);
   const tagsValue = React.useMemo(
     () => ({
       pressedTags: pressedTags,

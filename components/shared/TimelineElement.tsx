@@ -61,15 +61,11 @@ export const TimelineElement = ({ dataToMap }: Props) => {
     );
   };
 
-  //Fix type any below****************************
   const timelineData = dataToMap?.map((value, i: number) => ({
     time: format(new Date(value.date), "d MMM yy"),
     description: descriptionElement(value, i.toString()),
     icon:
-      // value.payloadTags
-      //   ? assignIcon(value.payloadTags[0].tagLabel)
-      //   : assignIcon("generic"),
-      value.payloadTags?.length > 0
+      value.payloadTags.length > 0
         ? assignIcon(value.payloadTags[0].tagLabel)
         : assignIcon("generic"),
   }));
