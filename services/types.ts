@@ -70,7 +70,7 @@ export type VeggieLog = {
   id: string;
   date: number;
   notes?: string;
-  photos: string[];
+  photos?: string[];
   payloadTags: Tag[];
 };
 
