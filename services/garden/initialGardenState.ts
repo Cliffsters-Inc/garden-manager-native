@@ -20,14 +20,22 @@ export const initialGardenState: Garden[] = [
                 date: 1652054400000,
                 notes: "starting to sprout\n\nyey",
                 photos: [],
-                payloadTags: [],
+                payloadTags: [
+                  {
+                    tagLabel: "seedling",
+                    tagColor: "#44803F",
+                    tagIcon: "seedling",
+                  },
+                ],
               },
               {
                 id: "utbyJ4pwA1F0TlRcMYYLw",
                 date: 1652251484254,
                 notes: "bugs everywhere what do?",
                 photos: [],
-                payloadTags: [],
+                payloadTags: [
+                  { tagLabel: "pests", tagColor: "#FF5A33", tagIcon: "pest" },
+                ],
               },
             ],
           },
