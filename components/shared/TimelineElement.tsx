@@ -8,7 +8,7 @@ import { format } from "date-fns";
 import { useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
 import Timeline from "react-native-timeline-flatlist";
-import { VeggieLog, VeggieLogNormalised } from "../../services/types";
+import { VeggieLogNormalised } from "../../services/types";
 import { Text, View } from "../Themed";
 
 type Props = {
@@ -38,10 +38,12 @@ export const TimelineElement = ({ dataToMap }: Props) => {
         return <FontAwesome5 name="seedling" size={20} color="#44803F" />;
       case "generic":
         return <FontAwesome name="circle-o" size={20} color="black" />;
+      default:
+        return <FontAwesome name="circle-o" size={20} color="black" />;
     }
   };
 
-  const descriptionElement = (value: VeggieLog, i: string) => {
+  const descriptionElement = (value: VeggieLogNormalised, i: string) => {
     const onPress = () => {
       setShowAllText((prev) => ({
         ...showAllText,
@@ -65,8 +67,8 @@ export const TimelineElement = ({ dataToMap }: Props) => {
     time: format(new Date(value.date), "d MMM yy"),
     description: descriptionElement(value, i.toString()),
     icon:
-      value.payloadTags.length > 0
-        ? assignIcon(value.payloadTags[0].tagLabel)
+      value.payloadTags?.length > 0
+        ? assignIcon(value.payloadTags[0]!.tagLabel)
         : assignIcon("generic"),
   }));
 

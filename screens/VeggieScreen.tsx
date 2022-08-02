@@ -116,7 +116,7 @@ export const VeggieScreen = ({
                   />
                 )}
               </View>
-              {/* <View style={{ flexDirection: "row" }}>
+              <View style={{ flexDirection: "row" }}>
                 {item.photos.entities &&
                   item.photos.entities.map((photoUri) => (
                     <Image
@@ -124,7 +124,7 @@ export const VeggieScreen = ({
                       source={{ uri: photoUri, width: 50, height: 50 }}
                     />
                   ))}
-              </View> */}
+              </View>
               <Text>Notes: {item.notes}</Text>
             </Pressable>
           )}

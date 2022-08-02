@@ -48,12 +48,10 @@ export const AddTagToList = (array: Tag[], tagToAdd: string) => {
 
 export const RemoveTagFromList = (array: Tag[], tagToRemove: string) => {
   let index = 0;
-  const toRemove = array.find((tag, i) => {
+  array.find((tag, i) => {
     index = i;
     return tag.tagLabel === tagToRemove;
   });
-  console.log("toRemove ", toRemove);
-  console.log("index", index);
 
   if (index > -1) {
     array.splice(index, 1);
