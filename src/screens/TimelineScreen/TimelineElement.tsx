@@ -24,15 +24,15 @@ export const TimelineElement = ({ dataToMap }: Props) => {
   const assignIcon = (iconName: string) => {
     switch (iconName) {
       case "pests":
-        return <Ionicons name="ios-bug-outline" size={20} color={"#FF5A33"} />;
+        return <Ionicons name="ios-bug-outline" size={20} color="#FF5A33" />;
       case "disease":
-        return <FontAwesome5 name="virus" size={20} color={"#633c15"} />;
+        return <FontAwesome5 name="virus" size={20} color="#633c15" />;
       case "sowed":
         return (
           <MaterialCommunityIcons
             name="seed-outline"
             size={20}
-            color={"#B4CF66"}
+            color="#B4CF66"
           />
         );
       case "seedling":
@@ -78,9 +78,9 @@ export const TimelineElement = ({ dataToMap }: Props) => {
       <Timeline
         data={timelineData}
         style={styles.list}
-        innerCircle={"element"}
+        innerCircle="element"
         circleSize={20}
-        circleColor={"white"}
+        circleColor="white"
         timeStyle={styles.time}
         timeContainerStyle={styles.timeContainer}
         descriptionStyle={styles.description}

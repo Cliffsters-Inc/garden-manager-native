@@ -1,6 +1,6 @@
 import { Tag } from "../../features/entity.types";
 
-export const defaultTagsList: string[] = [
+export const DefaultTagsList: string[] = [
   "pests",
   "disease",
   "sowed",
