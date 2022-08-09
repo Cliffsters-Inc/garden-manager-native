@@ -4,11 +4,10 @@ import { Icon } from "react-native-vector-icons/Icon";
 
 import { Tag } from "../../features/entity.types";
 import { Text, View } from "../Themed";
-import { TagIcon } from "./TagIcon";
+import { TagIconElement } from "./TagIcon";
 
 type TagProps = {
   tag: Tag;
-  //should label below be icon?
   extraStyleProps?: { label?: object };
   children?: ReactElement<Icon>;
 };
@@ -18,7 +17,7 @@ export const TagElement = ({ tag, extraStyleProps, children }: TagProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.icon}>
-        <TagIcon iconColor={tagColor} selectedIcon={tagIcon} />
+        <TagIconElement iconColor={tagColor} selectedIcon={tagIcon} />
       </View>
       <View style={[styles.textContainer, { backgroundColor: tagColor }]}>
         <Text style={[styles.label, extraStyleProps?.label]}>{tagLabel}</Text>

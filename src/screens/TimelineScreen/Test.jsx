@@ -38,6 +38,11 @@ export const Test = () => {
 
   const filterArr = ["pests", "seedling", "disease", "generic"];
 
+  function con() {
+    console.log("filtered: ", filteredArray);
+    console.log("logsArr: ", logsArr);
+  }
+
   const filter = () => {
     const filteredList = logsArr.filter((tagObj) => {
       const filteredPayloadTags = tagObj.payloadTags.some((payloadTagObj) => {
@@ -48,12 +53,6 @@ export const Test = () => {
     });
     setFilteredArray(filteredList);
   };
-
-  function con() {
-    console.log("filtered: ", filteredArray);
-    console.log("logsArr: ", logsArr);
-  }
-
   return (
     <View>
       <Text>TestComp</Text>

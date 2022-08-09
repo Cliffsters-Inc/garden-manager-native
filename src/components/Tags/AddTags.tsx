@@ -1,3 +1,4 @@
+/* eslint-disable import/namespace */
 import { Feather } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";

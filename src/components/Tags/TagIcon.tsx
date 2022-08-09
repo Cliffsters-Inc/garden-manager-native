@@ -6,7 +6,7 @@ import {
 
 import { View } from "../Themed";
 
-export type Icon = {
+export type TagIcon = {
   id: string;
   name: string;
   icon: any;
@@ -17,8 +17,8 @@ type Props = {
   selectedIcon: string | undefined;
 };
 
-export const TagIcon = ({ iconColor, selectedIcon }: Props) => {
-  const iconList: Icon[] = [
+export const TagIconElement = ({ iconColor, selectedIcon }: Props) => {
+  const iconList: TagIcon[] = [
     {
       id: "pest",
       name: "pest",

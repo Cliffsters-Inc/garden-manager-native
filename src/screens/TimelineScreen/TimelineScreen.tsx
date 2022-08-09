@@ -1,75 +1,64 @@
-import { useEffect, useState } from "react";
-import { FlatList, Pressable } from "react-native";
+/* eslint-disable import/namespace */
+import { useState } from "react";
+import { StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 
-import { convertToTag, DefaultTagsList } from "../../components/Tags/Tag.utils";
-import { TagElement } from "../../components/Tags/TagElement";
 import { View } from "../../components/Themed";
-import { Tag, VeggieLogNormalised } from "../../features/entity.types";
+import { VeggieLogNormalised } from "../../features/entity.types";
 import { logSelectors } from "../../features/log/log.slice";
 import { TimelineScreenProps } from "../../navigation/navigation.types";
 import { useAppSelector } from "../../store";
-import { LogFilter } from "./LogFilter";
-import { Test } from "./Test";
+import { FilterModal } from "./FilterModal";
 import { TimelineElement } from "./TimelineElement";
 
 export const TimelineScreen = ({
   navigation,
 }: TimelineScreenProps<"TimelineScreen">) => {
   const globalLogs = useAppSelector(logSelectors.selectAll);
-  const [combinedTagsList, setCombinedTagsList] = useState<Tag[]>([]);
   const [isFiltered, setIsFiltered] = useState<boolean>(false);
   const [filteredLogs, setFilteredLogs] = useState<VeggieLogNormalised[]>([]);
-  const [filterArray, setFilterArray] = useState<string[]>([]);
+  // const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
-  useEffect(() => {
-    const combinedTags: Tag[] = DefaultTagsList.map((tag) => convertToTag(tag));
-    setCombinedTagsList(combinedTags);
-  }, []);
-
-  const renderTags = ({ item }: { item: Tag }) => {
-    return (
-      <Pressable
-        onPress={() => setFilterArray([...filterArray, item.tagLabel])}
-      >
-        <TagElement tag={item} />
-      </Pressable>
-    );
+  const showFilteredList = () => {
+    setIsFiltered(true);
   };
 
-  const filter = () => {
-    const logsToFilter = globalLogs;
-    const filteredList = logsToFilter.filter((log) =>
-      log.payloadTags.some((tag) => {
-        return filterArray.includes(tag.tagLabel);
-      })
-    );
-    setIsFiltered(true);
-    setFilteredLogs(filteredList);
+  //****Complete this function */
+  const filterLogs = (arr: VeggieLogNormalised[]) => {
+    setFilteredLogs(arr);
   };
 
   const con = () => {
-    console.log("filteredArray", filterArray);
-    console.log("filteredLogs", filteredLogs);
     console.log("isFiltered", isFiltered);
-    console.log("glogs", globalLogs);
+    console.log("filteredLogs", filteredLogs);
   };
 
+  // const filterByDate = () => {
+  //   const logsToFilter = [...globalLogs];
+  //   const filteredList = logsToFilter.filter(
+  //     (log) => log.date === 1652054400000
+  //   );
+  //   setFilteredLogs(filteredList);
+  // };
+
+  // const FilterByPhotos = () => {
+  //   const logsToFilter = [...globalLogs];
+  //   const filteredList = logsToFilter.filter(
+  //     (log) => log.photos.entities.length > 0
+  //   );
+  //   setFilteredLogs(filteredList);
+  // };
+
   return (
-    <View>
-      <FlatList
-        data={combinedTagsList}
-        keyExtractor={(item) => item.tagLabel}
-        horizontal
-        renderItem={renderTags}
-      />
-      <Button title="filter" onPress={filter} />
+    <View style={styles.container}>
       <Button title="con" onPress={con} />
-
-      {/* <Test /> */}
-
-      {/* <TimelineElement dataToMap={globalLogs} /> */}
-
+      <View style={styles.filter}>
+        <FilterModal
+          isFiltered={isFiltered}
+          showFilteredList={showFilteredList}
+          filterLogs={filterLogs}
+        />
+      </View>
       {isFiltered ? (
         <TimelineElement dataToMap={filteredLogs} />
       ) : (
@@ -78,3 +67,13 @@ export const TimelineScreen = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  filter: {
+    height: 100,
+    // backgroundColor: "red",
+  },
+});

@@ -1,7 +1,3 @@
-import { ReactElement } from "react";
-
-import { Icon } from "../components/Tags/TagIcon";
-
 type Months =
   | "JAN"
   | "FEB"
@@ -71,7 +67,7 @@ export type VeggieLog = {
   id: string;
   date: number;
   notes?: string;
-  photos?: string[];
+  photos: string[];
   payloadTags: Tag[];
 };
 
