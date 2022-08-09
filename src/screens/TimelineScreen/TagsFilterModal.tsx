@@ -11,12 +11,14 @@ import { useAppSelector } from "../../store";
 
 interface Props {
   showFilteredList: () => void;
+  toggleIsFiltered: () => void;
   filterLogs: (arr: VeggieLogNormalised[]) => void;
   closeFilterModal: () => void;
 }
 
 export const TagsFilterModal = ({
   showFilteredList,
+  toggleIsFiltered,
   filterLogs,
   closeFilterModal,
 }: Props) => {
@@ -53,12 +55,18 @@ export const TagsFilterModal = ({
   };
 
   useEffect(() => {
+    console.log("selectedFilters change");
     if (selectedFilters.length > 0) {
       filterTags();
     }
   }, [selectedFilters]);
 
-  const backToTimeline = () => {
+  const resetAndGoBack = () => {
+    filterLogs(globalLogs);
+    setModalVisible(!modalVisible);
+  };
+
+  const filterAndGoBack = () => {
     setModalVisible(!modalVisible);
     closeFilterModal();
   };
@@ -67,15 +75,34 @@ export const TagsFilterModal = ({
     <View>
       <View style={styles.centeredView}>
         <Modal animationType="slide" visible={modalVisible}>
+          <View
+            style={{
+              height: 100,
+              justifyContent: "flex-end",
+              backgroundColor: "green",
+            }}
+          >
+            <Text onPress={resetAndGoBack} style={{ fontSize: 20 }}>
+              Back
+            </Text>
+            <Text
+              onPress={filterAndGoBack}
+              style={{ fontSize: 20, marginLeft: "auto" }}
+            >
+              Filter
+            </Text>
+          </View>
           <View style={styles.modalView}>
-            <FlatList
-              data={combinedTagsList}
-              keyExtractor={(item) => item.tagLabel}
-              renderItem={renderTags}
-            />
+            <View style={styles.list}>
+              <FlatList
+                data={combinedTagsList}
+                keyExtractor={(item) => item.tagLabel}
+                renderItem={renderTags}
+              />
+            </View>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={backToTimeline}
+              onPress={resetAndGoBack}
             >
               <Text style={styles.textStyle}>Hide Modal</Text>
             </Pressable>
@@ -98,10 +125,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: 400,
+    width: 200,
     // marginTop: 22,
     // backgroundColor: "red",
   },
   modalView: {
+    // justifyContent: "center",
+    alignItems: "center",
+
     height: "50%",
     width: "90%",
     margin: 20,
@@ -117,6 +148,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+  list: {
+    justifyContent: "center",
+    alignItems: "center",
+    // height: "80%",
+    width: "90%",
+    backgroundColor: "blue",
   },
   categorySelector: {
     fontSize: 20,

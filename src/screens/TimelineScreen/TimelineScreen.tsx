@@ -23,6 +23,10 @@ export const TimelineScreen = ({
     setIsFiltered(true);
   };
 
+  const toggleIsFiltered = () => {
+    setIsFiltered(!isFiltered);
+  };
+
   //****Complete this function */
   const filterLogs = (arr: VeggieLogNormalised[]) => {
     setFilteredLogs(arr);
@@ -56,6 +60,7 @@ export const TimelineScreen = ({
       <View style={styles.filter}>
         <FilterModal
           isFiltered={isFiltered}
+          toggleIsFiltered={toggleIsFiltered}
           showFilteredList={showFilteredList}
           filterLogs={filterLogs}
         />
