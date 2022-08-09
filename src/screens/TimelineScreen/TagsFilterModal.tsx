@@ -1,6 +1,8 @@
 /* eslint-disable import/namespace */
+import { FontAwesome5 } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
+import { Button } from "react-native-elements";
 
 import { convertToTag, DefaultTagsList } from "../../components/Tags/Tag.utils";
 import { TagElement } from "../../components/Tags/TagElement";
@@ -32,13 +34,34 @@ export const TagsFilterModal = ({
   }, []);
 
   const renderTags = ({ item }: { item: Tag }) => {
+    const selectTag = () => {
+      setSelectedFilters([...selectedFilters, item.tagLabel]);
+    };
+
+    const checkIfSelected = () => {
+      return selectedFilters.includes(item.tagLabel);
+    };
+
+    const handleTagPress = () => {
+      selectTag();
+    };
+
     return (
-      <Pressable
-        onPress={() => setSelectedFilters([...selectedFilters, item.tagLabel])}
-      >
+      <Pressable onPress={handleTagPress}>
         <TagElement tag={item} hideIcon />
+        <View style={{ marginLeft: 200, justifyContent: "flex-start" }}>
+          {checkIfSelected() && (
+            <FontAwesome5 name="check" size={24} color="black" />
+          )}
+        </View>
       </Pressable>
     );
+  };
+
+  const con = () => {
+    console.log("selectedFilters", selectedFilters);
+    // console.log("isSelected", isSelected);
+    // console.log("tagSelected", tagSelected);
   };
 
   const filterTags = () => {
@@ -62,11 +85,13 @@ export const TagsFilterModal = ({
   const resetAndGoBack = () => {
     filterLogs(globalLogs);
     setModalVisible(!modalVisible);
+
+    // setTagSelected(false);
   };
 
   const filterAndGoBack = () => {
     setModalVisible(!modalVisible);
-    closeFilterModal();
+    // closeFilterModal();
   };
 
   return (
@@ -98,6 +123,7 @@ export const TagsFilterModal = ({
                 renderItem={renderTags}
               />
             </View>
+            <Button title={"con"} onPress={con} />
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={resetAndGoBack}
@@ -150,7 +176,7 @@ const styles = StyleSheet.create({
   list: {
     justifyContent: "center",
     alignItems: "center",
-    // height: "80%",
+    height: "80%",
     width: "90%",
     backgroundColor: "blue",
   },

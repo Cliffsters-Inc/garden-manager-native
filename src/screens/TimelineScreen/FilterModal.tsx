@@ -1,5 +1,5 @@
 /* eslint-disable import/namespace */
-import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { Modal, Pressable, StyleSheet } from "react-native";
 import { Divider } from "react-native-elements";
@@ -43,11 +43,16 @@ export const FilterModal = ({
               </View>
             </View>
             <Divider color="black" />
-            <TagsFilterModal
-              showFilteredList={showFilteredList}
-              filterLogs={filterLogs}
-              closeFilterModal={closeFilterModal}
-            />
+            <View style={{ flexDirection: "row" }}>
+              <TagsFilterModal
+                showFilteredList={showFilteredList}
+                filterLogs={filterLogs}
+                closeFilterModal={closeFilterModal}
+              />
+              <View style={{ marginLeft: 50, justifyContent: "flex-end" }}>
+                <AntDesign name="right" size={24} color="black" />
+              </View>
+            </View>
             <Divider />
             <Text style={styles.categorySelector}>Date</Text>
             <Divider />
