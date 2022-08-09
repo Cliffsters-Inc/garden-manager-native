@@ -31,6 +31,7 @@ export const TimelineScreen = ({
   const con = () => {
     console.log("isFiltered", isFiltered);
     console.log("filteredLogs", filteredLogs);
+    console.log("globalLogs", globalLogs);
   };
 
   // const filterByDate = () => {

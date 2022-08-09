@@ -36,7 +36,7 @@ export const TagsFilterModal = ({
       <Pressable
         onPress={() => setSelectedFilters([...selectedFilters, item.tagLabel])}
       >
-        <TagElement tag={item} />
+        <TagElement tag={item} hideIcon />
       </Pressable>
     );
   };

@@ -1,3 +1,4 @@
+/* eslint-disable import/namespace */
 import { ReactElement } from "react";
 import { StyleSheet } from "react-native";
 import { Icon } from "react-native-vector-icons/Icon";
@@ -10,14 +11,22 @@ type TagProps = {
   tag: Tag;
   extraStyleProps?: { label?: object };
   children?: ReactElement<Icon>;
+  hideIcon?: boolean;
 };
 
-export const TagElement = ({ tag, extraStyleProps, children }: TagProps) => {
+export const TagElement = ({
+  tag,
+  extraStyleProps,
+  children,
+  hideIcon,
+}: TagProps) => {
   const { tagLabel, tagColor, tagIcon } = tag;
   return (
     <View style={styles.container}>
       <View style={styles.icon}>
-        <TagIconElement iconColor={tagColor} selectedIcon={tagIcon} />
+        {!hideIcon && (
+          <TagIconElement iconColor={tagColor} selectedIcon={tagIcon} />
+        )}
       </View>
       <View style={[styles.textContainer, { backgroundColor: tagColor }]}>
         <Text style={[styles.label, extraStyleProps?.label]}>{tagLabel}</Text>
