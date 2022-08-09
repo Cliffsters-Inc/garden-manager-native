@@ -9,16 +9,16 @@ import { VeggieLogNormalised } from "../../features/entity.types";
 import { TagsFilterModal } from "./TagsFilterModal";
 
 interface Props {
-  toggleIsFiltered: () => void;
   showFilteredList: () => void;
   filterLogs: (arr: VeggieLogNormalised[]) => void;
+  clearFilters: () => void;
   isFiltered: boolean;
 }
 
 export const FilterModal = ({
   showFilteredList,
-  toggleIsFiltered,
   filterLogs,
+  clearFilters,
   isFiltered,
 }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -33,7 +33,7 @@ export const FilterModal = ({
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={{ flexDirection: "row" }}>
-              <Pressable>
+              <Pressable onPress={clearFilters}>
                 <Text style={styles.categorySelector}>None</Text>
               </Pressable>
               <View style={{ marginLeft: 200, justifyContent: "flex-end" }}>
@@ -45,7 +45,6 @@ export const FilterModal = ({
             <Divider color="black" />
             <TagsFilterModal
               showFilteredList={showFilteredList}
-              toggleIsFiltered={toggleIsFiltered}
               filterLogs={filterLogs}
               closeFilterModal={closeFilterModal}
             />

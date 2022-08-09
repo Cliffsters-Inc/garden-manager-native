@@ -11,14 +11,12 @@ import { useAppSelector } from "../../store";
 
 interface Props {
   showFilteredList: () => void;
-  toggleIsFiltered: () => void;
   filterLogs: (arr: VeggieLogNormalised[]) => void;
   closeFilterModal: () => void;
 }
 
 export const TagsFilterModal = ({
   showFilteredList,
-  toggleIsFiltered,
   filterLogs,
   closeFilterModal,
 }: Props) => {
