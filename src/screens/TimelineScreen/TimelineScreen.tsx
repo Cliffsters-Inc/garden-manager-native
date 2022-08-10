@@ -41,21 +41,13 @@ export const TimelineScreen = ({
     console.log("isFiltered", isFiltered);
     console.log("selectedFilters", selectedFilters);
     // console.log("filteredLogs", filteredLogs);
-    // console.log("globalLogs", globalLogs);
+    console.log("globalLogs", globalLogs);
   };
 
   // const filterByDate = () => {
   //   const logsToFilter = [...globalLogs];
   //   const filteredList = logsToFilter.filter(
   //     (log) => log.date === 1652054400000
-  //   );
-  //   setFilteredLogs(filteredList);
-  // };
-
-  // const FilterByPhotos = () => {
-  //   const logsToFilter = [...globalLogs];
-  //   const filteredList = logsToFilter.filter(
-  //     (log) => log.photos.entities.length > 0
   //   );
   //   setFilteredLogs(filteredList);
   // };

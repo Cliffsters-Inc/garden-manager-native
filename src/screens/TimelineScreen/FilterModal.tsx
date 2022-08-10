@@ -8,6 +8,7 @@ import { convertToTag } from "../../components/Tags/Tag.utils";
 import { TagElement } from "../../components/Tags/TagElement";
 import { Text, View } from "../../components/Themed";
 import { Tag, VeggieLogNormalised } from "../../features/entity.types";
+import { PhotoFilter } from "./PhotoFilter";
 import { TagsFilterModal } from "./TagsFilterModal";
 
 interface Props {
@@ -28,17 +29,7 @@ export const FilterModal = ({
   isFiltered,
 }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [filteredTagsList, setFilteredTags] = useState<any[]>([]);
-
-  // useEffect(() => {
-  //   const tagsProps: Tag[] = selectedFilters.map((filterName: string) => {
-  //     convertToTag(filterName);
-  //   });
-  //   const filteredTagElements = tagsProps.map((tagProp) => {
-  //     return <TagElement tag={tagProp} />;
-  //   });
-  //   setFilteredTags(filteredTagElements);
-  // }, [selectedFilters]);
+  const [filteredTagsList, setFilteredTags] = useState<Tag[]>([]);
 
   useEffect(() => {
     const listToDisplay = selectedFilters.map((tagName: string) =>
@@ -102,7 +93,8 @@ export const FilterModal = ({
               </View>
             </View>
             <Divider />
-            <Text style={styles.categorySelector}>Date</Text>
+            {/* <Text style={styles.categorySelector}>Photos</Text> */}
+            <PhotoFilter filterLogs={filterLogs} />
             <Divider />
             <Pressable
               style={[styles.button, styles.buttonClose]}

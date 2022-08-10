@@ -88,7 +88,6 @@ export const TagsFilterModal = ({
   }, [selectedFilters]);
 
   const resetAndGoBack = () => {
-    // filterLogs(globalLogs);
     clearFilters();
     setModalVisible(!modalVisible);
   };
