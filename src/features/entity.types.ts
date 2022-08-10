@@ -67,7 +67,10 @@ export type VeggieLog = {
   id: string;
   date: number;
   notes?: string;
-  photos: string[];
+  photos: {
+    entities: string[];
+    loading: LoadingStates;
+  };
   payloadTags: Tag[];
 };
 

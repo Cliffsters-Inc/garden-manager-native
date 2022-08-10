@@ -1,5 +1,4 @@
 import { FontAwesome5 } from "@expo/vector-icons";
-import { format } from "date-fns";
 import React from "react";
 import { FlatList, Image, StyleSheet, TouchableOpacity } from "react-native";
 
@@ -35,19 +34,6 @@ export const VeggieList = ({ veggies, navigationHandler }: Props) => {
               </Text>
             </View>
             <View style={styles.veggieR}>
-              <View style={{ flexDirection: "column", marginRight: 15 }}>
-                {"sowDate" in item && item.sowDate && (
-                  <Text style={{ color: "gray", textAlign: "right" }}>
-                    Sown: {format(new Date(item.sowDate), "dd/MM/yy")}
-                  </Text>
-                )}
-                {"harvestDate" in item && item.harvestDate && (
-                  <Text style={{ color: "gray", textAlign: "right" }}>
-                    Harvest: {format(new Date(item.harvestDate), "dd/MM/yy")}
-                  </Text>
-                )}
-              </View>
-
               <FontAwesome5 name="angle-right" size={12} />
             </View>
           </TouchableOpacity>

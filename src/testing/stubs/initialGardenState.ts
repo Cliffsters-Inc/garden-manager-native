@@ -19,6 +19,7 @@ export const initialGardenState: Garden[] = [
                 id: "zv8RCeafO9OFQELDRcC",
                 date: 1652054400000,
                 notes: "starting to sprout\n\nyey",
+<<<<<<< HEAD
                 photos: ["test"],
                 payloadTags: [
                   {
@@ -26,6 +27,10 @@ export const initialGardenState: Garden[] = [
                     tagColor: "#44803F",
                     tagIcon: "seedling",
                   },
+=======
+                photos: { entities: [], loading: "pending" },
+                payloadTags: [
+>>>>>>> dev
                   { tagLabel: "pests", tagColor: "#FF5A33", tagIcon: "pest" },
                 ],
               },
@@ -33,7 +38,11 @@ export const initialGardenState: Garden[] = [
                 id: "utbyJ4pwA1F0TlRcMYYLw",
                 date: 1652251484254,
                 notes: "bugs everywhere what do?",
+<<<<<<< HEAD
                 photos: ["test2"],
+=======
+                photos: { entities: [], loading: "pending" },
+>>>>>>> dev
                 payloadTags: [
                   { tagLabel: "pests", tagColor: "#FF5A33", tagIcon: "pest" },
                 ],
@@ -42,6 +51,7 @@ export const initialGardenState: Garden[] = [
           },
         ],
       },
+<<<<<<< HEAD
       // {
       //   name: "2",
       //   id: "hjk3afv89",
@@ -79,4 +89,43 @@ export const initialGardenState: Garden[] = [
   //   id: "nfsdgsagahgerf",
   //   beds: [],
   // },
+=======
+      {
+        name: "2",
+        id: "hjk3afv89",
+        veggies: [
+          {
+            veggieInfo: { id: "ghv2ags90aosjdsalkb21309" },
+            id: "hi34fp78934ch21398op",
+            notes: "Feed these within a week.",
+            logs: [],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: "backyard",
+    id: "nkjun4safgkkhg1",
+    beds: [
+      {
+        name: "1",
+        id: "bkghefuhefku865766",
+        veggies: [
+          {
+            veggieInfo: { id: "ghvsg2ags90aosjdsalkb21309" },
+            id: "paosgypaosighpaiosghjk3n3u9i23",
+            notes: "Set up shadecloth for extra protection.",
+            logs: [],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: "Green House",
+    id: "nfsdgsagahgerf",
+    beds: [],
+  },
+>>>>>>> dev
 ];
