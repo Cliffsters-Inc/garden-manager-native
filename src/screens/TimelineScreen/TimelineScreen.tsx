@@ -17,25 +17,30 @@ export const TimelineScreen = ({
   const globalLogs = useAppSelector(logSelectors.selectAll);
   const [isFiltered, setIsFiltered] = useState<boolean>(false);
   const [filteredLogs, setFilteredLogs] = useState<VeggieLogNormalised[]>([]);
-  // const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
   const showFilteredList = () => {
     setIsFiltered(true);
   };
 
-  //****Complete this function */
+  const addFilter = (newFilter: string) => {
+    setSelectedFilters([...selectedFilters, newFilter]);
+  };
+
   const filterLogs = (arr: VeggieLogNormalised[]) => {
     setFilteredLogs(arr);
   };
 
   const clearFilters = () => {
     setIsFiltered(false);
+    setSelectedFilters([]);
     filterLogs(globalLogs);
   };
 
   const con = () => {
     console.log("isFiltered", isFiltered);
-    console.log("filteredLogs", filteredLogs);
+    console.log("selectedFilters", selectedFilters);
+    // console.log("filteredLogs", filteredLogs);
     // console.log("globalLogs", globalLogs);
   };
 
@@ -63,6 +68,8 @@ export const TimelineScreen = ({
           isFiltered={isFiltered}
           showFilteredList={showFilteredList}
           filterLogs={filterLogs}
+          selectedFilters={selectedFilters}
+          addFilter={addFilter}
           clearFilters={clearFilters}
         />
       </View>

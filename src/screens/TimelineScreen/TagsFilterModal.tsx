@@ -14,19 +14,24 @@ import { useAppSelector } from "../../store";
 interface Props {
   showFilteredList: () => void;
   filterLogs: (arr: VeggieLogNormalised[]) => void;
+  selectedFilters: string[];
+  addFilter: (newFilter: string) => void;
+  clearFilters: () => void;
   closeFilterModal: () => void;
 }
 
 export const TagsFilterModal = ({
   showFilteredList,
   filterLogs,
+  selectedFilters,
+  addFilter,
+  clearFilters,
   closeFilterModal,
 }: Props) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const globalLogs = useAppSelector(logSelectors.selectAll);
   const [combinedTagsList, setCombinedTagsList] = useState<Tag[]>([]);
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
   useEffect(() => {
     const combinedTags: Tag[] = DefaultTagsList.map((tag) => convertToTag(tag));
@@ -35,7 +40,7 @@ export const TagsFilterModal = ({
 
   const renderTags = ({ item }: { item: Tag }) => {
     const selectTag = () => {
-      setSelectedFilters([...selectedFilters, item.tagLabel]);
+      addFilter(item.tagLabel);
     };
 
     const checkIfSelected = () => {
@@ -48,7 +53,7 @@ export const TagsFilterModal = ({
 
     return (
       <Pressable onPress={handleTagPress}>
-        <TagElement tag={item} hideIcon />
+        <TagElement tag={item} />
         <View style={{ marginLeft: 200, justifyContent: "flex-start" }}>
           {checkIfSelected() && (
             <FontAwesome5 name="check" size={24} color="black" />
@@ -83,10 +88,9 @@ export const TagsFilterModal = ({
   }, [selectedFilters]);
 
   const resetAndGoBack = () => {
-    filterLogs(globalLogs);
+    // filterLogs(globalLogs);
+    clearFilters();
     setModalVisible(!modalVisible);
-
-    // setTagSelected(false);
   };
 
   const filterAndGoBack = () => {
@@ -123,7 +127,7 @@ export const TagsFilterModal = ({
                 renderItem={renderTags}
               />
             </View>
-            <Button title={"con"} onPress={con} />
+            <Button title="con" onPress={con} />
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={resetAndGoBack}
