@@ -7,18 +7,17 @@ import { logSelectors } from "../../features/log/log.slice";
 import { useAppSelector } from "../../store";
 
 interface Props {
-  filterLogs: (arr: VeggieLogNormalised[]) => void;
+  setFilteredLogs: React.Dispatch<React.SetStateAction<VeggieLogNormalised[]>>;
 }
 
-export const PhotoFilter = ({ filterLogs }: Props) => {
+export const PhotoFilter = ({ setFilteredLogs }: Props) => {
   const globalLogs = useAppSelector(logSelectors.selectAll);
 
   const FilterByPhotos = () => {
     const logsToFilter = [...globalLogs];
-    const filteredList = logsToFilter.filter(
-      (log) => log.photos.entities.length > 0
-    );
-    filterLogs(filteredList);
+    const filteredList = logsToFilter.filter((log) => log.photos.entities);
+    setFilteredLogs(filteredList);
+    console.log("Pictest");
   };
 
   return (

@@ -12,19 +12,21 @@ import { logSelectors } from "../../features/log/log.slice";
 import { useAppSelector } from "../../store";
 
 interface Props {
-  showFilteredList: () => void;
-  filterLogs: (arr: VeggieLogNormalised[]) => void;
+  setIsTimelineFiltered: React.Dispatch<React.SetStateAction<boolean>>;
+  filteredLogs: VeggieLogNormalised[];
+  setFilteredLogs: React.Dispatch<React.SetStateAction<VeggieLogNormalised[]>>;
   selectedFilters: string[];
-  addFilter: (newFilter: string) => void;
+  setSelectedFilters: React.Dispatch<React.SetStateAction<string[]>>;
   clearFilters: () => void;
   closeFilterModal: () => void;
 }
 
 export const TagsFilterModal = ({
-  showFilteredList,
-  filterLogs,
+  setIsTimelineFiltered,
+  filteredLogs,
+  setFilteredLogs,
   selectedFilters,
-  addFilter,
+  setSelectedFilters,
   clearFilters,
   closeFilterModal,
 }: Props) => {
@@ -34,21 +36,23 @@ export const TagsFilterModal = ({
   const [combinedTagsList, setCombinedTagsList] = useState<Tag[]>([]);
 
   useEffect(() => {
-    const combinedTags: Tag[] = DefaultTagsList.map((tag) => convertToTag(tag));
+    const combinedTags: Tag[] = DefaultTagsList.map((tag: string) =>
+      convertToTag(tag)
+    );
     setCombinedTagsList(combinedTags);
   }, []);
 
   const renderTags = ({ item }: { item: Tag }) => {
     const selectTag = () => {
-      addFilter(item.tagLabel);
-    };
-
-    const checkIfSelected = () => {
-      return selectedFilters.includes(item.tagLabel);
+      setSelectedFilters([...selectedFilters, item.tagLabel]);
     };
 
     const handleTagPress = () => {
       selectTag();
+    };
+
+    const checkIfSelected = () => {
+      return selectedFilters.includes(item.tagLabel);
     };
 
     return (
@@ -63,12 +67,6 @@ export const TagsFilterModal = ({
     );
   };
 
-  const con = () => {
-    console.log("selectedFilters", selectedFilters);
-    // console.log("isSelected", isSelected);
-    // console.log("tagSelected", tagSelected);
-  };
-
   const filterTags = () => {
     const logsToFilter = [...globalLogs];
     const filteredList = logsToFilter.filter((log) =>
@@ -76,12 +74,12 @@ export const TagsFilterModal = ({
         return selectedFilters.includes(tag.tagLabel);
       })
     );
-    showFilteredList();
-    filterLogs(filteredList);
+    setIsTimelineFiltered(true);
+    setFilteredLogs([...filteredLogs, ...filteredList]);
+    console.log("**filteredList", filteredList);
   };
 
   useEffect(() => {
-    console.log("selectedFilters change");
     if (selectedFilters.length > 0) {
       filterTags();
     }
@@ -94,7 +92,14 @@ export const TagsFilterModal = ({
 
   const filterAndGoBack = () => {
     setModalVisible(!modalVisible);
-    // closeFilterModal();
+  };
+
+  const con = () => {
+    console.log("selectedFilters", selectedFilters);
+    console.log("filteredLogs", filteredLogs);
+    console.log("test", test);
+    // console.log("isSelected", isSelected);
+    // console.log("tagSelected", tagSelected);
   };
 
   return (

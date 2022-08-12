@@ -15,57 +15,53 @@ export const TimelineScreen = ({
   navigation,
 }: TimelineScreenProps<"TimelineScreen">) => {
   const globalLogs = useAppSelector(logSelectors.selectAll);
-  const [isFiltered, setIsFiltered] = useState<boolean>(false);
-  const [filteredLogs, setFilteredLogs] = useState<VeggieLogNormalised[]>([]);
+  const [isTimelineFiltered, setIsTimelineFiltered] = useState<boolean>(false);
+  const [filteredLogs, setFilteredLogs] = useState<VeggieLogNormalised[]>([
+    {
+      id: "zv8RCeafO9OFQELDRcC",
+      date: 1652054400000,
+      notes: "starting to sprout\n\nyey",
+      photos: { entities: [], loading: "pending" },
+      veggie: "testVeggie",
+      payloadTags: [
+        {
+          tagLabel: "seedling",
+          tagColor: "#44803F",
+          tagIcon: "seedling",
+        },
+      ],
+    },
+  ]);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
-  const showFilteredList = () => {
-    setIsFiltered(true);
-  };
-
-  const addFilter = (newFilter: string) => {
-    setSelectedFilters([...selectedFilters, newFilter]);
-  };
-
-  const filterLogs = (arr: VeggieLogNormalised[]) => {
-    setFilteredLogs(arr);
-  };
-
   const clearFilters = () => {
-    setIsFiltered(false);
+    setIsTimelineFiltered(false);
     setSelectedFilters([]);
-    filterLogs(globalLogs);
+    setFilteredLogs(globalLogs);
   };
 
   const con = () => {
-    console.log("isFiltered", isFiltered);
+    console.log("isFiltered", isTimelineFiltered);
     console.log("selectedFilters", selectedFilters);
-    // console.log("filteredLogs", filteredLogs);
-    console.log("globalLogs", globalLogs);
+    console.log("filteredLogs", filteredLogs);
+    // console.log("globalLogs", globalLogs);
   };
-
-  // const filterByDate = () => {
-  //   const logsToFilter = [...globalLogs];
-  //   const filteredList = logsToFilter.filter(
-  //     (log) => log.date === 1652054400000
-  //   );
-  //   setFilteredLogs(filteredList);
-  // };
 
   return (
     <View style={styles.container}>
       <Button title="con" onPress={con} />
       <View style={styles.filter}>
         <FilterModal
-          isFiltered={isFiltered}
-          showFilteredList={showFilteredList}
-          filterLogs={filterLogs}
+          isTimelineFiltered={isTimelineFiltered}
+          setIsTimelineFiltered={setIsTimelineFiltered}
+          filteredLogs={filteredLogs}
+          setFilteredLogs={setFilteredLogs}
           selectedFilters={selectedFilters}
-          addFilter={addFilter}
+          setSelectedFilters={setSelectedFilters}
           clearFilters={clearFilters}
         />
       </View>
-      {isFiltered ? (
+      {isTimelineFiltered ? (
         <TimelineElement dataToMap={filteredLogs} />
       ) : (
         <TimelineElement dataToMap={globalLogs} />

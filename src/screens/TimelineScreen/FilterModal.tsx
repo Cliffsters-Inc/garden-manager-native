@@ -12,21 +12,23 @@ import { PhotoFilter } from "./PhotoFilter";
 import { TagsFilterModal } from "./TagsFilterModal";
 
 interface Props {
-  showFilteredList: () => void;
-  filterLogs: (arr: VeggieLogNormalised[]) => void;
+  isTimelineFiltered: boolean;
+  setIsTimelineFiltered: React.Dispatch<React.SetStateAction<boolean>>;
+  filteredLogs: VeggieLogNormalised[];
+  setFilteredLogs: React.Dispatch<React.SetStateAction<VeggieLogNormalised[]>>;
   selectedFilters: string[];
-  addFilter: (newFilter: string) => void;
+  setSelectedFilters: React.Dispatch<React.SetStateAction<string[]>>;
   clearFilters: () => void;
-  isFiltered: boolean;
 }
 
 export const FilterModal = ({
-  showFilteredList,
-  filterLogs,
+  isTimelineFiltered,
+  setIsTimelineFiltered,
+  filteredLogs,
+  setFilteredLogs,
   selectedFilters,
-  addFilter,
+  setSelectedFilters,
   clearFilters,
-  isFiltered,
 }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [filteredTagsList, setFilteredTags] = useState<Tag[]>([]);
@@ -37,7 +39,6 @@ export const FilterModal = ({
     );
     setFilteredTags(listToDisplay);
   }, [selectedFilters]);
-  console.log("modalRender", filteredTagsList);
 
   const closeFilterModal = () => {
     setModalVisible(false);
@@ -50,6 +51,7 @@ export const FilterModal = ({
   const con = () => {
     console.log("selectedFilters", selectedFilters);
     console.log("filteredTagsList", filteredTagsList);
+    console.log("filteredLogs", filteredLogs);
   };
 
   return (
@@ -63,7 +65,7 @@ export const FilterModal = ({
                 <Text style={styles.categorySelector}>None</Text>
               </Pressable>
               <View style={{ marginLeft: 200, justifyContent: "flex-end" }}>
-                {!isFiltered && (
+                {!isTimelineFiltered && (
                   <FontAwesome5 name="check" size={24} color="green" />
                 )}
               </View>
@@ -73,10 +75,11 @@ export const FilterModal = ({
               style={{ flexDirection: "row", maxHeight: 50, maxWidth: 100 }}
             >
               <TagsFilterModal
-                showFilteredList={showFilteredList}
-                filterLogs={filterLogs}
+                setIsTimelineFiltered={setIsTimelineFiltered}
+                filteredLogs={filteredLogs}
+                setFilteredLogs={setFilteredLogs}
                 selectedFilters={selectedFilters}
-                addFilter={addFilter}
+                setSelectedFilters={setSelectedFilters}
                 clearFilters={clearFilters}
                 closeFilterModal={closeFilterModal}
               />
@@ -93,8 +96,7 @@ export const FilterModal = ({
               </View>
             </View>
             <Divider />
-            {/* <Text style={styles.categorySelector}>Photos</Text> */}
-            <PhotoFilter filterLogs={filterLogs} />
+            <PhotoFilter setFilteredLogs={setFilteredLogs} />
             <Divider />
             <Pressable
               style={[styles.button, styles.buttonClose]}

@@ -20,7 +20,7 @@ export const initialGardenState: Garden[] = [
                 id: "zv8RCeafO9OFQELDRcC",
                 date: 1652054400000,
                 notes: "starting to sprout\n\nyey",
-                photos: { entities: [], loading: "pending" },
+                photos: { entities: ["test"], loading: "pending" },
                 payloadTags: [
                   {
                     tagLabel: "seedling",
