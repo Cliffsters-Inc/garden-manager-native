@@ -16,23 +16,19 @@ export const TimelineScreen = ({
 }: TimelineScreenProps<"TimelineScreen">) => {
   const globalLogs = useAppSelector(logSelectors.selectAll);
   const [isTimelineFiltered, setIsTimelineFiltered] = useState<boolean>(false);
-  const [filteredLogs, setFilteredLogs] = useState<VeggieLogNormalised[]>([
-    {
-      id: "zv8RCeafO9OFQELDRcC",
-      date: 1652054400000,
-      notes: "starting to sprout\n\nyey",
-      photos: { entities: [], loading: "pending" },
-      veggie: "testVeggie",
-      payloadTags: [
-        {
-          tagLabel: "seedling",
-          tagColor: "#44803F",
-          tagIcon: "seedling",
-        },
-      ],
-    },
-  ]);
+  const [filteredLogs, setFilteredLogs] = useState<VeggieLogNormalised[]>([]);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [test, setTest] = useState<VeggieLogNormalised[]>();
+
+  // useState(() => {
+  //   // if (filteredLogs.length > 0) {
+  //   const finalArr = new Set(filteredLogs);
+  //   const lastArr = [...finalArr];
+  //   setTest(lastArr);
+
+  //   console.log("lastTest", lastArr);
+  //   // }
+  // });
 
   const clearFilters = () => {
     setIsTimelineFiltered(false);
@@ -45,6 +41,7 @@ export const TimelineScreen = ({
     console.log("selectedFilters", selectedFilters);
     console.log("filteredLogs", filteredLogs);
     // console.log("globalLogs", globalLogs);
+    console.log("test", test);
   };
 
   return (

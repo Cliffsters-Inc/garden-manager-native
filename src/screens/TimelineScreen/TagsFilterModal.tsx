@@ -15,6 +15,9 @@ interface Props {
   setIsTimelineFiltered: React.Dispatch<React.SetStateAction<boolean>>;
   filteredLogs: VeggieLogNormalised[];
   setFilteredLogs: React.Dispatch<React.SetStateAction<VeggieLogNormalised[]>>;
+  setlogsFilteredByTag: React.Dispatch<
+    React.SetStateAction<VeggieLogNormalised[]>
+  >;
   selectedFilters: string[];
   setSelectedFilters: React.Dispatch<React.SetStateAction<string[]>>;
   clearFilters: () => void;
@@ -24,11 +27,10 @@ interface Props {
 export const TagsFilterModal = ({
   setIsTimelineFiltered,
   filteredLogs,
-  setFilteredLogs,
+  setlogsFilteredByTag,
   selectedFilters,
   setSelectedFilters,
   clearFilters,
-  closeFilterModal,
 }: Props) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
@@ -44,7 +46,18 @@ export const TagsFilterModal = ({
 
   const renderTags = ({ item }: { item: Tag }) => {
     const selectTag = () => {
-      setSelectedFilters([...selectedFilters, item.tagLabel]);
+      const alreadySelected = selectedFilters.includes(item.tagLabel);
+      if (!alreadySelected) {
+        console.log("adding new tag filter");
+        setSelectedFilters([...selectedFilters, item.tagLabel]);
+      } else {
+        const tempArr = selectedFilters.filter(
+          (filter) => filter !== item.tagLabel
+        );
+        setSelectedFilters(tempArr);
+        console.log("udplicateTest");
+        console.log("temp", tempArr);
+      }
     };
 
     const handleTagPress = () => {
@@ -67,23 +80,16 @@ export const TagsFilterModal = ({
     );
   };
 
-  const filterTags = () => {
+  const filterByTags = () => {
     const logsToFilter = [...globalLogs];
     const filteredList = logsToFilter.filter((log) =>
       log.payloadTags.some((tag) => {
         return selectedFilters.includes(tag.tagLabel);
       })
     );
-    setIsTimelineFiltered(true);
-    setFilteredLogs([...filteredLogs, ...filteredList]);
+    setlogsFilteredByTag(filteredList);
     console.log("**filteredList", filteredList);
   };
-
-  useEffect(() => {
-    if (selectedFilters.length > 0) {
-      filterTags();
-    }
-  }, [selectedFilters]);
 
   const resetAndGoBack = () => {
     clearFilters();
@@ -91,13 +97,15 @@ export const TagsFilterModal = ({
   };
 
   const filterAndGoBack = () => {
+    filterByTags();
+    setIsTimelineFiltered(true);
     setModalVisible(!modalVisible);
   };
 
   const con = () => {
     console.log("selectedFilters", selectedFilters);
     console.log("filteredLogs", filteredLogs);
-    console.log("test", test);
+    // console.log("test", test);
     // console.log("isSelected", isSelected);
     // console.log("tagSelected", tagSelected);
   };

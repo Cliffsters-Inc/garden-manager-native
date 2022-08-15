@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet } from "react-native";
 import { Button, Divider } from "react-native-elements";
 
-import { convertToTag } from "../../components/Tags/Tag.utils";
-import { TagElement } from "../../components/Tags/TagElement";
+// import { convertToTag } from "../../components/Tags/Tag.utils";
+// import { TagElement } from "../../components/Tags/TagElement";
 import { Text, View } from "../../components/Themed";
-import { Tag, VeggieLogNormalised } from "../../features/entity.types";
+import { VeggieLogNormalised } from "../../features/entity.types";
 import { PhotoFilter } from "./PhotoFilter";
 import { TagsFilterModal } from "./TagsFilterModal";
 
@@ -31,35 +31,49 @@ export const FilterModal = ({
   clearFilters,
 }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [filteredTagsList, setFilteredTags] = useState<Tag[]>([]);
+  const [logsFilteredByTag, setlogsFilteredByTag] = useState<
+    VeggieLogNormalised[]
+  >([]);
+  const [logsFilteredByPics, setlogsFilteredByPics] = useState<
+    VeggieLogNormalised[]
+  >([]);
+
+  // useEffect(() => {
+  //   const listToDisplay = selectedFilters.map((tagName: string) =>
+  //     convertToTag(tagName)
+  //   );
+  //   setFilteredTagsList(listToDisplay);
+  // }, [selectedFilters]);
 
   useEffect(() => {
-    const listToDisplay = selectedFilters.map((tagName: string) =>
-      convertToTag(tagName)
-    );
-    setFilteredTags(listToDisplay);
-  }, [selectedFilters]);
+    const mergedArray = [...logsFilteredByTag, ...logsFilteredByPics];
+    setFilteredLogs(mergedArray);
+  }, [logsFilteredByTag, logsFilteredByPics]);
 
   const closeFilterModal = () => {
     setModalVisible(false);
   };
 
-  const renderTags = ({ item }: { item: Tag }) => {
-    return <TagElement tag={item} hideIcon />;
-  };
+  // const renderTags = ({ item }: { item: Tag }) => {
+  //   return <TagElement tag={item} hideIcon />;
+  // };
 
   const con = () => {
+    console.log(
+      "*************************************************************************************"
+    );
     console.log("selectedFilters", selectedFilters);
-    console.log("filteredTagsList", filteredTagsList);
-    console.log("filteredLogs", filteredLogs);
+    console.log("filteredTagsList", logsFilteredByTag);
+    console.log("filteredPicsList", logsFilteredByPics);
+    // console.log("filteredLogs", filteredLogs);
   };
 
   return (
     <View style={styles.centeredView}>
       <Modal animationType="slide" visible={modalVisible}>
-        <Button title="con" onPress={con} />
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <Button title="con" onPress={con} />
             <View style={{ flexDirection: "row" }}>
               <Pressable onPress={clearFilters}>
                 <Text style={styles.categorySelector}>None</Text>
@@ -78,31 +92,35 @@ export const FilterModal = ({
                 setIsTimelineFiltered={setIsTimelineFiltered}
                 filteredLogs={filteredLogs}
                 setFilteredLogs={setFilteredLogs}
+                setlogsFilteredByTag={setlogsFilteredByTag}
                 selectedFilters={selectedFilters}
                 setSelectedFilters={setSelectedFilters}
                 clearFilters={clearFilters}
                 closeFilterModal={closeFilterModal}
               />
               <View style={{ maxHeight: 30 }}>
-                <FlatList
-                  data={filteredTagsList}
+                {/* <FlatList
+                  data={logsFilteredByTag}
                   keyExtractor={(item) => item.tagLabel}
                   horizontal
                   renderItem={renderTags}
-                />
+                /> */}
               </View>
               <View style={{ marginLeft: 50, justifyContent: "flex-end" }}>
                 <AntDesign name="right" size={24} color="black" />
               </View>
             </View>
             <Divider />
-            <PhotoFilter setFilteredLogs={setFilteredLogs} />
+            <PhotoFilter
+              setIsTimelineFiltered={setIsTimelineFiltered}
+              setlogsFilteredByPics={setlogsFilteredByPics}
+            />
             <Divider />
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}
             >
-              <Text style={styles.textStyle}>Hide Modal</Text>
+              <Text style={styles.textStyle}>Accept Filters</Text>
             </Pressable>
           </View>
         </View>

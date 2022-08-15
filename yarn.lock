@@ -5948,7 +5948,7 @@ expo-camera@~12.1.2:
 
 expo-cli@^6.0.2:
   version "6.0.2"
-  resolved "https://registry.npmjs.org/expo-cli/-/expo-cli-6.0.2.tgz"
+  resolved "https://registry.yarnpkg.com/expo-cli/-/expo-cli-6.0.2.tgz#704b5ec0aab9484b1a4dc7e211b1eb30e8e8ab14"
   integrity sha512-jdYgr9N14glnbaZd/lV28lInOnMrusE75NKouji757uhoZrbphCfIQ6Cmc0COKEvHJGiX2uuxhis9uSs5HP/rg==
   dependencies:
     "@babel/runtime" "7.9.0"
