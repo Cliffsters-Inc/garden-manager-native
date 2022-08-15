@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet } from "react-native";
 import { Button, Divider } from "react-native-elements";
 
-// import { convertToTag } from "../../components/Tags/Tag.utils";
-// import { TagElement } from "../../components/Tags/TagElement";
+import { convertToTag } from "../../components/Tags/Tag.utils";
+import { TagElement } from "../../components/Tags/TagElement";
 import { Text, View } from "../../components/Themed";
-import { VeggieLogNormalised } from "../../features/entity.types";
+import { Tag, VeggieLogNormalised } from "../../features/entity.types";
+import { logSelectors } from "../../features/log/log.slice";
+import { useAppSelector } from "../../store";
 import { PhotoFilter } from "./PhotoFilter";
 import { TagsFilterModal } from "./TagsFilterModal";
 
@@ -16,9 +18,6 @@ interface Props {
   setIsTimelineFiltered: React.Dispatch<React.SetStateAction<boolean>>;
   filteredLogs: VeggieLogNormalised[];
   setFilteredLogs: React.Dispatch<React.SetStateAction<VeggieLogNormalised[]>>;
-  selectedFilters: string[];
-  setSelectedFilters: React.Dispatch<React.SetStateAction<string[]>>;
-  clearFilters: () => void;
 }
 
 export const FilterModal = ({
@@ -26,24 +25,23 @@ export const FilterModal = ({
   setIsTimelineFiltered,
   filteredLogs,
   setFilteredLogs,
-  selectedFilters,
-  setSelectedFilters,
-  clearFilters,
 }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [tagsToFilter, setTagsToFilter] = useState<string[]>([]);
   const [logsFilteredByTag, setlogsFilteredByTag] = useState<
     VeggieLogNormalised[]
   >([]);
   const [logsFilteredByPics, setlogsFilteredByPics] = useState<
     VeggieLogNormalised[]
   >([]);
+  const [tagsToDisplay, setTagsToDisplay] = useState<Tag[]>([]);
 
-  // useEffect(() => {
-  //   const listToDisplay = selectedFilters.map((tagName: string) =>
-  //     convertToTag(tagName)
-  //   );
-  //   setFilteredTagsList(listToDisplay);
-  // }, [selectedFilters]);
+  useEffect(() => {
+    const listToDisplay = tagsToFilter.map((tagName: string) =>
+      convertToTag(tagName)
+    );
+    setTagsToDisplay(listToDisplay);
+  }, [tagsToFilter]);
 
   useEffect(() => {
     const mergedArray = [...logsFilteredByTag, ...logsFilteredByPics];
@@ -54,15 +52,22 @@ export const FilterModal = ({
     setModalVisible(false);
   };
 
-  // const renderTags = ({ item }: { item: Tag }) => {
-  //   return <TagElement tag={item} hideIcon />;
-  // };
+  const renderTags = ({ item }: { item: Tag }) => {
+    return <TagElement tag={item} hideIcon />;
+  };
+
+  const globalLogs = useAppSelector(logSelectors.selectAll);
+  const clearFilters = () => {
+    setIsTimelineFiltered(false);
+    setTagsToFilter([]);
+    setFilteredLogs(globalLogs);
+  };
 
   const con = () => {
     console.log(
       "*************************************************************************************"
     );
-    console.log("selectedFilters", selectedFilters);
+    console.log("tagsToFilter", tagsToFilter);
     console.log("filteredTagsList", logsFilteredByTag);
     console.log("filteredPicsList", logsFilteredByPics);
     // console.log("filteredLogs", filteredLogs);
@@ -90,21 +95,19 @@ export const FilterModal = ({
             >
               <TagsFilterModal
                 setIsTimelineFiltered={setIsTimelineFiltered}
-                filteredLogs={filteredLogs}
-                setFilteredLogs={setFilteredLogs}
                 setlogsFilteredByTag={setlogsFilteredByTag}
-                selectedFilters={selectedFilters}
-                setSelectedFilters={setSelectedFilters}
+                tagsToFilter={tagsToFilter}
+                setTagsToFilter={setTagsToFilter}
                 clearFilters={clearFilters}
                 closeFilterModal={closeFilterModal}
               />
               <View style={{ maxHeight: 30 }}>
-                {/* <FlatList
-                  data={logsFilteredByTag}
+                <FlatList
+                  data={tagsToDisplay}
                   keyExtractor={(item) => item.tagLabel}
                   horizontal
                   renderItem={renderTags}
-                /> */}
+                />
               </View>
               <View style={{ marginLeft: 50, justifyContent: "flex-end" }}>
                 <AntDesign name="right" size={24} color="black" />

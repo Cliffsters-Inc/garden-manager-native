@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/namespace
 import { Garden } from "../entity.types";
 
 export const initialGardenState: Garden[] = [
@@ -20,7 +19,7 @@ export const initialGardenState: Garden[] = [
                 id: "zv8RCeafO9OFQELDRcC",
                 date: 1652054400000,
                 notes: "starting to sprout\n\nyey",
-                photos: { entities: ["test"], loading: "pending" },
+                photos: { entities: [], loading: "pending" },
                 payloadTags: [
                   {
                     tagLabel: "seedling",

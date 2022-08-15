@@ -13,23 +13,20 @@ import { useAppSelector } from "../../store";
 
 interface Props {
   setIsTimelineFiltered: React.Dispatch<React.SetStateAction<boolean>>;
-  filteredLogs: VeggieLogNormalised[];
-  setFilteredLogs: React.Dispatch<React.SetStateAction<VeggieLogNormalised[]>>;
   setlogsFilteredByTag: React.Dispatch<
     React.SetStateAction<VeggieLogNormalised[]>
   >;
-  selectedFilters: string[];
-  setSelectedFilters: React.Dispatch<React.SetStateAction<string[]>>;
+  tagsToFilter: string[];
+  setTagsToFilter: React.Dispatch<React.SetStateAction<string[]>>;
   clearFilters: () => void;
   closeFilterModal: () => void;
 }
 
 export const TagsFilterModal = ({
   setIsTimelineFiltered,
-  filteredLogs,
   setlogsFilteredByTag,
-  selectedFilters,
-  setSelectedFilters,
+  tagsToFilter,
+  setTagsToFilter,
   clearFilters,
 }: Props) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -46,15 +43,15 @@ export const TagsFilterModal = ({
 
   const renderTags = ({ item }: { item: Tag }) => {
     const selectTag = () => {
-      const alreadySelected = selectedFilters.includes(item.tagLabel);
+      const alreadySelected = tagsToFilter.includes(item.tagLabel);
       if (!alreadySelected) {
         console.log("adding new tag filter");
-        setSelectedFilters([...selectedFilters, item.tagLabel]);
+        setTagsToFilter([...tagsToFilter, item.tagLabel]);
       } else {
-        const tempArr = selectedFilters.filter(
+        const tempArr = tagsToFilter.filter(
           (filter) => filter !== item.tagLabel
         );
-        setSelectedFilters(tempArr);
+        setTagsToFilter(tempArr);
         console.log("udplicateTest");
         console.log("temp", tempArr);
       }
@@ -65,13 +62,18 @@ export const TagsFilterModal = ({
     };
 
     const checkIfSelected = () => {
-      return selectedFilters.includes(item.tagLabel);
+      return tagsToFilter.includes(item.tagLabel);
     };
 
     return (
       <Pressable onPress={handleTagPress}>
         <TagElement tag={item} />
-        <View style={{ marginLeft: 200, justifyContent: "flex-start" }}>
+        <View
+          style={{
+            marginLeft: 200,
+            justifyContent: "flex-start",
+          }}
+        >
           {checkIfSelected() && (
             <FontAwesome5 name="check" size={24} color="black" />
           )}
@@ -84,7 +86,7 @@ export const TagsFilterModal = ({
     const logsToFilter = [...globalLogs];
     const filteredList = logsToFilter.filter((log) =>
       log.payloadTags.some((tag) => {
-        return selectedFilters.includes(tag.tagLabel);
+        return tagsToFilter.includes(tag.tagLabel);
       })
     );
     setlogsFilteredByTag(filteredList);
@@ -103,10 +105,8 @@ export const TagsFilterModal = ({
   };
 
   const con = () => {
-    console.log("selectedFilters", selectedFilters);
-    console.log("filteredLogs", filteredLogs);
-    // console.log("test", test);
-    // console.log("isSelected", isSelected);
+    console.log("tagsToFilter", tagsToFilter);
+    // console.log("test", test); console.log("isSelected", isSelected);
     // console.log("tagSelected", tagSelected);
   };
 
@@ -121,12 +121,20 @@ export const TagsFilterModal = ({
               backgroundColor: "green",
             }}
           >
-            <Text onPress={resetAndGoBack} style={{ fontSize: 20 }}>
+            <Text
+              onPress={resetAndGoBack}
+              style={{
+                fontSize: 20,
+              }}
+            >
               Back
             </Text>
             <Text
               onPress={filterAndGoBack}
-              style={{ fontSize: 20, marginLeft: "auto" }}
+              style={{
+                fontSize: 20,
+                marginLeft: "auto",
+              }}
             >
               Filter
             </Text>
@@ -166,8 +174,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 400,
     width: 200,
-    // marginTop: 22,
-    // backgroundColor: "red",
+    // marginTop: 22, backgroundColor: "red",
   },
   modalView: {
     // justifyContent: "center",
