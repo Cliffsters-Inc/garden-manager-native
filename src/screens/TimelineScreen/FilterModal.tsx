@@ -23,7 +23,6 @@ interface Props {
 export const FilterModal = ({
   isTimelineFiltered,
   setIsTimelineFiltered,
-  filteredLogs,
   setFilteredLogs,
 }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -44,13 +43,12 @@ export const FilterModal = ({
   }, [tagsToFilter]);
 
   useEffect(() => {
-    const mergedArray = [...logsFilteredByTag, ...logsFilteredByPics];
+    const mergedArray = [
+      ...new Set([...logsFilteredByTag, ...logsFilteredByPics]),
+    ];
+    console.log("meregedArray", mergedArray);
     setFilteredLogs(mergedArray);
   }, [logsFilteredByTag, logsFilteredByPics]);
-
-  const closeFilterModal = () => {
-    setModalVisible(false);
-  };
 
   const renderTags = ({ item }: { item: Tag }) => {
     return <TagElement tag={item} hideIcon />;
@@ -99,7 +97,6 @@ export const FilterModal = ({
                 tagsToFilter={tagsToFilter}
                 setTagsToFilter={setTagsToFilter}
                 clearFilters={clearFilters}
-                closeFilterModal={closeFilterModal}
               />
               <View style={{ maxHeight: 30 }}>
                 <FlatList

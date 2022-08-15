@@ -19,7 +19,6 @@ interface Props {
   tagsToFilter: string[];
   setTagsToFilter: React.Dispatch<React.SetStateAction<string[]>>;
   clearFilters: () => void;
-  closeFilterModal: () => void;
 }
 
 export const TagsFilterModal = ({
