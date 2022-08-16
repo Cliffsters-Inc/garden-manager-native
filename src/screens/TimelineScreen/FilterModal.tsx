@@ -27,13 +27,13 @@ export const FilterModal = ({
 }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [tagsToFilter, setTagsToFilter] = useState<string[]>([]);
-  const [logsFilteredByTag, setlogsFilteredByTag] = useState<
-    VeggieLogNormalised[]
-  >([]);
-  const [logsFilteredByPics, setlogsFilteredByPics] = useState<
-    VeggieLogNormalised[]
-  >([]);
   const [tagsToDisplay, setTagsToDisplay] = useState<Tag[]>([]);
+  const [logsFilteredByTag, setLogsFilteredByTag] = useState<
+    VeggieLogNormalised[]
+  >([]);
+  const [logsFilteredByPics, setLogsFilteredByPics] = useState<
+    VeggieLogNormalised[]
+  >([]);
 
   useEffect(() => {
     const listToDisplay = tagsToFilter.map((tagName: string) =>
@@ -58,6 +58,8 @@ export const FilterModal = ({
   const clearFilters = () => {
     setIsTimelineFiltered(false);
     setTagsToFilter([]);
+    setLogsFilteredByTag([]);
+    setLogsFilteredByPics([]);
     setFilteredLogs(globalLogs);
   };
 
@@ -66,8 +68,14 @@ export const FilterModal = ({
       "*************************************************************************************"
     );
     console.log("tagsToFilter", tagsToFilter);
-    console.log("filteredTagsList", logsFilteredByTag);
-    console.log("filteredPicsList", logsFilteredByPics);
+    console.log(
+      "filteredTagsList",
+      logsFilteredByTag.map((log: VeggieLogNormalised) => log.notes)
+    );
+    console.log(
+      "filteredPicsList",
+      logsFilteredByPics.map((log: VeggieLogNormalised) => log.notes)
+    );
     // console.log("filteredLogs", filteredLogs);
   };
 
@@ -93,7 +101,7 @@ export const FilterModal = ({
             >
               <TagsFilterModal
                 setIsTimelineFiltered={setIsTimelineFiltered}
-                setlogsFilteredByTag={setlogsFilteredByTag}
+                setLogsFilteredByTag={setLogsFilteredByTag}
                 tagsToFilter={tagsToFilter}
                 setTagsToFilter={setTagsToFilter}
                 clearFilters={clearFilters}
@@ -112,8 +120,10 @@ export const FilterModal = ({
             </View>
             <Divider />
             <PhotoFilter
+              isTimelineFiltered={isTimelineFiltered}
               setIsTimelineFiltered={setIsTimelineFiltered}
-              setlogsFilteredByPics={setlogsFilteredByPics}
+              logsFilteredByPics={logsFilteredByPics}
+              setLogsFilteredByPics={setLogsFilteredByPics}
             />
             <Divider />
             <Pressable

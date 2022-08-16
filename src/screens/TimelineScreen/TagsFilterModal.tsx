@@ -13,7 +13,7 @@ import { useAppSelector } from "../../store";
 
 interface Props {
   setIsTimelineFiltered: React.Dispatch<React.SetStateAction<boolean>>;
-  setlogsFilteredByTag: React.Dispatch<
+  setLogsFilteredByTag: React.Dispatch<
     React.SetStateAction<VeggieLogNormalised[]>
   >;
   tagsToFilter: string[];
@@ -23,7 +23,7 @@ interface Props {
 
 export const TagsFilterModal = ({
   setIsTimelineFiltered,
-  setlogsFilteredByTag,
+  setLogsFilteredByTag: setlogsFilteredByTag,
   tagsToFilter,
   setTagsToFilter,
   clearFilters,
