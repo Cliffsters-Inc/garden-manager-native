@@ -10,6 +10,7 @@ import { Text, View } from "../../components/Themed";
 import { Tag, VeggieLogNormalised } from "../../features/entity.types";
 import { logSelectors } from "../../features/log/log.slice";
 import { useAppSelector } from "../../store";
+import { LocationFilter } from "./LocationFilter";
 import { PhotoFilter } from "./PhotoFilter";
 import { TagsFilterModal } from "./TagsFilterModal";
 
@@ -32,6 +33,9 @@ export const FilterModal = ({
     VeggieLogNormalised[]
   >([]);
   const [logsFilteredByPics, setLogsFilteredByPics] = useState<
+    VeggieLogNormalised[]
+  >([]);
+  const [logsFilteredByLocation, setLogsFilteredByLocation] = useState<
     VeggieLogNormalised[]
   >([]);
 
@@ -118,6 +122,10 @@ export const FilterModal = ({
                 <AntDesign name="right" size={24} color="black" />
               </View>
             </View>
+            <Divider />
+            <LocationFilter
+              setLogsFilteredByLocation={setLogsFilteredByLocation}
+            />
             <Divider />
             <PhotoFilter
               isTimelineFiltered={isTimelineFiltered}

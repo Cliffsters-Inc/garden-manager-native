@@ -157,7 +157,7 @@ export const TagsFilterModal = ({
         </Modal>
       </View>
       <Pressable
-        style={[styles.button, styles.buttonOpen]}
+        style={styles.buttonOpen}
         onPress={() => setModalVisible(true)}
       >
         <Text style={styles.categorySelector}>Tags</Text>
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   textStyle: {
-    color: "white",
+    // color: "white",
     fontWeight: "bold",
     textAlign: "center",
   },

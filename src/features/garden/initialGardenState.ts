@@ -1,5 +1,6 @@
 import { Garden } from "../entity.types";
 
+//****If you make changes here remember to clear storage to correctly test****
 export const initialGardenState: Garden[] = [
   {
     name: "frontyard",
@@ -18,6 +19,7 @@ export const initialGardenState: Garden[] = [
               {
                 id: "zv8RCeafO9OFQELDRcC",
                 date: 1652054400000,
+                location: ["frontyard", "1"],
                 notes: "starting to sprout\n\nyey",
                 photos: { entities: [], loading: "pending" },
                 payloadTags: [
@@ -31,6 +33,7 @@ export const initialGardenState: Garden[] = [
               {
                 id: "utbyJ4pwA1F0TlRcMYYLw",
                 date: 1652251484254,
+                location: ["backyard", "2"],
                 notes: "bugs everywhere what do?",
                 photos: { entities: [], loading: "pending" },
                 payloadTags: [
