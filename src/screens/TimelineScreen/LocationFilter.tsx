@@ -5,20 +5,27 @@ import { Button } from "react-native-elements";
 
 import { Text, View } from "../../components/Themed";
 import { VeggieLogNormalised } from "../../features/entity.types";
+import { gardenSelectors } from "../../features/garden/garden.slice";
 import { logSelectors } from "../../features/log/log.slice";
 import { useAppSelector } from "../../store";
 
 interface Props {
+  setIsTimelineFiltered: React.Dispatch<React.SetStateAction<boolean>>;
   setLogsFilteredByLocation: React.Dispatch<
     React.SetStateAction<VeggieLogNormalised[]>
   >;
 }
 
-export const LocationFilter = ({ setLogsFilteredByLocation }: Props) => {
-  const globalLogs = useAppSelector(logSelectors.selectAll);
+export const LocationFilter = ({
+  setLogsFilteredByLocation,
+  setIsTimelineFiltered,
+}: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const locationList = ["frontyard", "1"];
-  const [test, setTest] = useState<VeggieLogNormalised[]>([]);
+  const globalLogs = useAppSelector(logSelectors.selectAll);
+  const gardens = useAppSelector(gardenSelectors.selectAll);
+  const gardenNamesList = gardens.map((garden) => garden.name);
+
+  console.log("gardens", gardenNamesList);
 
   const filterByLocation = (locationName: string) => {
     const logsToFilter = [...globalLogs];
@@ -30,6 +37,9 @@ export const LocationFilter = ({ setLogsFilteredByLocation }: Props) => {
       return filteredLocation;
     });
     console.log("mcFillyList", filteredList);
+    //This may need to be moved.
+    setIsTimelineFiltered(true);
+    setLogsFilteredByLocation(filteredList);
   };
 
   //   const filterByLocation = (locationName: string) => {
@@ -60,7 +70,7 @@ export const LocationFilter = ({ setLogsFilteredByLocation }: Props) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <FlatList
-              data={locationList}
+              data={gardenNamesList}
               keyExtractor={(index) => index}
               renderItem={renderLocations}
             />

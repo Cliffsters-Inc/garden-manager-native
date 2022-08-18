@@ -4,7 +4,6 @@ import { StyleSheet } from "react-native";
 import { ActionButton } from "../../components/ActionButton";
 import { Text, View } from "../../components/Themed";
 import { bedSelectors } from "../../features/bed/bed.slice";
-import { gardenSelectors } from "../../features/garden/garden.slice";
 import { veggieSelectors } from "../../features/veggie/veggie.slice";
 import { GardenScreenProps } from "../../navigation/navigation.types";
 import { useAppSelector } from "../../store";
@@ -22,7 +21,6 @@ export const BedScreen = ({
   const veggies = useAppSelector((state) =>
     veggieSelectors.selectByIds(state, bed?.veggies ?? [])
   );
-  console.log("locTit2", locationTitles);
   return bed ? (
     <View style={styles.container}>
       <Text>Bed Name: {bed.name}</Text>

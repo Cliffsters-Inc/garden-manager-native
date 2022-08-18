@@ -24,6 +24,7 @@ interface Props {
 export const FilterModal = ({
   isTimelineFiltered,
   setIsTimelineFiltered,
+  filteredLogs,
   setFilteredLogs,
 }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -48,11 +49,15 @@ export const FilterModal = ({
 
   useEffect(() => {
     const mergedArray = [
-      ...new Set([...logsFilteredByTag, ...logsFilteredByPics]),
+      ...new Set([
+        ...logsFilteredByTag,
+        ...logsFilteredByPics,
+        ...logsFilteredByLocation,
+      ]),
     ];
     console.log("meregedArray", mergedArray);
     setFilteredLogs(mergedArray);
-  }, [logsFilteredByTag, logsFilteredByPics]);
+  }, [logsFilteredByTag, logsFilteredByPics, logsFilteredByLocation]);
 
   const renderTags = ({ item }: { item: Tag }) => {
     return <TagElement tag={item} hideIcon />;
@@ -71,16 +76,17 @@ export const FilterModal = ({
     console.log(
       "*************************************************************************************"
     );
-    console.log("tagsToFilter", tagsToFilter);
-    console.log(
-      "filteredTagsList",
-      logsFilteredByTag.map((log: VeggieLogNormalised) => log.notes)
-    );
-    console.log(
-      "filteredPicsList",
-      logsFilteredByPics.map((log: VeggieLogNormalised) => log.notes)
-    );
-    // console.log("filteredLogs", filteredLogs);
+    // console.log("tagsToFilter", tagsToFilter);
+    // console.log(
+    //   "filteredTagsList",
+    //   logsFilteredByTag.map((log: VeggieLogNormalised) => log.notes)
+    // );
+    // console.log(
+    //   "filteredPicsList",
+    //   logsFilteredByPics.map((log: VeggieLogNormalised) => log.notes)
+    // );
+    console.log("log location", logsFilteredByLocation);
+    console.log("***LOGS", filteredLogs);
   };
 
   return (
@@ -125,6 +131,7 @@ export const FilterModal = ({
             <Divider />
             <LocationFilter
               setLogsFilteredByLocation={setLogsFilteredByLocation}
+              setIsTimelineFiltered={setIsTimelineFiltered}
             />
             <Divider />
             <PhotoFilter
