@@ -10,6 +10,7 @@ import { logActions } from "../../features/log/log.slice";
 import { photoSelectors } from "../../features/photos/photos.slice";
 import { GardenScreenProps } from "../../navigation/navigation.types";
 import { useAppDispatch, useAppSelector } from "../../store";
+import { LocationObj } from "../BedScreen/BedCards";
 import { Calendar } from "./Calendar";
 import { CrossBtn } from "./CrossBtn";
 
@@ -20,12 +21,13 @@ export const NewVeggieLogModal = ({
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [date, setDate] = useState(Date.now());
   const [notes, setNotes] = useState("");
-  const { veggieId } = route.params;
+  const { veggieId, locationTitles } = route.params;
   const [payloadTags, setPayloadTags] = useState<Tag[]>([]);
 
   const appContext = useContext(pressedTagsContext);
   const pressedTags = appContext?.pressedTags;
   const setPressedTags = appContext?.setPressedTags;
+  const location: LocationObj = locationTitles;
 
   const dispatch = useAppDispatch();
   const cachedPhotos = useAppSelector(photoSelectors.selectAllCachedPhotos);
@@ -33,12 +35,12 @@ export const NewVeggieLogModal = ({
   useEffect(() => {
     setPayloadTags([...pressedTags!]);
   }, [pressedTags]);
-
   const handleSubmit = () => {
     const { payload } = dispatch(
       logActions.add({
         veggie: veggieId,
         date,
+        location,
         notes,
         photos: { entities: [], loading: "succeeded" },
         payloadTags,
@@ -59,7 +61,7 @@ export const NewVeggieLogModal = ({
       headerRight: () => <Button title="Add" onPress={handleSubmit} />,
       headerLeft: () => <Button title="Cancel" onPress={goBackAndClear} />,
     });
-  }, [navigation, date, notes, payloadTags]);
+  }, [navigation, date, location, notes, payloadTags]);
 
   const dateCalFormatted = format(new Date(date), "yyyy-MM-dd");
 

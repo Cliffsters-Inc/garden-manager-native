@@ -1,3 +1,5 @@
+import { LocationObj } from "./../screens/BedScreen/BedCards";
+
 type Months =
   | "JAN"
   | "FEB"
@@ -66,7 +68,7 @@ export type VeggieNormalised = {
 export type VeggieLog = {
   id: string;
   date: number;
-  location: string[];
+  location: LocationObj;
   notes?: string;
   photos: {
     entities: string[];
@@ -78,7 +80,7 @@ export type VeggieLog = {
 export type VeggieLogNormalised = {
   id: string;
   date: number;
-  location: string[];
+  location: LocationObj;
   notes?: string;
   photos: {
     entities: string[];

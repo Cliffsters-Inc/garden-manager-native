@@ -13,6 +13,11 @@ type Props = {
   navigation: GardenScreenProps<"BedsScreen">["navigation"];
 };
 
+export type LocationObj = {
+  gardenTitle: string;
+  bedTitle: string;
+} | null;
+
 export const BedCards = ({ selectedGardenId, navigation }: Props) => {
   const garden = useAppSelector((state) =>
     gardenSelectors.selectById(state, selectedGardenId)
@@ -36,6 +41,10 @@ export const BedCards = ({ selectedGardenId, navigation }: Props) => {
             <CustomCard
               title={item.name}
               selectedBedId={item.id}
+              locationTitles={{
+                gardenTitle: garden!.name,
+                bedTitle: item.name,
+              }}
               navigation={navigation}
             />
           )}

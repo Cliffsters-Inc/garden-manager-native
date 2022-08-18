@@ -1,13 +1,6 @@
 /* eslint-disable import/namespace */
-import { nanoid } from "@reduxjs/toolkit";
 import { useState } from "react";
-import {
-  FlatList,
-  ListRenderItem,
-  Modal,
-  Pressable,
-  StyleSheet,
-} from "react-native";
+import { FlatList, Modal, Pressable, StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 
 import { Text, View } from "../../components/Themed";
@@ -29,24 +22,24 @@ export const LocationFilter = ({ setLogsFilteredByLocation }: Props) => {
 
   const filterByLocation = (locationName: string) => {
     const logsToFilter = [...globalLogs];
-    const filteredList: any[] = logsToFilter.filter((log) => {
-      const filteredLocations = log.location.some((location) => {
-        return location.includes(locationName);
-      });
-      console.log("filLocs", filteredLocations);
-      return filteredLocations;
+    const filteredList: VeggieLogNormalised[] = logsToFilter.filter((log) => {
+      const filteredLocation =
+        (log.location?.gardenTitle || log.location?.bedTitle) === locationName
+          ? log
+          : null;
+      return filteredLocation;
     });
-    setTest(filteredList);
+    console.log("mcFillyList", filteredList);
   };
+
   //   const filterByLocation = (locationName: string) => {
   //     const logsToFilter = [...globalLogs];
-  //     console.log("loc", locationName);
   //     const filteredList: any[] = logsToFilter.filter((log) => {
-  //       log.location.some((location) => {
-  //         return location.includes("frontyard");
+  //       const filteredLocations = log.location.some((location) => {
+  //         return location.includes(locationName);
   //       });
-  //       console.log("filt", filteredList);
-  //       return filteredList;
+  //       console.log("filLocs", filteredLocations);
+  //       return filteredLocations;
   //     });
   //     setTest(filteredList);
   //   };

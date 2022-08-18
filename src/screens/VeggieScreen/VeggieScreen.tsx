@@ -19,7 +19,7 @@ export const VeggieScreen = ({
   navigation,
   route,
 }: GardenScreenProps<"VeggieScreen">) => {
-  const { veggieId } = route.params;
+  const { veggieId, locationTitles } = route.params;
   const [logsDescending, setLogsDescending] = useState(true);
 
   const dispatch = useAppDispatch();
@@ -112,7 +112,7 @@ export const VeggieScreen = ({
                   <FlatList
                     data={item.payloadTags}
                     keyExtractor={(item) => item.tagLabel}
-                    horizontal={true}
+                    horizontal
                     renderItem={renderDisplayTag}
                   />
                 )}
@@ -133,7 +133,9 @@ export const VeggieScreen = ({
       </View>
       <ActionButton
         text="Add Log"
-        onPress={() => navigation.navigate("NewVeggieLogModal", { veggieId })}
+        onPress={() =>
+          navigation.navigate("NewVeggieLogModal", { veggieId, locationTitles })
+        }
       />
     </View>
   ) : null;
