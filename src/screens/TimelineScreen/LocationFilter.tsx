@@ -4,7 +4,11 @@ import { FlatList, Modal, Pressable, StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 
 import { Text, View } from "../../components/Themed";
-import { VeggieLogNormalised } from "../../features/entity.types";
+import { bedSelectors } from "../../features/bed/bed.slice";
+import {
+  BedNormalised,
+  VeggieLogNormalised,
+} from "../../features/entity.types";
 import { gardenSelectors } from "../../features/garden/garden.slice";
 import { logSelectors } from "../../features/log/log.slice";
 import { useAppSelector } from "../../store";
@@ -23,45 +27,72 @@ export const LocationFilter = ({
   const [modalVisible, setModalVisible] = useState(false);
   const globalLogs = useAppSelector(logSelectors.selectAll);
   const gardens = useAppSelector(gardenSelectors.selectAll);
+
   const gardenNamesList = gardens.map((garden) => garden.name);
+  const [isDisplayingBedList, setIsDisplayingBedlist] =
+    useState<boolean>(false);
 
-  console.log("gardens", gardenNamesList);
+  const [selectedGardenId, setSelectedGardenId] = useState("");
+  const selectedBeds = useAppSelector((state) =>
+    bedSelectors.selectByGarden(state, selectedGardenId)
+  );
 
-  const filterByLocation = (locationName: string) => {
+  const [filterByList, setFilterByList] = useState<string[]>([]);
+
+  const createGardenBedList = (gardenName: string) => {
+    let selectedGardenId: string;
+    gardens.filter((garden) => {
+      if (garden.name === gardenName) {
+        setSelectedGardenId(garden.id);
+      }
+      console.log("**garden", selectedGardenId);
+    });
+  };
+
+  const filterByGarden = (gardenName: string) => {
+    setFilterByList([gardenName]);
     const logsToFilter = [...globalLogs];
-    const filteredList: VeggieLogNormalised[] = logsToFilter.filter((log) => {
+    const filteredList = logsToFilter.filter((log) => {
       const filteredLocation =
-        (log.location?.gardenTitle || log.location?.bedTitle) === locationName
-          ? log
-          : null;
+        log.location?.gardenTitle === gardenName ? log : null;
       return filteredLocation;
     });
-    console.log("mcFillyList", filteredList);
-    //This may need to be moved.
+    console.log("filteredList", filteredList);
+    createGardenBedList(gardenName);
+    setIsDisplayingBedlist(true);
     setIsTimelineFiltered(true);
     setLogsFilteredByLocation(filteredList);
   };
 
-  //   const filterByLocation = (locationName: string) => {
-  //     const logsToFilter = [...globalLogs];
-  //     const filteredList: any[] = logsToFilter.filter((log) => {
-  //       const filteredLocations = log.location.some((location) => {
-  //         return location.includes(locationName);
-  //       });
-  //       console.log("filLocs", filteredLocations);
-  //       return filteredLocations;
-  //     });
-  //     setTest(filteredList);
-  //   };
+  const filterByBed = (bedName: string) => {
+    setFilterByList([...filterByList, bedName]);
+    const logsToFilter = [...globalLogs];
+    const filteredList = logsToFilter.filter((log) => {
+      return (
+        log.location?.gardenTitle === filterByList[0] &&
+        log.location?.bedTitle === bedName
+      );
+    });
+    setLogsFilteredByLocation(filteredList);
+    console.log("test", filterByList[0], bedName);
+    console.log("filteredList bed", filteredList);
+  };
 
-  const renderLocations = ({ item }: { item: string }) => (
-    <Pressable onPress={() => filterByLocation(item)}>
+  const renderGardens = ({ item }: { item: string }) => (
+    <Pressable onPress={() => filterByGarden(item)}>
       <Text style={styles.modalText}>{item}</Text>
     </Pressable>
   );
 
+  const renderBeds = ({ item }: { item: BedNormalised }) => (
+    <Pressable onPress={() => filterByBed(item.name)}>
+      <Text style={styles.modalText}>{item.name}</Text>
+    </Pressable>
+  );
+
   const con = () => {
-    console.log("test", test);
+    console.log("selectedBeds", selectedBeds);
+    console.log("isDisplayingBedList", isDisplayingBedList);
   };
 
   return (
@@ -69,11 +100,20 @@ export const LocationFilter = ({
       <Modal animationType="slide" visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <FlatList
-              data={gardenNamesList}
-              keyExtractor={(index) => index}
-              renderItem={renderLocations}
-            />
+            {!isDisplayingBedList ? (
+              <FlatList
+                data={gardenNamesList}
+                keyExtractor={(index) => index}
+                renderItem={renderGardens}
+              />
+            ) : (
+              <FlatList
+                data={selectedBeds}
+                keyExtractor={(index) => index.id}
+                renderItem={renderBeds}
+              />
+            )}
+            <Text>Filter by {filterByList}</Text>
             <Button title="con" onPress={con} />
             <Pressable
               style={[styles.button, styles.buttonClose]}

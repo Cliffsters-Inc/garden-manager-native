@@ -69,6 +69,7 @@ export const FilterModal = ({
     setTagsToFilter([]);
     setLogsFilteredByTag([]);
     setLogsFilteredByPics([]);
+    setLogsFilteredByLocation([]);
     setFilteredLogs(globalLogs);
   };
 

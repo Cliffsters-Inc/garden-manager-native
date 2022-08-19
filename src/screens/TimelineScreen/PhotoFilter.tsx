@@ -18,7 +18,6 @@ interface Props {
 }
 
 export const PhotoFilter = ({
-  isTimelineFiltered,
   logsFilteredByPics,
   setIsTimelineFiltered,
   setLogsFilteredByPics: setlogsFilteredByPics,
