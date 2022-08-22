@@ -18,66 +18,64 @@ interface Props {
   setLogsFilteredByLocation: React.Dispatch<
     React.SetStateAction<VeggieLogNormalised[]>
   >;
+  selectedLocations: string[];
+  setSelectedLocations: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const LocationFilter = ({
-  setLogsFilteredByLocation,
   setIsTimelineFiltered,
+  setLogsFilteredByLocation,
+  selectedLocations,
+  setSelectedLocations,
 }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const globalLogs = useAppSelector(logSelectors.selectAll);
   const gardens = useAppSelector(gardenSelectors.selectAll);
 
-  const gardenNamesList = gardens.map((garden) => garden.name);
-  const [isDisplayingBedList, setIsDisplayingBedlist] =
-    useState<boolean>(false);
+  const [selectedGardenId, setSelectedGardenId] = useState<string>("");
 
-  const [selectedGardenId, setSelectedGardenId] = useState("");
-  const selectedBeds = useAppSelector((state) =>
-    bedSelectors.selectByGarden(state, selectedGardenId)
-  );
-
-  const [filterByList, setFilterByList] = useState<string[]>([]);
+  const selectedBeds = useAppSelector((state) => {
+    if (selectedGardenId) {
+      return bedSelectors.selectByGarden(state, selectedGardenId);
+    } else {
+      return null;
+    }
+  });
 
   const createGardenBedList = (gardenName: string) => {
-    let selectedGardenId: string;
     gardens.filter((garden) => {
       if (garden.name === gardenName) {
         setSelectedGardenId(garden.id);
       }
-      console.log("**garden", selectedGardenId);
     });
   };
 
   const filterByGarden = (gardenName: string) => {
-    setFilterByList([gardenName]);
+    setSelectedLocations([gardenName]);
     const logsToFilter = [...globalLogs];
     const filteredList = logsToFilter.filter((log) => {
       const filteredLocation =
         log.location?.gardenTitle === gardenName ? log : null;
       return filteredLocation;
     });
-    console.log("filteredList", filteredList);
     createGardenBedList(gardenName);
-    setIsDisplayingBedlist(true);
     setIsTimelineFiltered(true);
     setLogsFilteredByLocation(filteredList);
   };
 
   const filterByBed = (bedName: string) => {
-    setFilterByList([...filterByList, bedName]);
+    setSelectedLocations([...selectedLocations, bedName]);
     const logsToFilter = [...globalLogs];
     const filteredList = logsToFilter.filter((log) => {
       return (
-        log.location?.gardenTitle === filterByList[0] &&
+        log.location?.gardenTitle === selectedLocations[0] &&
         log.location?.bedTitle === bedName
       );
     });
     setLogsFilteredByLocation(filteredList);
-    console.log("test", filterByList[0], bedName);
-    console.log("filteredList bed", filteredList);
   };
 
+  //consider consolidating the following two functions.
   const renderGardens = ({ item }: { item: string }) => (
     <Pressable onPress={() => filterByGarden(item)}>
       <Text style={styles.modalText}>{item}</Text>
@@ -90,17 +88,25 @@ export const LocationFilter = ({
     </Pressable>
   );
 
+  const resetMenu = () => {
+    setSelectedGardenId("");
+    setSelectedLocations([]);
+  };
+
   const con = () => {
     console.log("selectedBeds", selectedBeds);
-    console.log("isDisplayingBedList", isDisplayingBedList);
+    console.log("selectedGardenId", selectedGardenId);
+    console.log("selectedLocations", selectedLocations);
   };
+
+  const gardenNamesList = gardens.map((garden) => garden.name);
 
   return (
     <View style={styles.centeredView}>
       <Modal animationType="slide" visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            {!isDisplayingBedList ? (
+            {!selectedGardenId ? (
               <FlatList
                 data={gardenNamesList}
                 keyExtractor={(index) => index}
@@ -113,7 +119,8 @@ export const LocationFilter = ({
                 renderItem={renderBeds}
               />
             )}
-            <Text>Filter by {filterByList}</Text>
+            <Text>Filter by {selectedLocations}</Text>
+            <Button title="reset" onPress={resetMenu} />
             <Button title="con" onPress={con} />
             <Pressable
               style={[styles.button, styles.buttonClose]}

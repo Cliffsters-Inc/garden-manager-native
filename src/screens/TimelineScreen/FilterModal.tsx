@@ -30,6 +30,8 @@ export const FilterModal = ({
   const [modalVisible, setModalVisible] = useState(false);
   const [tagsToFilter, setTagsToFilter] = useState<string[]>([]);
   const [tagsToDisplay, setTagsToDisplay] = useState<Tag[]>([]);
+  const [selectedLocations, setSelectedlocations] = useState<string[]>([]);
+
   const [logsFilteredByTag, setLogsFilteredByTag] = useState<
     VeggieLogNormalised[]
   >([]);
@@ -67,6 +69,7 @@ export const FilterModal = ({
   const clearFilters = () => {
     setIsTimelineFiltered(false);
     setTagsToFilter([]);
+    setSelectedlocations([]);
     setLogsFilteredByTag([]);
     setLogsFilteredByPics([]);
     setLogsFilteredByLocation([]);
@@ -86,8 +89,9 @@ export const FilterModal = ({
     //   "filteredPicsList",
     //   logsFilteredByPics.map((log: VeggieLogNormalised) => log.notes)
     // );
-    console.log("log location", logsFilteredByLocation);
-    console.log("***LOGS", filteredLogs);
+    // console.log("log location", logsFilteredByLocation);
+    // console.log("***LOGS", filteredLogs);
+    console.log("***filterByList", selectedLocations);
   };
 
   return (
@@ -130,10 +134,26 @@ export const FilterModal = ({
               </View>
             </View>
             <Divider />
-            <LocationFilter
-              setLogsFilteredByLocation={setLogsFilteredByLocation}
-              setIsTimelineFiltered={setIsTimelineFiltered}
-            />
+            <View
+              style={{
+                flexDirection: "row",
+                maxHeight: 50,
+                maxWidth: 100,
+              }}
+            >
+              <LocationFilter
+                setIsTimelineFiltered={setIsTimelineFiltered}
+                setLogsFilteredByLocation={setLogsFilteredByLocation}
+                setSelectedLocations={setSelectedlocations}
+                selectedLocations={selectedLocations}
+              />
+              <FlatList
+                data={selectedLocations}
+                horizontal
+                keyExtractor={(index) => index}
+                renderItem={({ item }) => <Text>{item}</Text>}
+              />
+            </View>
             <Divider />
             <PhotoFilter
               isTimelineFiltered={isTimelineFiltered}

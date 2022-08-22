@@ -51,7 +51,7 @@ export const TagsFilterModal = ({
           (filter) => filter !== item.tagLabel
         );
         setTagsToFilter(tempArr);
-        console.log("udplicateTest");
+        console.log("duplicateTest");
         console.log("temp", tempArr);
       }
     };
@@ -219,7 +219,6 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   textStyle: {
-    // color: "white",
     fontWeight: "bold",
     textAlign: "center",
   },
