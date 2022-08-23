@@ -40,6 +40,7 @@ export const PhotoFilter = ({
   const resetPhotoFilter = () => {
     setlogsFilteredByPics([]);
     setIsFilteringByPic(false);
+    setIsTimelineFiltered(false);
   };
 
   const photoFilterSwitch = () => {

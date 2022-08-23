@@ -99,8 +99,8 @@ export const TagsFilterModal = ({
 
   const filterAndGoBack = () => {
     filterByTags();
-    setIsTimelineFiltered(true);
     setModalVisible(!modalVisible);
+    // setIsTimelineFiltered(true);
   };
 
   const con = () => {
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: "80%",
     width: "90%",
-    backgroundColor: "blue",
+    // backgroundColor: "blue",
   },
   categorySelector: {
     fontSize: 20,

@@ -59,7 +59,7 @@ export const LocationFilter = ({
       return filteredLocation;
     });
     createGardenBedList(gardenName);
-    setIsTimelineFiltered(true);
+    // setIsTimelineFiltered(true);
     setLogsFilteredByLocation(filteredList);
   };
 
@@ -91,6 +91,7 @@ export const LocationFilter = ({
   const resetMenu = () => {
     setSelectedGardenId("");
     setSelectedLocations([]);
+    setIsTimelineFiltered(false);
   };
 
   const con = () => {

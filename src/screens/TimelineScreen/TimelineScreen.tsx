@@ -1,5 +1,5 @@
 /* eslint-disable import/namespace */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 
@@ -17,29 +17,21 @@ export const TimelineScreen = ({
   const globalLogs = useAppSelector(logSelectors.selectAll);
   const [isTimelineFiltered, setIsTimelineFiltered] = useState<boolean>(false);
   const [filteredLogs, setFilteredLogs] = useState<VeggieLogNormalised[]>([]);
-  const [test, setTest] = useState<VeggieLogNormalised[]>();
 
-  // useState(() => {
-  //   // if (filteredLogs.length > 0) {
-  //   const finalArr = new Set(filteredLogs);
-  //   const lastArr = [...finalArr];
-  //   setTest(lastArr);
-
-  //   console.log("lastTest", lastArr);
-  //   // }
-  // });
-
-  // const clearFilters = () => {
-  //   setIsTimelineFiltered(false);
-  //   setSelectedFilters([]);
-  //   setFilteredLogs(globalLogs);
-  // };
+  useEffect(() => {
+    if (filteredLogs.length === 0) {
+      setIsTimelineFiltered(false);
+      console.log("list is empty");
+    } else {
+      setIsTimelineFiltered(true);
+      console.log("occupied list");
+    }
+  });
 
   const con = () => {
     console.log("isFiltered", isTimelineFiltered);
     console.log("filteredLogs", filteredLogs);
     // console.log("globalLogs", globalLogs);
-    console.log("test", test);
   };
 
   return (

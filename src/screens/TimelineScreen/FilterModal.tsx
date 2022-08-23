@@ -76,20 +76,27 @@ export const FilterModal = ({
     setFilteredLogs(globalLogs);
   };
 
+  // useEffect(() => {
+  //   if ((logsFilteredByTag.length && logsFilteredByLocation.length) === 0) {
+  //     setIsTimelineFiltered(false);
+  //     console.log("empoty list");
+  //   } else {
+  //     setIsTimelineFiltered(false);
+  //     console.log("occupied list");
+  //   }
+  // }, [logsFilteredByTag, logsFilteredByLocation]);
+
   const con = () => {
-    console.log(
-      "*************************************************************************************"
-    );
     // console.log("tagsToFilter", tagsToFilter);
-    // console.log(
-    //   "filteredTagsList",
-    //   logsFilteredByTag.map((log: VeggieLogNormalised) => log.notes)
-    // );
+    console.log(
+      "filteredTagsList",
+      logsFilteredByTag.map((log: VeggieLogNormalised) => log.notes)
+    );
     // console.log(
     //   "filteredPicsList",
     //   logsFilteredByPics.map((log: VeggieLogNormalised) => log.notes)
     // );
-    // console.log("log location", logsFilteredByLocation);
+    console.log("log location", logsFilteredByLocation);
     // console.log("***LOGS", filteredLogs);
     console.log("***filterByList", selectedLocations);
   };

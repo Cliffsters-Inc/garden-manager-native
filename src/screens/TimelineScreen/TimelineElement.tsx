@@ -89,7 +89,9 @@ export const TimelineElement = ({ dataToMap }: Props) => {
     </View>
   ) : (
     <View>
-      <Text>No Logs have been created yet</Text>
+      <Text>
+        No Logs match selected filters or you have not yet created any.
+      </Text>
     </View>
   );
 };
