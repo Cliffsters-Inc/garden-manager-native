@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
 import { Button } from "react-native-elements";
 
-import { convertToTag, DefaultTagsList } from "../../components/Tags/Tag.utils";
+import { convertToTag } from "../../components/Tags/Tag.utils";
 import { TagElement } from "../../components/Tags/TagElement";
 import { Text } from "../../components/Themed";
 import { Tag, VeggieLogNormalised } from "../../features/entity.types";
@@ -12,7 +12,6 @@ import { logSelectors } from "../../features/log/log.slice";
 import { useAppSelector } from "../../store";
 
 interface Props {
-  setIsTimelineFiltered: React.Dispatch<React.SetStateAction<boolean>>;
   setLogsFilteredByTag: React.Dispatch<
     React.SetStateAction<VeggieLogNormalised[]>
   >;
@@ -22,7 +21,6 @@ interface Props {
 }
 
 export const TagsFilterModal = ({
-  setIsTimelineFiltered,
   setLogsFilteredByTag: setlogsFilteredByTag,
   tagsToFilter,
   setTagsToFilter,
@@ -31,13 +29,24 @@ export const TagsFilterModal = ({
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const globalLogs = useAppSelector(logSelectors.selectAll);
-  const [combinedTagsList, setCombinedTagsList] = useState<Tag[]>([]);
+  const [selectableTagFilters, setSelectableTagFilters] = useState<Tag[]>([]);
+
+  const listUsedTagsNames = () => {
+    const logsWithTags = globalLogs.filter((log) => {
+      const logsWithTags = log.payloadTags.length > 0;
+      return logsWithTags;
+    });
+
+    const tagObjectList = logsWithTags.flatMap((log) => log.payloadTags);
+    const uniqueTags = Array.from(
+      new Set(tagObjectList.map((tag) => tag.tagLabel))
+    );
+    const usedTagList = uniqueTags.map((name) => convertToTag(name));
+    setSelectableTagFilters(usedTagList);
+  };
 
   useEffect(() => {
-    const combinedTags: Tag[] = DefaultTagsList.map((tag: string) =>
-      convertToTag(tag)
-    );
-    setCombinedTagsList(combinedTags);
+    listUsedTagsNames();
   }, []);
 
   const renderTags = ({ item }: { item: Tag }) => {
@@ -51,8 +60,6 @@ export const TagsFilterModal = ({
           (filter) => filter !== item.tagLabel
         );
         setTagsToFilter(tempArr);
-        console.log("duplicateTest");
-        console.log("temp", tempArr);
       }
     };
 
@@ -100,12 +107,12 @@ export const TagsFilterModal = ({
   const filterAndGoBack = () => {
     filterByTags();
     setModalVisible(!modalVisible);
-    // setIsTimelineFiltered(true);
   };
 
   const con = () => {
     console.log("tagsToFilter", tagsToFilter);
-    // console.log("test", test); console.log("isSelected", isSelected);
+    console.log("test", test);
+    // console.log("isSelected", isSelected);
     // console.log("tagSelected", tagSelected);
   };
 
@@ -141,7 +148,7 @@ export const TagsFilterModal = ({
           <View style={styles.modalView}>
             <View style={styles.list}>
               <FlatList
-                data={combinedTagsList}
+                data={selectableTagFilters}
                 keyExtractor={(item) => item.tagLabel}
                 renderItem={renderTags}
               />
