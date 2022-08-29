@@ -36,12 +36,15 @@ export const TagsFilterModal = ({
       const logsWithTags = log.payloadTags.length > 0;
       return logsWithTags;
     });
-
+    // console.log("logsWithTags", logsWithTags);
     const tagObjectList = logsWithTags.flatMap((log) => log.payloadTags);
+    // console.log("tagObjectList", tagObjectList);
     const uniqueTags = Array.from(
       new Set(tagObjectList.map((tag) => tag.tagLabel))
     );
+    // console.log("uniqueTags", uniqueTags);
     const usedTagList = uniqueTags.map((name) => convertToTag(name));
+    // console.log("usedTagsList", usedTagList);
     setSelectableTagFilters(usedTagList);
   };
 
@@ -111,7 +114,7 @@ export const TagsFilterModal = ({
 
   const con = () => {
     console.log("tagsToFilter", tagsToFilter);
-    console.log("test", test);
+    console.log("globalLogs", globalLogs);
     // console.log("isSelected", isSelected);
     // console.log("tagSelected", tagSelected);
   };

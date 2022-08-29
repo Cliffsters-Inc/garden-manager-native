@@ -1,4 +1,3 @@
-/* eslint-disable import/namespace */
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
@@ -28,10 +27,21 @@ export const TimelineScreen = ({
     }
   });
 
+  //delete below var
+  const logDates = globalLogs.map((log) => new Date(log.date));
+  const firstDate = logDates[0];
+  const secondDate = logDates[1];
+  const thirdDate = logDates[2];
+
+  const compareDates = () => {
+    logDates.filter((date) =>
+      console.log(date > firstDate! && date < thirdDate!)
+    );
+  };
+
   const con = () => {
     console.log("isFiltered", isTimelineFiltered);
     console.log("filteredLogs", filteredLogs);
-    // console.log("globalLogs", globalLogs);
   };
 
   return (

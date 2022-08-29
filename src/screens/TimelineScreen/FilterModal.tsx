@@ -1,4 +1,3 @@
-/* eslint-disable import/namespace */
 import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet } from "react-native";
@@ -10,6 +9,7 @@ import { Text, View } from "../../components/Themed";
 import { Tag, VeggieLogNormalised } from "../../features/entity.types";
 import { logSelectors } from "../../features/log/log.slice";
 import { useAppSelector } from "../../store";
+import { DateFilter } from "./DateFilter";
 import { LocationFilter } from "./LocationFilter";
 import { PhotoFilter } from "./PhotoFilter";
 import { TagsFilterModal } from "./TagsFilterModal";
@@ -35,10 +35,13 @@ export const FilterModal = ({
   const [logsFilteredByTag, setLogsFilteredByTag] = useState<
     VeggieLogNormalised[]
   >([]);
-  const [logsFilteredByPics, setLogsFilteredByPics] = useState<
+  const [logsFilteredByDate, setLogsFilteredByDate] = useState<
     VeggieLogNormalised[]
   >([]);
   const [logsFilteredByLocation, setLogsFilteredByLocation] = useState<
+    VeggieLogNormalised[]
+  >([]);
+  const [logsFilteredByPics, setLogsFilteredByPics] = useState<
     VeggieLogNormalised[]
   >([]);
 
@@ -53,13 +56,18 @@ export const FilterModal = ({
     const mergedArray = [
       ...new Set([
         ...logsFilteredByTag,
+        ...logsFilteredByDate,
         ...logsFilteredByPics,
         ...logsFilteredByLocation,
       ]),
     ];
-    console.log("meregedArray", mergedArray);
     setFilteredLogs(mergedArray);
-  }, [logsFilteredByTag, logsFilteredByPics, logsFilteredByLocation]);
+  }, [
+    logsFilteredByTag,
+    logsFilteredByDate,
+    logsFilteredByPics,
+    logsFilteredByLocation,
+  ]);
 
   const renderTags = ({ item }: { item: Tag }) => {
     return <TagElement tag={item} hideIcon />;
@@ -71,20 +79,11 @@ export const FilterModal = ({
     setTagsToFilter([]);
     setSelectedlocations([]);
     setLogsFilteredByTag([]);
+    setLogsFilteredByDate([]);
     setLogsFilteredByPics([]);
     setLogsFilteredByLocation([]);
     setFilteredLogs(globalLogs);
   };
-
-  // useEffect(() => {
-  //   if ((logsFilteredByTag.length && logsFilteredByLocation.length) === 0) {
-  //     setIsTimelineFiltered(false);
-  //     console.log("empoty list");
-  //   } else {
-  //     setIsTimelineFiltered(false);
-  //     console.log("occupied list");
-  //   }
-  // }, [logsFilteredByTag, logsFilteredByLocation]);
 
   const con = () => {
     // console.log("tagsToFilter", tagsToFilter);
@@ -122,7 +121,6 @@ export const FilterModal = ({
               style={{ flexDirection: "row", maxHeight: 50, maxWidth: 100 }}
             >
               <TagsFilterModal
-                setIsTimelineFiltered={setIsTimelineFiltered}
                 setLogsFilteredByTag={setLogsFilteredByTag}
                 tagsToFilter={tagsToFilter}
                 setTagsToFilter={setTagsToFilter}
@@ -139,6 +137,20 @@ export const FilterModal = ({
               <View style={{ marginLeft: 50, justifyContent: "flex-end" }}>
                 <AntDesign name="right" size={24} color="black" />
               </View>
+            </View>
+            <Divider />
+            <View
+              style={{
+                justifyContent: "flex-start",
+                marginTop: 20,
+                marginLeft: 50,
+                flexDirection: "row",
+                maxHeight: 50,
+                maxWidth: 100,
+                // backgroundColor: "red",
+              }}
+            >
+              <DateFilter setLogsFilteredByDate={setLogsFilteredByDate} />
             </View>
             <Divider />
             <View
