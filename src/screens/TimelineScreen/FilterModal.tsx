@@ -17,14 +17,12 @@ import { TagsFilterModal } from "./TagsFilterModal";
 interface Props {
   isTimelineFiltered: boolean;
   setIsTimelineFiltered: React.Dispatch<React.SetStateAction<boolean>>;
-  filteredLogs: VeggieLogNormalised[];
   setFilteredLogs: React.Dispatch<React.SetStateAction<VeggieLogNormalised[]>>;
 }
 
 export const FilterModal = ({
   isTimelineFiltered,
   setIsTimelineFiltered,
-  filteredLogs,
   setFilteredLogs,
 }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -86,18 +84,7 @@ export const FilterModal = ({
   };
 
   const con = () => {
-    // console.log("tagsToFilter", tagsToFilter);
-    console.log(
-      "filteredTagsList",
-      logsFilteredByTag.map((log: VeggieLogNormalised) => log.notes)
-    );
-    // console.log(
-    //   "filteredPicsList",
-    //   logsFilteredByPics.map((log: VeggieLogNormalised) => log.notes)
-    // );
-    console.log("log location", logsFilteredByLocation);
-    // console.log("***LOGS", filteredLogs);
-    console.log("***filterByList", selectedLocations);
+    console.log("isTimelineFiltered", isTimelineFiltered);
   };
 
   return (
@@ -174,12 +161,12 @@ export const FilterModal = ({
               />
             </View>
             <Divider />
-            <PhotoFilter
-              isTimelineFiltered={isTimelineFiltered}
-              setIsTimelineFiltered={setIsTimelineFiltered}
-              logsFilteredByPics={logsFilteredByPics}
-              setLogsFilteredByPics={setLogsFilteredByPics}
-            />
+            <PhotoFilter setLogsFilteredByPics={setLogsFilteredByPics} />
+            <View style={{ marginLeft: 200, justifyContent: "flex-end" }}>
+              {logsFilteredByPics.length > 0 && (
+                <FontAwesome5 name="check" size={24} color="green" />
+              )}
+            </View>
             <Divider />
             <Pressable
               style={[styles.button, styles.buttonClose]}

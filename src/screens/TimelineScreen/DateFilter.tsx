@@ -107,7 +107,7 @@ export const DateFilter = ({ setLogsFilteredByDate }: Props) => {
               style={[styles.button, styles.buttonClose]}
               onPress={filterAndCloseModal}
             >
-              <Text style={styles.textStyle}>Hide Modal</Text>
+              <Text style={styles.textStyle}>Filter Dates</Text>
             </Pressable>
           </View>
         </View>

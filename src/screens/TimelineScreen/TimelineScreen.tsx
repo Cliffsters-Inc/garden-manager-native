@@ -20,24 +20,10 @@ export const TimelineScreen = ({
   useEffect(() => {
     if (filteredLogs.length === 0) {
       setIsTimelineFiltered(false);
-      console.log("list is empty");
     } else {
       setIsTimelineFiltered(true);
-      console.log("occupied list");
     }
   });
-
-  //delete below var
-  const logDates = globalLogs.map((log) => new Date(log.date));
-  const firstDate = logDates[0];
-  const secondDate = logDates[1];
-  const thirdDate = logDates[2];
-
-  const compareDates = () => {
-    logDates.filter((date) =>
-      console.log(date > firstDate! && date < thirdDate!)
-    );
-  };
 
   const con = () => {
     console.log("isFiltered", isTimelineFiltered);
@@ -51,7 +37,6 @@ export const TimelineScreen = ({
         <FilterModal
           isTimelineFiltered={isTimelineFiltered}
           setIsTimelineFiltered={setIsTimelineFiltered}
-          filteredLogs={filteredLogs}
           setFilteredLogs={setFilteredLogs}
         />
       </View>
