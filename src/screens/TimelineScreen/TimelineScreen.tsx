@@ -36,7 +36,6 @@ export const TimelineScreen = ({
       <View style={styles.filter}>
         <FilterModal
           isTimelineFiltered={isTimelineFiltered}
-          setIsTimelineFiltered={setIsTimelineFiltered}
           setFilteredLogs={setFilteredLogs}
         />
       </View>

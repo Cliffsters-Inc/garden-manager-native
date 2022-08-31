@@ -16,18 +16,12 @@ import { TagsFilterModal } from "./TagsFilterModal";
 
 interface Props {
   isTimelineFiltered: boolean;
-  setIsTimelineFiltered: React.Dispatch<React.SetStateAction<boolean>>;
   setFilteredLogs: React.Dispatch<React.SetStateAction<VeggieLogNormalised[]>>;
 }
 
-export const FilterModal = ({
-  isTimelineFiltered,
-  setIsTimelineFiltered,
-  setFilteredLogs,
-}: Props) => {
+export const FilterModal = ({ isTimelineFiltered, setFilteredLogs }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [tagsToFilter, setTagsToFilter] = useState<string[]>([]);
-  const [tagsToDisplay, setTagsToDisplay] = useState<Tag[]>([]);
   const [selectedLocations, setSelectedlocations] = useState<string[]>([]);
 
   const [logsFilteredByTag, setLogsFilteredByTag] = useState<
@@ -42,13 +36,6 @@ export const FilterModal = ({
   const [logsFilteredByPics, setLogsFilteredByPics] = useState<
     VeggieLogNormalised[]
   >([]);
-
-  useEffect(() => {
-    const listToDisplay = tagsToFilter.map((tagName: string) =>
-      convertToTag(tagName)
-    );
-    setTagsToDisplay(listToDisplay);
-  }, [tagsToFilter]);
 
   useEffect(() => {
     const mergedArray = [
@@ -73,7 +60,6 @@ export const FilterModal = ({
 
   const globalLogs = useAppSelector(logSelectors.selectAll);
   const clearFilters = () => {
-    setIsTimelineFiltered(false);
     setTagsToFilter([]);
     setSelectedlocations([]);
     setLogsFilteredByTag([]);
@@ -86,6 +72,8 @@ export const FilterModal = ({
   const con = () => {
     console.log("isTimelineFiltered", isTimelineFiltered);
   };
+
+  const tagsToDisplay = tagsToFilter.map((tagName) => convertToTag(tagName));
 
   return (
     <View style={styles.centeredView}>
@@ -148,7 +136,6 @@ export const FilterModal = ({
               }}
             >
               <LocationFilter
-                setIsTimelineFiltered={setIsTimelineFiltered}
                 setLogsFilteredByLocation={setLogsFilteredByLocation}
                 setSelectedLocations={setSelectedlocations}
                 selectedLocations={selectedLocations}

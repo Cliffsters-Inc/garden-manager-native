@@ -1,6 +1,6 @@
 /* eslint-disable import/namespace */
 import { FontAwesome5 } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
 import { Button } from "react-native-elements";
 
@@ -21,7 +21,7 @@ interface Props {
 }
 
 export const TagsFilterModal = ({
-  setLogsFilteredByTag: setlogsFilteredByTag,
+  setLogsFilteredByTag,
   tagsToFilter,
   setTagsToFilter,
   clearFilters,
@@ -29,45 +29,34 @@ export const TagsFilterModal = ({
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const globalLogs = useAppSelector(logSelectors.selectAll);
-  const [selectableTagFilters, setSelectableTagFilters] = useState<Tag[]>([]);
 
-  const listUsedTagsNames = () => {
-    const logsWithTags = globalLogs.filter((log) => {
-      const logsWithTags = log.payloadTags.length > 0;
-      return logsWithTags;
-    });
-    // console.log("logsWithTags", logsWithTags);
-    const tagObjectList = logsWithTags.flatMap((log) => log.payloadTags);
-    // console.log("tagObjectList", tagObjectList);
-    const uniqueTags = Array.from(
-      new Set(tagObjectList.map((tag) => tag.tagLabel))
+  const listTagsInLogs = () => {
+    const logsWithTags = [...globalLogs]
+      .filter((log) => log.payloadTags.length > 0)
+      .flatMap((log) => log.payloadTags);
+
+    const uniqueTagObjs = Array.from(
+      new Set(logsWithTags.map((tag) => tag.tagLabel))
     );
-    // console.log("uniqueTags", uniqueTags);
-    const usedTagList = uniqueTags.map((name) => convertToTag(name));
-    // console.log("usedTagsList", usedTagList);
-    setSelectableTagFilters(usedTagList);
+    const tagsInLogs = uniqueTagObjs.map((label) => convertToTag(label));
+    return tagsInLogs;
   };
 
-  useEffect(() => {
-    listUsedTagsNames();
-  }, []);
-
   const renderTags = ({ item }: { item: Tag }) => {
-    const selectTag = () => {
+    const toggleTag = () => {
       const alreadySelected = tagsToFilter.includes(item.tagLabel);
       if (!alreadySelected) {
-        console.log("adding new tag filter");
         setTagsToFilter([...tagsToFilter, item.tagLabel]);
       } else {
-        const tempArr = tagsToFilter.filter(
+        const updatedArr = tagsToFilter.filter(
           (filter) => filter !== item.tagLabel
         );
-        setTagsToFilter(tempArr);
+        setTagsToFilter(updatedArr);
       }
     };
 
     const handleTagPress = () => {
-      selectTag();
+      toggleTag();
     };
 
     const checkIfSelected = () => {
@@ -93,16 +82,17 @@ export const TagsFilterModal = ({
 
   const filterByTags = () => {
     const logsToFilter = [...globalLogs];
-    const filteredList = logsToFilter.filter((log) =>
+    const logsFilteredByTag = logsToFilter.filter((log) =>
       log.payloadTags.some((tag) => {
         return tagsToFilter.includes(tag.tagLabel);
       })
     );
-    setlogsFilteredByTag(filteredList);
-    console.log("**filteredList", filteredList);
+    setLogsFilteredByTag(logsFilteredByTag);
+    console.log("**filteredList", logsFilteredByTag);
   };
 
   const resetAndGoBack = () => {
+    //fix below. See Asana subtask for TimlineFilters.
     clearFilters();
     setModalVisible(!modalVisible);
   };
@@ -151,7 +141,7 @@ export const TagsFilterModal = ({
           <View style={styles.modalView}>
             <View style={styles.list}>
               <FlatList
-                data={selectableTagFilters}
+                data={listTagsInLogs()}
                 keyExtractor={(item) => item.tagLabel}
                 renderItem={renderTags}
               />

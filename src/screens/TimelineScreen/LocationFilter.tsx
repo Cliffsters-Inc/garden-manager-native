@@ -14,7 +14,6 @@ import { logSelectors } from "../../features/log/log.slice";
 import { useAppSelector } from "../../store";
 
 interface Props {
-  setIsTimelineFiltered: React.Dispatch<React.SetStateAction<boolean>>;
   setLogsFilteredByLocation: React.Dispatch<
     React.SetStateAction<VeggieLogNormalised[]>
   >;
@@ -23,7 +22,6 @@ interface Props {
 }
 
 export const LocationFilter = ({
-  setIsTimelineFiltered,
   setLogsFilteredByLocation,
   selectedLocations,
   setSelectedLocations,
@@ -42,7 +40,7 @@ export const LocationFilter = ({
     }
   });
 
-  const createGardenBedList = (gardenName: string) => {
+  const createBedList = (gardenName: string) => {
     gardens.filter((garden) => {
       if (garden.name === gardenName) {
         setSelectedGardenId(garden.id);
@@ -58,8 +56,7 @@ export const LocationFilter = ({
         log.location?.gardenTitle === gardenName ? log : null;
       return filteredLocation;
     });
-    createGardenBedList(gardenName);
-    // setIsTimelineFiltered(true);
+    createBedList(gardenName);
     setLogsFilteredByLocation(filteredList);
   };
 
@@ -91,7 +88,7 @@ export const LocationFilter = ({
   const resetMenu = () => {
     setSelectedGardenId("");
     setSelectedLocations([]);
-    setIsTimelineFiltered(false);
+    setLogsFilteredByLocation([]);
   };
 
   const con = () => {
