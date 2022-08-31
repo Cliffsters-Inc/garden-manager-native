@@ -1,4 +1,3 @@
-/* eslint-disable import/namespace */
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet, View } from "react-native";

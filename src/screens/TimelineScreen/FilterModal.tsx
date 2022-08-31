@@ -71,6 +71,7 @@ export const FilterModal = ({ isTimelineFiltered, setFilteredLogs }: Props) => {
 
   const con = () => {
     console.log("isTimelineFiltered", isTimelineFiltered);
+    console.log("logsFilteredByDate", logsFilteredByDate);
   };
 
   const tagsToDisplay = tagsToFilter.map((tagName) => convertToTag(tagName));

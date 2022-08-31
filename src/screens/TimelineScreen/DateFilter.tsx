@@ -9,16 +9,16 @@ import { logSelectors } from "../../features/log/log.slice";
 import { useAppSelector } from "../../store";
 import { DatePicker } from "./DatePicker";
 
-export type DateRangeObj = {
-  startingDate: Date | null;
-  endingDate: Date | null;
-};
-
 interface Props {
   setLogsFilteredByDate: React.Dispatch<
     React.SetStateAction<VeggieLogNormalised[]>
   >;
 }
+
+export type DateRangeObj = {
+  startingDate: Date | null;
+  endingDate: Date | null;
+};
 
 export const DateFilter = ({ setLogsFilteredByDate }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -29,22 +29,22 @@ export const DateFilter = ({ setLogsFilteredByDate }: Props) => {
     endingDate: null,
   });
 
+  // let isChoosingStartDate = true;
   const openStartDatePicker = () => {
     setIsChoosingStartDate(true);
+    // isChoosingStartDate = true;
     setDatePickerVisibility(true);
   };
 
   const openEndDatePicker = () => {
     setIsChoosingStartDate(false);
+    // isChoosingStartDate = false;
     setDatePickerVisibility(true);
   };
 
   const createDateRange = (date: Date) => {
-    if (date && isChoosingStartDate) {
-      setDateRange((prevState) => ({
-        ...prevState,
-        startingDate: date,
-      }));
+    if (isChoosingStartDate) {
+      setDateRange((prevState) => ({ ...prevState, startingDate: date }));
     } else {
       setDateRange((prevState) => ({ ...prevState, endingDate: date }));
     }
@@ -59,6 +59,7 @@ export const DateFilter = ({ setLogsFilteredByDate }: Props) => {
   const compareDates = () => {
     const datesInRange = globalLogs.filter(
       (log) =>
+        //non-null assertion being made here but it could be null, what are possible problems?
         new Date(log.date) >= dateRange.startingDate! &&
         new Date(log.date) <= dateRange.endingDate!
     );
@@ -72,10 +73,7 @@ export const DateFilter = ({ setLogsFilteredByDate }: Props) => {
 
   const con = () => {
     console.log("dateRange", dateRange);
-    console.log(
-      "dathjsbcvhjabs",
-      format(dateRange.startingDate!, "yyyy-MM-dd")
-    );
+    console.log("isChoosingStartDate", isChoosingStartDate);
   };
 
   return (
