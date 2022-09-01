@@ -1,4 +1,5 @@
 import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet } from "react-native";
 import { Button, Divider } from "react-native-elements";
@@ -9,7 +10,7 @@ import { Text, View } from "../../components/Themed";
 import { Tag, VeggieLogNormalised } from "../../features/entity.types";
 import { logSelectors } from "../../features/log/log.slice";
 import { useAppSelector } from "../../store";
-import { DateFilter } from "./DateFilter";
+import { DateFilter, DateRangeObj } from "./DateFilter";
 import { LocationFilter } from "./LocationFilter";
 import { PhotoFilter } from "./PhotoFilter";
 import { TagsFilterModal } from "./TagsFilterModal";
@@ -23,6 +24,10 @@ export const FilterModal = ({ isTimelineFiltered, setFilteredLogs }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [tagsToFilter, setTagsToFilter] = useState<string[]>([]);
   const [selectedLocations, setSelectedlocations] = useState<string[]>([]);
+  const [dateRange, setDateRange] = useState<DateRangeObj>({
+    startingDate: null,
+    endingDate: null,
+  });
 
   const [logsFilteredByTag, setLogsFilteredByTag] = useState<
     VeggieLogNormalised[]
@@ -70,11 +75,25 @@ export const FilterModal = ({ isTimelineFiltered, setFilteredLogs }: Props) => {
   };
 
   const con = () => {
-    console.log("isTimelineFiltered", isTimelineFiltered);
+    // console.log("isTimelineFiltered", isTimelineFiltered);
     console.log("logsFilteredByDate", logsFilteredByDate);
+    console.log("dateRange", dateRange);
   };
 
   const tagsToDisplay = tagsToFilter.map((tagName) => convertToTag(tagName));
+
+  // const renderDateRange = () => {
+  //   {
+  //     dateRange.startingDate && (
+  //       <Text>{format(dateRange.startingDate, "dd-MM-yyyy")}</Text>
+  //     );
+  //   }
+  //   {
+  //     dateRange.endingDate && (
+  //       <Text> - {format(dateRange.endingDate, "dd-MM-yyyy")}</Text>
+  //     );
+  //   }
+  // };
 
   return (
     <View style={styles.centeredView}>
@@ -126,8 +145,18 @@ export const FilterModal = ({ isTimelineFiltered, setFilteredLogs }: Props) => {
                 // backgroundColor: "red",
               }}
             >
-              <DateFilter setLogsFilteredByDate={setLogsFilteredByDate} />
+              <DateFilter
+                setLogsFilteredByDate={setLogsFilteredByDate}
+                dateRange={dateRange}
+                setDateRange={setDateRange}
+              />
             </View>
+            {dateRange.startingDate && (
+              <Text>{format(dateRange.startingDate, "dd-MM-yyyy")}</Text>
+            )}
+            {dateRange.endingDate && (
+              <Text> - {format(dateRange.endingDate, "dd-MM-yyyy")}</Text>
+            )}
             <Divider />
             <View
               style={{

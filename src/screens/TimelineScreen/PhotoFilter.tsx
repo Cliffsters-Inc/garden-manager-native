@@ -20,9 +20,10 @@ export const PhotoFilter = ({
 
   const filterByPhotos = () => {
     const logsToFilter = [...globalLogs];
-    setlogsFilteredByPics(
-      logsToFilter.filter((log) => log.photos.entities.length > 0)
+    const filteredList = logsToFilter.filter(
+      (log) => log.photos.entities.length > 0
     );
+    setlogsFilteredByPics(filteredList);
     setIsFilteringByPic(true);
   };
 

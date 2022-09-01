@@ -10,6 +10,8 @@ import { useAppSelector } from "../../store";
 import { DatePicker } from "./DatePicker";
 
 interface Props {
+  dateRange: DateRangeObj;
+  setDateRange: React.Dispatch<React.SetStateAction<DateRangeObj>>;
   setLogsFilteredByDate: React.Dispatch<
     React.SetStateAction<VeggieLogNormalised[]>
   >;
@@ -20,14 +22,14 @@ export type DateRangeObj = {
   endingDate: Date | null;
 };
 
-export const DateFilter = ({ setLogsFilteredByDate }: Props) => {
+export const DateFilter = ({
+  dateRange,
+  setDateRange,
+  setLogsFilteredByDate,
+}: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isChoosingStartDate, setIsChoosingStartDate] = useState(true);
-  const [dateRange, setDateRange] = useState<DateRangeObj>({
-    startingDate: null,
-    endingDate: null,
-  });
 
   // let isChoosingStartDate = true;
   const openStartDatePicker = () => {
@@ -56,20 +58,30 @@ export const DateFilter = ({ setLogsFilteredByDate }: Props) => {
 
   const globalLogs = useAppSelector(logSelectors.selectAll);
 
-  const compareDates = () => {
+  const filterLogsByDate = () => {
     const datesInRange = globalLogs.filter(
       (log) =>
         //non-null assertion being made here but it could be null, what are possible problems?
         new Date(log.date) >= dateRange.startingDate! &&
         new Date(log.date) <= dateRange.endingDate!
     );
-    setLogsFilteredByDate(datesInRange);
+    if (datesInRange.length > 0) {
+      setLogsFilteredByDate(datesInRange);
+      setModalVisible(!modalVisible);
+    } else {
+      alert(
+        `no logs were found between ${format(
+          dateRange.startingDate!,
+          "dd-MM-yyyy"
+        )} & ${format(dateRange.endingDate!, "dd-MM-yyyy")}`
+      );
+    }
   };
 
-  const filterAndCloseModal = () => {
-    setModalVisible(!modalVisible);
-    compareDates();
-  };
+  const filterOrDismiss = () =>
+    dateRange.startingDate
+      ? filterLogsByDate()
+      : setModalVisible(!modalVisible);
 
   const con = () => {
     console.log("dateRange", dateRange);
@@ -97,13 +109,13 @@ export const DateFilter = ({ setLogsFilteredByDate }: Props) => {
               End Date
             </Text>
             {dateRange.endingDate && (
-              <Text>{format(dateRange.startingDate!, "dd-MM-yyyy")}</Text>
+              <Text>{format(dateRange.endingDate!, "dd-MM-yyyy")}</Text>
             )}
             <Button title="con" onPress={con} />
             <Button title="Reset Dates" onPress={clearDateRange} />
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={filterAndCloseModal}
+              onPress={filterOrDismiss}
             >
               <Text style={styles.textStyle}>Filter Dates</Text>
             </Pressable>
