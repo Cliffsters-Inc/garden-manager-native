@@ -16,11 +16,11 @@ import { PhotoFilter } from "./PhotoFilter";
 import { TagsFilterModal } from "./TagsFilterModal";
 
 interface Props {
-  isTimelineFiltered: boolean;
+  isFiltered: boolean;
   setFilteredLogs: React.Dispatch<React.SetStateAction<VeggieLogNormalised[]>>;
 }
 
-export const FilterModal = ({ isTimelineFiltered, setFilteredLogs }: Props) => {
+export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [tagsToFilter, setTagsToFilter] = useState<string[]>([]);
   const [selectedLocations, setSelectedlocations] = useState<string[]>([]);
@@ -75,7 +75,6 @@ export const FilterModal = ({ isTimelineFiltered, setFilteredLogs }: Props) => {
   };
 
   const con = () => {
-    // console.log("isTimelineFiltered", isTimelineFiltered);
     console.log("logsFilteredByDate", logsFilteredByDate);
     console.log("dateRange", dateRange);
   };
@@ -106,7 +105,7 @@ export const FilterModal = ({ isTimelineFiltered, setFilteredLogs }: Props) => {
                 <Text style={styles.categorySelector}>None</Text>
               </Pressable>
               <View style={{ marginLeft: 200, justifyContent: "flex-end" }}>
-                {!isTimelineFiltered && (
+                {!isFiltered && (
                   <FontAwesome5 name="check" size={24} color="green" />
                 )}
               </View>
@@ -142,7 +141,6 @@ export const FilterModal = ({ isTimelineFiltered, setFilteredLogs }: Props) => {
                 flexDirection: "row",
                 maxHeight: 50,
                 maxWidth: 100,
-                // backgroundColor: "red",
               }}
             >
               <DateFilter

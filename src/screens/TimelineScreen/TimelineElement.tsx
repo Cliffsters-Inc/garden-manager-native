@@ -13,14 +13,15 @@ import { Text, View } from "../../components/Themed";
 import { VeggieLogNormalised } from "../../features/entity.types";
 
 type Props = {
-  dataToMap: VeggieLogNormalised[];
+  logsToMap: VeggieLogNormalised[];
 };
 
-export const TimelineElement = ({ dataToMap }: Props) => {
+export const TimelineElement = ({ logsToMap }: Props) => {
   const [showAllText, setShowAllText] = useState<{ [key: string]: boolean }>(
     {}
   );
-
+  const hasLogs = logsToMap.length > 0;
+  console.log("**********logsToMap************", logsToMap);
   const assignIcon = (iconName: string) => {
     switch (iconName) {
       case "pests":
@@ -44,7 +45,7 @@ export const TimelineElement = ({ dataToMap }: Props) => {
     }
   };
 
-  const descriptionElement = (value: VeggieLogNormalised, i: string) => {
+  const createDescription = (log: VeggieLogNormalised, i: string) => {
     const onPress = () => {
       setShowAllText((prev) => ({
         ...showAllText,
@@ -58,22 +59,28 @@ export const TimelineElement = ({ dataToMap }: Props) => {
           style={styles.description}
           numberOfLines={showAllText[`${i}`] ? 0 : 4}
         >
-          {value.notes}
+          {log.notes}
         </Text>
       </Pressable>
     );
   };
 
-  const timelineData = dataToMap?.map((value, i: number) => ({
-    time: format(new Date(value.date), "d MMM yy"),
-    description: descriptionElement(value, i.toString()),
-    icon:
-      value.payloadTags?.length > 0
-        ? assignIcon(value.payloadTags[0]!.tagLabel)
-        : assignIcon("generic"),
-  }));
+  const timelineData = logsToMap?.map((log, i: number) => {
+    const logTime = format(new Date(log.date), "d MMM yy");
+    const logDescription = createDescription(log, i.toString());
+    const hasTag = log.payloadTags.length > 0;
+    const logIcon = hasTag
+      ? assignIcon(log.payloadTags[0]!.tagLabel)
+      : assignIcon("generic");
 
-  return dataToMap.length > 0 ? (
+    return {
+      time: logTime,
+      description: logDescription,
+      icon: logIcon,
+    };
+  });
+
+  return hasLogs ? (
     <View style={styles.container}>
       <Timeline
         data={timelineData}
@@ -89,9 +96,7 @@ export const TimelineElement = ({ dataToMap }: Props) => {
     </View>
   ) : (
     <View>
-      <Text>
-        No Logs match selected filters or you have not yet created any.
-      </Text>
+      <Text>No Logs match selected filters.</Text>
     </View>
   );
 };

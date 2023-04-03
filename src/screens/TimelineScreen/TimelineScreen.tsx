@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 
@@ -14,20 +14,13 @@ export const TimelineScreen = ({
   navigation,
 }: TimelineScreenProps<"TimelineScreen">) => {
   const globalLogs = useAppSelector(logSelectors.selectAll);
-  const [isTimelineFiltered, setIsTimelineFiltered] = useState<boolean>(false);
   const [filteredLogs, setFilteredLogs] = useState<VeggieLogNormalised[]>([]);
-
-  useEffect(() => {
-    if (filteredLogs.length === 0) {
-      setIsTimelineFiltered(false);
-    } else {
-      setIsTimelineFiltered(true);
-    }
-  });
+  const isFiltered = filteredLogs.length > 0;
+  const logState = isFiltered ? filteredLogs : globalLogs;
 
   const con = () => {
-    console.log("isFiltered", isTimelineFiltered);
-    console.log("filteredLogs", filteredLogs);
+    // console.log("globalLogs", globalLogs);
+    // console.log("filteredLogs", filteredLogs);
   };
 
   return (
@@ -35,15 +28,11 @@ export const TimelineScreen = ({
       <Button title="con" onPress={con} />
       <View style={styles.filter}>
         <FilterModal
-          isTimelineFiltered={isTimelineFiltered}
+          isFiltered={isFiltered}
           setFilteredLogs={setFilteredLogs}
         />
       </View>
-      {isTimelineFiltered ? (
-        <TimelineElement dataToMap={filteredLogs} />
-      ) : (
-        <TimelineElement dataToMap={globalLogs} />
-      )}
+      <TimelineElement logsToMap={logState} />
     </View>
   );
 };

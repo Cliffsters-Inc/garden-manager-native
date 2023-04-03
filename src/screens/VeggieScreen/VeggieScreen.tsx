@@ -29,7 +29,6 @@ export const VeggieScreen = ({
   const logs = useAppSelector((state) =>
     logSelectors.selectByIds(state, veggie?.logs ?? [])
   );
-
   useEffect(() => {
     if (logs) {
       logs.forEach((log) => dispatch(logActions.fetchLogPhotos(log.id)));
