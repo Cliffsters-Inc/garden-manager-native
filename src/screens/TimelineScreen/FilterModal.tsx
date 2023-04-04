@@ -21,6 +21,10 @@ interface Props {
 }
 
 export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
+  const date = useAppSelector((state) => state.filters.logsBydate);
+  const filterByPic = useAppSelector((state) => state.filters.filterByPic);
+  const logsWithPic = useAppSelector((state) => state.filters.logsWithPics);
+  const filteredLogs = useAppSelector((state) => state.filters.filteredLogs);
   const [modalVisible, setModalVisible] = useState(false);
   const [tagsToFilter, setTagsToFilter] = useState<string[]>([]);
   const [selectedLocations, setSelectedlocations] = useState<string[]>([]);
@@ -75,24 +79,13 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
   };
 
   const con = () => {
-    console.log("logsFilteredByDate", logsFilteredByDate);
-    console.log("dateRange", dateRange);
+    console.log("date", date);
+    console.log("filterByPic", filterByPic);
+    console.log("logsWithPic", logsWithPic);
+    console.log("filteredLogs", filteredLogs);
   };
 
   const tagsToDisplay = tagsToFilter.map((tagName) => convertToTag(tagName));
-
-  // const renderDateRange = () => {
-  //   {
-  //     dateRange.startingDate && (
-  //       <Text>{format(dateRange.startingDate, "dd-MM-yyyy")}</Text>
-  //     );
-  //   }
-  //   {
-  //     dateRange.endingDate && (
-  //       <Text> - {format(dateRange.endingDate, "dd-MM-yyyy")}</Text>
-  //     );
-  //   }
-  // };
 
   return (
     <View style={styles.centeredView}>
