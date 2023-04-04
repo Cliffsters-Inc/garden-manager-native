@@ -36,32 +36,17 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
   const [logsFilteredByTag, setLogsFilteredByTag] = useState<
     VeggieLogNormalised[]
   >([]);
-  const [logsFilteredByDate, setLogsFilteredByDate] = useState<
-    VeggieLogNormalised[]
-  >([]);
+
   const [logsFilteredByLocation, setLogsFilteredByLocation] = useState<
     VeggieLogNormalised[]
   >([]);
-  // const [logsFilteredByPics, setLogsFilteredByPics] = useState<
-  //   VeggieLogNormalised[]
-  // >([]);
 
   useEffect(() => {
     const mergedArray = [
-      ...new Set([
-        ...logsFilteredByTag,
-        ...logsFilteredByDate,
-        // ...logsFilteredByPics,
-        ...logsFilteredByLocation,
-      ]),
+      ...new Set([...logsFilteredByTag, ...logsFilteredByLocation]),
     ];
     setFilteredLogs(mergedArray);
-  }, [
-    logsFilteredByTag,
-    logsFilteredByDate,
-    // logsFilteredByPics,
-    logsFilteredByLocation,
-  ]);
+  }, [logsFilteredByTag, logsFilteredByLocation]);
 
   const renderTags = ({ item }: { item: Tag }) => {
     return <TagElement tag={item} hideIcon />;
@@ -72,8 +57,6 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
     setTagsToFilter([]);
     setSelectedlocations([]);
     setLogsFilteredByTag([]);
-    setLogsFilteredByDate([]);
-    // setLogsFilteredByPics([]);
     setLogsFilteredByLocation([]);
     setFilteredLogs(globalLogs);
   };
@@ -136,11 +119,7 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
                 maxWidth: 100,
               }}
             >
-              <DateFilter
-                setLogsFilteredByDate={setLogsFilteredByDate}
-                dateRange={dateRange}
-                setDateRange={setDateRange}
-              />
+              <DateFilter dateRange={dateRange} setDateRange={setDateRange} />
             </View>
             {dateRange.startingDate && (
               <Text>{format(dateRange.startingDate, "dd-MM-yyyy")}</Text>

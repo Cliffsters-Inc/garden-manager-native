@@ -4,17 +4,14 @@ import { Modal, Pressable, StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 
 import { Text, View } from "../../components/Themed";
-import { VeggieLogNormalised } from "../../features/entity.types";
+import { setLogsByDate } from "../../features/Filters/filter.slice";
 import { logSelectors } from "../../features/log/log.slice";
-import { useAppSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 import { DatePicker } from "./DatePicker";
 
 interface Props {
   dateRange: DateRangeObj;
   setDateRange: React.Dispatch<React.SetStateAction<DateRangeObj>>;
-  setLogsFilteredByDate: React.Dispatch<
-    React.SetStateAction<VeggieLogNormalised[]>
-  >;
 }
 
 export type DateRangeObj = {
@@ -22,30 +19,26 @@ export type DateRangeObj = {
   endingDate: Date | null;
 };
 
-export const DateFilter = ({
-  dateRange,
-  setDateRange,
-  setLogsFilteredByDate,
-}: Props) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [isChoosingStartDate, setIsChoosingStartDate] = useState(true);
+export const DateFilter = ({ dateRange, setDateRange }: Props) => {
+  const dispatch = useAppDispatch();
+  const globalLogs = useAppSelector(logSelectors.selectAll);
+  const LogsByDate = useAppSelector((state) => state.filters.logsBydate);
+  const [showModal, setShowModal] = useState(false);
+  const [showPicker, setShowPicker] = useState(false);
+  const [selectingStartdate, setSelectingStartdate] = useState(true);
 
-  // let isChoosingStartDate = true;
   const openStartDatePicker = () => {
-    setIsChoosingStartDate(true);
-    // isChoosingStartDate = true;
-    setDatePickerVisibility(true);
+    setSelectingStartdate(true);
+    setShowPicker(true);
   };
 
   const openEndDatePicker = () => {
-    setIsChoosingStartDate(false);
-    // isChoosingStartDate = false;
-    setDatePickerVisibility(true);
+    setSelectingStartdate(false);
+    setShowPicker(true);
   };
 
   const createDateRange = (date: Date) => {
-    if (isChoosingStartDate) {
+    if (selectingStartdate) {
       setDateRange((prevState) => ({ ...prevState, startingDate: date }));
     } else {
       setDateRange((prevState) => ({ ...prevState, endingDate: date }));
@@ -56,45 +49,37 @@ export const DateFilter = ({
     setDateRange({ startingDate: null, endingDate: null });
   };
 
-  const globalLogs = useAppSelector(logSelectors.selectAll);
+  const dateFilter = () => {
+    const logsToFilter = [...globalLogs];
+    const logsInRange = logsToFilter
+      .filter(
+        (log) =>
+          //non-null assertion being made here but it could be null, what are possible problems?
+          new Date(log.date) >= dateRange.startingDate! &&
+          new Date(log.date) <= dateRange.endingDate!
+      )
+      .map((log) => log.id);
+    console.log("in range", logsInRange);
 
-  const filterLogsByDate = () => {
-    const datesInRange = globalLogs.filter(
-      (log) =>
-        //non-null assertion being made here but it could be null, what are possible problems?
-        new Date(log.date) >= dateRange.startingDate! &&
-        new Date(log.date) <= dateRange.endingDate!
-    );
-    if (datesInRange.length > 0) {
-      setLogsFilteredByDate(datesInRange);
-      setModalVisible(!modalVisible);
-    } else {
-      alert(
-        `no logs were found between ${format(
-          dateRange.startingDate!,
-          "dd-MM-yyyy"
-        )} & ${format(dateRange.endingDate!, "dd-MM-yyyy")}`
-      );
+    if (logsInRange.length > 0) {
+      dispatch(setLogsByDate(logsInRange));
     }
+    setShowModal(!showModal);
   };
 
-  const filterOrDismiss = () =>
-    dateRange.startingDate
-      ? filterLogsByDate()
-      : setModalVisible(!modalVisible);
-
   const con = () => {
-    console.log("dateRange", dateRange);
-    console.log("isChoosingStartDate", isChoosingStartDate);
+    console.log("logsBydate", LogsByDate);
+    // console.log("dateRange", dateRange);
+    // console.log("selectingStartdate", selectingStartdate);
   };
 
   return (
     <View style={styles.centeredView}>
       <Modal
         animationType="slide"
-        visible={modalVisible}
+        visible={showModal}
         onRequestClose={() => {
-          setModalVisible(!modalVisible);
+          setShowModal(!showModal);
         }}
       >
         <View style={styles.centeredView}>
@@ -115,19 +100,19 @@ export const DateFilter = ({
             <Button title="Reset Dates" onPress={clearDateRange} />
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={filterOrDismiss}
+              onPress={dateFilter}
             >
               <Text style={styles.textStyle}>Filter Dates</Text>
             </Pressable>
           </View>
         </View>
         <DatePicker
-          isDatePickerVisible={isDatePickerVisible}
-          setDatePickerVisibility={setDatePickerVisibility}
+          showPicker={showPicker}
+          setShowPicker={setShowPicker}
           createDateRange={createDateRange}
         />
       </Modal>
-      <Pressable onPress={() => setModalVisible(true)}>
+      <Pressable onPress={() => setShowModal(true)}>
         <Text style={styles.categorySelector}>Date Range</Text>
       </Pressable>
     </View>

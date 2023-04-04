@@ -3,14 +3,14 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { View } from "../../components/Themed";
 
 interface Props {
-  isDatePickerVisible: boolean;
-  setDatePickerVisibility: React.Dispatch<React.SetStateAction<boolean>>;
+  showPicker: boolean;
+  setShowPicker: React.Dispatch<React.SetStateAction<boolean>>;
   createDateRange: (date: Date) => void;
 }
 
 export const DatePicker = ({
-  isDatePickerVisible,
-  setDatePickerVisibility,
+  showPicker,
+  setShowPicker,
   createDateRange,
 }: Props) => {
   const handleConfirm = (date: Date) => {
@@ -19,13 +19,13 @@ export const DatePicker = ({
   };
 
   const hideDatePicker = () => {
-    setDatePickerVisibility(false);
+    setShowPicker(false);
   };
 
   return (
     <View>
       <DateTimePickerModal
-        isVisible={isDatePickerVisible}
+        isVisible={showPicker}
         mode="date"
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}

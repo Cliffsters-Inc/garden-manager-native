@@ -33,6 +33,7 @@ export const filterSlice = createSlice({
   },
 });
 
-export const { switchFilterByPic, setLogsWithPics } = filterSlice.actions;
+export const { setLogsByDate, switchFilterByPic, setLogsWithPics } =
+  filterSlice.actions;
 
 export default filterSlice.reducer;
