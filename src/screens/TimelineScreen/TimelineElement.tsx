@@ -21,7 +21,7 @@ export const TimelineElement = ({ logsToMap }: Props) => {
     {}
   );
   const hasLogs = logsToMap.length > 0;
-  console.log("**********logsToMap************", logsToMap);
+  // console.log("**********logsToMap************", logsToMap);
   const assignIcon = (iconName: string) => {
     switch (iconName) {
       case "pests":

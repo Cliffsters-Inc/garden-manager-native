@@ -8,10 +8,10 @@ interface filterState {
 }
 
 const initialState: filterState = {
-  logsBydate: ["12/12/12"],
+  logsBydate: [],
   filterByPic: false,
-  logsWithPics: ["test"],
-  filteredLogs: [["test2"]],
+  logsWithPics: [],
+  filteredLogs: [],
 };
 
 export const filterSlice = createSlice({
@@ -32,5 +32,7 @@ export const filterSlice = createSlice({
     },
   },
 });
+
+export const { switchFilterByPic, setLogsWithPics } = filterSlice.actions;
 
 export default filterSlice.reducer;

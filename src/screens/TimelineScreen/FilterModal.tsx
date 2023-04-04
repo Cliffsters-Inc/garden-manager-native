@@ -42,16 +42,16 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
   const [logsFilteredByLocation, setLogsFilteredByLocation] = useState<
     VeggieLogNormalised[]
   >([]);
-  const [logsFilteredByPics, setLogsFilteredByPics] = useState<
-    VeggieLogNormalised[]
-  >([]);
+  // const [logsFilteredByPics, setLogsFilteredByPics] = useState<
+  //   VeggieLogNormalised[]
+  // >([]);
 
   useEffect(() => {
     const mergedArray = [
       ...new Set([
         ...logsFilteredByTag,
         ...logsFilteredByDate,
-        ...logsFilteredByPics,
+        // ...logsFilteredByPics,
         ...logsFilteredByLocation,
       ]),
     ];
@@ -59,7 +59,7 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
   }, [
     logsFilteredByTag,
     logsFilteredByDate,
-    logsFilteredByPics,
+    // logsFilteredByPics,
     logsFilteredByLocation,
   ]);
 
@@ -73,7 +73,7 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
     setSelectedlocations([]);
     setLogsFilteredByTag([]);
     setLogsFilteredByDate([]);
-    setLogsFilteredByPics([]);
+    // setLogsFilteredByPics([]);
     setLogsFilteredByLocation([]);
     setFilteredLogs(globalLogs);
   };
@@ -169,12 +169,7 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
               />
             </View>
             <Divider />
-            <PhotoFilter setLogsFilteredByPics={setLogsFilteredByPics} />
-            <View style={{ marginLeft: 200, justifyContent: "flex-end" }}>
-              {logsFilteredByPics.length > 0 && (
-                <FontAwesome5 name="check" size={24} color="green" />
-              )}
-            </View>
+            <PhotoFilter />
             <Divider />
             <Pressable
               style={[styles.button, styles.buttonClose]}
