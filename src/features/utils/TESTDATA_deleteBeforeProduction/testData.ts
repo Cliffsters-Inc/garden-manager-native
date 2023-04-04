@@ -20,6 +20,8 @@ export const testGardenState: Garden[] = [
               {
                 id: nanoid(),
                 date: 1654910862301,
+                location: { gardenTitle: "1", bedTitle: "1" },
+                photos: { entities: [], loading: "pending" },
                 notes:
                   "Sunt nisi dolore ex quis consectetur ullamco culpa excepteur ea officia laborum esse laborum labore.",
                 payloadTags: [
@@ -29,6 +31,8 @@ export const testGardenState: Garden[] = [
               {
                 id: nanoid(),
                 date: 1654910000000,
+                location: { gardenTitle: "1", bedTitle: "1" },
+                photos: { entities: [], loading: "pending" },
                 notes:
                   "Reprehenderit consectetur anim laboris elit fugiat veniam proident aliqua esse. Sunt nisi dolore ex quis consectetur ullamco culpa excepteur ea officia laborum esse laborum labore. Pariatur fugiat tempor anim sunt pariatur. Ea ea labore in reprehenderit et amet. Id nulla voluptate in incididunt voluptate ut aliqua ex ut mollit reprehenderit magna. Magna consectetur irure laborum id qui aute ullamco incididunt. Elit officia ut pariatur minim.",
                 payloadTags: [
@@ -42,6 +46,8 @@ export const testGardenState: Garden[] = [
               {
                 id: nanoid(),
                 date: 1655010000000,
+                location: { gardenTitle: "1", bedTitle: "1" },
+                photos: { entities: [], loading: "pending" },
                 notes:
                   "Pariatur mollit voluptate deserunt nisi reprehenderit consectetur anim laboris elit fugiat veniam proident aliqua esse.",
                 payloadTags: [
@@ -55,6 +61,8 @@ export const testGardenState: Garden[] = [
               {
                 id: nanoid(),
                 date: 165310000000,
+                location: { gardenTitle: "1", bedTitle: "1" },
+                photos: { entities: [], loading: "pending" },
                 notes:
                   "Pariatur mollit voluptate deserunt nisi reprehenderit consectetur anim laboris elit fugiat veniam proident aliqua esse.",
                 payloadTags: [

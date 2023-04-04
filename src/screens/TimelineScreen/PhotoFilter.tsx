@@ -1,46 +1,57 @@
-import { useState } from "react";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
 
 import { Text, View } from "../../components/Themed";
 import { VeggieLogNormalised } from "../../features/entity.types";
+import {
+  setLogsWithPics,
+  switchFilterByPic,
+} from "../../features/filters/filterSlice";
 import { logSelectors } from "../../features/log/log.slice";
-import { useAppSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 
-interface Props {
-  setLogsFilteredByPics: React.Dispatch<
-    React.SetStateAction<VeggieLogNormalised[]>
-  >;
-}
-
-export const PhotoFilter = ({
-  setLogsFilteredByPics: setlogsFilteredByPics,
-}: Props) => {
+export const PhotoFilter = () => {
+  const dispatch = useAppDispatch();
+  const filterByPic = useAppSelector((state) => state.filters.filterByPic);
   const globalLogs = useAppSelector(logSelectors.selectAll);
-  const [isFilteringByPic, setIsFilteringByPic] = useState<boolean>(false);
+
+  const handlePress = () => {
+    dispatch(switchFilterByPic(!filterByPic));
+  };
 
   const filterByPhotos = () => {
     const logsToFilter = [...globalLogs];
-    const filteredList = logsToFilter.filter(
-      (log) => log.photos.entities.length > 0
-    );
-    setlogsFilteredByPics(filteredList);
-    setIsFilteringByPic(true);
+    const logsWithPics = logsToFilter
+      .filter((log) => log.photos.entities.length > 0)
+      .map((log) => log.id);
+    console.log("logsWithPics", logsWithPics);
+    dispatch(setLogsWithPics(logsWithPics));
   };
 
   const resetPhotoFilter = () => {
-    setlogsFilteredByPics([]);
-    setIsFilteringByPic(false);
+    dispatch(setLogsWithPics([]));
   };
 
-  const photoFilterSwitch = () => {
-    return !isFilteringByPic ? filterByPhotos() : resetPhotoFilter();
-  };
+  useEffect(() => {
+    if (filterByPic) {
+      filterByPhotos();
+      console.log("filter on");
+    } else {
+      resetPhotoFilter();
+      console.log("filter off");
+    }
+  }, [filterByPic]);
 
   return (
     <View>
-      <Pressable onPress={photoFilterSwitch}>
+      {/* <Pressable onPress={() => dispatch(switchFilterByPic(!filterByPic))}> */}
+      <Pressable onPress={handlePress}>
         <Text style={styles.categorySelector}>Photo</Text>
       </Pressable>
+      <View style={{ marginLeft: 200, justifyContent: "flex-end" }}>
+        {filterByPic && <FontAwesome5 name="check" size={24} color="green" />}
+      </View>
     </View>
   );
 };

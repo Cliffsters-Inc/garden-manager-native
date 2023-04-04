@@ -14,9 +14,9 @@ export const TimelineScreen = ({
   navigation,
 }: TimelineScreenProps<"TimelineScreen">) => {
   const globalLogs = useAppSelector(logSelectors.selectAll);
-  const [filteredLogs, setFilteredLogs] = useState<VeggieLogNormalised[]>([]);
-  const isFiltered = filteredLogs.length > 0;
-  const logState = isFiltered ? filteredLogs : globalLogs;
+  const activeFilter = useAppSelector((state) => state.filters.activeFilter);
+  const [filteredLogs, setFilteredLogs] = useState<string[]>([]);
+  const logState = activeFilter ? filteredLogs : globalLogs;
 
   const con = () => {
     // console.log("globalLogs", globalLogs);
@@ -27,12 +27,9 @@ export const TimelineScreen = ({
     <View style={styles.container}>
       <Button title="con" onPress={con} />
       <View style={styles.filter}>
-        <FilterModal
-          isFiltered={isFiltered}
-          setFilteredLogs={setFilteredLogs}
-        />
+        <FilterModal />
       </View>
-      <TimelineElement logsToMap={logState} />
+      {/* <TimelineElement logsToMap={logState} /> */}
     </View>
   );
 };

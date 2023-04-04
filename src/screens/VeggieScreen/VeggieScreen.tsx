@@ -103,6 +103,7 @@ export const VeggieScreen = ({
                 marginVertical: 5,
               }}
             >
+              <Text>{item.id}</Text>
               <View style={{ flexDirection: "row" }}>
                 <Text style={{ fontSize: 20, fontWeight: "bold" }}>
                   {format(new Date(item.date), "d MMM yy")}

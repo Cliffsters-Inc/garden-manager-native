@@ -8,19 +8,30 @@ import { convertToTag } from "../../components/Tags/Tag.utils";
 import { TagElement } from "../../components/Tags/TagElement";
 import { Text, View } from "../../components/Themed";
 import { Tag, VeggieLogNormalised } from "../../features/entity.types";
+import {
+  filterLogs,
+  setLogsByDate,
+  setLogsWithPics,
+  switchActiveFilter,
+  switchFilterByPic,
+} from "../../features/filters/filterSlice";
 import { logSelectors } from "../../features/log/log.slice";
-import { useAppSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 import { DateFilter, DateRangeObj } from "./DateFilter";
 import { LocationFilter } from "./LocationFilter";
 import { PhotoFilter } from "./PhotoFilter";
 import { TagsFilterModal } from "./TagsFilterModal";
 
-interface Props {
-  isFiltered: boolean;
-  setFilteredLogs: React.Dispatch<React.SetStateAction<VeggieLogNormalised[]>>;
-}
-
-export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
+export const FilterModal = () => {
+  const dispatch = useAppDispatch();
+  const activeFilter = useAppSelector((state) => state.filters.activeFilter);
+  // const filterByDate = useAppSelector((state) => state.filters.filterByDate);
+  //remove
+  const test = useAppSelector((state) => state.filters.test);
+  const filterByPic = useAppSelector((state) => state.filters.filterByPic);
+  const logsBydate = useAppSelector((state) => state.filters.logsBydate);
+  const logsWithPics = useAppSelector((state) => state.filters.logsWithPics);
+  const filteredLogs = useAppSelector((state) => state.filters.filteredLogs);
   const [modalVisible, setModalVisible] = useState(false);
   const [tagsToFilter, setTagsToFilter] = useState<string[]>([]);
   const [selectedLocations, setSelectedlocations] = useState<string[]>([]);
@@ -42,57 +53,39 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
     VeggieLogNormalised[]
   >([]);
 
-  useEffect(() => {
-    const mergedArray = [
-      ...new Set([
-        ...logsFilteredByTag,
-        ...logsFilteredByDate,
-        ...logsFilteredByPics,
-        ...logsFilteredByLocation,
-      ]),
-    ];
-    setFilteredLogs(mergedArray);
-  }, [
-    logsFilteredByTag,
-    logsFilteredByDate,
-    logsFilteredByPics,
-    logsFilteredByLocation,
-  ]);
+  const confirmFilter = () => {
+    console.log("filtering....");
+    // dispatch(filterLogs);
+    setModalVisible(false);
+  };
 
   const renderTags = ({ item }: { item: Tag }) => {
     return <TagElement tag={item} hideIcon />;
   };
 
   const globalLogs = useAppSelector(logSelectors.selectAll);
+
   const clearFilters = () => {
-    setTagsToFilter([]);
-    setSelectedlocations([]);
-    setLogsFilteredByTag([]);
-    setLogsFilteredByDate([]);
-    setLogsFilteredByPics([]);
-    setLogsFilteredByLocation([]);
-    setFilteredLogs(globalLogs);
+    // dispatch(clearFilters);
+    dispatch(switchActiveFilter(false));
+    dispatch(setLogsByDate([]));
+    dispatch(switchFilterByPic(false));
+    dispatch(setLogsWithPics([]));
+    setDateRange({
+      startingDate: null,
+      endingDate: null,
+    });
+    console.log("clear filters pressed");
   };
 
   const con = () => {
-    console.log("logsFilteredByDate", logsFilteredByDate);
-    console.log("dateRange", dateRange);
+    console.log("test", test);
+    console.log("logsByDate", logsBydate);
+    console.log("logsWithPics", logsWithPics);
+    console.log("filteredLogs", filteredLogs);
   };
 
   const tagsToDisplay = tagsToFilter.map((tagName) => convertToTag(tagName));
-
-  // const renderDateRange = () => {
-  //   {
-  //     dateRange.startingDate && (
-  //       <Text>{format(dateRange.startingDate, "dd-MM-yyyy")}</Text>
-  //     );
-  //   }
-  //   {
-  //     dateRange.endingDate && (
-  //       <Text> - {format(dateRange.endingDate, "dd-MM-yyyy")}</Text>
-  //     );
-  //   }
-  // };
 
   return (
     <View style={styles.centeredView}>
@@ -105,7 +98,7 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
                 <Text style={styles.categorySelector}>None</Text>
               </Pressable>
               <View style={{ marginLeft: 200, justifyContent: "flex-end" }}>
-                {!isFiltered && (
+                {!activeFilter && (
                   <FontAwesome5 name="check" size={24} color="green" />
                 )}
               </View>
@@ -118,7 +111,6 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
                 setLogsFilteredByTag={setLogsFilteredByTag}
                 tagsToFilter={tagsToFilter}
                 setTagsToFilter={setTagsToFilter}
-                clearFilters={clearFilters}
               />
               <View style={{ maxHeight: 30 }}>
                 <FlatList
@@ -143,11 +135,7 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
                 maxWidth: 100,
               }}
             >
-              <DateFilter
-                setLogsFilteredByDate={setLogsFilteredByDate}
-                dateRange={dateRange}
-                setDateRange={setDateRange}
-              />
+              <DateFilter dateRange={dateRange} setDateRange={setDateRange} />
             </View>
             {dateRange.startingDate && (
               <Text>{format(dateRange.startingDate, "dd-MM-yyyy")}</Text>
@@ -176,16 +164,12 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
               />
             </View>
             <Divider />
-            <PhotoFilter setLogsFilteredByPics={setLogsFilteredByPics} />
-            <View style={{ marginLeft: 200, justifyContent: "flex-end" }}>
-              {logsFilteredByPics.length > 0 && (
-                <FontAwesome5 name="check" size={24} color="green" />
-              )}
-            </View>
+            <PhotoFilter />
             <Divider />
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
+              onPress={confirmFilter}
+              // onPress={() => setModalVisible(!modalVisible)}
             >
               <Text style={styles.textStyle}>Accept Filters</Text>
             </Pressable>
