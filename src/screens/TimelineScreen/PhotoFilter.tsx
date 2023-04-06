@@ -1,5 +1,5 @@
 import { FontAwesome5 } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Pressable, StyleSheet } from "react-native";
 
 import { Text, View } from "../../components/Themed";
@@ -28,17 +28,12 @@ export const PhotoFilter = () => {
     dispatch(setLogsWithPics(logsWithPics));
   };
 
-  const resetPhotoFilter = () => {
-    //put new reset here
-  };
-
   useEffect(() => {
     if (filterByPic) {
       filterByPhotos();
       console.log("filter on");
     } else {
-      resetPhotoFilter();
-      console.log("filter off");
+      setLogsWithPics([]);
     }
   }, [filterByPic]);
 

@@ -1,6 +1,6 @@
 import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet } from "react-native";
 import { Button, Divider } from "react-native-elements";
 
@@ -8,8 +8,9 @@ import { convertToTag } from "../../components/Tags/Tag.utils";
 import { TagElement } from "../../components/Tags/TagElement";
 import { Text, View } from "../../components/Themed";
 import { Tag, VeggieLogNormalised } from "../../features/entity.types";
+import { filterLogs, resetFilters } from "../../features/Filters/filter.slice";
 import { logSelectors } from "../../features/log/log.slice";
-import { useAppSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 import { DateFilter, DateRangeObj } from "./DateFilter";
 import { LocationFilter } from "./LocationFilter";
 import { PhotoFilter } from "./PhotoFilter";
@@ -21,8 +22,12 @@ interface Props {
 }
 
 export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
-  const date = useAppSelector((state) => state.filters.logsBydate);
+  // const filterState = useAppSelector((state) => state.filters);
+  const globalLogs = useAppSelector(logSelectors.selectAll);
+  const dispatch = useAppDispatch();
+  const filterByDate = useAppSelector((state) => state.filters.filterByDate);
   const filterByPic = useAppSelector((state) => state.filters.filterByPic);
+  const logsByDate = useAppSelector((state) => state.filters.logsBydate);
   const logsWithPic = useAppSelector((state) => state.filters.logsWithPics);
   const filteredLogs = useAppSelector((state) => state.filters.filteredLogs);
   const [modalVisible, setModalVisible] = useState(false);
@@ -41,31 +46,25 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
     VeggieLogNormalised[]
   >([]);
 
-  useEffect(() => {
-    const mergedArray = [
-      ...new Set([...logsFilteredByTag, ...logsFilteredByLocation]),
-    ];
-    setFilteredLogs(mergedArray);
-  }, [logsFilteredByTag, logsFilteredByLocation]);
-
   const renderTags = ({ item }: { item: Tag }) => {
     return <TagElement tag={item} hideIcon />;
   };
 
-  const globalLogs = useAppSelector(logSelectors.selectAll);
   const clearFilters = () => {
-    setTagsToFilter([]);
-    setSelectedlocations([]);
-    setLogsFilteredByTag([]);
-    setLogsFilteredByLocation([]);
-    setFilteredLogs(globalLogs);
+    dispatch(resetFilters());
+  };
+
+  const filter = () => {
+    console.log("filtering...");
+    dispatch(filterLogs());
+    setModalVisible(!modalVisible);
   };
 
   const con = () => {
-    console.log("date", date);
-    console.log("filterByPic", filterByPic);
-    console.log("logsWithPic", logsWithPic);
-    console.log("filteredLogs", filteredLogs);
+    console.log("log", globalLogs[0]);
+    // console.log("logsByDate", logsByDate);
+    // console.log("logsWithPic", logsWithPic);
+    // console.log("filteredLogs", filteredLogs);
   };
 
   const tagsToDisplay = tagsToFilter.map((tagName) => convertToTag(tagName));
@@ -152,7 +151,7 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
             <Divider />
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
+              onPress={filter}
             >
               <Text style={styles.textStyle}>Accept Filters</Text>
             </Pressable>

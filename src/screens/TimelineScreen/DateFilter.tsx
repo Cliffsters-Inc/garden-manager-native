@@ -54,7 +54,7 @@ export const DateFilter = ({ dateRange, setDateRange }: Props) => {
     const logsInRange = logsToFilter
       .filter(
         (log) =>
-          //non-null assertion being made here but it could be null, what are possible problems?
+          //non-null assertion being made here but it could be null, add conditional?
           new Date(log.date) >= dateRange.startingDate! &&
           new Date(log.date) <= dateRange.endingDate!
       )
