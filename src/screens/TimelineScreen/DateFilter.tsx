@@ -4,7 +4,11 @@ import { Modal, Pressable, StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 
 import { Text, View } from "../../components/Themed";
-import { setLogsByDate } from "../../features/Filters/filter.slice";
+import {
+  resetDateFilters,
+  setLogsByDate,
+  switchFilterByDate,
+} from "../../features/Filters/filter.slice";
 import { logSelectors } from "../../features/log/log.slice";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { DatePicker } from "./DatePicker";
@@ -37,6 +41,7 @@ export const DateFilter = ({ dateRange, setDateRange }: Props) => {
     setShowPicker(true);
   };
 
+  //would this be better if applied directly to button?
   const createDateRange = (date: Date) => {
     if (selectingStartdate) {
       setDateRange((prevState) => ({ ...prevState, startingDate: date }));
@@ -47,6 +52,7 @@ export const DateFilter = ({ dateRange, setDateRange }: Props) => {
 
   const clearDateRange = () => {
     setDateRange({ startingDate: null, endingDate: null });
+    dispatch(resetDateFilters());
   };
 
   const dateFilter = () => {
@@ -61,10 +67,19 @@ export const DateFilter = ({ dateRange, setDateRange }: Props) => {
       .map((log) => log.id);
     console.log("in range", logsInRange);
 
+    const emptyDateRange =
+      dateRange.startingDate === null && dateRange.endingDate === null;
     if (logsInRange.length > 0) {
+      console.log("range not empty", logsInRange.length);
       dispatch(setLogsByDate(logsInRange));
+      // dispatch(switchFilterByDate(true));
+      setShowModal(!showModal);
+      //add display warning for incorrect date range?
+    } else if (emptyDateRange) {
+      console.log("empty");
+      // dispatch(setLogsByDate(logsInRange));
+      setShowModal(!showModal);
     }
-    setShowModal(!showModal);
   };
 
   const con = () => {

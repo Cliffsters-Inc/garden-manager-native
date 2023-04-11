@@ -1,14 +1,19 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
 interface filterState {
+  activeFilter: boolean;
+  logsByTag: string[];
   filterByDate: boolean;
   filterByPic: boolean;
   logsBydate: string[];
   logsWithPics: string[];
   filteredLogs: string[];
+  // [key: string]: boolean | string[];
 }
 
 const initialState: filterState = {
+  activeFilter: false,
+  logsByTag: [],
   filterByDate: false,
   logsBydate: [],
   filterByPic: false,
@@ -20,11 +25,27 @@ export const filterSlice = createSlice({
   name: "filters",
   initialState,
   reducers: {
+    // switchActiveFilter: (state) => {
+    //   const { activeFilter, ...rest } = state;
+    //   console.log("state", state);
+    //   const areAllPropsSame = Object.entries(rest).every(([key, value]) => {
+    //     return value === initialState[key];
+    //   });
+    //   console.log("props", areAllPropsSame);
+    // },
+    setLogsByTag: (state, action) => {
+      state.logsByTag = action.payload;
+      // console.log("test log state", initialState);
+    },
     switchFilterByDate: (state, action) => {
       state.filterByDate = action.payload;
     },
     setLogsByDate: (state, action) => {
       state.logsBydate = action.payload;
+    },
+    resetDateFilters: (state) => {
+      state.filterByDate = false;
+      state.logsBydate = [];
     },
     switchFilterByPic: (state, action) => {
       state.filterByPic = action.payload;
@@ -41,7 +62,7 @@ export const filterSlice = createSlice({
           }
         });
       };
-      addIfOccupied(state.logsBydate, state.logsWithPics);
+      addIfOccupied(state.logsBydate, state.logsWithPics, state.logsByTag);
 
       const flattenedArr = occupiedArrs.flat();
       const matchingElements = flattenedArr.filter((item) => {
@@ -60,7 +81,10 @@ export const filterSlice = createSlice({
 });
 
 export const {
+  setLogsByTag,
+  switchFilterByDate,
   setLogsByDate,
+  resetDateFilters,
   switchFilterByPic,
   setLogsWithPics,
   filterLogs,

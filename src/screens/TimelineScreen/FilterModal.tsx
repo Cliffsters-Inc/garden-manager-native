@@ -1,6 +1,6 @@
 import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet } from "react-native";
 import { Button, Divider } from "react-native-elements";
 
@@ -16,31 +16,33 @@ import { LocationFilter } from "./LocationFilter";
 import { PhotoFilter } from "./PhotoFilter";
 import { TagsFilterModal } from "./TagsFilterModal";
 
-interface Props {
-  isFiltered: boolean;
-  setFilteredLogs: React.Dispatch<React.SetStateAction<VeggieLogNormalised[]>>;
-}
-
-export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
+export const FilterModal = () => {
   // const filterState = useAppSelector((state) => state.filters);
   const globalLogs = useAppSelector(logSelectors.selectAll);
   const dispatch = useAppDispatch();
+  const activeFilter = useAppSelector((state) => state.filters.activeFilter);
+  const logsByTag = useAppSelector((state) => state.filters.logsByTag);
   const filterByDate = useAppSelector((state) => state.filters.filterByDate);
   const filterByPic = useAppSelector((state) => state.filters.filterByPic);
   const logsByDate = useAppSelector((state) => state.filters.logsBydate);
   const logsWithPic = useAppSelector((state) => state.filters.logsWithPics);
   const filteredLogs = useAppSelector((state) => state.filters.filteredLogs);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [tagsToFilter, setTagsToFilter] = useState<string[]>([]);
   const [selectedLocations, setSelectedlocations] = useState<string[]>([]);
   const [dateRange, setDateRange] = useState<DateRangeObj>({
     startingDate: null,
     endingDate: null,
   });
-
-  const [logsFilteredByTag, setLogsFilteredByTag] = useState<
-    VeggieLogNormalised[]
-  >([]);
+  //create none element and move side effect there??
+  // useEffect(() => {
+  //   dispatch(switchActiveFilter());
+  //   console.log("render");
+  // }, [logsByDate, filterByPic]);
+  // useEffect(() => {
+  //   dispatch(switchActiveFilter());
+  //   console.log("render");
+  // }, [filterByDate, filterByPic]);
 
   const [logsFilteredByLocation, setLogsFilteredByLocation] = useState<
     VeggieLogNormalised[]
@@ -52,6 +54,10 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
 
   const clearFilters = () => {
     dispatch(resetFilters());
+    setDateRange({
+      startingDate: null,
+      endingDate: null,
+    });
   };
 
   const filter = () => {
@@ -61,13 +67,17 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
   };
 
   const con = () => {
-    console.log("log", globalLogs[0]);
-    // console.log("logsByDate", logsByDate);
-    // console.log("logsWithPic", logsWithPic);
-    // console.log("filteredLogs", filteredLogs);
+    // console.log("log", globalLogs[0]);
+    console.log("logsByDate", logsByDate);
+    console.log("logsWithPic", logsWithPic);
+    // dispatch(switchActiveFilter());
+    console.log("logsByTag", logsByTag);
+    // console.log("filterByPic", filterByPic);
+    // console.log("activeFilter", activeFilter);
+    console.log("filteredLogs", filteredLogs);
   };
 
-  const tagsToDisplay = tagsToFilter.map((tagName) => convertToTag(tagName));
+  const tagsToDisplay = selectedTags.map((tagName) => convertToTag(tagName));
 
   return (
     <View style={styles.centeredView}>
@@ -80,7 +90,7 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
                 <Text style={styles.categorySelector}>None</Text>
               </Pressable>
               <View style={{ marginLeft: 200, justifyContent: "flex-end" }}>
-                {!isFiltered && (
+                {!activeFilter && (
                   <FontAwesome5 name="check" size={24} color="green" />
                 )}
               </View>
@@ -90,10 +100,8 @@ export const FilterModal = ({ isFiltered, setFilteredLogs }: Props) => {
               style={{ flexDirection: "row", maxHeight: 50, maxWidth: 100 }}
             >
               <TagsFilterModal
-                setLogsFilteredByTag={setLogsFilteredByTag}
-                tagsToFilter={tagsToFilter}
-                setTagsToFilter={setTagsToFilter}
-                clearFilters={clearFilters}
+                selectedTags={selectedTags}
+                setSelectedTags={setSelectedTags}
               />
               <View style={{ maxHeight: 30 }}>
                 <FlatList

@@ -11,16 +11,17 @@ import Timeline from "react-native-timeline-flatlist";
 
 import { Text, View } from "../../components/Themed";
 import { VeggieLogNormalised } from "../../features/entity.types";
+import { logSelectors } from "../../features/log/log.slice";
+import { useAppSelector } from "../../store";
 
-type Props = {
-  logsToMap: VeggieLogNormalised[];
-};
-
-export const TimelineElement = ({ logsToMap }: Props) => {
+export const TimelineElement = () => {
+  const globalLogs = useAppSelector(logSelectors.selectAll);
+  const activeFilter = useAppSelector((state) => state.filters.activeFilter);
+  const filteredLogs = useAppSelector((state) => state.filters.filteredLogs);
+  const logsToMap = activeFilter ? filteredLogs : globalLogs;
   const [showAllText, setShowAllText] = useState<{ [key: string]: boolean }>(
     {}
   );
-  const hasLogs = logsToMap.length > 0;
   // console.log("**********logsToMap************", logsToMap);
   const assignIcon = (iconName: string) => {
     switch (iconName) {
@@ -80,6 +81,7 @@ export const TimelineElement = ({ logsToMap }: Props) => {
     };
   });
 
+  const hasLogs = logsToMap.length > 0;
   return hasLogs ? (
     <View style={styles.container}>
       <Timeline

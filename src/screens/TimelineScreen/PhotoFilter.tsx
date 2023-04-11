@@ -31,7 +31,6 @@ export const PhotoFilter = () => {
   useEffect(() => {
     if (filterByPic) {
       filterByPhotos();
-      console.log("filter on");
     } else {
       setLogsWithPics([]);
     }

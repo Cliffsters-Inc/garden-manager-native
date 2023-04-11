@@ -6,28 +6,18 @@ import { Button } from "react-native-elements";
 import { convertToTag } from "../../components/Tags/Tag.utils";
 import { TagElement } from "../../components/Tags/TagElement";
 import { Text } from "../../components/Themed";
-import { Tag, VeggieLogNormalised } from "../../features/entity.types";
+import { Tag } from "../../features/entity.types";
+import { setLogsByTag } from "../../features/Filters/filter.slice";
 import { logSelectors } from "../../features/log/log.slice";
-import { useAppSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 
-interface Props {
-  setLogsFilteredByTag: React.Dispatch<
-    React.SetStateAction<VeggieLogNormalised[]>
-  >;
-  tagsToFilter: string[];
-  setTagsToFilter: React.Dispatch<React.SetStateAction<string[]>>;
-  clearFilters: () => void;
-}
-
-export const TagsFilterModal = ({
-  setLogsFilteredByTag,
-  tagsToFilter,
-  setTagsToFilter,
-  clearFilters,
-}: Props) => {
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
-
+export const TagsFilterModal: React.FC<{
+  selectedTags: string[];
+  setSelectedTags: (value: string[]) => void;
+}> = ({ selectedTags, setSelectedTags }) => {
+  const dispatch = useAppDispatch();
   const globalLogs = useAppSelector(logSelectors.selectAll);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const listTagsInLogs = () => {
     const logsWithTags = [...globalLogs]
@@ -40,30 +30,22 @@ export const TagsFilterModal = ({
     const tagsInLogs = uniqueTagObjs.map((label) => convertToTag(label));
     return tagsInLogs;
   };
+  const usedTags = listTagsInLogs();
 
+  const toggleTag = (item: Tag, selected: boolean) => {
+    if (!selected) {
+      setSelectedTags([...selectedTags, item.tagLabel]);
+    } else {
+      const newList = selectedTags.filter(
+        (tagName) => tagName !== item.tagLabel
+      );
+      setSelectedTags(newList);
+    }
+  };
   const renderTags = ({ item }: { item: Tag }) => {
-    const toggleTag = () => {
-      const alreadySelected = tagsToFilter.includes(item.tagLabel);
-      if (!alreadySelected) {
-        setTagsToFilter([...tagsToFilter, item.tagLabel]);
-      } else {
-        const updatedArr = tagsToFilter.filter(
-          (filter) => filter !== item.tagLabel
-        );
-        setTagsToFilter(updatedArr);
-      }
-    };
-
-    const handleTagPress = () => {
-      toggleTag();
-    };
-
-    const checkIfSelected = () => {
-      return tagsToFilter.includes(item.tagLabel);
-    };
-
+    const selected = selectedTags.includes(item.tagLabel);
     return (
-      <Pressable onPress={handleTagPress}>
+      <Pressable onPress={() => toggleTag(item, selected)}>
         <TagElement tag={item} />
         <View
           style={{
@@ -71,9 +53,7 @@ export const TagsFilterModal = ({
             justifyContent: "flex-start",
           }}
         >
-          {checkIfSelected() && (
-            <FontAwesome5 name="check" size={24} color="black" />
-          )}
+          {selected && <FontAwesome5 name="check" size={24} color="black" />}
         </View>
       </Pressable>
     );
@@ -83,29 +63,23 @@ export const TagsFilterModal = ({
     const logsToFilter = [...globalLogs];
     const logsFilteredByTag = logsToFilter.filter((log) =>
       log.payloadTags.some((tag) => {
-        return tagsToFilter.includes(tag.tagLabel);
+        return selectedTags.includes(tag.tagLabel);
       })
     );
-    setLogsFilteredByTag(logsFilteredByTag);
-    console.log("**filteredList", logsFilteredByTag);
+    const filteredIds = logsFilteredByTag.map((log) => log.id);
+    dispatch(setLogsByTag(filteredIds));
+    setModalVisible(!modalVisible);
+    console.log("**filteredList", filteredIds);
   };
 
   const resetAndGoBack = () => {
     //fix below. See Asana subtask for TimlineFilters.
-    clearFilters();
-    setModalVisible(!modalVisible);
-  };
-
-  const filterAndGoBack = () => {
-    filterByTags();
+    setSelectedTags([]);
     setModalVisible(!modalVisible);
   };
 
   const con = () => {
-    console.log("tagsToFilter", tagsToFilter);
-    console.log("globalLogs", globalLogs);
-    // console.log("isSelected", isSelected);
-    // console.log("tagSelected", tagSelected);
+    console.log("tagsToFilter", selectedTags);
   };
 
   return (
@@ -120,7 +94,7 @@ export const TagsFilterModal = ({
             }}
           >
             <Text
-              onPress={resetAndGoBack}
+              onPress={() => setModalVisible(!modalVisible)}
               style={{
                 fontSize: 20,
               }}
@@ -128,7 +102,7 @@ export const TagsFilterModal = ({
               Back
             </Text>
             <Text
-              onPress={filterAndGoBack}
+              onPress={filterByTags}
               style={{
                 fontSize: 20,
                 marginLeft: "auto",
@@ -140,7 +114,7 @@ export const TagsFilterModal = ({
           <View style={styles.modalView}>
             <View style={styles.list}>
               <FlatList
-                data={listTagsInLogs()}
+                data={usedTags}
                 keyExtractor={(item) => item.tagLabel}
                 renderItem={renderTags}
               />
@@ -150,7 +124,7 @@ export const TagsFilterModal = ({
               style={[styles.button, styles.buttonClose]}
               onPress={resetAndGoBack}
             >
-              <Text style={styles.textStyle}>Hide Modal</Text>
+              <Text style={styles.textStyle}>Reset Filters</Text>
             </Pressable>
           </View>
         </Modal>

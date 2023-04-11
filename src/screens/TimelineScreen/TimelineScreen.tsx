@@ -13,11 +13,6 @@ import { TimelineElement } from "./TimelineElement";
 export const TimelineScreen = ({
   navigation,
 }: TimelineScreenProps<"TimelineScreen">) => {
-  const globalLogs = useAppSelector(logSelectors.selectAll);
-  const [filteredLogs, setFilteredLogs] = useState<VeggieLogNormalised[]>([]);
-  const isFiltered = filteredLogs.length > 0;
-  const logState = isFiltered ? filteredLogs : globalLogs;
-
   const con = () => {
     // console.log("globalLogs", globalLogs);
     // console.log("filteredLogs", filteredLogs);
@@ -27,12 +22,9 @@ export const TimelineScreen = ({
     <View style={styles.container}>
       <Button title="con" onPress={con} />
       <View style={styles.filter}>
-        <FilterModal
-          isFiltered={isFiltered}
-          setFilteredLogs={setFilteredLogs}
-        />
+        <FilterModal />
       </View>
-      <TimelineElement logsToMap={logState} />
+      <TimelineElement />
     </View>
   );
 };
