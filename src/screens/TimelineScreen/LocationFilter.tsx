@@ -1,134 +1,142 @@
-/* eslint-disable import/namespace */
 import { useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 
 import { Text, View } from "../../components/Themed";
 import { bedSelectors } from "../../features/bed/bed.slice";
-import {
-  BedNormalised,
-  VeggieLogNormalised,
-} from "../../features/entity.types";
+import { setLogsByLocation } from "../../features/Filters/filter.slice";
 import { gardenSelectors } from "../../features/garden/garden.slice";
 import { logSelectors } from "../../features/log/log.slice";
-import { useAppSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 
-interface Props {
-  setLogsFilteredByLocation: React.Dispatch<
-    React.SetStateAction<VeggieLogNormalised[]>
-  >;
-  selectedLocations: string[];
-  setSelectedLocations: React.Dispatch<React.SetStateAction<string[]>>;
+export interface SelectedLocationsObj {
+  garden: string | null;
+  bed: string | null;
 }
 
-export const LocationFilter = ({
-  setLogsFilteredByLocation,
-  selectedLocations,
-  setSelectedLocations,
-}: Props) => {
-  const [modalVisible, setModalVisible] = useState(false);
+export const LocationFilter: React.FC<{
+  selectedLocations: SelectedLocationsObj;
+  setSelectedLocations: React.Dispatch<
+    React.SetStateAction<SelectedLocationsObj>
+  >;
+}> = ({ selectedLocations, setSelectedLocations }) => {
+  const dispatch = useAppDispatch();
   const globalLogs = useAppSelector(logSelectors.selectAll);
   const gardens = useAppSelector(gardenSelectors.selectAll);
-
-  const [selectedGardenId, setSelectedGardenId] = useState<string>("");
-
-  const selectedBeds = useAppSelector((state) => {
-    if (selectedGardenId) {
-      return bedSelectors.selectByGarden(state, selectedGardenId);
-    } else {
-      return null;
-    }
-  });
-
-  const createBedList = (gardenName: string) => {
-    gardens.filter((garden) => {
-      if (garden.name === gardenName) {
-        setSelectedGardenId(garden.id);
-      }
-    });
-  };
+  const [modalVisible, setModalVisible] = useState(false);
+  const [displayWarning, setDisplayWarning] = useState(false);
+  const [bedIds, setBedIds] = useState<string[]>([]);
 
   const filterByGarden = (gardenName: string) => {
-    setSelectedLocations([gardenName]);
-    const logsToFilter = [...globalLogs];
-    const filteredList = logsToFilter.filter((log) => {
-      const filteredLocation =
-        log.location?.gardenTitle === gardenName ? log : null;
-      return filteredLocation;
-    });
-    createBedList(gardenName);
-    setLogsFilteredByLocation(filteredList);
+    setSelectedLocations({ ...selectedLocations, garden: gardenName });
+    const logs = [...globalLogs];
+    const matchingLogs = logs
+      .filter((log) => log.location?.gardenTitle === gardenName)
+      .map(({ id }) => id);
+    console.log("garden lodt", matchingLogs);
+    if (matchingLogs.length > 0) {
+      dispatch(setLogsByLocation(matchingLogs));
+      createGardenId(gardenName);
+      setDisplayWarning(false);
+    } else {
+      setDisplayWarning(true);
+    }
   };
 
   const filterByBed = (bedName: string) => {
-    setSelectedLocations([...selectedLocations, bedName]);
-    const logsToFilter = [...globalLogs];
-    const filteredList = logsToFilter.filter((log) => {
-      return (
-        log.location?.gardenTitle === selectedLocations[0] &&
-        log.location?.bedTitle === bedName
-      );
-    });
-    setLogsFilteredByLocation(filteredList);
+    setSelectedLocations({ ...selectedLocations, bed: bedName });
+    const logs = [...globalLogs];
+    const matchingLogs = logs
+      .filter(
+        (log) =>
+          log.location?.gardenTitle === selectedLocations.garden &&
+          log.location?.bedTitle === bedName
+      )
+      .map(({ id }) => id);
+    if (matchingLogs.length > 0) {
+      dispatch(setLogsByLocation(matchingLogs));
+      setDisplayWarning(false);
+    } else {
+      setDisplayWarning(true);
+    }
   };
 
-  //consider consolidating the following two functions.
-  const renderGardens = ({ item }: { item: string }) => (
-    <Pressable onPress={() => filterByGarden(item)}>
+  const displayGardens = !(bedIds.length > 0);
+  const area = ({ item }: { item: string }) => (
+    <Pressable
+      onPress={() =>
+        displayGardens ? filterByGarden(item) : filterByBed(item)
+      }
+    >
       <Text style={styles.modalText}>{item}</Text>
     </Pressable>
   );
 
-  const renderBeds = ({ item }: { item: BedNormalised }) => (
-    <Pressable onPress={() => filterByBed(item.name)}>
-      <Text style={styles.modalText}>{item.name}</Text>
-    </Pressable>
-  );
-
-  const resetMenu = () => {
-    setSelectedGardenId("");
-    setSelectedLocations([]);
-    setLogsFilteredByLocation([]);
+  const resetFilter = () => {
+    setBedIds([]);
+    setSelectedLocations({ garden: null, bed: null });
+    dispatch(setLogsByLocation([]));
   };
 
   const con = () => {
-    console.log("selectedBeds", selectedBeds);
-    console.log("selectedGardenId", selectedGardenId);
     console.log("selectedLocations", selectedLocations);
+    console.log("bedsList", bedsList);
   };
 
-  const gardenNamesList = gardens.map((garden) => garden.name);
+  const gardensList = gardens.map((garden) => garden.name);
+
+  const createGardenId = (gardenName: string) => {
+    const garden = gardens.find((garden) => garden.name === gardenName);
+    setBedIds(garden?.beds ?? []);
+  };
+
+  const bedsList: string[] = useAppSelector((state) => {
+    if (bedIds) {
+      return bedSelectors.selectByIds(state, bedIds).map(({ name }) => name);
+    }
+    return [];
+  });
+
+  const Warning = () =>
+    displayWarning ? (
+      <View>
+        <Text>Selected area does not contain logs.</Text>
+      </View>
+    ) : null;
 
   return (
-    <View style={styles.centeredView}>
-      <Modal animationType="slide" visible={modalVisible}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            {!selectedGardenId ? (
+    <View>
+      <View style={styles.centeredView}>
+        <Modal animationType="slide" visible={modalVisible}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
               <FlatList
-                data={gardenNamesList}
-                keyExtractor={(index) => index}
-                renderItem={renderGardens}
+                data={displayGardens ? gardensList : bedsList}
+                keyExtractor={(name) => name}
+                renderItem={area}
               />
-            ) : (
-              <FlatList
-                data={selectedBeds}
-                keyExtractor={(index) => index.id}
-                renderItem={renderBeds}
-              />
-            )}
-            <Text>Filter by {selectedLocations}</Text>
-            <Button title="reset" onPress={resetMenu} />
-            <Button title="con" onPress={con} />
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
+              <Warning />
+              <Text style={{ fontSize: 20 }}>
+                Filter by {selectedLocations.garden}{" "}
+                {selectedLocations.bed && `& ${selectedLocations.bed}`}
+              </Text>
+              <Button title="con" onPress={con} />
+              <Pressable
+                style={[styles.button, styles.buttonClose, { marginBottom: 5 }]}
+                onPress={resetFilter}
+              >
+                <Text style={styles.textStyle}>Reset Filter</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>Hide Modal</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      </View>
       <Pressable
         style={styles.buttonOpen}
         onPress={() => setModalVisible(true)}
@@ -167,6 +175,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "black",
   },
+  list: {
+    fontSize: 20,
+  },
   button: {
     borderRadius: 20,
     padding: 10,
@@ -186,5 +197,6 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
+    fontSize: 20,
   },
 });

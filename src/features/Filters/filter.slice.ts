@@ -4,11 +4,12 @@ interface filterState {
   activeFilter: boolean;
   logsByTag: string[];
   filterByDate: boolean;
-  filterByPic: boolean;
   logsBydate: string[];
+  logsByLocation: string[];
+  filterByPic: boolean;
   logsWithPics: string[];
   filteredLogs: string[];
-  // [key: string]: boolean | string[];
+  [key: string]: boolean | string[];
 }
 
 const initialState: filterState = {
@@ -16,8 +17,10 @@ const initialState: filterState = {
   logsByTag: [],
   filterByDate: false,
   logsBydate: [],
+  logsByLocation: [],
   filterByPic: false,
   logsWithPics: [],
+
   filteredLogs: [],
 };
 
@@ -26,9 +29,12 @@ export const filterSlice = createSlice({
   initialState,
   reducers: {
     // switchActiveFilter: (state) => {
-    //   const { activeFilter, ...rest } = state;
+    //   const { activeFilter, logsByTag, logsBydate, logsWithPics, ...rest } =
+    //     state;
     //   console.log("state", state);
     //   const areAllPropsSame = Object.entries(rest).every(([key, value]) => {
+    //     console.log("key", key, "value", value);
+    //     console.log("logs**", state.logsByTag);
     //     return value === initialState[key];
     //   });
     //   console.log("props", areAllPropsSame);
@@ -47,6 +53,9 @@ export const filterSlice = createSlice({
       state.filterByDate = false;
       state.logsBydate = [];
     },
+    setLogsByLocation: (state, action) => {
+      state.logsByLocation = action.payload;
+    },
     switchFilterByPic: (state, action) => {
       state.filterByPic = action.payload;
     },
@@ -62,7 +71,12 @@ export const filterSlice = createSlice({
           }
         });
       };
-      addIfOccupied(state.logsBydate, state.logsWithPics, state.logsByTag);
+      addIfOccupied(
+        state.logsBydate,
+        state.logsWithPics,
+        state.logsByTag,
+        state.logsByLocation
+      );
 
       const flattenedArr = occupiedArrs.flat();
       const matchingElements = flattenedArr.filter((item) => {
@@ -81,10 +95,12 @@ export const filterSlice = createSlice({
 });
 
 export const {
+  // switchActiveFilter,
   setLogsByTag,
   switchFilterByDate,
   setLogsByDate,
   resetDateFilters,
+  setLogsByLocation,
   switchFilterByPic,
   setLogsWithPics,
   filterLogs,

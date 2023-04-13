@@ -72,12 +72,6 @@ export const TagsFilterModal: React.FC<{
     console.log("**filteredList", filteredIds);
   };
 
-  const resetAndGoBack = () => {
-    //fix below. See Asana subtask for TimlineFilters.
-    setSelectedTags([]);
-    setModalVisible(!modalVisible);
-  };
-
   const con = () => {
     console.log("tagsToFilter", selectedTags);
   };
@@ -122,7 +116,7 @@ export const TagsFilterModal: React.FC<{
             <Button title="con" onPress={con} />
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={resetAndGoBack}
+              onPress={() => setSelectedTags([])}
             >
               <Text style={styles.textStyle}>Reset Filters</Text>
             </Pressable>

@@ -7,34 +7,44 @@ import { Button, Divider } from "react-native-elements";
 import { convertToTag } from "../../components/Tags/Tag.utils";
 import { TagElement } from "../../components/Tags/TagElement";
 import { Text, View } from "../../components/Themed";
-import { Tag, VeggieLogNormalised } from "../../features/entity.types";
-import { filterLogs, resetFilters } from "../../features/Filters/filter.slice";
+import { Tag } from "../../features/entity.types";
+import {
+  filterLogs,
+  resetFilters,
+  setLogsByLocation, // switchActiveFilter,
+} from "../../features/Filters/filter.slice";
 import { logSelectors } from "../../features/log/log.slice";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { DateFilter, DateRangeObj } from "./DateFilter";
-import { LocationFilter } from "./LocationFilter";
+import { LocationFilter, SelectedLocationsObj } from "./LocationFilter";
 import { PhotoFilter } from "./PhotoFilter";
 import { TagsFilterModal } from "./TagsFilterModal";
 
 export const FilterModal = () => {
-  // const filterState = useAppSelector((state) => state.filters);
   const globalLogs = useAppSelector(logSelectors.selectAll);
   const dispatch = useAppDispatch();
   const activeFilter = useAppSelector((state) => state.filters.activeFilter);
   const logsByTag = useAppSelector((state) => state.filters.logsByTag);
+  const logsByLocation = useAppSelector(
+    (state) => state.filters.logsByLocation
+  );
   const filterByDate = useAppSelector((state) => state.filters.filterByDate);
   const filterByPic = useAppSelector((state) => state.filters.filterByPic);
   const logsByDate = useAppSelector((state) => state.filters.logsBydate);
   const logsWithPic = useAppSelector((state) => state.filters.logsWithPics);
   const filteredLogs = useAppSelector((state) => state.filters.filteredLogs);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedLocations, setSelectedlocations] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedLocations, setSelectedlocations] =
+    useState<SelectedLocationsObj>({
+      garden: null,
+      bed: null,
+    });
   const [dateRange, setDateRange] = useState<DateRangeObj>({
     startingDate: null,
     endingDate: null,
   });
-  //create none element and move side effect there??
+
   // useEffect(() => {
   //   dispatch(switchActiveFilter());
   //   console.log("render");
@@ -43,10 +53,6 @@ export const FilterModal = () => {
   //   dispatch(switchActiveFilter());
   //   console.log("render");
   // }, [filterByDate, filterByPic]);
-
-  const [logsFilteredByLocation, setLogsFilteredByLocation] = useState<
-    VeggieLogNormalised[]
-  >([]);
 
   const renderTags = ({ item }: { item: Tag }) => {
     return <TagElement tag={item} hideIcon />;
@@ -67,9 +73,9 @@ export const FilterModal = () => {
   };
 
   const con = () => {
-    // console.log("log", globalLogs[0]);
     console.log("logsByDate", logsByDate);
     console.log("logsWithPic", logsWithPic);
+    console.log("logByLocation", logsByLocation);
     // dispatch(switchActiveFilter());
     console.log("logsByTag", logsByTag);
     // console.log("filterByPic", filterByPic);
@@ -142,17 +148,26 @@ export const FilterModal = () => {
                 maxWidth: 100,
               }}
             >
-              <LocationFilter
-                setLogsFilteredByLocation={setLogsFilteredByLocation}
-                setSelectedLocations={setSelectedlocations}
-                selectedLocations={selectedLocations}
-              />
-              <FlatList
-                data={selectedLocations}
-                horizontal
-                keyExtractor={(index) => index}
-                renderItem={({ item }) => <Text>{item}</Text>}
-              />
+              <View
+                style={{
+                  flexDirection: "row",
+                  minWidth: 200,
+                }}
+              >
+                <LocationFilter
+                  selectedLocations={selectedLocations}
+                  setSelectedLocations={setSelectedlocations}
+                />
+                <Text
+                  style={{
+                    flexDirection: "row",
+                    fontSize: 20,
+                  }}
+                >
+                  {selectedLocations.garden}{" "}
+                  {selectedLocations.bed && `& ${selectedLocations.bed}`}
+                </Text>
+              </View>
             </View>
             <Divider />
             <PhotoFilter />

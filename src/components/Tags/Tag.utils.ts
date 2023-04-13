@@ -7,29 +7,29 @@ export const DefaultTagsList: string[] = [
   "seedling",
 ];
 
-export const convertToTag = (tag: string) => {
-  switch (tag) {
+export const convertToTag = (tagName: string) => {
+  switch (tagName) {
     case "pests":
       return {
-        tagLabel: tag,
+        tagLabel: tagName,
         tagColor: "#FF5A33",
         tagIcon: "pest",
       };
     case "disease":
       return {
-        tagLabel: tag,
+        tagLabel: tagName,
         tagColor: "#633c15",
         tagIcon: "disease",
       };
     case "sowed":
       return {
-        tagLabel: tag,
+        tagLabel: tagName,
         tagColor: "#B4CF66",
         tagIcon: "seed",
       };
     case "seedling":
       return {
-        tagLabel: tag,
+        tagLabel: tagName,
         tagColor: "#44803F",
         tagIcon: "seedling",
       };
