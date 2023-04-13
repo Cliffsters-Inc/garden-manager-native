@@ -8,11 +8,7 @@ import { convertToTag } from "../../components/Tags/Tag.utils";
 import { TagElement } from "../../components/Tags/TagElement";
 import { Text, View } from "../../components/Themed";
 import { Tag } from "../../features/entity.types";
-import {
-  filterLogs,
-  resetFilters,
-  setLogsByLocation, // switchActiveFilter,
-} from "../../features/Filters/filter.slice";
+import { filterLogs, resetFilters } from "../../features/Filters/filter.slice";
 import { logSelectors } from "../../features/log/log.slice";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { DateFilter, DateRangeObj } from "./DateFilter";
@@ -60,9 +56,14 @@ export const FilterModal = () => {
 
   const clearFilters = () => {
     dispatch(resetFilters());
+    setSelectedTags([]);
     setDateRange({
       startingDate: null,
       endingDate: null,
+    });
+    setSelectedlocations({
+      garden: null,
+      bed: null,
     });
   };
 
