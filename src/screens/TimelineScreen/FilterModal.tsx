@@ -28,7 +28,9 @@ export const FilterModal = () => {
   const filterByPic = useAppSelector((state) => state.filters.filterByPic);
   const logsByDate = useAppSelector((state) => state.filters.logsBydate);
   const logsWithPic = useAppSelector((state) => state.filters.logsWithPics);
-  const filteredLogs = useAppSelector((state) => state.filters.filteredLogs);
+  const filteredLogIds = useAppSelector(
+    (state) => state.filters.filteredLogIds
+  );
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedLocations, setSelectedlocations] =
@@ -81,7 +83,7 @@ export const FilterModal = () => {
     console.log("logsByTag", logsByTag);
     // console.log("filterByPic", filterByPic);
     // console.log("activeFilter", activeFilter);
-    console.log("filteredLogs", filteredLogs);
+    console.log("filteredLogs", filteredLogIds);
   };
 
   const tagsToDisplay = selectedTags.map((tagName) => convertToTag(tagName));

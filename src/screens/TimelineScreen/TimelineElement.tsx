@@ -16,13 +16,21 @@ import { useAppSelector } from "../../store";
 
 export const TimelineElement = () => {
   const globalLogs = useAppSelector(logSelectors.selectAll);
-  const activeFilter = useAppSelector((state) => state.filters.activeFilter);
-  const filteredLogs = useAppSelector((state) => state.filters.filteredLogs);
-  const logsToMap = activeFilter ? filteredLogs : globalLogs;
+  // const activeFilter = useAppSelector((state) => state.filters.activeFilter);
+  const activeFilter = true;
+  const filteredLogIds = useAppSelector(
+    (state) => state.filters.filteredLogIds
+  );
   const [showAllText, setShowAllText] = useState<{ [key: string]: boolean }>(
     {}
   );
-  // console.log("**********logsToMap************", logsToMap);
+
+  const filteredLogs: VeggieLogNormalised[] = useAppSelector((state) =>
+    logSelectors.selectByIds(state, filteredLogIds)
+  );
+  const timelineLogs = activeFilter ? filteredLogs : globalLogs;
+  console.log("***Logs***", filteredLogs);
+
   const assignIcon = (iconName: string) => {
     switch (iconName) {
       case "pests":
@@ -66,26 +74,26 @@ export const TimelineElement = () => {
     );
   };
 
-  const timelineData = logsToMap?.map((log, i: number) => {
-    const logTime = format(new Date(log.date), "d MMM yy");
-    const logDescription = createDescription(log, i.toString());
-    const hasTag = log.payloadTags.length > 0;
-    const logIcon = hasTag
-      ? assignIcon(log.payloadTags[0]!.tagLabel)
-      : assignIcon("generic");
+  const entryData = timelineLogs?.map((log, i: number) => {
+    const date = format(new Date(log.date), "d MMM yy");
+    const text = createDescription(log, i.toString());
+
+    const hasTag = log.payloadTags && log.payloadTags.length > 0;
+    const firstTag = hasTag ? log.payloadTags[0]!.tagLabel : "";
+    const tag = hasTag ? assignIcon(firstTag) : assignIcon("generic");
 
     return {
-      time: logTime,
-      description: logDescription,
-      icon: logIcon,
+      time: date,
+      description: text,
+      icon: tag,
     };
   });
 
-  const hasLogs = logsToMap.length > 0;
+  const hasLogs = timelineLogs.length > 0;
   return hasLogs ? (
     <View style={styles.container}>
       <Timeline
-        data={timelineData}
+        data={entryData}
         style={styles.list}
         innerCircle="element"
         circleSize={20}

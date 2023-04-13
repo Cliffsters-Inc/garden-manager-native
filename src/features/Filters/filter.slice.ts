@@ -8,7 +8,7 @@ interface filterState {
   logsByLocation: string[];
   filterByPic: boolean;
   logsWithPics: string[];
-  filteredLogs: string[];
+  filteredLogIds: string[];
   [key: string]: boolean | string[];
 }
 
@@ -21,7 +21,7 @@ const initialState: filterState = {
   filterByPic: false,
   logsWithPics: [],
 
-  filteredLogs: [],
+  filteredLogIds: [],
 };
 
 export const filterSlice = createSlice({
@@ -84,7 +84,7 @@ export const filterSlice = createSlice({
       });
 
       const unique = [...new Set(matchingElements)];
-      state.filteredLogs = unique;
+      state.filteredLogIds = unique;
       // console.log("occ", occupiedArrs);
       // console.log("flat", flattenedArr);
       // console.log("matching", matchingElements);
