@@ -83,7 +83,7 @@ export const LocationFilter: React.FC<{
     console.log("bedsList", bedsList);
   };
 
-  const gardensList = gardens.map((garden) => garden.name);
+  const gardensList = gardens.map(({ name }) => name);
 
   const createGardenId = (gardenName: string) => {
     const garden = gardens.find((garden) => garden.name === gardenName);

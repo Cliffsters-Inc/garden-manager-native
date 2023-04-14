@@ -1,10 +1,11 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 interface filterState {
   activeFilter: boolean;
   logsByTag: string[];
   filterByDate: boolean;
   logsBydate: string[];
+  filterByLocation: boolean;
   logsByLocation: string[];
   filterByPic: boolean;
   logsWithPics: string[];
@@ -17,10 +18,10 @@ const initialState: filterState = {
   logsByTag: [],
   filterByDate: false,
   logsBydate: [],
+  filterByLocation: false,
   logsByLocation: [],
   filterByPic: false,
   logsWithPics: [],
-
   filteredLogIds: [],
 };
 
@@ -28,20 +29,17 @@ export const filterSlice = createSlice({
   name: "filters",
   initialState,
   reducers: {
-    // switchActiveFilter: (state) => {
-    //   const { activeFilter, logsByTag, logsBydate, logsWithPics, ...rest } =
-    //     state;
-    //   console.log("state", state);
-    //   const areAllPropsSame = Object.entries(rest).every(([key, value]) => {
-    //     console.log("key", key, "value", value);
-    //     console.log("logs**", state.logsByTag);
-    //     return value === initialState[key];
-    //   });
-    //   console.log("props", areAllPropsSame);
-    // },
+    switchActiveFilter: (state) => {
+      const { activeFilter, ...rest } = state;
+      console.log("state", state);
+      const propsSameValue = Object.entries(rest).every(([key, value]) => {
+        return JSON.stringify(value) === JSON.stringify(initialState[key]);
+      });
+      console.log("props same", propsSameValue);
+      state.activeFilter = !propsSameValue;
+    },
     setLogsByTag: (state, action) => {
       state.logsByTag = action.payload;
-      // console.log("test log state", initialState);
     },
     switchFilterByDate: (state, action) => {
       state.filterByDate = action.payload;
@@ -63,29 +61,33 @@ export const filterSlice = createSlice({
       state.logsWithPics = action.payload;
     },
     filterLogs: (state) => {
-      const occupiedArrs: string[][] = [];
-      const addIfOccupied = (...arrays: string[][]) => {
+      const activeFilters: string[][] = [];
+      const checkIfActive = (...arrays: string[][]) => {
         arrays.forEach((arr) => {
           if (arr.length > 0) {
-            occupiedArrs.push(arr);
+            activeFilters.push(arr);
+          }
+
+          if (state.filterByPic && state.logsWithPics.length === 0) {
+            activeFilters.push(state.logsWithPics);
           }
         });
       };
-      addIfOccupied(
+      checkIfActive(
         state.logsBydate,
         state.logsWithPics,
         state.logsByTag,
         state.logsByLocation
       );
 
-      const flattenedArr = occupiedArrs.flat();
+      const flattenedArr = activeFilters.flat();
       const matchingElements = flattenedArr.filter((item) => {
-        return occupiedArrs.every((subArr) => subArr.includes(item));
+        return activeFilters.every((subArr) => subArr.includes(item));
       });
 
       const unique = [...new Set(matchingElements)];
       state.filteredLogIds = unique;
-      // console.log("occ", occupiedArrs);
+      // console.log("occ", activeFilters);
       // console.log("flat", flattenedArr);
       // console.log("matching", matchingElements);
       // console.log("unique", unique);
@@ -95,7 +97,7 @@ export const filterSlice = createSlice({
 });
 
 export const {
-  // switchActiveFilter,
+  switchActiveFilter,
   setLogsByTag,
   switchFilterByDate,
   setLogsByDate,

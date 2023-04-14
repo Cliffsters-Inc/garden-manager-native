@@ -16,8 +16,7 @@ import { useAppSelector } from "../../store";
 
 export const TimelineElement = () => {
   const globalLogs = useAppSelector(logSelectors.selectAll);
-  // const activeFilter = useAppSelector((state) => state.filters.activeFilter);
-  const activeFilter = true;
+  const activeFilter = useAppSelector((state) => state.filters.activeFilter);
   const filteredLogIds = useAppSelector(
     (state) => state.filters.filteredLogIds
   );
@@ -26,8 +25,9 @@ export const TimelineElement = () => {
   );
 
   const filteredLogs: VeggieLogNormalised[] = useAppSelector((state) =>
-    logSelectors.selectByIds(state, filteredLogIds)
+    filteredLogIds ? logSelectors.selectByIds(state, filteredLogIds) : []
   );
+
   const timelineLogs = activeFilter ? filteredLogs : globalLogs;
   console.log("***Logs***", filteredLogs);
 

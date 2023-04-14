@@ -8,7 +8,11 @@ import { convertToTag } from "../../components/Tags/Tag.utils";
 import { TagElement } from "../../components/Tags/TagElement";
 import { Text, View } from "../../components/Themed";
 import { Tag } from "../../features/entity.types";
-import { filterLogs, resetFilters } from "../../features/Filters/filter.slice";
+import {
+  filterLogs,
+  resetFilters,
+  switchActiveFilter,
+} from "../../features/Filters/filter.slice";
 import { logSelectors } from "../../features/log/log.slice";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { DateFilter, DateRangeObj } from "./DateFilter";
@@ -43,14 +47,10 @@ export const FilterModal = () => {
     endingDate: null,
   });
 
-  // useEffect(() => {
-  //   dispatch(switchActiveFilter());
-  //   console.log("render");
-  // }, [logsByDate, filterByPic]);
-  // useEffect(() => {
-  //   dispatch(switchActiveFilter());
-  //   console.log("render");
-  // }, [filterByDate, filterByPic]);
+  useEffect(() => {
+    dispatch(switchActiveFilter());
+    console.log("switch active filter");
+  }, [logsByTag, logsByLocation, logsByDate, filterByPic]);
 
   const renderTags = ({ item }: { item: Tag }) => {
     return <TagElement tag={item} hideIcon />;
@@ -82,8 +82,8 @@ export const FilterModal = () => {
     // dispatch(switchActiveFilter());
     console.log("logsByTag", logsByTag);
     // console.log("filterByPic", filterByPic);
-    // console.log("activeFilter", activeFilter);
     console.log("filteredLogs", filteredLogIds);
+    console.log("activeFilter", activeFilter);
   };
 
   const tagsToDisplay = selectedTags.map((tagName) => convertToTag(tagName));
