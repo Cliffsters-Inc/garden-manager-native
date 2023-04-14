@@ -1,26 +1,34 @@
-import { StyleSheet } from "react-native";
-import { Button } from "react-native-elements";
+import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
+import { Pressable, StyleSheet } from "react-native";
+import { Text } from "react-native-elements";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { View } from "../../components/Themed";
-import { TimelineScreenProps } from "../../navigation/navigation.types";
 import { FilterModal } from "./FilterModal";
 import { TimelineElement } from "./TimelineElement";
 
-export const TimelineScreen = ({
-  navigation,
-}: TimelineScreenProps<"TimelineScreen">) => {
-  const con = () => {
-    // console.log("globalLogs", globalLogs);
-    // console.log("filteredLogs", filteredLogs);
-  };
+export const TimelineScreen = () => {
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <View style={styles.container}>
-      <Button title="con" onPress={con} />
       <View style={styles.filter}>
-        <FilterModal />
+        <Pressable
+          style={[styles.button]}
+          onPress={() => setModalVisible(true)}
+        >
+          <Ionicons name="filter" size={24} color="black" />
+          <Text style={styles.buttonText}>Filters</Text>
+        </Pressable>
+        <FilterModal
+          setModalVisible={setModalVisible}
+          modalVisible={modalVisible}
+        />
       </View>
-      <TimelineElement />
+      <View style={styles.timeline}>
+        <TimelineElement />
+      </View>
     </View>
   );
 };
@@ -30,7 +38,27 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   filter: {
-    height: 100,
-    // backgroundColor: "red",
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-end",
+  },
+  timeline: {
+    flex: 15,
+  },
+  button: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    backgroundColor: "#D3D3D3",
+    marginTop: 15,
+    marginRight: 15,
+    borderRadius: 20,
+    padding: 1,
+    width: 100,
+  },
+  buttonText: {
+    marginLeft: 5,
+    marginTop: 4,
   },
 });

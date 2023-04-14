@@ -1,4 +1,4 @@
-import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet } from "react-native";
@@ -20,7 +20,10 @@ import { LocationFilter, SelectedLocationsObj } from "./LocationFilter";
 import { PhotoFilter } from "./PhotoFilter";
 import { TagsFilterModal } from "./TagsFilterModal";
 
-export const FilterModal = () => {
+export const FilterModal: React.FC<{
+  modalVisible: boolean;
+  setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ modalVisible, setModalVisible }) => {
   const globalLogs = useAppSelector(logSelectors.selectAll);
   const dispatch = useAppDispatch();
   const activeFilter = useAppSelector((state) => state.filters.activeFilter);
@@ -35,7 +38,6 @@ export const FilterModal = () => {
   const filteredLogIds = useAppSelector(
     (state) => state.filters.filteredLogIds
   );
-  const [modalVisible, setModalVisible] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedLocations, setSelectedlocations] =
     useState<SelectedLocationsObj>({
@@ -72,7 +74,7 @@ export const FilterModal = () => {
   const filter = () => {
     console.log("filtering...");
     dispatch(filterLogs());
-    setModalVisible(!modalVisible);
+    setModalVisible(false);
   };
 
   const con = () => {
@@ -184,12 +186,6 @@ export const FilterModal = () => {
           </View>
         </View>
       </Modal>
-      <Pressable
-        style={[styles.button, styles.buttonOpen]}
-        onPress={() => setModalVisible(true)}
-      >
-        <Ionicons name="filter" size={24} color="black" />
-      </Pressable>
     </View>
   );
 };
