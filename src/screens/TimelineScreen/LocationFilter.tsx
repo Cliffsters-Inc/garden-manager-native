@@ -8,6 +8,7 @@ import { setLogsByLocation } from "../../features/Filters/filter.slice";
 import { gardenSelectors } from "../../features/garden/garden.slice";
 import { logSelectors } from "../../features/log/log.slice";
 import { useAppDispatch, useAppSelector } from "../../store";
+import { RangeSelector } from "../FilterModal/RangeSelector";
 
 export interface SelectedLocationsObj {
   garden: string | null;
@@ -26,6 +27,8 @@ export const LocationFilter: React.FC<{
   const [modalVisible, setModalVisible] = useState(false);
   const [displayWarning, setDisplayWarning] = useState(false);
   const [bedIds, setBedIds] = useState<string[]>([]);
+  const garden = selectedLocations.garden ? selectedLocations.garden : "";
+  const bed = selectedLocations.bed ? selectedLocations.bed : "";
 
   const filterByGarden = (gardenName: string) => {
     setSelectedLocations({ ...selectedLocations, garden: gardenName });
@@ -104,6 +107,21 @@ export const LocationFilter: React.FC<{
       </View>
     ) : null;
 
+  const locations = [garden, bed];
+  const locationsText = ({ item }: { item: string }) => (
+    //why arnt styles below working??
+    <Text>{item}</Text>
+  );
+  const seperator = () => (garden && bed !== "" ? <Text> & </Text> : <Text />);
+  const renderedList = (
+    <FlatList
+      data={locations}
+      renderItem={locationsText}
+      ItemSeparatorComponent={seperator}
+      horizontal
+    />
+  );
+
   return (
     <View>
       <View style={styles.centeredView}>
@@ -117,8 +135,7 @@ export const LocationFilter: React.FC<{
               />
               <Warning />
               <Text style={{ fontSize: 20 }}>
-                Filter by {selectedLocations.garden}{" "}
-                {selectedLocations.bed && `& ${selectedLocations.bed}`}
+                Filter by {garden} {selectedLocations.bed && `& ${bed}`}
               </Text>
               <Button title="con" onPress={con} />
               <Pressable
@@ -137,12 +154,11 @@ export const LocationFilter: React.FC<{
           </View>
         </Modal>
       </View>
-      <Pressable
-        style={styles.buttonOpen}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.textStyle}>Location</Text>
-      </Pressable>
+      <RangeSelector
+        name="Location"
+        handlePress={() => setModalVisible(true)}
+        list={renderedList}
+      />
     </View>
   );
 };
@@ -150,13 +166,11 @@ export const LocationFilter: React.FC<{
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
+    display: "flex",
     justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
+    marginHorizontal: 40,
   },
   modalView: {
-    margin: 20,
-    backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",

@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { useState } from "react";
-import { Modal, Pressable, StyleSheet } from "react-native";
+import { FlatList, Modal, Pressable, StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 
 import { Text, View } from "../../components/Themed";
@@ -11,6 +11,7 @@ import {
 } from "../../features/Filters/filter.slice";
 import { logSelectors } from "../../features/log/log.slice";
 import { useAppDispatch, useAppSelector } from "../../store";
+import { RangeSelector } from "../FilterModal/RangeSelector";
 import { DatePicker } from "./DatePicker";
 
 interface Props {
@@ -30,6 +31,13 @@ export const DateFilter = ({ dateRange, setDateRange }: Props) => {
   const [showModal, setShowModal] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const [selectingStartdate, setSelectingStartdate] = useState(true);
+  //can i use these values for replace others??
+  const startDate = dateRange.startingDate
+    ? format(dateRange.startingDate, "dd-MM-yyyy")
+    : "";
+  const endDate = dateRange.endingDate
+    ? format(dateRange.endingDate, "dd-MM-yyyy")
+    : "";
 
   const openStartDatePicker = () => {
     setSelectingStartdate(true);
@@ -55,6 +63,8 @@ export const DateFilter = ({ dateRange, setDateRange }: Props) => {
     dispatch(resetDateFilters());
   };
 
+  const emptyDateRange =
+    dateRange.startingDate === null && dateRange.endingDate === null;
   const dateFilter = () => {
     const logsToFilter = [...globalLogs];
     const logsInRange = logsToFilter
@@ -67,69 +77,76 @@ export const DateFilter = ({ dateRange, setDateRange }: Props) => {
       .map((log) => log.id);
     console.log("in range", logsInRange);
 
-    const emptyDateRange =
-      dateRange.startingDate === null && dateRange.endingDate === null;
     if (logsInRange.length > 0) {
-      console.log("range not empty", logsInRange.length);
       dispatch(setLogsByDate(logsInRange));
-      // dispatch(switchFilterByDate(true));
       setShowModal(!showModal);
       //add display warning for incorrect date range?
     } else if (emptyDateRange) {
-      console.log("empty");
-      // dispatch(setLogsByDate(logsInRange));
       setShowModal(!showModal);
     }
   };
 
+  const range = [startDate, endDate];
+  const rangeText = ({ item }: { item: string }) => <Text>{item}</Text>;
+  const seperator = () => (!emptyDateRange ? <Text> - </Text> : <Text />);
+  const renderedList = (
+    <FlatList
+      data={range}
+      renderItem={rangeText}
+      ItemSeparatorComponent={seperator}
+      horizontal
+    />
+  );
+
   const con = () => {
-    console.log("logsBydate", LogsByDate);
+    console.log("range", range);
+    // console.log("logsBydate", LogsByDate);
     // console.log("dateRange", dateRange);
     // console.log("selectingStartdate", selectingStartdate);
   };
 
   return (
-    <View style={styles.centeredView}>
-      <Modal
-        animationType="slide"
-        visible={showModal}
-        onRequestClose={() => {
-          setShowModal(!showModal);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text onPress={openStartDatePicker} style={styles.modalText}>
-              Start Date
-            </Text>
-            {dateRange.startingDate && (
-              <Text>{format(dateRange.startingDate!, "dd-MM-yyyy")}</Text>
-            )}
-            <Text onPress={openEndDatePicker} style={styles.modalText}>
-              End Date
-            </Text>
-            {dateRange.endingDate && (
-              <Text>{format(dateRange.endingDate!, "dd-MM-yyyy")}</Text>
-            )}
-            <Button title="con" onPress={con} />
-            <Button title="Reset Dates" onPress={clearDateRange} />
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={dateFilter}
-            >
-              <Text style={styles.textStyle}>Filter Dates</Text>
-            </Pressable>
+    <View>
+      <View style={styles.centeredView}>
+        <Modal
+          animationType="slide"
+          visible={showModal}
+          onRequestClose={() => {
+            setShowModal(!showModal);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text onPress={openStartDatePicker} style={styles.modalText}>
+                Start Date
+              </Text>
+              {dateRange.startingDate && <Text>{startDate}</Text>}
+              <Text onPress={openEndDatePicker} style={styles.modalText}>
+                End Date
+              </Text>
+              {dateRange.endingDate && <Text>{endDate}</Text>}
+              <Button title="con" onPress={con} />
+              <Button title="Reset Dates" onPress={clearDateRange} />
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={dateFilter}
+              >
+                <Text style={styles.textStyle}>Filter Dates</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
-        <DatePicker
-          showPicker={showPicker}
-          setShowPicker={setShowPicker}
-          createDateRange={createDateRange}
-        />
-      </Modal>
-      <Pressable onPress={() => setShowModal(true)}>
-        <Text style={styles.categorySelector}>Date Range</Text>
-      </Pressable>
+          <DatePicker
+            showPicker={showPicker}
+            setShowPicker={setShowPicker}
+            createDateRange={createDateRange}
+          />
+        </Modal>
+      </View>
+      <RangeSelector
+        name="Date"
+        handlePress={() => setShowModal(true)}
+        list={renderedList}
+      />
     </View>
   );
 };
@@ -139,7 +156,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    // marginTop: 22,
   },
   modalView: {
     margin: 20,

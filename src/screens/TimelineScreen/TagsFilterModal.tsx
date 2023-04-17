@@ -10,6 +10,7 @@ import { Tag } from "../../features/entity.types";
 import { setLogsByTag } from "../../features/Filters/filter.slice";
 import { logSelectors } from "../../features/log/log.slice";
 import { useAppDispatch, useAppSelector } from "../../store";
+import { RangeSelector } from "../FilterModal/RangeSelector";
 
 export const TagsFilterModal: React.FC<{
   selectedTags: string[];
@@ -30,7 +31,6 @@ export const TagsFilterModal: React.FC<{
     const tagsInLogs = uniqueTagObjs.map((label) => convertToTag(label));
     return tagsInLogs;
   };
-  const usedTags = listTagsInLogs();
 
   const toggleTag = (item: Tag, selected: boolean) => {
     if (!selected) {
@@ -42,22 +42,32 @@ export const TagsFilterModal: React.FC<{
       setSelectedTags(newList);
     }
   };
-  const renderTags = ({ item }: { item: Tag }) => {
+
+  const usedTags = listTagsInLogs();
+  const parentTags = selectedTags.map((tagLabel) => convertToTag(tagLabel));
+  const tag = (
+    { item }: { item: Tag },
+    displayType: "selectable" | "display"
+  ) => {
     const selected = selectedTags.includes(item.tagLabel);
-    return (
+    return displayType === "selectable" ? (
       <Pressable onPress={() => toggleTag(item, selected)}>
         <TagElement tag={item} />
-        <View
-          style={{
-            marginLeft: 200,
-            justifyContent: "flex-start",
-          }}
-        >
-          {selected && <FontAwesome5 name="check" size={24} color="black" />}
-        </View>
+        {selected && <FontAwesome5 name="check" size={24} color="black" />}
       </Pressable>
+    ) : (
+      <TagElement tag={item} hideIcon />
     );
   };
+
+  const renderedList = (
+    <FlatList
+      data={parentTags}
+      keyExtractor={(item) => item.tagLabel}
+      renderItem={({ item }) => tag({ item }, "display")}
+      horizontal
+    />
+  );
 
   const filterByTags = () => {
     const logsToFilter = [...globalLogs];
@@ -74,6 +84,7 @@ export const TagsFilterModal: React.FC<{
 
   const con = () => {
     console.log("tagsToFilter", selectedTags);
+    console.log("parentTags", parentTags);
   };
 
   return (
@@ -110,7 +121,7 @@ export const TagsFilterModal: React.FC<{
               <FlatList
                 data={usedTags}
                 keyExtractor={(item) => item.tagLabel}
-                renderItem={renderTags}
+                renderItem={({ item }) => tag({ item }, "selectable")}
               />
             </View>
             <Button title="con" onPress={con} />
@@ -123,12 +134,11 @@ export const TagsFilterModal: React.FC<{
           </View>
         </Modal>
       </View>
-      <Pressable
-        style={styles.buttonOpen}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.categorySelector}>Tags</Text>
-      </Pressable>
+      <RangeSelector
+        name="Tags"
+        handlePress={() => setModalVisible(true)}
+        list={renderedList}
+      />
     </View>
   );
 };
@@ -166,7 +176,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: "80%",
-    width: "90%",
+    width: "80%",
     // backgroundColor: "blue",
   },
   categorySelector: {

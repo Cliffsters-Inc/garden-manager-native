@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 200,
     minWidth: 60,
-    marginTop: 10,
+    // marginTop: 10,
   },
   label: {
     textTransform: "capitalize",
