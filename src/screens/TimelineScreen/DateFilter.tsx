@@ -1,37 +1,32 @@
 import { format } from "date-fns";
 import { useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet } from "react-native";
-import { Button } from "react-native-elements";
 
 import { Text, View } from "../../components/Themed";
 import {
   resetDateFilters,
   setLogsByDate,
-  switchFilterByDate,
 } from "../../features/Filters/filter.slice";
 import { logSelectors } from "../../features/log/log.slice";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { RangeSelector } from "../FilterModal/RangeSelector";
 import { DatePicker } from "./DatePicker";
 
-interface Props {
-  dateRange: DateRangeObj;
-  setDateRange: React.Dispatch<React.SetStateAction<DateRangeObj>>;
-}
-
 export type DateRangeObj = {
   startingDate: Date | null;
   endingDate: Date | null;
 };
 
-export const DateFilter = ({ dateRange, setDateRange }: Props) => {
+export const DateFilter: React.FC<{
+  dateRange: DateRangeObj;
+  setDateRange: React.Dispatch<React.SetStateAction<DateRangeObj>>;
+}> = ({ dateRange, setDateRange }) => {
   const dispatch = useAppDispatch();
   const globalLogs = useAppSelector(logSelectors.selectAll);
   const LogsByDate = useAppSelector((state) => state.filters.logsBydate);
   const [showModal, setShowModal] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const [selectingStartdate, setSelectingStartdate] = useState(true);
-  //can i use these values for replace others??
   const startDate = dateRange.startingDate
     ? format(dateRange.startingDate, "dd-MM-yyyy")
     : "";
@@ -86,14 +81,31 @@ export const DateFilter = ({ dateRange, setDateRange }: Props) => {
     }
   };
 
+  const RangeDisplay = () => (
+    <View style={styles.rangeDisplay}>
+      <Text onPress={openStartDatePicker} style={styles.picker}>
+        Start Date
+      </Text>
+      {dateRange.startingDate && <Text>{startDate}</Text>}
+      <Text onPress={openEndDatePicker} style={styles.picker}>
+        End Date
+      </Text>
+      {dateRange.endingDate && <Text>{endDate}</Text>}
+    </View>
+  );
+
   const range = [startDate, endDate];
-  const rangeText = ({ item }: { item: string }) => <Text>{item}</Text>;
-  const seperator = () => (!emptyDateRange ? <Text> - </Text> : <Text />);
+  const rangeText = ({ item }: { item: string }) => (
+    <Text style={styles.text}>{item}</Text>
+  );
+  const seperator = () =>
+    !emptyDateRange ? <Text style={styles.text}> - </Text> : <Text />;
   const renderedList = (
     <FlatList
       data={range}
       renderItem={rangeText}
       ItemSeparatorComponent={seperator}
+      style={{ marginLeft: 20 }}
       horizontal
     />
   );
@@ -107,41 +119,24 @@ export const DateFilter = ({ dateRange, setDateRange }: Props) => {
 
   return (
     <View>
-      <View style={styles.centeredView}>
-        <Modal
-          animationType="slide"
-          visible={showModal}
-          onRequestClose={() => {
-            setShowModal(!showModal);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text onPress={openStartDatePicker} style={styles.modalText}>
-                Start Date
-              </Text>
-              {dateRange.startingDate && <Text>{startDate}</Text>}
-              <Text onPress={openEndDatePicker} style={styles.modalText}>
-                End Date
-              </Text>
-              {dateRange.endingDate && <Text>{endDate}</Text>}
-              <Button title="con" onPress={con} />
-              <Button title="Reset Dates" onPress={clearDateRange} />
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={dateFilter}
-              >
-                <Text style={styles.textStyle}>Filter Dates</Text>
-              </Pressable>
-            </View>
+      <Modal animationType="slide" visible={showModal}>
+        <View style={styles.container}>
+          <View style={styles.modalView}>
+            <RangeDisplay />
+            <Pressable style={styles.button} onPress={dateFilter}>
+              <Text style={styles.buttonText}>Filter Dates</Text>
+            </Pressable>
+            <Pressable style={styles.button} onPress={clearDateRange}>
+              <Text style={styles.buttonText}>Reset Dates</Text>
+            </Pressable>
           </View>
           <DatePicker
             showPicker={showPicker}
             setShowPicker={setShowPicker}
             createDateRange={createDateRange}
           />
-        </Modal>
-      </View>
+        </View>
+      </Modal>
       <RangeSelector
         name="Date"
         handlePress={() => setShowModal(true)}
@@ -152,18 +147,20 @@ export const DateFilter = ({ dateRange, setDateRange }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  centeredView: {
+  container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-end",
     alignItems: "center",
-    // marginTop: 22,
+    marginHorizontal: 40,
+    marginBottom: 100,
   },
   modalView: {
-    margin: 20,
-    backgroundColor: "white",
+    height: 400,
+    width: 350,
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -173,28 +170,29 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  categorySelector: {
-    fontSize: 20,
+  rangeDisplay: {
+    marginBottom: 50,
   },
   button: {
+    width: 150,
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-  },
-  buttonOpen: {
-    // backgroundColor: "#F194FF",
-  },
-  buttonClose: {
+    marginBottom: 5,
     backgroundColor: "#2196F3",
   },
-  textStyle: {
-    // color: "white",
+  buttonText: {
+    color: "white",
     fontWeight: "bold",
-    // textAlign: "center",
+    textAlign: "center",
   },
-  modalText: {
+  picker: {
+    fontSize: 20,
     marginTop: 20,
     marginBottom: 15,
     textAlign: "center",
+  },
+  text: {
+    fontSize: 15,
   },
 });

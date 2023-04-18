@@ -1,7 +1,6 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
-import { Button } from "react-native-elements";
 
 import { convertToTag } from "../../components/Tags/Tag.utils";
 import { TagElement } from "../../components/Tags/TagElement";
@@ -52,22 +51,17 @@ export const TagsFilterModal: React.FC<{
     const selected = selectedTags.includes(item.tagLabel);
     return displayType === "selectable" ? (
       <Pressable onPress={() => toggleTag(item, selected)}>
-        <TagElement tag={item} />
-        {selected && <FontAwesome5 name="check" size={24} color="black" />}
+        <View style={styles.listContainer}>
+          <View style={{ marginRight: 30 }}>
+            <TagElement tag={item} />
+          </View>
+          {selected && <FontAwesome5 name="check" size={24} color="black" />}
+        </View>
       </Pressable>
     ) : (
       <TagElement tag={item} hideIcon />
     );
   };
-
-  const renderedList = (
-    <FlatList
-      data={parentTags}
-      keyExtractor={(item) => item.tagLabel}
-      renderItem={({ item }) => tag({ item }, "display")}
-      horizontal
-    />
-  );
 
   const filterByTags = () => {
     const logsToFilter = [...globalLogs];
@@ -82,6 +76,15 @@ export const TagsFilterModal: React.FC<{
     console.log("**filteredList", filteredIds);
   };
 
+  const renderedList = (
+    <FlatList
+      data={parentTags}
+      keyExtractor={(item) => item.tagLabel}
+      renderItem={({ item }) => tag({ item }, "display")}
+      horizontal
+    />
+  );
+
   const con = () => {
     console.log("tagsToFilter", selectedTags);
     console.log("parentTags", parentTags);
@@ -89,51 +92,27 @@ export const TagsFilterModal: React.FC<{
 
   return (
     <View>
-      <View style={styles.centeredView}>
-        <Modal animationType="slide" visible={modalVisible}>
-          <View
-            style={{
-              height: 100,
-              justifyContent: "flex-end",
-              backgroundColor: "green",
-            }}
-          >
-            <Text
-              onPress={() => setModalVisible(!modalVisible)}
-              style={{
-                fontSize: 20,
-              }}
-            >
-              Back
-            </Text>
-            <Text
-              onPress={filterByTags}
-              style={{
-                fontSize: 20,
-                marginLeft: "auto",
-              }}
-            >
-              Filter
-            </Text>
-          </View>
+      <Modal animationType="slide" visible={modalVisible}>
+        <View style={styles.container}>
           <View style={styles.modalView}>
-            <View style={styles.list}>
-              <FlatList
-                data={usedTags}
-                keyExtractor={(item) => item.tagLabel}
-                renderItem={({ item }) => tag({ item }, "selectable")}
-              />
-            </View>
-            <Button title="con" onPress={con} />
+            <FlatList
+              data={usedTags}
+              keyExtractor={(item) => item.tagLabel}
+              renderItem={({ item }) => tag({ item }, "selectable")}
+            />
+            {/* <Button title="con" onPress={con} /> */}
+            <Pressable style={styles.button} onPress={filterByTags}>
+              <Text style={styles.buttonText}>Filter Tags</Text>
+            </Pressable>
             <Pressable
-              style={[styles.button, styles.buttonClose]}
+              style={styles.button}
               onPress={() => setSelectedTags([])}
             >
-              <Text style={styles.textStyle}>Reset Filters</Text>
+              <Text style={styles.buttonText}>Reset Filters</Text>
             </Pressable>
           </View>
-        </Modal>
-      </View>
+        </View>
+      </Modal>
       <RangeSelector
         name="Tags"
         handlePress={() => setModalVisible(true)}
@@ -144,25 +123,21 @@ export const TagsFilterModal: React.FC<{
 };
 
 const styles = StyleSheet.create({
-  centeredView: {
-    flex: 0.5,
-    justifyContent: "center",
+  container: {
+    flex: 1,
+    justifyContent: "flex-end",
     alignItems: "center",
-    height: 400,
-    width: 200,
-    // marginTop: 22, backgroundColor: "red",
+    marginHorizontal: 40,
+    marginBottom: 100,
   },
   modalView: {
-    // justifyContent: "center",
+    height: 400,
+    width: 350,
+    justifyContent: "center",
     alignItems: "center",
-
-    height: "50%",
-    width: "90%",
-    margin: 20,
-    // backgroundColor: "red",
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    // alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -172,31 +147,21 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  list: {
-    justifyContent: "center",
-    alignItems: "center",
-    height: "80%",
-    width: "80%",
-    // backgroundColor: "blue",
-  },
-  categorySelector: {
-    fontSize: 20,
-    marginTop: 30,
-  },
   button: {
+    width: 150,
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-  },
-  buttonOpen: {
-    // backgroundColor: "#F194FF",
-  },
-  buttonClose: {
+    marginBottom: 5,
     backgroundColor: "#2196F3",
-    marginTop: 50,
   },
-  textStyle: {
+  buttonText: {
+    color: "white",
     fontWeight: "bold",
     textAlign: "center",
+  },
+  listContainer: {
+    flexDirection: "row",
+    margin: 10,
   },
 });

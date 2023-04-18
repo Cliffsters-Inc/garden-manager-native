@@ -85,7 +85,7 @@ export const FilterModal: React.FC<{
   return (
     <View>
       <Modal animationType="slide" visible={modalVisible}>
-        <View style={styles.centeredView}>
+        <View style={styles.container}>
           <View style={styles.modalView}>
             {/* <Button title="con" onPress={con} /> */}
             <ResetFilters
@@ -102,12 +102,11 @@ export const FilterModal: React.FC<{
               setSelectedLocations={setSelectedlocations}
             />
             <PhotoFilter />
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={filter}
-            >
-              <Text style={styles.textStyle}>Accept Filters</Text>
-            </Pressable>
+            <View style={styles.buttonContainer}>
+              <Pressable style={styles.button} onPress={filter}>
+                <Text style={styles.buttonText}>Accept Filters</Text>
+              </Pressable>
+            </View>
           </View>
         </View>
       </Modal>
@@ -116,22 +115,18 @@ export const FilterModal: React.FC<{
 };
 
 const styles = StyleSheet.create({
-  centeredView: {
+  container: {
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
-    height: 400,
     marginBottom: 100,
-    // backgroundColor: "blue",
   },
   modalView: {
-    height: "50%",
-    width: "90%",
-    margin: 20,
-    // backgroundColor: "red",
+    height: 400,
+    width: 350,
+    justifyContent: "center",
     borderRadius: 20,
     padding: 35,
-    // alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -141,25 +136,20 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  buttonContainer: {
+    alignItems: "center",
+  },
   button: {
+    width: 150,
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
+    marginTop: 80,
     backgroundColor: "#2196F3",
-    marginTop: 50,
   },
-  textStyle: {
+  buttonText: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
     textAlign: "center",
   },
 });

@@ -14,8 +14,13 @@ export const RangeSelector: React.FC<{
       <Pressable onPress={handlePress}>
         <Text style={styles.text}>{name}</Text>
       </Pressable>
-      <View style={styles.list}>{list}</View>
-      <AntDesign name="right" size={24} color="black" />
+      <View>{list}</View>
+      <AntDesign
+        name="right"
+        size={24}
+        color="black"
+        style={{ marginLeft: "auto" }}
+      />
     </View>
     <Divider color="black" />
   </>
@@ -29,11 +34,5 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-  },
-  list: {
-    display: "flex",
-    marginRight: "auto",
-    // width: "100%",
-    backgroundColor: "red",
   },
 });

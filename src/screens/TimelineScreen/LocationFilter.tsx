@@ -71,7 +71,7 @@ export const LocationFilter: React.FC<{
         displayGardens ? filterByGarden(item) : filterByBed(item)
       }
     >
-      <Text style={styles.modalText}>{item}</Text>
+      <Text style={styles.listItem}>{item}</Text>
     </Pressable>
   );
 
@@ -108,52 +108,52 @@ export const LocationFilter: React.FC<{
     ) : null;
 
   const locations = [garden, bed];
-  const locationsText = ({ item }: { item: string }) => (
-    //why arnt styles below working??
-    <Text>{item}</Text>
+  const locationItem = ({ item }: { item: string }) => (
+    <Text style={styles.text}>{item}</Text>
   );
-  const seperator = () => (garden && bed !== "" ? <Text> & </Text> : <Text />);
+  const seperator = () =>
+    garden && bed !== "" ? <Text style={styles.text}> & </Text> : <Text />;
   const renderedList = (
     <FlatList
       data={locations}
-      renderItem={locationsText}
+      renderItem={locationItem}
       ItemSeparatorComponent={seperator}
+      style={{ marginLeft: 20 }}
       horizontal
     />
   );
 
+  const FilterBy = () => (
+    <Text style={styles.filterBy}>
+      Filter by {garden} {selectedLocations.bed && `& ${bed}`}
+    </Text>
+  );
+
   return (
     <View>
-      <View style={styles.centeredView}>
-        <Modal animationType="slide" visible={modalVisible}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <FlatList
-                data={displayGardens ? gardensList : bedsList}
-                keyExtractor={(name) => name}
-                renderItem={area}
-              />
-              <Warning />
-              <Text style={{ fontSize: 20 }}>
-                Filter by {garden} {selectedLocations.bed && `& ${bed}`}
-              </Text>
-              <Button title="con" onPress={con} />
-              <Pressable
-                style={[styles.button, styles.buttonClose, { marginBottom: 5 }]}
-                onPress={resetFilter}
-              >
-                <Text style={styles.textStyle}>Reset Filter</Text>
-              </Pressable>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </Pressable>
-            </View>
+      <Modal animationType="slide" visible={modalVisible}>
+        <View style={styles.container}>
+          <View style={styles.modalView}>
+            <FlatList
+              data={displayGardens ? gardensList : bedsList}
+              keyExtractor={(name) => name}
+              renderItem={area}
+            />
+            <Warning />
+            <FilterBy />
+            {/* <Button title="con" onPress={con} /> */}
+            <Pressable style={styles.button} onPress={resetFilter}>
+              <Text style={styles.buttonText}>Reset Filter</Text>
+            </Pressable>
+            <Pressable
+              style={styles.button}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.buttonText}>Filter Locations</Text>
+            </Pressable>
           </View>
-        </Modal>
-      </View>
+        </View>
+      </Modal>
       <RangeSelector
         name="Location"
         handlePress={() => setModalVisible(true)}
@@ -164,16 +164,20 @@ export const LocationFilter: React.FC<{
 };
 
 const styles = StyleSheet.create({
-  centeredView: {
+  container: {
     flex: 1,
-    display: "flex",
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    alignItems: "center",
     marginHorizontal: 40,
+    marginBottom: 100,
   },
   modalView: {
+    height: 400,
+    width: 350,
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -183,34 +187,31 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  categorySelector: {
-    fontSize: 20,
-    marginTop: 30,
-    textAlign: "center",
-    color: "black",
-  },
-  list: {
-    fontSize: 20,
-  },
   button: {
+    width: 150,
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-  },
-  buttonOpen: {
-    // backgroundColor: "#F194FF",
-  },
-  buttonClose: {
+    marginBottom: 5,
     backgroundColor: "#2196F3",
   },
-  textStyle: {
-    // color: "white",
+  buttonText: {
+    color: "white",
     fontWeight: "bold",
-    // textAlign: "left",
-  },
-  modalText: {
-    marginBottom: 15,
     textAlign: "center",
+  },
+  listItem: {
+    marginBottom: 15,
+    padding: 5,
+    textAlign: "center",
+    fontSize: 20,
+    backgroundColor: "#D3D3D3",
+  },
+  filterBy: {
+    fontSize: 20,
+    marginVertical: 10,
+  },
+  text: {
     fontSize: 20,
   },
 });
