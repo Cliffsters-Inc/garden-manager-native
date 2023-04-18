@@ -79,6 +79,7 @@ export const LocationFilter: React.FC<{
     setBedIds([]);
     setSelectedLocations({ garden: null, bed: null });
     dispatch(setLogsByLocation([]));
+    setDisplayWarning(false);
   };
 
   const con = () => {
@@ -102,9 +103,7 @@ export const LocationFilter: React.FC<{
 
   const Warning = () =>
     displayWarning ? (
-      <View>
-        <Text>Selected area does not contain logs.</Text>
-      </View>
+      <Text style={styles.warning}>Selected area does not contain logs.</Text>
     ) : null;
 
   const locations = [garden, bed];
@@ -146,8 +145,13 @@ export const LocationFilter: React.FC<{
               <Text style={styles.buttonText}>Reset Filter</Text>
             </Pressable>
             <Pressable
-              style={styles.button}
+              style={
+                !displayWarning
+                  ? styles.button
+                  : [styles.button, styles.buttonDisabled]
+              }
               onPress={() => setModalVisible(!modalVisible)}
+              disabled={displayWarning}
             >
               <Text style={styles.buttonText}>Filter Locations</Text>
             </Pressable>
@@ -195,6 +199,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     backgroundColor: "#2196F3",
   },
+  buttonDisabled: {
+    opacity: 0.3,
+    // backgroundColor: "#ADD8E6",
+    // backgroundColor: "#F0F8FF",
+    // backgroundColor: "red",
+  },
   buttonText: {
     color: "white",
     fontWeight: "bold",
@@ -206,6 +216,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     backgroundColor: "#D3D3D3",
+  },
+  warning: {
+    color: "red",
+    fontSize: 15,
+    marginTop: 10,
   },
   filterBy: {
     fontSize: 20,
