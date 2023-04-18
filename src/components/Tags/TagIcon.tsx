@@ -1,4 +1,5 @@
 import {
+  FontAwesome,
   FontAwesome5,
   Ionicons,
   MaterialCommunityIcons,
@@ -43,7 +44,12 @@ export const TagIconElement = ({ iconColor, selectedIcon }: Props) => {
     {
       id: "seedling",
       name: "seedling",
-      icon: <FontAwesome5 name="seedling" size={20} color="black" />,
+      icon: <FontAwesome5 name="seedling" size={20} color={iconColor} />,
+    },
+    {
+      id: "default",
+      name: "default",
+      icon: <FontAwesome name="circle-o" size={20} color="black" />,
     },
   ];
 

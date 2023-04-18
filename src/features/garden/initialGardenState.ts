@@ -3,7 +3,7 @@ import { Garden } from "../entity.types";
 //****If you make changes here remember to clear storage to correctly test****
 export const initialGardenState: Garden[] = [
   {
-    name: "frontyard",
+    name: "Frontyard",
     id: "klj39sadg7sd98",
     beds: [
       {
@@ -19,7 +19,7 @@ export const initialGardenState: Garden[] = [
               {
                 id: "zv8RCeafO9OFQELDRcC",
                 date: 1652054400000,
-                location: { gardenTitle: "frontyard", bedTitle: "1" },
+                location: { gardenTitle: "Frontyard", bedTitle: "1" },
                 notes: "starting to sprout\n\nyey",
                 photos: { entities: [], loading: "pending" },
                 payloadTags: [
@@ -33,7 +33,7 @@ export const initialGardenState: Garden[] = [
               {
                 id: "utbyJ4pwA1F0TlRcMYYLw",
                 date: 1652251484254,
-                location: { gardenTitle: "frontyard", bedTitle: "1" },
+                location: { gardenTitle: "Frontyard", bedTitle: "1" },
                 notes: "bugs everywhere what do?",
                 photos: { entities: [], loading: "pending" },
                 payloadTags: [
@@ -59,7 +59,7 @@ export const initialGardenState: Garden[] = [
     ],
   },
   {
-    name: "backyard",
+    name: "Backyard",
     id: "nkjun4safgkkhg1",
     beds: [
       {

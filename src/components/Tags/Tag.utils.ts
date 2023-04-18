@@ -5,6 +5,7 @@ export const DefaultTagsList: string[] = [
   "disease",
   "sowed",
   "seedling",
+  "default",
 ];
 
 export const convertToTag = (tagName: string) => {
@@ -33,10 +34,17 @@ export const convertToTag = (tagName: string) => {
         tagColor: "#44803F",
         tagIcon: "seedling",
       };
+    case "default":
+      return {
+        tagLabel: "default",
+        tagColor: "#FFFFFF",
+        tagIcon: "default",
+      };
     default:
       return {
-        tagLabel: "",
+        tagLabel: "default",
         tagColor: "#FFFFFF",
+        tagIcon: "default",
       };
   }
 };

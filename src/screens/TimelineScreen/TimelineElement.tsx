@@ -1,14 +1,9 @@
-import {
-  FontAwesome,
-  FontAwesome5,
-  Ionicons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
 import { format } from "date-fns";
 import { useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
 import Timeline from "react-native-timeline-flatlist";
 
+import { TagIconElement } from "../../components/Tags/TagIcon";
 import { Text, View } from "../../components/Themed";
 import { VeggieLogNormalised } from "../../features/entity.types";
 import { logSelectors } from "../../features/log/log.slice";
@@ -29,30 +24,6 @@ export const TimelineElement = () => {
   );
 
   const timelineLogs = activeFilter ? filteredLogs : globalLogs;
-  console.log("***Logs***", filteredLogs);
-
-  const assignIcon = (iconName: string) => {
-    switch (iconName) {
-      case "pests":
-        return <Ionicons name="ios-bug-outline" size={20} color="#FF5A33" />;
-      case "disease":
-        return <FontAwesome5 name="virus" size={20} color="#633c15" />;
-      case "sowed":
-        return (
-          <MaterialCommunityIcons
-            name="seed-outline"
-            size={20}
-            color="#B4CF66"
-          />
-        );
-      case "seedling":
-        return <FontAwesome5 name="seedling" size={20} color="#44803F" />;
-      case "generic":
-        return <FontAwesome name="circle-o" size={20} color="black" />;
-      default:
-        return <FontAwesome name="circle-o" size={20} color="black" />;
-    }
-  };
 
   const createDescription = (log: VeggieLogNormalised, i: string) => {
     const onPress = () => {
@@ -78,9 +49,21 @@ export const TimelineElement = () => {
     const date = format(new Date(log.date), "d MMM yy");
     const text = createDescription(log, i.toString());
 
-    const hasTag = log.payloadTags && log.payloadTags.length > 0;
-    const firstTag = hasTag ? log.payloadTags[0]!.tagLabel : "";
-    const tag = hasTag ? assignIcon(firstTag) : assignIcon("generic");
+    const findFirstTag = () => {
+      if (log.payloadTags.length > 0) {
+        return log.payloadTags[0];
+      } else {
+        return {
+          tagLabel: "default",
+          tagColor: "#FFFFFF",
+          tagIcon: "default",
+        };
+      }
+    };
+    const firstTag = findFirstTag();
+    const iconColor = firstTag?.tagColor;
+    const selectedIcon = firstTag?.tagIcon;
+    const tag = TagIconElement({ iconColor, selectedIcon });
 
     return {
       time: date,
