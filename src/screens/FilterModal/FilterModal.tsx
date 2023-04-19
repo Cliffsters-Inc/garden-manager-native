@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Modal, Pressable, StyleSheet } from "react-native";
+import { Button } from "react-native-elements";
 
 import { Text, View } from "../../components/Themed";
 import {
@@ -72,13 +73,13 @@ export const FilterModal: React.FC<{
   };
 
   const con = () => {
-    console.log("logsByDate", logsByDate);
+    // console.log("logsByDate", logsByDate);
     console.log("logsWithPic", logsWithPic);
     console.log("logByLocation", logsByLocation);
     // dispatch(switchActiveFilter());
-    console.log("logsByTag", logsByTag);
+    // console.log("logsByTag", logsByTag);
     // console.log("filterByPic", filterByPic);
-    console.log("filteredLogs", filteredLogIds);
+    // console.log("filteredLogs", filteredLogIds);
     console.log("activeFilter", activeFilter);
   };
 
@@ -87,7 +88,7 @@ export const FilterModal: React.FC<{
       <Modal animationType="slide" visible={modalVisible}>
         <View style={styles.container}>
           <View style={styles.modalView}>
-            {/* <Button title="con" onPress={con} /> */}
+            <Button title="con" onPress={con} />
             <ResetFilters
               clearFilters={clearFilters}
               activeFilter={activeFilter}

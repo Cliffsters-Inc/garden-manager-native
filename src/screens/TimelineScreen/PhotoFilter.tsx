@@ -17,7 +17,7 @@ export const PhotoFilter = () => {
     dispatch(switchFilterByPic(!filterByPic));
   };
 
-  const filterByPhotos = () => {
+  const filterPhotos = () => {
     const logsToFilter = [...globalLogs];
     const logsWithPics = logsToFilter
       .filter((log) => log.photos.entities.length > 0)
@@ -28,9 +28,9 @@ export const PhotoFilter = () => {
 
   useEffect(() => {
     if (filterByPic) {
-      filterByPhotos();
+      filterPhotos();
     } else {
-      setLogsWithPics([]);
+      dispatch(setLogsWithPics([]));
     }
   }, [filterByPic]);
 
