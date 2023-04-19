@@ -22,7 +22,6 @@ export const PhotoFilter = () => {
     const logsWithPics = logsToFilter
       .filter((log) => log.photos.entities.length > 0)
       .map((log) => log.id);
-    console.log("logsWithPics", logsWithPics);
     dispatch(setLogsWithPics(logsWithPics));
   };
 

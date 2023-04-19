@@ -23,7 +23,6 @@ export const DateFilter: React.FC<{
 }> = ({ dateRange, setDateRange }) => {
   const dispatch = useAppDispatch();
   const globalLogs = useAppSelector(logSelectors.selectAll);
-  const LogsByDate = useAppSelector((state) => state.filters.logsBydate);
   const [showModal, setShowModal] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const [selectingStartdate, setSelectingStartdate] = useState(true);
@@ -44,7 +43,6 @@ export const DateFilter: React.FC<{
     setShowPicker(true);
   };
 
-  //would this be better if applied directly to button?
   const createDateRange = (date: Date) => {
     if (selectingStartdate) {
       setDateRange((prevState) => ({ ...prevState, startingDate: date }));
@@ -70,7 +68,6 @@ export const DateFilter: React.FC<{
           new Date(log.date) <= dateRange.endingDate!
       )
       .map((log) => log.id);
-    console.log("in range", logsInRange);
 
     if (logsInRange.length > 0) {
       dispatch(setLogsByDate(logsInRange));
@@ -109,13 +106,6 @@ export const DateFilter: React.FC<{
       horizontal
     />
   );
-
-  const con = () => {
-    console.log("range", range);
-    // console.log("logsBydate", LogsByDate);
-    // console.log("dateRange", dateRange);
-    // console.log("selectingStartdate", selectingStartdate);
-  };
 
   return (
     <View>

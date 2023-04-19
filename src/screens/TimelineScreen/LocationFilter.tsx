@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet } from "react-native";
-import { Button } from "react-native-elements";
 
 import { Text, View } from "../../components/Themed";
 import { bedSelectors } from "../../features/bed/bed.slice";
@@ -36,7 +35,6 @@ export const LocationFilter: React.FC<{
     const matchingLogs = logs
       .filter((log) => log.location?.gardenTitle === gardenName)
       .map(({ id }) => id);
-    console.log("garden lodt", matchingLogs);
     if (matchingLogs.length > 0) {
       dispatch(setLogsByLocation(matchingLogs));
       createGardenId(gardenName);
@@ -80,11 +78,6 @@ export const LocationFilter: React.FC<{
     setSelectedLocations({ garden: null, bed: null });
     dispatch(setLogsByLocation([]));
     setDisplayWarning(false);
-  };
-
-  const con = () => {
-    console.log("selectedLocations", selectedLocations);
-    console.log("bedsList", bedsList);
   };
 
   const gardensList = gardens.map(({ name }) => name);
@@ -140,7 +133,6 @@ export const LocationFilter: React.FC<{
             />
             <Warning />
             <FilterBy />
-            {/* <Button title="con" onPress={con} /> */}
             <Pressable
               style={
                 !displayWarning

@@ -31,11 +31,9 @@ export const filterSlice = createSlice({
   reducers: {
     switchActiveFilter: (state) => {
       const { activeFilter, filteredLogsIds, ...rest } = state;
-      console.log("state", state);
       const propsSameValue = Object.entries(rest).every(([key, value]) => {
         return JSON.stringify(value) === JSON.stringify(initialState[key]);
       });
-      console.log("props same", propsSameValue);
       state.activeFilter = !propsSameValue;
     },
     setLogsByTag: (state, action) => {
@@ -87,10 +85,6 @@ export const filterSlice = createSlice({
 
       const unique = [...new Set(matchingElements)];
       state.filteredLogsIds = unique;
-      // console.log("occ", activeFilters);
-      // console.log("flat", flattenedArr);
-      // console.log("matching", matchingElements);
-      // console.log("unique", unique);
     },
     resetFilters: () => initialState,
   },

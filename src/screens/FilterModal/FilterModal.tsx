@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Modal, Pressable, StyleSheet } from "react-native";
-import { Button } from "react-native-elements";
 
 import { Text, View } from "../../components/Themed";
 import {
@@ -8,7 +7,6 @@ import {
   resetFilters,
   switchActiveFilter,
 } from "../../features/Filters/filter.slice";
-import { logSelectors } from "../../features/log/log.slice";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { DateFilter, DateRangeObj } from "../TimelineScreen/DateFilter";
 import {
@@ -23,21 +21,15 @@ export const FilterModal: React.FC<{
   modalVisible: boolean;
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ modalVisible, setModalVisible }) => {
-  const globalLogs = useAppSelector(logSelectors.selectAll);
   const dispatch = useAppDispatch();
   const activeFilter = useAppSelector((state) => state.filters.activeFilter);
   const logsByTag = useAppSelector((state) => state.filters.logsByTag);
+  const filterByPic = useAppSelector((state) => state.filters.filterByPic);
+  const logsByDate = useAppSelector((state) => state.filters.logsBydate);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const logsByLocation = useAppSelector(
     (state) => state.filters.logsByLocation
   );
-  const filterByDate = useAppSelector((state) => state.filters.filterByDate);
-  const filterByPic = useAppSelector((state) => state.filters.filterByPic);
-  const logsByDate = useAppSelector((state) => state.filters.logsBydate);
-  const logsWithPic = useAppSelector((state) => state.filters.logsWithPics);
-  const filteredLogsIds = useAppSelector(
-    (state) => state.filters.filteredLogsIds
-  );
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedLocations, setSelectedlocations] =
     useState<SelectedLocationsObj>({
       garden: null,
@@ -50,7 +42,6 @@ export const FilterModal: React.FC<{
 
   useEffect(() => {
     dispatch(switchActiveFilter());
-    console.log("switch active filter");
   }, [logsByTag, logsByLocation, logsByDate, filterByPic]);
 
   const clearFilters = () => {
@@ -67,20 +58,8 @@ export const FilterModal: React.FC<{
   };
 
   const filter = () => {
-    console.log("filtering...");
     dispatch(filterLogs());
     setModalVisible(false);
-  };
-
-  const con = () => {
-    // console.log("logsByDate", logsByDate);
-    console.log("logsWithPic", logsWithPic);
-    console.log("logByLocation", logsByLocation);
-    // dispatch(switchActiveFilter());
-    // console.log("logsByTag", logsByTag);
-    // console.log("filterByPic", filterByPic);
-    // console.log("filteredLogs", filteredLogIds);
-    console.log("activeFilter", activeFilter);
   };
 
   return (
@@ -88,7 +67,6 @@ export const FilterModal: React.FC<{
       <Modal animationType="slide" visible={modalVisible}>
         <View style={styles.container}>
           <View style={styles.modalView}>
-            {/* <Button title="con" onPress={con} /> */}
             <ResetFilters
               clearFilters={clearFilters}
               activeFilter={activeFilter}

@@ -73,11 +73,9 @@ export const TagsFilterModal: React.FC<{
     const filteredIds = logsFilteredByTag.map((log) => log.id);
     dispatch(setLogsByTag(filteredIds));
     setModalVisible(!modalVisible);
-    console.log("**filteredList", filteredIds);
   };
 
   const renderedList = (
-    // <View style={{ paddingBottom: 2 }}>
     <View>
       <FlatList
         data={parentTags}
@@ -87,11 +85,6 @@ export const TagsFilterModal: React.FC<{
       />
     </View>
   );
-
-  const con = () => {
-    console.log("tagsToFilter", selectedTags);
-    console.log("parentTags", parentTags);
-  };
 
   return (
     <View>
@@ -103,7 +96,6 @@ export const TagsFilterModal: React.FC<{
               keyExtractor={(item) => item.tagLabel}
               renderItem={({ item }) => tag({ item }, "selectable")}
             />
-            {/* <Button title="con" onPress={con} /> */}
             <Pressable style={styles.button} onPress={filterByTags}>
               <Text style={styles.buttonText}>Filter Tags</Text>
             </Pressable>

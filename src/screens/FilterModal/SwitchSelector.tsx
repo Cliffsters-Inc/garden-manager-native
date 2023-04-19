@@ -1,6 +1,5 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Pressable, StyleSheet } from "react-native";
-import { Divider } from "react-native-elements";
 
 import { Text, View } from "../../components/Themed";
 
