@@ -9,31 +9,26 @@ export const SwitchSelector: React.FC<{
   handlePress: () => void;
   tickCondition: boolean;
 }> = ({ name, handlePress, tickCondition }) => (
-  <>
-    <View style={styles.container}>
-      <Pressable onPress={handlePress}>
-        <Text style={styles.text}>{name}</Text>
-      </Pressable>
-      <View style={styles.tick}>
-        {!tickCondition && (
-          <FontAwesome5 name="check" size={24} color="green" />
-        )}
-      </View>
+  <View style={styles.container}>
+    <Pressable onPress={handlePress}>
+      <Text style={styles.text}>{name}</Text>
+    </Pressable>
+    <View style={styles.tick}>
+      {!tickCondition && <FontAwesome5 name="check" size={24} color="green" />}
     </View>
-    <Divider color="black" />
-  </>
+  </View>
 );
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    marginTop: 10,
+    paddingTop: 8,
+    borderBottomWidth: 1,
   },
   text: {
     fontSize: 20,
   },
   tick: {
     marginLeft: "auto",
-    justifyContent: "flex-end",
   },
 });

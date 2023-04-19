@@ -105,7 +105,7 @@ export const DateFilter: React.FC<{
       data={range}
       renderItem={rangeText}
       ItemSeparatorComponent={seperator}
-      style={{ marginLeft: 20 }}
+      style={{ marginLeft: 15 }}
       horizontal
     />
   );
@@ -173,6 +173,12 @@ const styles = StyleSheet.create({
   rangeDisplay: {
     marginBottom: 50,
   },
+  picker: {
+    fontSize: 20,
+    marginTop: 20,
+    marginBottom: 15,
+    textAlign: "center",
+  },
   button: {
     width: 150,
     borderRadius: 20,
@@ -186,13 +192,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-  picker: {
-    fontSize: 20,
-    marginTop: 20,
-    marginBottom: 15,
-    textAlign: "center",
-  },
   text: {
-    fontSize: 15,
+    fontSize: 16,
   },
 });

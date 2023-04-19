@@ -9,28 +9,27 @@ export const RangeSelector: React.FC<{
   handlePress: () => void;
   list: JSX.Element;
 }> = ({ name, handlePress, list }) => (
-  <>
-    <View style={styles.container}>
-      <Pressable onPress={handlePress}>
-        <Text style={styles.text}>{name}</Text>
-      </Pressable>
-      <View>{list}</View>
-      <AntDesign
-        name="right"
-        size={24}
-        color="black"
-        style={{ marginLeft: "auto" }}
-      />
-    </View>
-    <Divider color="black" />
-  </>
+  <View style={styles.container}>
+    <Pressable onPress={handlePress}>
+      <Text style={styles.text}>{name}</Text>
+    </Pressable>
+    <View style={{ maxWidth: 210 }}>{list}</View>
+    <AntDesign
+      name="right"
+      size={24}
+      color="black"
+      style={{ marginLeft: "auto" }}
+    />
+  </View>
 );
 
 const styles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "row",
-    marginTop: 10,
+    paddingTop: 8,
+    // marginTop: 1,
+    borderBottomWidth: 1,
   },
   text: {
     fontSize: 20,

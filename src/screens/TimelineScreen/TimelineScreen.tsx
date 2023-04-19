@@ -38,8 +38,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   filter: {
-    flex: 1,
-    display: "flex",
     flexDirection: "column",
     alignItems: "flex-end",
   },

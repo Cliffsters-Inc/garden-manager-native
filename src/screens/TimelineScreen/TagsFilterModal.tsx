@@ -52,7 +52,7 @@ export const TagsFilterModal: React.FC<{
     return displayType === "selectable" ? (
       <Pressable onPress={() => toggleTag(item, selected)}>
         <View style={styles.listContainer}>
-          <View style={{ marginRight: 30 }}>
+          <View style={{ marginRight: 30, minWidth: 120 }}>
             <TagElement tag={item} />
           </View>
           {selected && <FontAwesome5 name="check" size={24} color="black" />}
@@ -77,12 +77,15 @@ export const TagsFilterModal: React.FC<{
   };
 
   const renderedList = (
-    <FlatList
-      data={parentTags}
-      keyExtractor={(item) => item.tagLabel}
-      renderItem={({ item }) => tag({ item }, "display")}
-      horizontal
-    />
+    // <View style={{ paddingBottom: 2 }}>
+    <View>
+      <FlatList
+        data={parentTags}
+        keyExtractor={(item) => item.tagLabel}
+        renderItem={({ item }) => tag({ item }, "display")}
+        horizontal
+      />
+    </View>
   );
 
   const con = () => {
@@ -162,6 +165,8 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flexDirection: "row",
+    minHeight: 25,
+    minWidth: 175,
     margin: 10,
   },
 });

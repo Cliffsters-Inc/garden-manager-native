@@ -52,8 +52,7 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
 
     borderRadius: 200,
-    minWidth: 60,
-    // marginTop: 10,
+    minWidth: 70,
   },
   label: {
     textTransform: "capitalize",

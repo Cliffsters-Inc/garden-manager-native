@@ -106,6 +106,12 @@ export const LocationFilter: React.FC<{
       <Text style={styles.warning}>Selected area does not contain logs.</Text>
     ) : null;
 
+  const FilterBy = () => (
+    <Text style={styles.filterBy}>
+      Filter by {garden} {selectedLocations.bed && `& ${bed}`}
+    </Text>
+  );
+
   const locations = [garden, bed];
   const locationItem = ({ item }: { item: string }) => (
     <Text style={styles.text}>{item}</Text>
@@ -117,15 +123,9 @@ export const LocationFilter: React.FC<{
       data={locations}
       renderItem={locationItem}
       ItemSeparatorComponent={seperator}
-      style={{ marginLeft: 20 }}
+      style={{ marginLeft: 15 }}
       horizontal
     />
-  );
-
-  const FilterBy = () => (
-    <Text style={styles.filterBy}>
-      Filter by {garden} {selectedLocations.bed && `& ${bed}`}
-    </Text>
   );
 
   return (
@@ -141,9 +141,6 @@ export const LocationFilter: React.FC<{
             <Warning />
             <FilterBy />
             {/* <Button title="con" onPress={con} /> */}
-            <Pressable style={styles.button} onPress={resetFilter}>
-              <Text style={styles.buttonText}>Reset Filter</Text>
-            </Pressable>
             <Pressable
               style={
                 !displayWarning
@@ -154,6 +151,9 @@ export const LocationFilter: React.FC<{
               disabled={displayWarning}
             >
               <Text style={styles.buttonText}>Filter Locations</Text>
+            </Pressable>
+            <Pressable style={styles.button} onPress={resetFilter}>
+              <Text style={styles.buttonText}>Reset Filter</Text>
             </Pressable>
           </View>
         </View>
@@ -172,7 +172,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
-    marginHorizontal: 40,
     marginBottom: 100,
   },
   modalView: {
@@ -201,9 +200,6 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: {
     opacity: 0.3,
-    // backgroundColor: "#ADD8E6",
-    // backgroundColor: "#F0F8FF",
-    // backgroundColor: "red",
   },
   buttonText: {
     color: "white",
@@ -227,6 +223,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   text: {
-    fontSize: 20,
+    fontSize: 18,
   },
 });

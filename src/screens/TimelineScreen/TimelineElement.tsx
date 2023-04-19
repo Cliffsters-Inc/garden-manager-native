@@ -88,8 +88,8 @@ export const TimelineElement = () => {
       />
     </View>
   ) : (
-    <View>
-      <Text>No Logs match selected filters.</Text>
+    <View style={styles.container}>
+      <Text style={styles.warning}>No Logs match selected filters.</Text>
     </View>
   );
 };
@@ -98,12 +98,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    // width: "100%",
+    justifyContent: "center",
   },
   list: {
-    flex: 1,
-    marginTop: 20,
     width: "100%",
+    marginTop: 20,
+    marginLeft: 25,
   },
   timeContainer: {
     minWidth: 80,
@@ -112,11 +112,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     backgroundColor: "#ff9797",
     color: "white",
+    fontWeight: "bold",
     padding: 6,
     borderRadius: 13,
   },
   detailContainer: {
-    textAlign: "center",
     backgroundColor: "#BBDAFF",
     marginVertical: 10,
     maxWidth: 180,
@@ -125,9 +125,13 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 2,
     borderRadius: 20,
-    padding: 10,
   },
   description: {
     textAlign: "center",
+    padding: 5,
+  },
+  warning: {
+    textAlign: "center",
+    fontSize: 20,
   },
 });
