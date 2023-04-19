@@ -26,6 +26,7 @@ export const DateFilter: React.FC<{
   const [showModal, setShowModal] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const [selectingStartdate, setSelectingStartdate] = useState(true);
+  const completedDateRange = dateRange.startingDate && dateRange.endingDate;
   const startDate = dateRange.startingDate
     ? format(dateRange.startingDate, "dd-MM-yyyy")
     : "";
@@ -56,27 +57,49 @@ export const DateFilter: React.FC<{
     dispatch(resetDateFilters());
   };
 
+  let displayWarning = false;
+  const logsInRange = completedDateRange
+    ? globalLogs.some(
+        (log) =>
+          new Date(log.date) >= dateRange.startingDate! &&
+          new Date(log.date) <= dateRange.endingDate!
+      )
+    : false;
+
+  if (completedDateRange && !logsInRange) {
+    displayWarning = true;
+  } else {
+    displayWarning = false;
+  }
+
   const emptyDateRange =
     dateRange.startingDate === null && dateRange.endingDate === null;
   const dateFilter = () => {
     const logsToFilter = [...globalLogs];
-    const logsInRange = logsToFilter
-      .filter(
-        (log) =>
-          //non-null assertion being made here but it could be null, add conditional?
-          new Date(log.date) >= dateRange.startingDate! &&
-          new Date(log.date) <= dateRange.endingDate!
-      )
-      .map((log) => log.id);
+    const logsInRange = completedDateRange
+      ? logsToFilter
+          .filter(
+            (log) =>
+              new Date(log.date) >= dateRange.startingDate! &&
+              new Date(log.date) <= dateRange.endingDate!
+          )
+          .map((log) => log.id)
+      : [];
 
     if (logsInRange.length > 0) {
       dispatch(setLogsByDate(logsInRange));
       setShowModal(!showModal);
-      //add display warning for incorrect date range?
     } else if (emptyDateRange) {
       setShowModal(!showModal);
     }
   };
+
+  const Warning = () =>
+    displayWarning ? (
+      <Text style={styles.warning}>
+        Selected date range does not contain logs.
+      </Text>
+    ) : null;
 
   const RangeDisplay = () => (
     <View style={styles.rangeDisplay}>
@@ -113,7 +136,15 @@ export const DateFilter: React.FC<{
         <View style={styles.container}>
           <View style={styles.modalView}>
             <RangeDisplay />
-            <Pressable style={styles.button} onPress={dateFilter}>
+            <Warning />
+            <Pressable
+              style={
+                !displayWarning
+                  ? styles.button
+                  : [styles.button, styles.buttonDisabled]
+              }
+              onPress={dateFilter}
+            >
               <Text style={styles.buttonText}>Filter Dates</Text>
             </Pressable>
             <Pressable style={styles.button} onPress={clearDateRange}>
@@ -177,6 +208,9 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     backgroundColor: "#2196F3",
   },
+  buttonDisabled: {
+    opacity: 0.3,
+  },
   buttonText: {
     color: "white",
     fontWeight: "bold",
@@ -184,5 +218,11 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
+  },
+  warning: {
+    color: "red",
+    textAlign: "center",
+    fontSize: 15,
+    marginBottom: 5,
   },
 });
