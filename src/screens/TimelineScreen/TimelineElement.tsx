@@ -12,15 +12,15 @@ import { useAppSelector } from "../../store";
 export const TimelineElement = () => {
   const globalLogs = useAppSelector(logSelectors.selectAll);
   const activeFilter = useAppSelector((state) => state.filters.activeFilter);
-  const filteredLogIds = useAppSelector(
-    (state) => state.filters.filteredLogIds
+  const filteredLogsIds = useAppSelector(
+    (state) => state.filters.filteredLogsIds
   );
   const [showAllText, setShowAllText] = useState<{ [key: string]: boolean }>(
     {}
   );
 
   const filteredLogs: VeggieLogNormalised[] = useAppSelector((state) =>
-    filteredLogIds ? logSelectors.selectByIds(state, filteredLogIds) : []
+    filteredLogsIds ? logSelectors.selectByIds(state, filteredLogsIds) : []
   );
 
   const timelineLogs = activeFilter ? filteredLogs : globalLogs;

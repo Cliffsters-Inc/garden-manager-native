@@ -9,7 +9,7 @@ interface filterState {
   logsByLocation: string[];
   filterByPic: boolean;
   logsWithPics: string[];
-  filteredLogIds: string[];
+  filteredLogsIds: string[];
   [key: string]: boolean | string[];
 }
 
@@ -22,7 +22,7 @@ const initialState: filterState = {
   logsByLocation: [],
   filterByPic: false,
   logsWithPics: [],
-  filteredLogIds: [],
+  filteredLogsIds: [],
 };
 
 export const filterSlice = createSlice({
@@ -30,7 +30,7 @@ export const filterSlice = createSlice({
   initialState,
   reducers: {
     switchActiveFilter: (state) => {
-      const { activeFilter, ...rest } = state;
+      const { activeFilter, filteredLogsIds, ...rest } = state;
       console.log("state", state);
       const propsSameValue = Object.entries(rest).every(([key, value]) => {
         return JSON.stringify(value) === JSON.stringify(initialState[key]);
@@ -86,7 +86,7 @@ export const filterSlice = createSlice({
       });
 
       const unique = [...new Set(matchingElements)];
-      state.filteredLogIds = unique;
+      state.filteredLogsIds = unique;
       // console.log("occ", activeFilters);
       // console.log("flat", flattenedArr);
       // console.log("matching", matchingElements);

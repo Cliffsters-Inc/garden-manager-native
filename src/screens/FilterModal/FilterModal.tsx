@@ -34,8 +34,8 @@ export const FilterModal: React.FC<{
   const filterByPic = useAppSelector((state) => state.filters.filterByPic);
   const logsByDate = useAppSelector((state) => state.filters.logsBydate);
   const logsWithPic = useAppSelector((state) => state.filters.logsWithPics);
-  const filteredLogIds = useAppSelector(
-    (state) => state.filters.filteredLogIds
+  const filteredLogsIds = useAppSelector(
+    (state) => state.filters.filteredLogsIds
   );
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedLocations, setSelectedlocations] =
@@ -88,7 +88,7 @@ export const FilterModal: React.FC<{
       <Modal animationType="slide" visible={modalVisible}>
         <View style={styles.container}>
           <View style={styles.modalView}>
-            <Button title="con" onPress={con} />
+            {/* <Button title="con" onPress={con} /> */}
             <ResetFilters
               clearFilters={clearFilters}
               activeFilter={activeFilter}
