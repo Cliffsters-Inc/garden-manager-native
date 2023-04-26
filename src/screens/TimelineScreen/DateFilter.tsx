@@ -1,9 +1,11 @@
 import { format } from "date-fns";
 import { useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet } from "react-native";
+import { Button } from "react-native-elements";
 
 import { Text, View } from "../../components/Themed";
 import {
+  filterByDate,
   resetDateFilters,
   setLogsByDate,
 } from "../../features/Filters/filter.slice";
@@ -72,6 +74,21 @@ export const DateFilter: React.FC<{
     displayWarning = false;
   }
 
+  const filter = () => {
+    const logsToFilter = [...globalLogs];
+    const start = new Date(dateRange.startingDate!);
+    const end = new Date(dateRange.endingDate!);
+
+    const startDate = start.getTime();
+    const endDate = end.getTime();
+
+    dispatch(
+      filterByDate({
+        logs: logsToFilter,
+        dates: { startDate, endDate },
+      })
+    );
+  };
   const emptyDateRange =
     dateRange.startingDate === null && dateRange.endingDate === null;
   const dateFilter = () => {
@@ -137,6 +154,7 @@ export const DateFilter: React.FC<{
           <View style={styles.modalView}>
             <RangeDisplay />
             <Warning />
+            <Button onPress={filter} title="CON" />
             <Pressable
               style={
                 !displayWarning

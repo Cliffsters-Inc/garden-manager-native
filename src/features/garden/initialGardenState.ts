@@ -52,7 +52,18 @@ export const initialGardenState: Garden[] = [
             veggieInfo: { id: "ghv2ags90aosjdsalkb21309" },
             id: "hi34fp78934ch21398op",
             notes: "Feed these within a week.",
-            logs: [],
+            logs: [
+              {
+                id: "sd7sGD9kjFD8765jghtytu",
+                date: 1652251484254,
+                location: { gardenTitle: "Frontyard", bedTitle: "2" },
+                notes: "Test Log",
+                photos: { entities: [], loading: "pending" },
+                payloadTags: [
+                  { tagLabel: "pests", tagColor: "#FF5A33", tagIcon: "pest" },
+                ],
+              },
+            ],
           },
         ],
       },

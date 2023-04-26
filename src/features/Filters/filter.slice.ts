@@ -1,4 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+import { DateRangeObj } from "../../screens/TimelineScreen/DateFilter";
+import { useAppSelector } from "../../store";
+import { VeggieLogNormalised } from "../entity.types";
+import { logSelectors, logSlice } from "../log/log.slice";
 
 interface filterState {
   activeFilter: boolean;
@@ -44,6 +49,30 @@ export const filterSlice = createSlice({
     },
     setLogsByDate: (state, action) => {
       state.logsBydate = action.payload;
+    },
+    filterByDate: (
+      state,
+      action: PayloadAction<{
+        logs: VeggieLogNormalised[];
+        dates: { startDate: number; endDate: number };
+      }>
+    ) => {
+      const globalLogs = action.payload.logs;
+      const start = action.payload.dates.startDate;
+      const end = action.payload.dates.endDate;
+      if (action.payload.dates.startDate < action.payload.dates.endDate) {
+        console.log("start less than end");
+      } else {
+        console.log("start more than end");
+      }
+      // console.log("SdateType", typeof startDate);
+      // console.log("Sdate", startDate);
+
+      const logsInRange = globalLogs
+        .filter((log) => log.date >= start && log.date <= end)
+        .map((log) => log.id);
+
+      console.log("logsInRange**", logsInRange);
     },
     resetDateFilters: (state) => {
       state.filterByDate = false;
@@ -95,6 +124,7 @@ export const {
   setLogsByTag,
   switchFilterByDate,
   setLogsByDate,
+  filterByDate,
   resetDateFilters,
   setLogsByLocation,
   switchFilterByPic,
