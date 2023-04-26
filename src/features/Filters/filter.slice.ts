@@ -9,7 +9,7 @@ interface FilterState {
   logsBydate: string[];
   filterByLocation: boolean;
   logsByLocation: string[];
-  filterByPic: boolean;
+  filteringByPic: boolean;
   logsWithPics: string[];
   filteredLogsIds: string[];
   [key: string]: boolean | string[];
@@ -21,7 +21,7 @@ const initialState: FilterState = {
   logsBydate: [],
   filterByLocation: false,
   logsByLocation: [],
-  filterByPic: false,
+  filteringByPic: false,
   logsWithPics: [],
   filteredLogsIds: [],
 };
@@ -69,11 +69,18 @@ export const filterSlice = createSlice({
     setLogsByLocation: (state, action) => {
       state.logsByLocation = action.payload;
     },
-    switchFilterByPic: (state, action) => {
-      state.filterByPic = action.payload;
-    },
-    setLogsWithPics: (state, action) => {
-      state.logsWithPics = action.payload;
+    filterByPhoto: (state, action) => {
+      state.filteringByPic = !state.filteringByPic;
+
+      if (state.filteringByPic) {
+        const globalLogs: VeggieLogNormalised[] = action.payload;
+        const foundWithPics = globalLogs
+          .filter((log) => log.photos.entities.length > 0)
+          .map((log) => log.id);
+        state.logsWithPics = foundWithPics;
+      } else {
+        state.logsWithPics = [];
+      }
     },
     filterLogs: (state) => {
       const activeFilters: string[][] = [];
@@ -83,7 +90,7 @@ export const filterSlice = createSlice({
             activeFilters.push(arr);
           }
 
-          if (state.filterByPic && state.logsWithPics.length === 0) {
+          if (state.filteringByPic && state.logsWithPics.length === 0) {
             activeFilters.push(state.logsWithPics);
           }
         });
@@ -113,8 +120,7 @@ export const {
   filterByDate,
   resetDateFilters,
   setLogsByLocation,
-  switchFilterByPic,
-  setLogsWithPics,
+  filterByPhoto,
   filterLogs,
   resetFilters,
 } = filterSlice.actions;

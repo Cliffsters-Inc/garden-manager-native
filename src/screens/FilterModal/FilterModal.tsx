@@ -27,7 +27,7 @@ export const FilterModal: React.FC<{
   const dispatch = useAppDispatch();
   const activeFilter = useAppSelector((state) => state.filters.activeFilter);
   const logsByTag = useAppSelector((state) => state.filters.logsByTag);
-  const filterByPic = useAppSelector((state) => state.filters.filterByPic);
+  const filteringByPic = useAppSelector((state) => state.filters.logsWithPics);
   const logsByDate = useAppSelector((state) => state.filters.logsBydate);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const logsByLocation = useAppSelector(
@@ -45,7 +45,7 @@ export const FilterModal: React.FC<{
 
   useEffect(() => {
     dispatch(switchActiveFilter());
-  }, [logsByTag, logsByLocation, logsByDate, filterByPic]);
+  }, [logsByTag, logsByLocation, logsByDate, filteringByPic]);
 
   const clearFilters = () => {
     dispatch(resetFilters());
