@@ -1,14 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { DateRangeObj } from "../../screens/TimelineScreen/DateFilter";
-import { useAppSelector } from "../../store";
+import { standardiseDate } from "../../screens/TimelineScreen/DateFilter/date.utils";
 import { VeggieLogNormalised } from "../entity.types";
-import { logSelectors, logSlice } from "../log/log.slice";
 
 interface FilterState {
   activeFilter: boolean;
   logsByTag: string[];
-  filterByDate: boolean;
   logsBydate: string[];
   filterByLocation: boolean;
   logsByLocation: string[];
@@ -21,7 +18,6 @@ interface FilterState {
 const initialState: FilterState = {
   activeFilter: false,
   logsByTag: [],
-  filterByDate: false,
   logsBydate: [],
   filterByLocation: false,
   logsByLocation: [],
@@ -44,35 +40,30 @@ export const filterSlice = createSlice({
     setLogsByTag: (state, action) => {
       state.logsByTag = action.payload;
     },
-    switchFilterByDate: (state, action) => {
-      state.filterByDate = action.payload;
-    },
-    setLogsByDate: (state, action) => {
-      state.logsBydate = action.payload;
-    },
     filterByDate: (
       state,
       action: PayloadAction<{
         logs: VeggieLogNormalised[];
-        dates: { startDate: number | undefined; endDate: number | undefined };
+        dates: {
+          startDate: number | undefined;
+          endDate: number | undefined;
+        };
       }>
     ) => {
       const globalLogs = action.payload.logs;
-      const start = action.payload.dates.startDate;
-      const end = action.payload.dates.endDate;
+      const start = standardiseDate(action.payload.dates.startDate!);
+      const end = standardiseDate(action.payload.dates.endDate!);
 
-      if (start && end) {
-        const logsInRange = globalLogs
-          .filter((log) => log.date >= start && log.date <= end)
-          .map((log) => log.id);
-        // .map((log) => console.log("logDate", log.date));
-        console.log(start, end);
-        // console.log("logsInRange**", logsInRange);
-        state.logsBydate = logsInRange;
-      }
+      const logsInRange = globalLogs
+        .filter((log) => {
+          const logDate = standardiseDate(log.date);
+          return logDate >= start && logDate <= end;
+        })
+        .map((log) => log.id);
+
+      state.logsBydate = logsInRange;
     },
     resetDateFilters: (state) => {
-      state.filterByDate = false;
       state.logsBydate = [];
     },
     setLogsByLocation: (state, action) => {
@@ -119,8 +110,6 @@ export const filterSlice = createSlice({
 export const {
   switchActiveFilter,
   setLogsByTag,
-  switchFilterByDate,
-  setLogsByDate,
   filterByDate,
   resetDateFilters,
   setLogsByLocation,

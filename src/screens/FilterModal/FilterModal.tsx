@@ -8,7 +8,10 @@ import {
   switchActiveFilter,
 } from "../../features/Filters/filter.slice";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { DateFilter, DateRangeObj } from "../TimelineScreen/DateFilter";
+import {
+  DateFilter,
+  DateRangeObj,
+} from "../TimelineScreen/DateFilter/DateFilter";
 import {
   LocationFilter,
   SelectedLocationsObj,

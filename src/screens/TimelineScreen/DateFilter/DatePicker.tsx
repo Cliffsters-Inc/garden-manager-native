@@ -1,18 +1,12 @@
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-import { View } from "../../components/Themed";
+import { View } from "../../../components/Themed";
 
-interface Props {
+export const DatePicker: React.FC<{
   showPicker: boolean;
   setShowPicker: React.Dispatch<React.SetStateAction<boolean>>;
   createDateRange: (date: Date) => void;
-}
-
-export const DatePicker = ({
-  showPicker,
-  setShowPicker,
-  createDateRange,
-}: Props) => {
+}> = ({ showPicker, setShowPicker, createDateRange }) => {
   const handleConfirm = (date: Date) => {
     createDateRange(date);
     hideDatePicker();

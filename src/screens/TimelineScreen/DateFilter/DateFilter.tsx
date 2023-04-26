@@ -1,17 +1,15 @@
-import { format } from "date-fns";
 import { useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet } from "react-native";
-import { Button } from "react-native-elements";
 
-import { Text, View } from "../../components/Themed";
+import { Text, View } from "../../../components/Themed";
 import {
   filterByDate,
   resetDateFilters,
-  setLogsByDate,
-} from "../../features/Filters/filter.slice";
-import { logSelectors } from "../../features/log/log.slice";
-import { useAppDispatch, useAppSelector } from "../../store";
-import { RangeSelector } from "../FilterModal/RangeSelector";
+} from "../../../features/Filters/filter.slice";
+import { logSelectors } from "../../../features/log/log.slice";
+import { useAppDispatch, useAppSelector } from "../../../store";
+import { RangeSelector } from "../../FilterModal/RangeSelector";
+import { dateToText, standardiseDate } from "./date.utils";
 import { DatePicker } from "./DatePicker";
 
 export type DateRangeObj = {
@@ -30,11 +28,10 @@ export const DateFilter: React.FC<{
   const [selectingStartdate, setSelectingStartdate] = useState(true);
   const completedDateRange = dateRange.startingDate && dateRange.endingDate;
   const startText = dateRange.startingDate
-    ? format(dateRange.startingDate, "dd-MM-yyyy")
+    ? dateToText(dateRange.startingDate)
     : "";
-  const endText = dateRange.endingDate
-    ? format(dateRange.endingDate, "dd-MM-yyyy")
-    : "";
+
+  const endText = dateRange.endingDate ? dateToText(dateRange.endingDate) : "";
 
   const openStartDatePicker = () => {
     setSelectingStartdate(true);
@@ -61,13 +58,13 @@ export const DateFilter: React.FC<{
 
   let displayWarning = false;
   const logsInRange = completedDateRange
-    ? globalLogs.some(
-        (log) =>
-          new Date(log.date) >= dateRange.startingDate! &&
-          new Date(log.date) < dateRange.endingDate!
-      )
+    ? globalLogs.some((log) => {
+        const logDate = standardiseDate(log.date);
+        const startDate = standardiseDate(dateRange.startingDate!);
+        const endDate = standardiseDate(dateRange.endingDate!);
+        return logDate >= startDate && logDate <= endDate;
+      })
     : false;
-  console.log("loginrange%%", logsInRange);
   if (completedDateRange && !logsInRange) {
     displayWarning = true;
   } else {
@@ -106,11 +103,11 @@ export const DateFilter: React.FC<{
       <Text onPress={openStartDatePicker} style={styles.picker}>
         Start Date
       </Text>
-      {dateRange.startingDate && <Text>{startText}</Text>}
+      <Text>{startText}</Text>
       <Text onPress={openEndDatePicker} style={styles.picker}>
         End Date
       </Text>
-      {dateRange.endingDate && <Text>{endText}</Text>}
+      <Text>{endText}</Text>
     </View>
   );
 
