@@ -5,7 +5,7 @@ import { useAppSelector } from "../../store";
 import { VeggieLogNormalised } from "../entity.types";
 import { logSelectors, logSlice } from "../log/log.slice";
 
-interface filterState {
+interface FilterState {
   activeFilter: boolean;
   logsByTag: string[];
   filterByDate: boolean;
@@ -18,7 +18,7 @@ interface filterState {
   [key: string]: boolean | string[];
 }
 
-const initialState: filterState = {
+const initialState: FilterState = {
   activeFilter: false,
   logsByTag: [],
   filterByDate: false,
@@ -54,25 +54,22 @@ export const filterSlice = createSlice({
       state,
       action: PayloadAction<{
         logs: VeggieLogNormalised[];
-        dates: { startDate: number; endDate: number };
+        dates: { startDate: number | undefined; endDate: number | undefined };
       }>
     ) => {
       const globalLogs = action.payload.logs;
       const start = action.payload.dates.startDate;
       const end = action.payload.dates.endDate;
-      if (action.payload.dates.startDate < action.payload.dates.endDate) {
-        console.log("start less than end");
-      } else {
-        console.log("start more than end");
+
+      if (start && end) {
+        const logsInRange = globalLogs
+          .filter((log) => log.date >= start && log.date <= end)
+          .map((log) => log.id);
+        // .map((log) => console.log("logDate", log.date));
+        console.log(start, end);
+        // console.log("logsInRange**", logsInRange);
+        state.logsBydate = logsInRange;
       }
-      // console.log("SdateType", typeof startDate);
-      // console.log("Sdate", startDate);
-
-      const logsInRange = globalLogs
-        .filter((log) => log.date >= start && log.date <= end)
-        .map((log) => log.id);
-
-      console.log("logsInRange**", logsInRange);
     },
     resetDateFilters: (state) => {
       state.filterByDate = false;
