@@ -10,7 +10,6 @@ export const BedsScreen = ({
   route,
 }: GardenScreenProps<"BedsScreen">) => {
   const { selectedGardenId } = route.params;
-
   return (
     <View style={styles.container}>
       <View style={styles.cards}>

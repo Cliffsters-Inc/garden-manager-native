@@ -1,50 +1,31 @@
-import {
-  FontAwesome,
-  FontAwesome5,
-  Ionicons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
 import { format } from "date-fns";
 import { useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
 import Timeline from "react-native-timeline-flatlist";
 
+import { TagIconElement } from "../../components/Tags/TagIcon";
 import { Text, View } from "../../components/Themed";
 import { VeggieLogNormalised } from "../../features/entity.types";
+import { logSelectors } from "../../features/log/log.slice";
+import { useAppSelector } from "../../store";
 
-type Props = {
-  dataToMap: VeggieLogNormalised[];
-};
-
-export const TimelineElement = ({ dataToMap }: Props) => {
+export const TimelineElement = () => {
+  const globalLogs = useAppSelector(logSelectors.selectAll);
+  const activeFilter = useAppSelector((state) => state.filters.activeFilter);
+  const filteredLogsIds = useAppSelector(
+    (state) => state.filters.filteredLogsIds
+  );
   const [showAllText, setShowAllText] = useState<{ [key: string]: boolean }>(
     {}
   );
 
-  const assignIcon = (iconName: string) => {
-    switch (iconName) {
-      case "pests":
-        return <Ionicons name="ios-bug-outline" size={20} color={"#FF5A33"} />;
-      case "disease":
-        return <FontAwesome5 name="virus" size={20} color={"#633c15"} />;
-      case "sowed":
-        return (
-          <MaterialCommunityIcons
-            name="seed-outline"
-            size={20}
-            color={"#B4CF66"}
-          />
-        );
-      case "seedling":
-        return <FontAwesome5 name="seedling" size={20} color="#44803F" />;
-      case "generic":
-        return <FontAwesome name="circle-o" size={20} color="black" />;
-      default:
-        return <FontAwesome name="circle-o" size={20} color="black" />;
-    }
-  };
+  const filteredLogs: VeggieLogNormalised[] = useAppSelector((state) =>
+    filteredLogsIds ? logSelectors.selectByIds(state, filteredLogsIds) : []
+  );
 
-  const descriptionElement = (value: VeggieLogNormalised, i: string) => {
+  const timelineLogs = activeFilter ? filteredLogs : globalLogs;
+
+  const createDescription = (log: VeggieLogNormalised, i: string) => {
     const onPress = () => {
       setShowAllText((prev) => ({
         ...showAllText,
@@ -58,29 +39,48 @@ export const TimelineElement = ({ dataToMap }: Props) => {
           style={styles.description}
           numberOfLines={showAllText[`${i}`] ? 0 : 4}
         >
-          {value.notes}
+          {log.notes}
         </Text>
       </Pressable>
     );
   };
 
-  const timelineData = dataToMap?.map((value, i: number) => ({
-    time: format(new Date(value.date), "d MMM yy"),
-    description: descriptionElement(value, i.toString()),
-    icon:
-      value.payloadTags?.length > 0
-        ? assignIcon(value.payloadTags[0]!.tagLabel)
-        : assignIcon("generic"),
-  }));
+  const entryData = timelineLogs?.map((log, i: number) => {
+    const date = format(new Date(log.date), "d MMM yy");
+    const text = createDescription(log, i.toString());
 
-  return dataToMap.length > 0 ? (
+    const findFirstTag = () => {
+      if (log.payloadTags.length > 0) {
+        return log.payloadTags[0];
+      } else {
+        return {
+          tagLabel: "default",
+          tagColor: "#FFFFFF",
+          tagIcon: "default",
+        };
+      }
+    };
+    const firstTag = findFirstTag();
+    const iconColor = firstTag?.tagColor;
+    const selectedIcon = firstTag?.tagIcon;
+    const tag = TagIconElement({ iconColor, selectedIcon });
+
+    return {
+      time: date,
+      description: text,
+      icon: tag,
+    };
+  });
+
+  const hasLogs = timelineLogs.length > 0;
+  return hasLogs ? (
     <View style={styles.container}>
       <Timeline
-        data={timelineData}
+        data={entryData}
         style={styles.list}
-        innerCircle={"element"}
+        innerCircle="element"
         circleSize={20}
-        circleColor={"white"}
+        circleColor="white"
         timeStyle={styles.time}
         timeContainerStyle={styles.timeContainer}
         descriptionStyle={styles.description}
@@ -88,8 +88,8 @@ export const TimelineElement = ({ dataToMap }: Props) => {
       />
     </View>
   ) : (
-    <View>
-      <Text>No Logs have been created yet</Text>
+    <View style={styles.container}>
+      <Text style={styles.warning}>No Logs match selected filters.</Text>
     </View>
   );
 };
@@ -98,12 +98,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    width: "100%",
+    justifyContent: "center",
   },
   list: {
-    flex: 1,
-    marginTop: 20,
     width: "100%",
+    marginTop: 20,
+    marginLeft: 25,
   },
   timeContainer: {
     minWidth: 80,
@@ -112,11 +112,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     backgroundColor: "#ff9797",
     color: "white",
+    fontWeight: "bold",
     padding: 6,
     borderRadius: 13,
   },
   detailContainer: {
-    textAlign: "center",
     backgroundColor: "#BBDAFF",
     marginVertical: 10,
     maxWidth: 180,
@@ -125,9 +125,13 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 2,
     borderRadius: 20,
-    padding: 10,
   },
   description: {
     textAlign: "center",
+    padding: 5,
+  },
+  warning: {
+    textAlign: "center",
+    fontSize: 20,
   },
 });

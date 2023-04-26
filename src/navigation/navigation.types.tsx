@@ -10,6 +10,7 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { VeggieInfo, VeggieLogNormalised } from "../features/entity.types";
+import { LocationObj } from "../screens/BedScreen/BedCards";
 
 declare global {
   namespace ReactNavigation {
@@ -24,7 +25,7 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   AddVeggieModal: { selectedBedId: string };
   NotFound: undefined;
-  NewVeggieLogModal: { veggieId: string };
+  NewVeggieLogModal: { veggieId: string; locationTitles: any };
   EditVeggieLogModal: { logId: string };
   CreateCardModal: { selectedGardenId?: string } | undefined;
   CardOptionsModal:
@@ -65,9 +66,11 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
 export type GardenTabParamList = {
   GardenScreen: undefined;
   GardenCards: undefined;
-  BedsScreen: { selectedGardenId: string };
-  BedScreen: { selectedBedId: string };
-  VeggieScreen: { veggieId: string };
+  BedsScreen: {
+    selectedGardenId: string;
+  };
+  BedScreen: { selectedBedId: string; locationTitles: LocationObj };
+  VeggieScreen: { veggieId: string; locationTitles: LocationObj };
   VeggieTimelineScreen: { veggieLogs: VeggieLogNormalised[] }; // TODO: fix type
 };
 

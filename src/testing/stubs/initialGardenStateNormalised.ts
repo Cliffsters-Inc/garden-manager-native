@@ -66,6 +66,7 @@ export const initialGardenStateNormalised: GardenNormalisedState = {
       veggie: "p9314y3hfo3i1nv1320n123f",
       id: "zv8RCeafO9OFQELDRcC",
       date: 1652054400000,
+      location: { gardenTitle: "frontyard", bedTitle: "1" },
       notes: "starting to sprout\n\nyey",
       photos: { entities: [], loading: "pending" },
       payloadTags: [
@@ -76,6 +77,7 @@ export const initialGardenStateNormalised: GardenNormalisedState = {
       veggie: "p9314y3hfo3i1nv1320n123f",
       id: "utbyJ4pwA1F0TlRcMYYLw",
       date: 1652251484254,
+      location: { gardenTitle: "frontyard", bedTitle: "1" },
       notes: "bugs everywhere what do?",
       photos: { entities: [], loading: "pending" },
       payloadTags: [

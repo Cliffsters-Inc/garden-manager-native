@@ -1,10 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AnyAction, combineReducers, ThunkAction } from "@reduxjs/toolkit";
 import {
   addListener,
+  AnyAction,
+  combineReducers,
   configureStore,
   createListenerMiddleware,
   ListenerEffectAPI,
+  ThunkAction,
   TypedAddListener,
   TypedStartListening,
 } from "@reduxjs/toolkit";
@@ -21,6 +23,7 @@ import {
 } from "redux-persist";
 
 import { bedSlice } from "./features/bed/bed.slice";
+import { filterSlice } from "./features/Filters/filter.slice";
 import { gardenSlice } from "./features/garden/garden.slice";
 import { logSlice } from "./features/log/log.slice";
 import { photoSlice } from "./features/photos/photos.slice";
@@ -40,6 +43,7 @@ const appReducer = combineReducers({
   [logSlice.name]: logSlice.reducer,
   [veggieInfoSlice.name]: veggieInfoSlice.reducer,
   [photoSlice.name]: photoSlice.reducer,
+  [filterSlice.name]: filterSlice.reducer,
 });
 
 const rootReducer = (
@@ -68,7 +72,7 @@ const store = configureStore({
     }).prepend(listenerMiddlewareInstance.middleware),
 });
 
-let persistor = persistStore(store);
+const persistor = persistStore(store);
 
 export { store, persistor };
 

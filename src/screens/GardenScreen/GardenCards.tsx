@@ -27,6 +27,7 @@ export const GardenCards = ({
             title={item.name}
             selectedGardenId={item.id}
             navigation={navigation}
+            locationTitles={null}
           />
         )}
       />

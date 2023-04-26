@@ -1,8 +1,9 @@
 import { Garden } from "../entity.types";
 
+//****If you make changes here remember to clear storage to correctly test****
 export const initialGardenState: Garden[] = [
   {
-    name: "frontyard",
+    name: "Frontyard",
     id: "klj39sadg7sd98",
     beds: [
       {
@@ -18,6 +19,7 @@ export const initialGardenState: Garden[] = [
               {
                 id: "zv8RCeafO9OFQELDRcC",
                 date: 1652054400000,
+                location: { gardenTitle: "Frontyard", bedTitle: "1" },
                 notes: "starting to sprout\n\nyey",
                 photos: { entities: [], loading: "pending" },
                 payloadTags: [
@@ -31,6 +33,7 @@ export const initialGardenState: Garden[] = [
               {
                 id: "utbyJ4pwA1F0TlRcMYYLw",
                 date: 1652251484254,
+                location: { gardenTitle: "Frontyard", bedTitle: "1" },
                 notes: "bugs everywhere what do?",
                 photos: { entities: [], loading: "pending" },
                 payloadTags: [
@@ -49,14 +52,25 @@ export const initialGardenState: Garden[] = [
             veggieInfo: { id: "ghv2ags90aosjdsalkb21309" },
             id: "hi34fp78934ch21398op",
             notes: "Feed these within a week.",
-            logs: [],
+            logs: [
+              {
+                id: "sd7sGD9kjFD8765jghtytu",
+                date: 1652251484254,
+                location: { gardenTitle: "Frontyard", bedTitle: "2" },
+                notes: "Test Log",
+                photos: { entities: [], loading: "pending" },
+                payloadTags: [
+                  { tagLabel: "pests", tagColor: "#FF5A33", tagIcon: "pest" },
+                ],
+              },
+            ],
           },
         ],
       },
     ],
   },
   {
-    name: "backyard",
+    name: "Backyard",
     id: "nkjun4safgkkhg1",
     beds: [
       {

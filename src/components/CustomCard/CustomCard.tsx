@@ -3,10 +3,12 @@ import { Pressable, StyleSheet } from "react-native";
 import { Card, Divider } from "react-native-elements";
 
 import { GardenScreenProps } from "../../navigation/navigation.types";
+import { LocationObj } from "../../screens/BedScreen/BedCards";
 import { View } from "../Themed";
 
 type Props = {
   title: string;
+  locationTitles: LocationObj;
   navigation:
     | GardenScreenProps<"GardenScreen">["navigation"]
     | GardenScreenProps<"BedsScreen">["navigation"];
@@ -23,6 +25,7 @@ type Props = {
 
 export const CustomCard = ({
   title,
+  locationTitles,
   selectedGardenId,
   selectedBedId,
   navigation,
@@ -31,9 +34,14 @@ export const CustomCard = ({
     <Pressable
       onPress={() => {
         selectedGardenId
-          ? navigation.navigate("BedsScreen", { selectedGardenId })
+          ? navigation.navigate("BedsScreen", {
+              selectedGardenId,
+            })
           : selectedBedId &&
-            navigation.navigate("BedScreen", { selectedBedId });
+            navigation.navigate("BedScreen", {
+              selectedBedId,
+              locationTitles,
+            });
       }}
       style={styles.container}
     >

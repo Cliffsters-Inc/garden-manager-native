@@ -1,3 +1,4 @@
+/* eslint-disable import/namespace */
 import { Feather } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
@@ -9,7 +10,7 @@ import { Text, View } from "../Themed";
 import {
   AddTagToList,
   convertToTag,
-  defaultTagsList,
+  DefaultTagsList,
   RemoveTagFromList,
 } from "./Tag.utils";
 import { TagElement } from "./TagElement";
@@ -24,7 +25,7 @@ export const AddTags = () => {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
   useEffect(() => {
-    const combinedTags: Tag[] = defaultTagsList.map((tag) => convertToTag(tag));
+    const combinedTags: Tag[] = DefaultTagsList.map((tag) => convertToTag(tag));
     setCombinedTagsList(combinedTags);
   }, []);
 
@@ -87,7 +88,7 @@ export const AddTags = () => {
         data={selectedTags}
         keyExtractor={(item) => item.tagLabel}
         extraData={pressedTags}
-        horizontal={true}
+        horizontal
         renderItem={renderSelectedItem}
       />
       <View style={styles.addContainer}>
@@ -95,7 +96,7 @@ export const AddTags = () => {
         <FlatList
           data={selectableTags}
           keyExtractor={(item) => item.tagLabel}
-          horizontal={true}
+          horizontal
           renderItem={renderSelectableItem}
         />
         <Divider style={{ paddingTop: 30 }} />

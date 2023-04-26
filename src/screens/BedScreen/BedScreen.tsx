@@ -13,14 +13,14 @@ export const BedScreen = ({
   navigation,
   route,
 }: GardenScreenProps<"BedScreen">) => {
-  const { selectedBedId } = route.params;
+  const { selectedBedId, locationTitles } = route.params;
+
   const bed = useAppSelector((state) =>
     bedSelectors.selectById(state, selectedBedId)
   );
   const veggies = useAppSelector((state) =>
     veggieSelectors.selectByIds(state, bed?.veggies ?? [])
   );
-
   return bed ? (
     <View style={styles.container}>
       <Text>Bed Name: {bed.name}</Text>
@@ -28,7 +28,10 @@ export const BedScreen = ({
         <VeggieList
           veggies={veggies}
           navigationHandler={(veggie) =>
-            navigation.navigate("VeggieScreen", { veggieId: veggie.id })
+            navigation.navigate("VeggieScreen", {
+              veggieId: veggie.id,
+              locationTitles,
+            })
           }
         />
       )}
