@@ -18,7 +18,7 @@ import {
 } from "../TimelineScreen/LocationFilter";
 import { PhotoFilter } from "../TimelineScreen/PhotoFilter";
 import { ResetFilters } from "../TimelineScreen/ResetFilters";
-import { TagsFilterModal } from "../TimelineScreen/TagsFilterModal";
+import { TagsFilter } from "../TimelineScreen/TagsFilter";
 
 export const FilterModal: React.FC<{
   modalVisible: boolean;
@@ -74,7 +74,7 @@ export const FilterModal: React.FC<{
               clearFilters={clearFilters}
               activeFilter={activeFilter}
             />
-            <TagsFilterModal
+            <TagsFilter
               selectedTags={selectedTags}
               setSelectedTags={setSelectedTags}
             />

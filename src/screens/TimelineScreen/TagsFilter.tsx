@@ -11,7 +11,7 @@ import { logSelectors } from "../../features/log/log.slice";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { RangeSelector } from "../FilterModal/RangeSelector";
 
-export const TagsFilterModal: React.FC<{
+export const TagsFilter: React.FC<{
   selectedTags: string[];
   setSelectedTags: (value: string[]) => void;
 }> = ({ selectedTags, setSelectedTags }) => {

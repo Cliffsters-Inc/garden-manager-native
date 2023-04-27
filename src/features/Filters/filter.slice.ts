@@ -55,7 +55,6 @@ export const filterSlice = createSlice({
         .map((log) => log.id);
 
       state.logsByTag = matchingLogs;
-      console.log("tags", state.logsByTag);
     },
     filterByDate: (
       state,
