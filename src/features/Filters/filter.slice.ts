@@ -7,7 +7,7 @@ interface FilterState {
   activeFilter: boolean;
   logsByTag: string[];
   logsBydate: string[];
-  filterByLocation: boolean;
+  filterByGarden: boolean;
   logsByLocation: string[];
   filteringByPic: boolean;
   logsWithPics: string[];
@@ -19,7 +19,7 @@ const initialState: FilterState = {
   activeFilter: false,
   logsByTag: [],
   logsBydate: [],
-  filterByLocation: false,
+  filterByGarden: false,
   logsByLocation: [],
   filteringByPic: false,
   logsWithPics: [],
@@ -50,11 +50,11 @@ export const filterSlice = createSlice({
         };
       }>
     ) => {
-      const globalLogs = action.payload.logs;
+      const logs = action.payload.logs;
       const start = standardiseDate(action.payload.dates.startDate!);
       const end = standardiseDate(action.payload.dates.endDate!);
 
-      const logsInRange = globalLogs
+      const logsInRange = logs
         .filter((log) => {
           const logDate = standardiseDate(log.date);
           return logDate >= start && logDate <= end;
@@ -66,15 +66,51 @@ export const filterSlice = createSlice({
     resetDateFilters: (state) => {
       state.logsBydate = [];
     },
-    setLogsByLocation: (state, action) => {
-      state.logsByLocation = action.payload;
+    filterByGarden: (
+      state,
+      action: PayloadAction<{
+        logs: VeggieLogNormalised[];
+        gardenName: string;
+      }>
+    ) => {
+      const logs = action.payload.logs;
+      const gardenName = action.payload.gardenName;
+      const matchingLogs = logs
+        .filter((log) => log.location?.gardenTitle === gardenName)
+        .map(({ id }) => id);
+
+      state.logsByLocation = matchingLogs;
+    },
+    filterByBed: (
+      state,
+      action: PayloadAction<{
+        logs: VeggieLogNormalised[];
+        garden: string;
+        bedName: string;
+      }>
+    ) => {
+      const logs = action.payload.logs;
+      const bedName = action.payload.bedName;
+      const garden = action.payload.garden;
+      const matchingLogs = logs
+        .filter(
+          (log) =>
+            log.location?.gardenTitle === garden &&
+            log.location?.bedTitle === bedName
+        )
+        .map(({ id }) => id);
+
+      state.logsByLocation = matchingLogs;
+    },
+    resetLocationFilter: (state) => {
+      state.logsByLocation = [];
     },
     filterByPhoto: (state, action) => {
       state.filteringByPic = !state.filteringByPic;
 
       if (state.filteringByPic) {
-        const globalLogs: VeggieLogNormalised[] = action.payload;
-        const foundWithPics = globalLogs
+        const logs: VeggieLogNormalised[] = action.payload;
+        const foundWithPics = logs
           .filter((log) => log.photos.entities.length > 0)
           .map((log) => log.id);
         state.logsWithPics = foundWithPics;
@@ -119,7 +155,9 @@ export const {
   setLogsByTag,
   filterByDate,
   resetDateFilters,
-  setLogsByLocation,
+  filterByGarden,
+  filterByBed,
+  resetLocationFilter,
   filterByPhoto,
   filterLogs,
   resetFilters,

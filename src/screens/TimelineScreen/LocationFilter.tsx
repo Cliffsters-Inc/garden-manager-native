@@ -3,7 +3,11 @@ import { FlatList, Modal, Pressable, StyleSheet } from "react-native";
 
 import { Text, View } from "../../components/Themed";
 import { bedSelectors } from "../../features/bed/bed.slice";
-import { setLogsByLocation } from "../../features/Filters/filter.slice";
+import {
+  filterByBed,
+  filterByGarden,
+  resetDateFilters,
+} from "../../features/Filters/filter.slice";
 import { gardenSelectors } from "../../features/garden/garden.slice";
 import { logSelectors } from "../../features/log/log.slice";
 import { useAppDispatch, useAppSelector } from "../../store";
@@ -23,76 +27,58 @@ export const LocationFilter: React.FC<{
   const dispatch = useAppDispatch();
   const globalLogs = useAppSelector(logSelectors.selectAll);
   const gardens = useAppSelector(gardenSelectors.selectAll);
+  const gardensList = gardens.map(({ name }) => name);
+  const logsByLocation = useAppSelector(
+    (state) => state.filters.logsByLocation
+  );
   const [modalVisible, setModalVisible] = useState(false);
-  const [displayWarning, setDisplayWarning] = useState(false);
-  const [bedIds, setBedIds] = useState<string[]>([]);
   const garden = selectedLocations.garden ? selectedLocations.garden : "";
   const bed = selectedLocations.bed ? selectedLocations.bed : "";
 
-  const filterByGarden = (gardenName: string) => {
+  let displayWarning = false;
+  if (
+    (garden !== "" && logsByLocation.length === 0) ||
+    (bed !== "" && logsByLocation.length === 0)
+  ) {
+    displayWarning = true;
+  } else {
+    displayWarning = false;
+  }
+
+  const filterGarden = (gardenName: string) => {
+    const logs = [...globalLogs];
     setSelectedLocations({ ...selectedLocations, garden: gardenName });
-    const logs = [...globalLogs];
-    const matchingLogs = logs
-      .filter((log) => log.location?.gardenTitle === gardenName)
-      .map(({ id }) => id);
-    if (matchingLogs.length > 0) {
-      dispatch(setLogsByLocation(matchingLogs));
-      createGardenId(gardenName);
-      setDisplayWarning(false);
-    } else {
-      setDisplayWarning(true);
-    }
+    dispatch(filterByGarden({ logs, gardenName }));
   };
 
-  const filterByBed = (bedName: string) => {
+  const bedsList: string[] = useAppSelector((state) => {
+    const selectedGarden = gardens.find((gar) => gar.name === garden);
+    const beds = selectedGarden?.beds ?? [];
+    if (beds) {
+      return bedSelectors.selectByIds(state, beds).map(({ name }) => name);
+    }
+    return [];
+  });
+
+  const filterBed = (bedName: string) => {
+    const logs = [...globalLogs];
     setSelectedLocations({ ...selectedLocations, bed: bedName });
-    const logs = [...globalLogs];
-    const matchingLogs = logs
-      .filter(
-        (log) =>
-          log.location?.gardenTitle === selectedLocations.garden &&
-          log.location?.bedTitle === bedName
-      )
-      .map(({ id }) => id);
-    if (matchingLogs.length > 0) {
-      dispatch(setLogsByLocation(matchingLogs));
-      setDisplayWarning(false);
-    } else {
-      setDisplayWarning(true);
-    }
+    dispatch(filterByBed({ logs, garden, bedName }));
   };
 
-  const displayGardens = !(bedIds.length > 0);
+  const selectingGarden = garden === "";
   const area = ({ item }: { item: string }) => (
     <Pressable
-      onPress={() =>
-        displayGardens ? filterByGarden(item) : filterByBed(item)
-      }
+      onPress={() => (selectingGarden ? filterGarden(item) : filterBed(item))}
     >
       <Text style={styles.listItem}>{item}</Text>
     </Pressable>
   );
 
   const resetFilter = () => {
-    setBedIds([]);
     setSelectedLocations({ garden: null, bed: null });
-    dispatch(setLogsByLocation([]));
-    setDisplayWarning(false);
+    dispatch(resetDateFilters());
   };
-
-  const gardensList = gardens.map(({ name }) => name);
-
-  const createGardenId = (gardenName: string) => {
-    const garden = gardens.find((garden) => garden.name === gardenName);
-    setBedIds(garden?.beds ?? []);
-  };
-
-  const bedsList: string[] = useAppSelector((state) => {
-    if (bedIds) {
-      return bedSelectors.selectByIds(state, bedIds).map(({ name }) => name);
-    }
-    return [];
-  });
 
   const Warning = () =>
     displayWarning ? (
@@ -109,6 +95,7 @@ export const LocationFilter: React.FC<{
   const locationItem = ({ item }: { item: string }) => (
     <Text style={styles.text}>{item}</Text>
   );
+
   const seperator = () =>
     garden && bed !== "" ? <Text style={styles.text}> & </Text> : <Text />;
   const renderedList = (
@@ -127,7 +114,7 @@ export const LocationFilter: React.FC<{
         <View style={styles.container}>
           <View style={styles.modalView}>
             <FlatList
-              data={displayGardens ? gardensList : bedsList}
+              data={selectingGarden ? gardensList : bedsList}
               keyExtractor={(name) => name}
               renderItem={area}
             />
