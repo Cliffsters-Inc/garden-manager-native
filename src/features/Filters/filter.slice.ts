@@ -12,6 +12,7 @@ interface FilterState {
   filteringByPic: boolean;
   logsWithPics: string[];
   filteredLogsIds: string[];
+  //added an index signature below to allow dynamic access to additional properties that is used in the SwitchActiveFilter action.
   [key: string]: boolean | string[];
 }
 
