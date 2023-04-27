@@ -8,14 +8,17 @@ import {
   switchActiveFilter,
 } from "../../features/Filters/filter.slice";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { DateFilter, DateRangeObj } from "../TimelineScreen/DateFilter";
+import {
+  DateFilter,
+  DateRangeObj,
+} from "../TimelineScreen/DateFilter/DateFilter";
 import {
   LocationFilter,
   SelectedLocationsObj,
 } from "../TimelineScreen/LocationFilter";
 import { PhotoFilter } from "../TimelineScreen/PhotoFilter";
 import { ResetFilters } from "../TimelineScreen/ResetFilters";
-import { TagsFilterModal } from "../TimelineScreen/TagsFilterModal";
+import { TagsFilter } from "../TimelineScreen/TagsFilter";
 
 export const FilterModal: React.FC<{
   modalVisible: boolean;
@@ -24,7 +27,7 @@ export const FilterModal: React.FC<{
   const dispatch = useAppDispatch();
   const activeFilter = useAppSelector((state) => state.filters.activeFilter);
   const logsByTag = useAppSelector((state) => state.filters.logsByTag);
-  const filterByPic = useAppSelector((state) => state.filters.filterByPic);
+  const filteringByPic = useAppSelector((state) => state.filters.logsWithPics);
   const logsByDate = useAppSelector((state) => state.filters.logsBydate);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const logsByLocation = useAppSelector(
@@ -42,7 +45,7 @@ export const FilterModal: React.FC<{
 
   useEffect(() => {
     dispatch(switchActiveFilter());
-  }, [logsByTag, logsByLocation, logsByDate, filterByPic]);
+  }, [logsByTag, logsByLocation, logsByDate, filteringByPic]);
 
   const clearFilters = () => {
     dispatch(resetFilters());
@@ -71,7 +74,7 @@ export const FilterModal: React.FC<{
               clearFilters={clearFilters}
               activeFilter={activeFilter}
             />
-            <TagsFilterModal
+            <TagsFilter
               selectedTags={selectedTags}
               setSelectedTags={setSelectedTags}
             />

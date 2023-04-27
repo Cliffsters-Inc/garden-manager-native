@@ -1,31 +1,28 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { DateRangeObj } from "../../screens/TimelineScreen/DateFilter";
-import { useAppSelector } from "../../store";
+import { standardiseDate } from "../../screens/TimelineScreen/DateFilter/date.utils";
 import { VeggieLogNormalised } from "../entity.types";
-import { logSelectors, logSlice } from "../log/log.slice";
 
-interface filterState {
+interface FilterState {
   activeFilter: boolean;
   logsByTag: string[];
-  filterByDate: boolean;
   logsBydate: string[];
-  filterByLocation: boolean;
+  filterByGarden: boolean;
   logsByLocation: string[];
-  filterByPic: boolean;
+  filteringByPic: boolean;
   logsWithPics: string[];
   filteredLogsIds: string[];
+  //added an index signature below to allow dynamic access to additional properties that is used in the SwitchActiveFilter action.
   [key: string]: boolean | string[];
 }
 
-const initialState: filterState = {
+const initialState: FilterState = {
   activeFilter: false,
   logsByTag: [],
-  filterByDate: false,
   logsBydate: [],
-  filterByLocation: false,
+  filterByGarden: false,
   logsByLocation: [],
-  filterByPic: false,
+  filteringByPic: false,
   logsWithPics: [],
   filteredLogsIds: [],
 };
@@ -41,51 +38,102 @@ export const filterSlice = createSlice({
       });
       state.activeFilter = !propsSameValue;
     },
-    setLogsByTag: (state, action) => {
-      state.logsByTag = action.payload;
-    },
-    switchFilterByDate: (state, action) => {
-      state.filterByDate = action.payload;
-    },
-    setLogsByDate: (state, action) => {
-      state.logsBydate = action.payload;
+    filterByTags: (
+      state,
+      action: PayloadAction<{
+        logs: VeggieLogNormalised[];
+        selectedTags: string[];
+      }>
+    ) => {
+      const logs = action.payload.logs;
+      const selectedTags = action.payload.selectedTags;
+      const matchingLogs = logs
+        .filter((log) =>
+          log.payloadTags.some((tag) => {
+            return selectedTags.includes(tag.tagLabel);
+          })
+        )
+        .map((log) => log.id);
+
+      state.logsByTag = matchingLogs;
     },
     filterByDate: (
       state,
       action: PayloadAction<{
         logs: VeggieLogNormalised[];
-        dates: { startDate: number; endDate: number };
+        dates: {
+          startDate: number | undefined;
+          endDate: number | undefined;
+        };
       }>
     ) => {
-      const globalLogs = action.payload.logs;
-      const start = action.payload.dates.startDate;
-      const end = action.payload.dates.endDate;
-      if (action.payload.dates.startDate < action.payload.dates.endDate) {
-        console.log("start less than end");
-      } else {
-        console.log("start more than end");
-      }
-      // console.log("SdateType", typeof startDate);
-      // console.log("Sdate", startDate);
+      const logs = action.payload.logs;
+      const start = standardiseDate(action.payload.dates.startDate!);
+      const end = standardiseDate(action.payload.dates.endDate!);
 
-      const logsInRange = globalLogs
-        .filter((log) => log.date >= start && log.date <= end)
+      const logsInRange = logs
+        .filter((log) => {
+          const logDate = standardiseDate(log.date);
+          return logDate >= start && logDate <= end;
+        })
         .map((log) => log.id);
 
-      console.log("logsInRange**", logsInRange);
+      state.logsBydate = logsInRange;
     },
     resetDateFilters: (state) => {
-      state.filterByDate = false;
       state.logsBydate = [];
     },
-    setLogsByLocation: (state, action) => {
-      state.logsByLocation = action.payload;
+    filterByGarden: (
+      state,
+      action: PayloadAction<{
+        logs: VeggieLogNormalised[];
+        gardenName: string;
+      }>
+    ) => {
+      const logs = action.payload.logs;
+      const gardenName = action.payload.gardenName;
+      const matchingLogs = logs
+        .filter((log) => log.location?.gardenTitle === gardenName)
+        .map(({ id }) => id);
+
+      state.logsByLocation = matchingLogs;
     },
-    switchFilterByPic: (state, action) => {
-      state.filterByPic = action.payload;
+    filterByBed: (
+      state,
+      action: PayloadAction<{
+        logs: VeggieLogNormalised[];
+        garden: string;
+        bedName: string;
+      }>
+    ) => {
+      const logs = action.payload.logs;
+      const bedName = action.payload.bedName;
+      const garden = action.payload.garden;
+      const matchingLogs = logs
+        .filter(
+          (log) =>
+            log.location?.gardenTitle === garden &&
+            log.location?.bedTitle === bedName
+        )
+        .map(({ id }) => id);
+
+      state.logsByLocation = matchingLogs;
     },
-    setLogsWithPics: (state, action) => {
-      state.logsWithPics = action.payload;
+    resetLocationFilter: (state) => {
+      state.logsByLocation = [];
+    },
+    filterByPhoto: (state, action) => {
+      state.filteringByPic = !state.filteringByPic;
+
+      if (state.filteringByPic) {
+        const logs: VeggieLogNormalised[] = action.payload;
+        const foundWithPics = logs
+          .filter((log) => log.photos.entities.length > 0)
+          .map((log) => log.id);
+        state.logsWithPics = foundWithPics;
+      } else {
+        state.logsWithPics = [];
+      }
     },
     filterLogs: (state) => {
       const activeFilters: string[][] = [];
@@ -95,7 +143,7 @@ export const filterSlice = createSlice({
             activeFilters.push(arr);
           }
 
-          if (state.filterByPic && state.logsWithPics.length === 0) {
+          if (state.filteringByPic && state.logsWithPics.length === 0) {
             activeFilters.push(state.logsWithPics);
           }
         });
@@ -121,14 +169,13 @@ export const filterSlice = createSlice({
 
 export const {
   switchActiveFilter,
-  setLogsByTag,
-  switchFilterByDate,
-  setLogsByDate,
+  filterByTags,
   filterByDate,
   resetDateFilters,
-  setLogsByLocation,
-  switchFilterByPic,
-  setLogsWithPics,
+  filterByGarden,
+  filterByBed,
+  resetLocationFilter,
+  filterByPhoto,
   filterLogs,
   resetFilters,
 } = filterSlice.actions;

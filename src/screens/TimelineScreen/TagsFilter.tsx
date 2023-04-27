@@ -6,12 +6,12 @@ import { convertToTag } from "../../components/Tags/Tag.utils";
 import { TagElement } from "../../components/Tags/TagElement";
 import { Text } from "../../components/Themed";
 import { Tag } from "../../features/entity.types";
-import { setLogsByTag } from "../../features/Filters/filter.slice";
+import { filterByTags } from "../../features/Filters/filter.slice";
 import { logSelectors } from "../../features/log/log.slice";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { RangeSelector } from "../FilterModal/RangeSelector";
 
-export const TagsFilterModal: React.FC<{
+export const TagsFilter: React.FC<{
   selectedTags: string[];
   setSelectedTags: (value: string[]) => void;
 }> = ({ selectedTags, setSelectedTags }) => {
@@ -63,15 +63,9 @@ export const TagsFilterModal: React.FC<{
     );
   };
 
-  const filterByTags = () => {
-    const logsToFilter = [...globalLogs];
-    const logsFilteredByTag = logsToFilter.filter((log) =>
-      log.payloadTags.some((tag) => {
-        return selectedTags.includes(tag.tagLabel);
-      })
-    );
-    const filteredIds = logsFilteredByTag.map((log) => log.id);
-    dispatch(setLogsByTag(filteredIds));
+  const filter = () => {
+    const logs = [...globalLogs];
+    dispatch(filterByTags({ logs, selectedTags }));
     setModalVisible(!modalVisible);
   };
 
@@ -96,7 +90,7 @@ export const TagsFilterModal: React.FC<{
               keyExtractor={(item) => item.tagLabel}
               renderItem={({ item }) => tag({ item }, "selectable")}
             />
-            <Pressable style={styles.button} onPress={filterByTags}>
+            <Pressable style={styles.button} onPress={filter}>
               <Text style={styles.buttonText}>Filter Tags</Text>
             </Pressable>
             <Pressable
