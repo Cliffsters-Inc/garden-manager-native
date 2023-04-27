@@ -37,8 +37,25 @@ export const filterSlice = createSlice({
       });
       state.activeFilter = !propsSameValue;
     },
-    setLogsByTag: (state, action) => {
-      state.logsByTag = action.payload;
+    filterByTags: (
+      state,
+      action: PayloadAction<{
+        logs: VeggieLogNormalised[];
+        selectedTags: string[];
+      }>
+    ) => {
+      const logs = action.payload.logs;
+      const selectedTags = action.payload.selectedTags;
+      const matchingLogs = logs
+        .filter((log) =>
+          log.payloadTags.some((tag) => {
+            return selectedTags.includes(tag.tagLabel);
+          })
+        )
+        .map((log) => log.id);
+
+      state.logsByTag = matchingLogs;
+      console.log("tags", state.logsByTag);
     },
     filterByDate: (
       state,
@@ -152,7 +169,7 @@ export const filterSlice = createSlice({
 
 export const {
   switchActiveFilter,
-  setLogsByTag,
+  filterByTags,
   filterByDate,
   resetDateFilters,
   filterByGarden,
